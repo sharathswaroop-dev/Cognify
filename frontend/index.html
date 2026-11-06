@@ -278,6 +278,32 @@ td:last-child,th:last-child{text-align:right;font-family:var(--mono)}
 .admin{margin-top:30px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line)}
 .admin .note{font:400 11px var(--mono);color:var(--mute)}
 
+/* voice */
+.micfab{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:6;display:flex;align-items:center;gap:9px;padding:12px 20px 12px 16px;border:0;border-radius:999px;background:var(--acid);color:#0b0c0e;font:800 13px var(--disp);letter-spacing:-.01em;box-shadow:0 10px 30px rgba(0,0,0,.55);transition:transform .35s var(--ease),opacity .25s}
+.micfab:hover{transform:translateX(-50%) translateY(-3px)}
+.micfab svg{width:18px;height:18px}
+.micfab[hidden]{display:none}
+.vsheet{position:absolute;left:0;right:0;bottom:0;z-index:8;max-height:88%;overflow-y:auto;padding:22px 18px 26px;border-radius:30px 30px 36px 36px;background:var(--s1);border-top:1px solid var(--line2);box-shadow:0 -24px 60px rgba(0,0,0,.6);animation:sheet .45s var(--ease);scrollbar-width:none}
+.vsheet::-webkit-scrollbar{display:none}
+.vsheet[hidden]{display:none}
+@keyframes sheet{from{transform:translateY(40px);opacity:0}}
+.vsheet h5{margin:0 0 4px;font:800 20px/1.1 var(--disp);letter-spacing:-.03em}
+.vsheet .sub{margin:0 0 14px;color:var(--mute);font-size:12.5px}
+.vx{position:absolute;right:14px;top:14px;border:1px solid var(--line2);background:none;border-radius:50%;width:30px;height:30px;color:var(--mute)}
+.recbtn{display:grid;place-items:center;width:84px;height:84px;margin:10px auto 6px;border:0;border-radius:50%;background:var(--hot);color:#0b0c0e;transition:transform .3s var(--ease)}
+.recbtn:hover{transform:scale(1.06)}
+.recbtn svg{width:30px;height:30px}
+.recbtn.live{animation:recp 1.4s infinite}
+@keyframes recp{0%{box-shadow:0 0 0 0 rgba(255,91,53,.55)}70%{box-shadow:0 0 0 22px rgba(255,91,53,0)}100%{box-shadow:0 0 0 0 rgba(255,91,53,0)}}
+.wave{display:block;width:100%;height:56px;margin:8px 0}
+.vtime{text-align:center;font:500 12px var(--mono);color:var(--mute)}
+.heard{padding:12px 14px;border-radius:12px;background:var(--ink);border:1px solid var(--line);font-size:13px;line-height:1.5;color:var(--mute);margin-bottom:12px}
+.heard b{display:block;font:500 10px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acid);margin-bottom:5px}
+.vwarn{font:400 11.5px/1.45 var(--mono);color:var(--amber);margin:8px 0}
+.vform .fi{padding:9px 11px;font-size:13px}
+.vform label.f{margin:12px 0 5px}
+.vform .arow{grid-template-columns:1fr 104px 30px}
+.vsheet .btn{padding:10px 16px;font-size:12.5px}
 /* mesh */
 .mgrid{display:grid;grid-template-columns:340px minmax(0,1fr) 380px;gap:22px;align-items:start}
 .mstrip{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 22px}
@@ -467,7 +493,7 @@ const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelect
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const api=async(p,b)=>{const r=await fetch(p,b?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b)}:{});
-  if(!r.ok){let m=r.statusText;try{m=(await r.json()).detail||m}catch{}throw new Error(typeof m==="string"?m:JSON.stringify(m))}return r.json()};
+  if(!r.ok){let m=r.statusText;try{m=(await r.json()).detail||m}catch{}throw new Error(typeof m==="string"?m:(m&&m.message)||JSON.stringify(m))}return r.json()};
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 let JOBS=[],REF=null,STATS=null,current=null,useMemory=true,runId=0;
 
@@ -580,7 +606,7 @@ function runPipe(root,steps){
   const id=setInterval(()=>{if(k>=els.length-1)return clearInterval(id);els[k].classList.replace("act","done");k++;els[k].classList.add("act")},useMemory?2100:700);
   return ()=>{clearInterval(id);els.forEach(e=>{e.classList.remove("act");e.classList.add("done")})}}
 
-async function selectJob(id){current=JOBS.find(j=>j.job_id===id);
+async function selectJob(id){current=JOBS.find(j=>j.job_id===id);if(typeof closeVoice==="function")closeVoice();
   $$(".tk").forEach(t=>t.classList.toggle("sel",t.dataset.id===id));
   await runBriefing();renderLogForm()}
 
@@ -592,7 +618,7 @@ async function runBriefing(){
       <div class="loc">${esc(j.site.name)}, ${esc(j.site.area)}<br>${esc(j.machine.model)} · ${esc(j.machine.location)}</div></div>
     <button class="memsw rv" style="--i:1" id="mem-toggle" aria-pressed="${useMemory}" data-cursor="Flip"><div class="t"><b>Memory ${useMemory?"ON":"OFF"}</b><small>${useMemory?"Using company history":"Ticket only"}</small></div><span class="sw"></span></button>
     <div id="brief">${pipeHTML(useMemory?STEPS_ON:STEPS_OFF)}</div>`;
-  $("#mem-toggle").onclick=()=>{useMemory=!useMemory;runBriefing()};
+  $("#mem-toggle").onclick=()=>{useMemory=!useMemory;runBriefing()};ensureVoice();
   const done=runPipe($("#phone"),useMemory?STEPS_ON:STEPS_OFF);
   $("#memory-panel").innerHTML=`<h3>What Hindsight recalled</h3><p class="sub">Recalling…</p>`;
   try{
@@ -698,6 +724,88 @@ async function loadHist(){
     ${v.actions.map(a=>`<div class="a ${a.result==="worked"?"w":a.result==="failed"?"f":""}">${a.result==="worked"?"✓":a.result==="failed"?"✕":"~"} ${esc(a.action)}</div>`).join("")}</div>`).join("")}</div>`:`<div class="empty">No visits yet.</div>`}
 $("#seed-btn").onclick=async()=>{$("#admin-msg").textContent="Loading…";try{const r=await api("/api/seed",{});$("#admin-msg").textContent=`${r.seeded} records sent. ${r.note}`;loadStatus()}catch(e){$("#admin-msg").textContent=e.message}};
 $("#reset-btn").onclick=async()=>{const r=await api("/api/reset-demo",{});$("#admin-msg").textContent=r.note||"Demo reset.";loadStatus();loadDash()};
+
+/* ---------- voice logging ---------- */
+const MIC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+let vrec=null;
+function ensureVoice(){
+  if($("#micfab"))return;
+  $("#pscr").insertAdjacentHTML("beforeend",`<button class="micfab" id="micfab" data-cursor="Speak" aria-label="Log this visit by voice">${MIC}<span>Log by voice</span></button><div class="vsheet" id="vsheet" hidden></div>`);
+  $("#micfab").onclick=openVoice}
+function sheet(html){const v=$("#vsheet");v.hidden=false;v.innerHTML=`<button class="vx" id="vx" aria-label="Close">×</button>${html}`;$("#micfab").hidden=true;$("#vx").onclick=closeVoice}
+function closeVoice(){stopTracks();const v=$("#vsheet");if(v){v.hidden=true;v.innerHTML=""}const f=$("#micfab");if(f)f.hidden=false}
+function stopTracks(){if(vrec){try{vrec.mr&&vrec.mr.state!=="inactive"&&(vrec.cancel=true,vrec.mr.stop())}catch{}try{vrec.stream&&vrec.stream.getTracks().forEach(t=>t.stop())}catch{}try{vrec.ac&&vrec.ac.close()}catch{}cancelAnimationFrame(vrec.raf);clearInterval(vrec.timer);vrec=null}}
+function openVoice(){
+  if(!current)return;
+  sheet(`<h5>Log this visit</h5><p class="sub">Tap and say what you tried, what failed, what fixed it and any parts. You can review everything before it is saved.</p>
+    <button class="recbtn" id="recgo" aria-label="Start recording" data-cursor="Record">${MIC}</button><div class="vtime">Tap to start</div>
+    <div style="text-align:center;margin-top:14px"><button class="btn sm" id="typeinstead">Type it instead</button></div>`);
+  $("#recgo").onclick=startRec;$("#typeinstead").onclick=()=>typedSheet("")}
+function vError(msg,canType=true){
+  sheet(`<h5>That didn't work</h5><div class="vwarn" style="font-size:12.5px;color:#ffb7a5;margin:6px 0 16px">${esc(msg)}</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm pri" id="again">Try again</button>${canType?`<button class="btn sm" id="typeinstead">Type it instead</button>`:""}</div>`);
+  $("#again").onclick=openVoice;if(canType)$("#typeinstead").onclick=()=>typedSheet("")}
+function typedSheet(text){
+  sheet(`<h5>Type the report</h5><p class="sub">Write it the way you would say it. We will turn it into the log.</p>
+    <textarea class="fi" id="typed" style="min-height:130px" placeholder="Reset the breaker, did not help. Replaced the contactor, still tripped…">${esc(text)}</textarea>
+    <div style="margin-top:12px"><button class="btn pri sm" id="structure">Structure it</button></div><div id="verr"></div>`);
+  $("#structure").onclick=async()=>{const t=$("#typed").value.trim();$("#structure").disabled=true;
+    try{const r=await api("/api/voice/extract",{transcript:t,job_id:current.job_id});confirmSheet(r)}
+    catch(e){$("#verr").innerHTML=`<div class="err">${esc(e.message)}</div>`;$("#structure").disabled=false}}}
+async function startRec(){
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}
+  catch(e){vError("The microphone is blocked or missing. Allow microphone access in the browser, or type the report instead.");return}
+  if(!window.MediaRecorder){stream.getTracks().forEach(t=>t.stop());vError("This browser can't record audio. Type the report instead.");return}
+  const mime=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/ogg;codecs=opus"].find(t=>MediaRecorder.isTypeSupported(t))||"";
+  const mr=new MediaRecorder(stream,mime?{mimeType:mime}:{}),chunks=[],t0=Date.now();
+  vrec={stream,mr,cancel:false};
+  mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  mr.onstop=()=>{const cancelled=vrec&&vrec.cancel;const secs=(Date.now()-t0)/1000;stopTracks();if(cancelled)return;
+    if(secs<1){vError("That was too short. Hold on a little longer and describe the visit.");return}
+    const blob=new Blob(chunks,{type:mr.mimeType||"audio/webm"});uploadAudio(blob)};
+  sheet(`<h5>Listening…</h5><p class="sub">Describe the visit. Tap the button when you are done.</p><canvas class="wave" id="wave" width="560" height="112"></canvas>
+    <button class="recbtn live" id="recstop" aria-label="Stop recording" data-cursor="Stop"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg></button><div class="vtime" id="vt">0:00</div>`);
+  try{const ac=new (window.AudioContext||window.webkitAudioContext)(),an=ac.createAnalyser();an.fftSize=64;ac.createMediaStreamSource(stream).connect(an);vrec.ac=ac;
+    const cv=$("#wave"),g=cv.getContext("2d"),buf=new Uint8Array(an.frequencyBinCount);
+    const draw=()=>{if(!vrec)return;vrec.raf=requestAnimationFrame(draw);an.getByteFrequencyData(buf);g.clearRect(0,0,cv.width,cv.height);
+      const n=buf.length,bw=cv.width/n;for(let i=0;i<n;i++){const h=Math.max(4,buf[i]/255*cv.height);g.fillStyle="#d6ff3d";g.fillRect(i*bw+3,(cv.height-h)/2,bw-6,h)}};draw()}catch{}
+  vrec.timer=setInterval(()=>{const s=Math.floor((Date.now()-t0)/1000);const e=$("#vt");if(e)e.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;if(s>=90)mr.stop()},250);
+  mr.start();$("#recstop").onclick=()=>mr.state!=="inactive"&&mr.stop()}
+async function uploadAudio(blob){
+  sheet(`<h5>Got it</h5><div class="pipe" id="vpipe"><div class="st act"><i></i><span>Transcribing with Whisper</span></div><div class="st"><i></i><span>Turning it into a visit log</span></div></div>`);
+  const steps=$$("#vpipe .st");setTimeout(()=>{if(steps[0]&&$("#vpipe")){steps[0].classList.replace("act","done");steps[1].classList.add("act")}},2200);
+  const fd=new FormData();fd.append("job_id",current.job_id);fd.append("audio",new File([blob],"report."+(blob.type.includes("mp4")?"m4a":blob.type.includes("ogg")?"ogg":"webm"),{type:blob.type}));
+  try{const r=await fetch("/api/voice/report",{method:"POST",body:fd});
+    if(!r.ok){let m="Something went wrong.";try{const d=(await r.json()).detail;m=d.message||d}catch{}vError(m);return}
+    confirmSheet(await r.json())}
+  catch(e){vError("Couldn't reach the server. Check the connection and try again.")}}
+function confirmSheet(r){
+  const v=r.structured,rows=(v.actions.length?v.actions:[{action:"",result:"failed",detail:""}]);
+  sheet(`<h5>Check and confirm</h5><p class="sub">Nothing is saved until you confirm.</p>
+    <div class="heard"><b>What I heard</b>${esc(r.transcript)}</div>
+    ${(r.warnings||[]).map(w=>`<div class="vwarn">⚠ ${esc(w)}</div>`).join("")}
+    <form class="vform" id="vform"><label class="f" style="margin-top:4px">What was tried</label><div id="vacts">${rows.map(a=>actionRow(a.action,a.result)).join("")}</div>
+      <button type="button" class="btn sm" id="vadd">+ Add attempt</button>
+      <label class="f">Outcome</label><select class="fi" id="vout"><option value="revisit_needed" ${v.outcome==="revisit_needed"?"selected":""}>Not fixed — needs another visit</option><option value="resolved" ${v.outcome==="resolved"?"selected":""}>Fixed</option></select>
+      <label class="f">Root cause</label><input class="fi" id="vcause" value="${esc(v.root_cause)}">
+      <label class="f">Parts used</label><input class="fi" id="vparts" value="${esc(v.parts_used.join(", "))}">
+      <label class="f">Notes</label><textarea class="fi" id="vnotes">${esc(v.notes)}</textarea>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button class="btn pri" id="vsave">Confirm &amp; save to memory</button><button type="button" class="btn" id="vredo">Record again</button></div>
+      <div id="vmsg"></div></form>`);
+  const bind=()=>$$("#vacts .rm").forEach(b=>b.onclick=()=>{if($$("#vacts .arow").length>1)b.parentElement.remove()});bind();
+  $("#vadd").onclick=()=>{$("#vacts").insertAdjacentHTML("beforeend",actionRow("","worked"));bind()};
+  $("#vredo").onclick=openVoice;
+  $("#vform").onsubmit=async e=>{e.preventDefault();
+    const actions=$$("#vacts .arow").map(x=>({action:$(".a-act",x).value.trim(),result:$(".a-res",x).value,detail:""})).filter(a=>a.action.length>1);
+    if(!actions.length){$("#vmsg").innerHTML=`<div class="err">Add at least one attempt.</div>`;return}
+    $("#vsave").disabled=true;
+    try{const res=await api(`/api/jobs/${current.job_id}/log`,{actions,outcome:$("#vout").value,root_cause:$("#vcause").value.trim(),
+        parts_used:$("#vparts").value.split(",").map(x=>x.trim()).filter(Boolean),notes:$("#vnotes").value.trim()});
+      sheet(`<h5>Saved to memory</h5><p class="sub">Retained in ${res.memory_backend==="hindsight"?"Hindsight":"local memory"}. Agents updated: ${esc((res.agents_updated||[]).join(", "))}.</p>
+        <div class="saved" style="margin-top:0">${esc(res.memory_text)}</div><div style="margin-top:14px"><button class="btn sm pri" id="vdone">Done</button></div>`);
+      $("#vdone").onclick=()=>{closeVoice();setTimeout(runBriefing,res.memory_backend==="hindsight"?1500:100)};loadStatus()}
+    catch(err){$("#vmsg").innerHTML=`<div class="err">Save failed: ${esc(err.message)}</div>`;$("#vsave").disabled=false}}}
 
 /* ---------- agent mesh ---------- */
 const AGENTS={feed:["AF","#ff5b35"],dispatcher:["D","#ffb23d"],diagnostician:["Dg","#d6ff3d"],parts:["P","#f1efe6"],field:["F","#ff9a6b"],system:["·","#5b5f67"]};

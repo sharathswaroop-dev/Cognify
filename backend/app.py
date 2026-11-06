@@ -15,7 +15,8 @@ from datetime import date
 from pathlib import Path
 from typing import Literal
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -310,6 +311,34 @@ def mesh_stream(run_id: str):
 
     return StreamingResponse(gen(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+# ------------------------------------------------------------------ voice logging
+import voice  # noqa: E402
+
+
+@app.post("/api/voice/report")
+async def voice_report(job_id: str = Form(...), audio: UploadFile = File(...)):
+    """Audio in; transcript + structured visit out. Nothing is saved: the technician confirms first."""
+    job = store.job(job_id)
+    data = await audio.read()
+    try:
+        tr = await run_in_threadpool(voice.transcribe, agent.llm.client, data, audio.filename or "report.webm")
+    except voice.VoiceError as exc:
+        raise HTTPException(422, {"code": exc.code, "message": exc.message})
+    structured, warnings = await run_in_threadpool(voice.extract_visit, agent.llm, tr["text"], job)
+    return {"transcript": tr["text"], "duration": tr["duration"], "structured": structured, "warnings": warnings}
+
+
+@app.post("/api/voice/extract")
+async def voice_extract(body: dict):
+    """Structure a typed or edited transcript (used by 'type instead' and for re-extraction)."""
+    text = str(body.get("transcript", "")).strip()
+    if len(text.split()) < 3:
+        raise HTTPException(422, {"code": "empty", "message": "Write at least a short sentence about the visit."})
+    job = store.job(body["job_id"]) if body.get("job_id") else None
+    structured, warnings = await run_in_threadpool(voice.extract_visit, agent.llm, text, job)
+    return {"transcript": text, "structured": structured, "warnings": warnings}
 
 
 # ------------------------------------------------------------------ replay evaluation
