@@ -1,6 +1,6 @@
 # Running the agents on Band
 
-SiteMemory's four agents (Dispatcher, Diagnostician, Parts agent, Field assistant) hand work to each other in a
+SiteMemory's four agents (Dispatcher, Diagnostician, Parts agent, Verifier) hand work to each other in a
 [Band](https://band.ai) room. Each handoff is a real Band message that mentions the receiving agent; the receiver reads
 it back from Band, acknowledges it, and only then acts on it. Without Band credentials the same four agents run
 in-process, so nothing about the demo depends on Band being reachable.
@@ -24,7 +24,7 @@ run is the setup below; if a field name differs from the spec, the fallback keep
    | `SM Dispatcher` | Decides remote fix or technician for a machine alarm |
    | `SM Diagnostician` | Finds the root cause of a fault and cites past visits |
    | `SM Parts` | Decides which parts to carry and checks stock |
-   | `SM Field` | Briefs the technician and records the visit |
+   | `SM Verifier` | Checks every claim against the raw visit records and can veto |
 
 3. For each agent, copy the **API Key** from the success dialog. It is shown once; **Regenerate API key** in the
    agent's menu issues a new one.
@@ -34,12 +34,12 @@ run is the setup below; if a field name differs from the spec, the fallback keep
    BAND_KEY_DISPATCHER=...
    BAND_KEY_DIAGNOSTICIAN=...
    BAND_KEY_PARTS=...
-   BAND_KEY_FIELD=...
+   BAND_KEY_VERIFIER=...
    ```
 
    `BAND_BASE_URL` defaults to `https://app.band.ai/api/v1`.
-5. Restart the app. The **Agent mesh** tab shows `Band: configured`.
-6. Fire an alarm. Each run creates a room titled `SiteMemory <alarm> <machine> <code>`, adds the four agents, and
+5. Restart the app. The header chip shows `Band: connected`.
+6. Run an alarm in the Control Room. The with-memory path creates a room titled `SiteMemory <alarm> <machine> <code>`, adds the four agents, and
    posts every handoff. Open **Rooms** in the Band app to watch the same conversation. In SiteMemory, handoff bubbles
    are tagged `via Band` when delivery through Band succeeded and `in-process` when it fell back.
 

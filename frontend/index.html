@@ -446,7 +446,7 @@ async function loadDash(){
 async function loadWatch(){const w=await api("/api/watchlist");$("#wl").innerHTML=w.map(x=>`<div class="wli"><div class="sc2">${x.score}</div><div><b>${esc(x.machine_id)} · ${esc(x.model)}</b>${x.holdout?' <span class="tag">held-out</span>':""}<small>${esc(x.site)} · installed ${x.installed}<br>${x.reasons.map(esc).join(" · ")}</small></div></div>`).join("")||'<div class="empty">Nothing stands out.</div>'}
 let ROI=null;
 function initRoi(s){
-  const ev=window.__eval,A=ev&&ev.test&&ev.test.arms,gain=A&&A.hindsight_verified&&A.none?Math.max(0,(A.hindsight_verified.ftf.rate||0)-(A.none.ftf.rate||0)):null;
+  const ev=window.__eval,A=ev&&ev.test&&ev.test.arms,best=A&&(A.hindsight_verified||A.basic_verified),gain=best&&A.none&&best.ftf.rate!=null&&A.none.ftf.rate!=null?Math.max(0,best.ftf.rate-A.none.ftf.rate):null;
   ROI={techs:25,visits:60,repeat:Math.round((1-s.first_time_fix_rate)*100),cost:250,gain:gain==null?25:Math.round(gain*100),price:50,derived:gain!=null};
   const row=(label,id,val,lbl)=>`<label for="${id}">${label} <span class="lbl ${lbl[0]}">${lbl[1]}</span></label><input class="fi" id="${id}" type="number" min="0" value="${val}">`;
   $("#roi").innerHTML=`<div class="roi"><div class="in">${row("Technicians","r-techs",ROI.techs,["you","Your inputs"])}${row("Visits per technician per month","r-visits",ROI.visits,["you","Your inputs"])}${row("Visits that end in a return trip, %","r-repeat",ROI.repeat,["you","Your inputs"])}
@@ -463,19 +463,20 @@ async function loadFixes(){
     <div class="dots">${f.attempts.map(a=>`<span class="dot ${a.result==="failed"?"f":a.result==="provisional"?"p":""} ${a.installed>=2023?"new":""}" title="${esc(a.date)} · ${esc(a.machine_id)} (installed ${a.installed}) · ${esc(a.job_id)} · ${esc(a.result)}${a.wrong_diagnosis?" · wrong diagnosis":""}"></span>`).join("")}</div>
     ${f.belief?`<div class="belief"><span class="kick">Belief updated</span>${esc(f.belief.replace(/^Belief updated:\s*/,""))}</div>`:""}</div>`).join(""):'<div class="empty">No attempts for this family.</div>'}
 let evalTimer=null;
-const ARM={none:"No memory",basic:"Basic search (BM25)",hindsight:"Hindsight memory",hindsight_verified:"Hindsight + Verifier"};
+const ARM={none:"No memory",basic:"Basic search (BM25)",basic_verified:"Basic search + Verifier",hindsight:"Hindsight",hindsight_verified:"Hindsight + Verifier"};
 async function loadEval(){clearInterval(evalTimer);let r;try{r=await api("/api/eval/results")}catch(e){$("#evalbody").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
   const st=await api("/api/eval/status").catch(()=>({state:"idle"}));
   if(st.state==="running"){$("#evalbody").innerHTML=`<div class="kick">Replaying history</div><div class="prog"><i style="width:${st.total?st.done/st.total*100:2}%"></i></div><div class="foot">${st.done}/${st.total||"?"} · ${esc(st.message)}</div>`;evalTimer=setInterval(loadEval,6000);return}
   if(!r.available||r.partial){$("#evalbody").innerHTML=`<p class="sub">${r.partial?"A previous run did not finish.":"No evaluation has been run yet."} It replays every incident and takes a while on real Hindsight and Groq (see docs/EVALUATION.md).</p>${st.state==="error"?`<div class="err">${esc(st.message)}</div>`:""}<button class="btn pri mag" id="eval-run" data-cursor="Run">Run the replay evaluation</button>`;$("#eval-run").onclick=async()=>{await api("/api/eval/run",{});loadEval()};return}
   window.__eval=r;const T=r.test,A=T.arms,rate=o=>o?`${pc(o.rate)} <span class="foot">(${o.k}/${o.n}, ${pc(o.ci[0])}-${pc(o.ci[1])})</span>`:"n/a";
   $("#evalbody").innerHTML=`<div class="kick" style="margin-bottom:10px">Final score on held-out machines · ${T.n_incidents} incidents · <span class="lbl sim">Simulated</span></div>
-    <table><tr><th>Arm</th><th class="n">Right fix</th><th class="n">Right parts</th><th class="n">Predicted first-time fix</th><th class="n">Failed fix warned</th></tr>
-    ${Object.keys(ARM).filter(k=>A[k]).map(k=>`<tr class="${k==="hindsight_verified"?"hl-row":""}"><td>${ARM[k]}</td><td class="n">${rate(A[k].fix)}</td><td class="n">${rate(A[k].parts)}</td><td class="n"><b>${rate(A[k].ftf)}</b></td><td class="n">${rate(A[k].warn)}</td></tr>`).join("")}</table>
+    <table><tr><th>Arm</th><th class="n">Right fix</th><th class="n">Right parts</th><th class="n">Predicted first-time fix</th><th class="n">Avoided the failed fix</th></tr>
+    ${Object.keys(ARM).filter(k=>A[k]).map(k=>`<tr class="${k.endsWith("_verified")?"hl-row":""}"><td>${ARM[k]}</td><td class="n">${rate(A[k].fix)}</td><td class="n">${rate(A[k].parts)}</td><td class="n"><b>${rate(A[k].ftf)}</b></td><td class="n">${rate(A[k].warn)}</td></tr>`).join("")}</table>
+    ${r.skipped&&Object.keys(r.skipped).length?`<div class="err" style="margin-top:12px">Not run: ${Object.entries(r.skipped).map(([k,w])=>esc((ARM[k]||k)+": "+w)).join("; ")}. The rows above are not a Hindsight result.</div>`:""}
     ${r.train?`<div class="foot" style="margin-top:12px">Tuning set (training machines only, ${r.train.n_incidents} incidents): predicted first-time fix ${Object.keys(ARM).filter(k=>r.train.arms[k]).map(k=>`${ARM[k]} ${pc(r.train.arms[k].ftf.rate)}`).join(" · ")}. ${esc(r.tuning||"")}</div>`:""}
     ${(r.failures||[]).length?`<details style="margin-top:12px"><summary class="foot" style="cursor:pointer">${r.failures.length} failures, listed honestly</summary>${r.failures.slice(0,12).map(f=>`<div class="foot" style="margin-top:6px">${esc(f.job)} · ${esc(f.machine)} · ${esc(ARM[f.arm]||f.arm)}: ${esc(f.why)}</div>`).join("")}</details>`:""}
     <div class="foot" style="margin-top:12px">Memory ${esc(r.memory_backend)} · model ${esc(r.model)} · generated ${esc(r.generated)}. Full method and caveats: docs/EVALUATION.md.</div>`;
-  if(ROI&&!ROI.derived){const A2=A,g=A2.hindsight_verified&&A2.none?Math.max(0,(A2.hindsight_verified.ftf.rate||0)-(A2.none.ftf.rate||0)):null;if(g!=null){ROI.gain=Math.round(g*100);ROI.derived=true;$("#r-gain").value=ROI.gain;calcRoi()}}}
+  if(ROI&&!ROI.derived){const b2=A.hindsight_verified||A.basic_verified,g=b2&&A.none&&b2.ftf.rate!=null&&A.none.ftf.rate!=null?Math.max(0,b2.ftf.rate-A.none.ftf.rate):null;if(g!=null){ROI.gain=Math.round(g*100);ROI.derived=true;$("#r-gain").value=ROI.gain;calcRoi()}}}
 
 (async()=>{
   words($("#h-room"),HEADS.room);movePill();addEventListener("resize",movePill);document.fonts?.ready.then(movePill);

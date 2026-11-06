@@ -1,67 +1,73 @@
 # SiteMemory
 
-**Field-service agents that remember every machine, every site and every repair, so the next visit is fixed the first time.**
+**Field-service agents that remember every machine, every site and every repair, check each other against the raw records, and say how sure they are.**
 
-Four agents, each with its own [Hindsight](https://github.com/vectorize-io/hindsight) memory bank, coordinate in a [Band](https://band.ai) room
-to turn a machine alarm into a diagnosis, a parts plan and a technician briefing. They learn from what *failed* as well as what worked,
-correct themselves when a fix stops working on newer equipment, and are scored by replaying the company's whole history in date order.
+An alarm comes in. Four agents in a [Band](https://band.ai) room (Dispatcher, Diagnostician, Parts agent, Verifier) turn it into a diagnosis, a parts list and a technician briefing, all on **one shared [Hindsight](https://github.com/vectorize-io/hindsight) memory bank**. The Verifier sees only the raw visit records, runs deterministic checks and can veto. The same agents also run with no memory, side by side, so you can see what memory changes.
 
 ![SiteMemory architecture](docs/architecture.svg)
 
 | | |
 | --- | --- |
-| ![Briefing](docs/screenshots/01-technician-briefing.png) | ![Belief updated](docs/screenshots/02-belief-updated.png) |
-| Memory-driven briefing: skip what failed, carry the part that fixed it | A belief corrected from evidence, scoped to the newer units |
-| ![Memory off vs on](docs/screenshots/04-memory-off-vs-on.png) | ![Agent mesh](docs/screenshots/05-agent-mesh.png) |
-| The same job with memory off and on (drag to wipe) | Four agents in a room; each message shows the memories it used |
-| ![Voice logging](docs/screenshots/03-voice-logging.png) | ![Dashboard](docs/screenshots/06-dashboard.png) |
-| Log a visit by voice, confirm, then retain | Fix outcomes over time and the replay evaluation |
+| ![Control room](docs/screenshots/01-control-room.png) | ![Memory panel and veto](docs/screenshots/02-veto-and-memory.png) |
+| **Agent Control Room:** one alarm, two paths, with a simulated consequence | **Verifier veto and revision**, and the memory panel lighting up on every recall |
+| ![Phone](docs/screenshots/03-phone-briefing.png) | ![Dashboard](docs/screenshots/04-dashboard.png) |
+| **Technician phone:** the briefing, and voice logging that retains | **Dashboard:** replay score, risk watchlist, ROI calculator |
 
 ## The problem
 
-A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. The knowledge that prevents it (what failed on this
-unit last time, what finally fixed it, which part to carry, the gate code) sits in job cards, chat threads and the heads of people who leave.
-Every visit starts from zero.
+A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. What prevents it (what failed on this unit last time, what finally fixed it, which part to carry, the gate code) lives in job cards, chat threads and the heads of people who leave. And plain "memory" is not enough: a log is full of wrong diagnoses, parts that were replaced on a hunch, fixes that held for three weeks, and fixes that quietly stop working on a newer generation of units. SiteMemory is built for that mess.
 
 ## What it does
 
-1. **Multi-agent mesh on Band.** A machine alarm (for example `M-07 E3 trip, supply 189V`) starts the flow automatically.
-   - **Dispatcher** decides *remote fix* or *send a technician* from its memory of which remote fixes ever worked for that alarm.
-   - **Diagnostician** recalls this machine, the same model elsewhere and the site, and returns a root cause that cites the past visits it relied on.
-   - **Parts agent** decides what to carry from past fixes, and flags what is not on the van.
-   - **Field assistant** writes the technician briefing and records the visit.
-
-   The room streams live to the web UI: who said what, and which memories each agent used. Setup: [docs/BAND_SETUP.md](docs/BAND_SETUP.md).
-2. **Replay evaluation.** Every incident in the history is briefed twice (without memory; with memory built only from *earlier* visits) and scored against what really happened. Numbers below.
-3. **Voice logging.** Tap the mic in the phone view and speak the visit. Groq Whisper transcribes it, the LLM structures it (attempts with worked/failed, root cause, parts, notes), and you confirm before anything is retained.
-4. **Self-correcting memory.** The agent tracks every fix's outcomes per model family. When recent failures are statistically implausible given the fix's record, it updates its belief, scopes it to the cohort that fails, names the fix that worked, retains the correction to Hindsight, and says **"Belief updated"** in the briefing.
+1. **Four agents, one shared bank, on Band.**
+   - **Dispatcher** decides *remote fix* or *send a technician*. Remote fixes are limited to a reset, a setpoint change or reading a log, and a remote fix that already failed on this machine is never repeated.
+   - **Diagnostician** recalls and reflects, then proposes causes. It shows *n*, verified successes, the success rate and its 95% interval, computed from the raw records. Fewer than 5 attempts is labelled **weak signal**, and confidence is earned by verified outcomes, not by how fluent the answer is.
+   - **Parts agent** proposes parts from past visits and checks van and warehouse stock. It does not judge whether the evidence is good enough.
+   - **Verifier** sees only raw visit and alarm records, never the other agents' reasoning. Its checks are deterministic, so the same inputs always give the same verdict. A vetoed agent revises and the Verifier checks again.
+2. **Evidence levels.** Every visit stores the suspected cause, the action taken and a verified outcome on a ladder: *suspected → fixed at visit → stable 30 days → stable 90 days*. A fix that comes back within 30 days never counts as fixed. Only verified outcomes raise confidence.
+3. **Agent Control Room.** One input, two paths side by side (without memory, with Hindsight). Agents' conversation streams live with status chips; a memory panel lights up on every recall, reflect and retain; Verifier vetoes and revisions are visible; each path ends in a **simulated consequence** (fixed first time, or a return visit, with hours, cost and downtime).
+4. **Technician phone and voice logging.** The briefing on a phone, and a mic button: Groq Whisper transcribes the spoken visit, the LLM structures it, the technician confirms, then it is retained.
+5. **Dashboard.** Replay evaluation score, a risk watchlist (every point has a stated reason), an ROI calculator in which every figure is labelled **Benchmark**, **Simulated** or **Your inputs**, and every fix's outcomes over time.
+6. **Leak-proof replay evaluation.** Every past incident is planned using only records dated before it, a guard fails if a later record is present, the Verifier's one threshold is tuned on training machines only, and the final score is on held-out machines.
 
 ## How Hindsight memory is used
 
-Each agent has its own bank, holding only what that role needs:
+One bank per company. Every agent reads and writes the same bank; records are tagged by kind and appended in date order, never edited:
 
-| Bank | Seeded with | Recalled for | Learns after a visit |
-| --- | --- | --- | --- |
-| `<prefix>-dispatcher` | Alarms with the remote action tried and whether it cleared | Is a remote fix worth trying for this code? | What finally fixed an alarm it routed |
-| `<prefix>-diagnostician` | Full visit records: what was tried, what failed, root cause | Root cause, with the job ids that support it | The new visit; belief corrections |
-| `<prefix>-parts` | Parts used per visit; whether a missing part forced a second trip | What to carry | The parts record of the new visit |
-| `<prefix>-field` | Site profiles (gate codes, contacts) and visits | The briefing: this machine, same model elsewhere, the site | The new visit; belief corrections |
-
-The three Hindsight operations, and where they live in the code:
+| Record | Tags | Holds |
+| --- | --- | --- |
+| Visit | `kind:visit`, `machine:`, `site:`, `family:`, `evidence:` | suspected cause, what was tried and whether it worked, parts used, parts missing, confirmed cause, the verified outcome at the time |
+| Follow-up | `kind:followup`, `evidence:stable_30d` / `stable_90d` / `failed` | what happened afterwards: it held, or it came back |
+| Alarm | `kind:alarm`, `code:` | the alarm, the remote action tried, whether it cleared |
+| Site | `kind:site` | access rules and contacts |
+| Belief | `kind:belief` | a correction, when a lesson stopped being true |
 
 | Operation | When | Code |
 | --- | --- | --- |
-| `retain` | After every visit, for every agent that learns from it; once per correction | `memory.py`, `mesh/runner.py: record_visit`, `beliefs.py: sync` |
-| `recall` | Before every job: tag-scoped to `machine:`, `family:`, `site:`, `code:` | `agent.py: recall_context`, `mesh/roles.py` |
-| `reflect` | Before every diagnosis and briefing: lessons across many visits | `agent.py`, `mesh/roles.py: Diagnostician` |
+| `retain` | after every visit; follow-ups as they fall due; once per belief correction | `backend/records.py`, `app.py: _log_visit`, `beliefs.py: sync` |
+| `recall` | before every decision, scoped with tags that must **all** match (`machine:M-07` + `kind:visit`) so alarms never pollute a diagnosis | `agents.py` |
+| `reflect` | before every diagnosis: lessons across many visits, and whether the answer depends on how old the unit is | `agents.py: Diagnostician` |
 
 Design points that made it work:
 
-- **Tags give three levels of recall.** `machine:M-07` (this unit), `family:daikin-vrv-iv` (same model at other sites, which is how a site with no history still gets a useful briefing), `site:S-01` (access rules).
-- **Failures are first-class.** Every attempt is retained as `DID NOT FIX IT` or `FIXED IT`, so the agent can tell a technician what to skip, not only what to do.
-- **Citations survive.** Hindsight rewrites memories into facts, so job ids are not in the recalled text. The `document_id` it returns is used to tag every memory (`[source J-0902, 2026-03-14]`), and the Diagnostician's evidence is discarded unless it cites an id that was actually recalled.
-- **Corrections are memory too.** A belief correction is retained as its own document (updated in place when it changes), so it comes back through recall in later sessions.
-- **One event loop.** The Hindsight client is async; its sync wrappers fail inside web-server threads. Every call goes through one background loop (`memory._LoopThread`). Before that fix, recall silently returned nothing and "memory on" looked identical to "memory off".
+- **Machine ids are validated.** A record or a recall for a machine that does not exist is refused before it touches memory.
+- **Failures are first-class.** Every attempt is retained as `DID NOT FIX IT` or `FIXED IT`, and a wrong diagnosis stays on the record, so the agents can say what to skip, not only what to do.
+- **Every recommendation links to exact past visits.** Hindsight rewrites memories into facts, so job ids are not in the recalled text; the `document_id` it returns tags every memory (`[source J-0902, 2026-03-14]`), and a citation the records do not support is vetoed.
+- **Counts come from the raw records, not from the model.** The LLM proposes; *n*, rates and intervals are computed deterministically, and the Verifier recomputes them.
+- **Comparable units.** When the record splits by hardware generation, statistics and part support are computed on units like this one, so a fix that fails on 2023+ units does not drag down its record on 2019 units, and does not get approved for a 2024 unit on the strength of the old ones.
+- **One event loop.** The Hindsight client is async and its sync wrappers fail inside web-server threads; every call goes through one background loop (`memory._LoopThread`). Before that fix, recall silently returned nothing and "memory on" looked identical to "memory off".
+- **Graceful degradation, shown honestly.** If Hindsight is unreachable (no credit, outage), the app falls back to a local BM25 keyword memory kept in step, and a banner says so. It is never presented as Hindsight recall.
+
+## The Verifier's checks
+
+All deterministic, over raw records as of the alarm's date:
+
+| Claim | Check | Veto when |
+| --- | --- | --- |
+| Remote fix | action type is reset / setpoint / read log; no failure of that action on this machine in 30 days | not allowed, or it already failed here |
+| Cause | each cited job exists, is dated before the alarm, is the same model family, shows that fix as worked, and is not merely suspected | a citation is missing or does not support the claim |
+| Cause | the fix's record on comparable units; recent evidence vs earlier | recent failures contradict the lesson (`Belief updated: ...`) |
+| Part | the part fixed the fault in enough visits on comparable units | it was replaced without fixing the fault, or never used |
 
 ## Replay evaluation
 
@@ -69,30 +75,30 @@ EVAL_SECTION
 
 ## Self-correcting memory
 
-The history contains a real drift: the compressor-contactor swap fixed Daikin VRV IV trips 9 of 9 times on units installed 2018 to 2021, then failed 4 of 4 times on units installed 2023 and later,
-where the real cause was the inverter board. `backend/beliefs.py` notices this with a rule you can read in one screen:
+The history contains a drift: the compressor-contactor swap fixed Daikin VRV IV trips on units installed 2018 to 2022, then failed every time on units installed 2023 and later, where the real cause was the inverter board. `backend/beliefs.py` notices this with a rule you can read in one screen:
 
 ```python
 MIN_EARLIER, MIN_RATE, MIN_RUN, ALPHA = 4, 0.75, 2, 0.05
 
-def detect(att: list[dict]) -> dict | None:       # attempts of one fix on one model family, in date order
+def detect(att):  # attempts of one fix on one model family, in date order
     r = 0
-    for a in reversed(att):                        # the trailing run of failures
-        if a["result"] != "failed":
-            break
+    for a in reversed(att):                        # 1) the latest attempts all failed
+        if a["result"] in GOOD: break
         r += 1
     earlier, recent = att[:len(att) - r], att[len(att) - r:]
-    if r < MIN_RUN or len(earlier) < MIN_EARLIER:  # a lesson needs a record to contradict
-        return None
-    k, n = sum(1 for a in earlier if a["result"] == "worked"), len(earlier)
-    if k / n < MIN_RATE or (1 - (k + 1) / (n + 2)) ** r >= ALPHA:   # Laplace-smoothed: would r failures in a row be an accident?
-        return None
-    return {"earlier": earlier, "recent": recent, "k": k, "n": n, "run": r}
+    if r >= MIN_RUN and len(earlier) >= MIN_EARLIER:
+        k, n, p = _p(earlier)                      # Laplace-smoothed earlier success rate
+        if k / n >= MIN_RATE and (1 - p) ** r < ALPHA:     # r failures in a row would be a <5% accident
+            return {"earlier": earlier, "recent": recent, "cohort_from": None, ...}
+    for y in sorted({a["installed"] for a in att})[1:]:    # 2) one generation of units fails, older units do not
+        new, old = [a for a in att if a["installed"] >= y], [a for a in att if a["installed"] < y]
+        if len(new) >= MIN_RUN and all(a["result"] not in GOOD for a in new) and len(old) >= MIN_EARLIER:
+            k, n, p = _p(old)
+            if k / n >= MIN_RATE and (1 - p) ** len(new) < ALPHA:
+                return {"earlier": old, "recent": new, "cohort_from": y, ...}
 ```
 
-It then scopes the belief to the units that fail (installed from 2023) so older units keep the original lesson, names the fix that worked in those incidents,
-retains the correction to Hindsight, and injects it into the briefing and the Diagnostician's prompt. The dashboard plots every fix's outcomes over time.
-If the fix starts working again, the trailing run of failures breaks and the belief disappears.
+It scopes the belief to the units that fail, names the fix that worked in those incidents, retains the correction to Hindsight, and lets the Verifier veto a recommendation the newer evidence contradicts. The dashboard plots every fix's outcomes over time. If the fix starts working again, the belief disappears.
 
 ## Run it
 
@@ -106,43 +112,48 @@ cp .env.example .env              # add GROQ_API_KEY and HINDSIGHT_API_KEY (and 
 python backend/app.py             # http://localhost:8000
 ```
 
-On first start the app seeds the four Hindsight banks (allow two to three minutes for Hindsight to finish processing). With no keys at all it runs on a local
-keyword memory and rule-based briefings, so the demo cannot break.
+On first start the app seeds the shared bank (about 640 records; allow a few minutes for Hindsight to finish processing). With no Hindsight key, or if Hindsight cannot be reached, it runs on the local keyword memory and says so.
 
 ```bash
-python -m pytest tests -q         # 43 tests, no network or keys needed
-python scripts/run_eval.py        # the replay evaluation, about 15 minutes on real Hindsight + Groq
-python scripts/extend_data.py     # regenerate the alarm history, newer units and the drift (idempotent)
+python -m pytest tests -q            # 60+ tests, no network or keys needed (fake LLM, local memory, mock Band server)
+python scripts/run_eval.py           # the replay evaluation on real Groq (and Hindsight, if reachable)
+python scripts/generate_data.py      # regenerate the synthetic company (deterministic)
+python scripts/check_content.py      # submission-rule checks (banned word, post length, links, secrets)
 ```
+
+**Band:** create four remote agents in the Band app and paste their keys into `.env`. Step by step, with what is and is not verified, in [docs/BAND_SETUP.md](docs/BAND_SETUP.md). Without keys the same four agents run in-process.
 
 ## Failure handling
 
-- LLM returns bad JSON or errors: retried, then a fallback model, then a deterministic briefing that still uses memory.
-- Hindsight unreachable: recall errors are caught and the agent continues, and the UI shows which backend is active.
+- LLM rate limit or outage: a per-minute limit is waited out; a daily limit moves straight to the next of three Groq models; if all fail, the agent says "unknown" and the Verifier will not approve it. In the evaluation, runs where the LLM failed are excluded from the rates, never scored as wrong answers.
+- Hindsight unreachable: local BM25 fallback, with a visible banner.
 - Band unreachable or misconfigured: the run continues in-process and the room says so.
-- Bad audio, silence, an unreadable file or an extraction failure: specific messages, and a type-instead fallback. Nothing is saved without confirmation.
-- A missing or invented citation: dropped, never shown.
+- Bad audio, silence, an unreadable file or an extraction failure: specific messages and a type-instead fallback; nothing is saved without confirmation.
+- An invented machine id, a citation that does not exist, a part the records do not support: refused or vetoed, never shown as fact.
 
 ## Layout
 
 ```
-backend/   app.py (API + SSE)  agent.py  memory.py  llm.py  beliefs.py  evaluation.py  voice.py  store.py
-           mesh/  band.py  roles.py  runner.py  records.py
-           data/  synthetic company, machines, sites, history, alarms, stock; eval_results.json
+backend/   app.py (API + SSE)  agents.py (Dispatcher, Diagnostician, Parts, Verifier)  evidence.py  records.py  memory.py  traced.py
+           beliefs.py  plan.py  simulate.py  evaluation.py  watchlist.py  voice.py  llm.py  store.py
+           mesh/  band.py (Band REST client + room)  runner.py (control room, two paths)
+           data/  synthetic company, machines, sites, history, alarms, stock, scenarios; eval_results.json
 frontend/  index.html (the whole UI, no build step)
-scripts/   generate_data.py  extend_data.py  run_eval.py
-tests/     mesh, Band (mock server), evaluation, voice, beliefs, alarm feed
+scripts/   generate_data.py  run_eval.py  check_content.py
+tests/     agents + Verifier + control room, Band (mock server), evidence levels, evaluation (leakage), voice
 docs/      architecture.svg  BAND_SETUP.md  EVALUATION.md  VIDEO_SCRIPT.md  ARTICLE.md  LINKEDIN_POST.md  screenshots/
 ```
 
 ## Data
 
-All data is synthetic: a fictional Bengaluru HVAC contractor (CoolCare Facility Services), 9 sites, 25 machines, 6 technicians, 67 visits across 43 incidents,
-78 alarms with remote-fix outcomes, and parts stock. No real company, person or customer.
+All data is synthetic: a fictional Bengaluru HVAC contractor (CoolCare Facility Services) with 12 sites, 51 machines (8 held out for testing only), 6 technicians, about 230 visits in about 137 incidents, 180 alarms with remote-fix outcomes, and parts stock. It deliberately contains wrong diagnoses, failed first attempts, parts shortages, fixes that came back within 30 days, and a fix that stops working on newer units. No real company, person or customer.
 
-## Honest limits
+## Limitations and roadmap
 
-- The evaluation is small (43 incidents) and synthetic; read the direction, not the exact percentage. See [docs/EVALUATION.md](docs/EVALUATION.md).
-- The Band transport is implemented from Band's published OpenAPI schemas and tested against a mock; it needs your four agent keys for a first live run ([docs/BAND_SETUP.md](docs/BAND_SETUP.md)).
-- Remote fixes in the demo are simulated: no real BMS is driven.
-- Whisper mishears brand names (a spoken "Daikin" can come back as "Dakin"); the confirmation step exists for that reason.
+- **Hindsight credit.** The Hindsight bank needs credit to ingest and recall. When the credit ran out during development, every Hindsight-dependent number was produced on the local fallback or marked **not run**; see [docs/EVALUATION.md](docs/EVALUATION.md) for exactly what ran. Top up and rerun `python scripts/run_eval.py` to add the Hindsight arms.
+- **Band is untested against the live service.** The transport follows Band's published OpenAPI schemas and is tested against a mock server; a first live run needs your four agent keys ([docs/BAND_SETUP.md](docs/BAND_SETUP.md)).
+- **Everything labelled Simulated is an assumption or a replay**, not a measurement: the consequence of a plan, hours and downtime per visit, and the ROI "avoided return trips". The $200-300 cost of a truck dispatch is a cited benchmark (Aberdeen Group, via AEX); the rest are ours.
+- **Small, synthetic evaluation.** Read the direction, not the percentage; the intervals are in the report.
+- **Remote fixes are decided by rules over the alarm log and are not driven on a real building management system.**
+- **Whisper mishears brand names** (a spoken "Daikin" can come back as "Dakin"); the confirmation step exists for that reason.
+- **Roadmap:** a native phone app with offline mode; a real BMS integration for the remote step; one bank per company in a multi-tenant deployment; letting the Verifier's thresholds be set per company; field trials in place of replays.
