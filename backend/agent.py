@@ -20,6 +20,8 @@ Rules:
 - If memories show an attempt that did NOT fix the problem before, put it in "avoid" and say when it failed.
 - If memories show what fixed it, put that first in "do_first" and list the needed parts in "bring".
 - Include site access rules and contact preferences from memories in "site_notes".
+- A CORRECTED LESSON overrides older memories that disagree with it. Follow it for this unit: do not put the fix it calls
+  unreliable first in "do_first" (list it under "avoid" with the reason), and make the fix it names the first step.
 - If there are no memories, give sensible generic troubleshooting for this equipment type, set confidence to "low",
   and leave "site_notes" empty.
 - Be short and concrete: a technician reads this on a phone in the van.

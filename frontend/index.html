@@ -354,6 +354,20 @@ details.mu .m1 b{color:var(--text);font-weight:500}
 .stk.warn{color:var(--amber)}
 .belief{padding:13px 15px;border-radius:12px;border:1px solid var(--amber);background:rgba(255,178,61,.08);font-size:13px;line-height:1.45;margin-bottom:12px}
 .belief .kick{color:var(--amber);margin-bottom:6px;display:block}
+/* fix outcomes */
+.fxrow{padding:16px 0;border-bottom:1px solid var(--line)}
+.fxrow:last-child{border-bottom:0}
+.fxh{display:flex;justify-content:space-between;gap:14px;align-items:baseline;margin-bottom:12px}
+.fxh b{font:700 14px/1.3 var(--disp);letter-spacing:-.01em}
+.fxh span{font:400 11px var(--mono);color:var(--mute);white-space:nowrap}
+.dots{display:flex;gap:7px;flex-wrap:wrap}
+.dot{width:15px;height:15px;border-radius:50%;background:var(--acid);animation:pop .5s var(--ease) backwards;animation-delay:calc(var(--i)*.035s)}
+.dot.f{background:var(--hot)}
+.dot.new{box-shadow:0 0 0 2px var(--s1),0 0 0 3.5px var(--paper)}
+@keyframes pop{from{transform:scale(0)}}
+.fxax{display:flex;justify-content:space-between;margin-top:8px;font:400 10px var(--mono);color:var(--dim)}
+.fxlegend{display:flex;gap:16px;flex-wrap:wrap;font:400 11px var(--mono);color:var(--mute);margin:0 0 6px}
+.fxlegend i{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:middle;margin-right:6px}
 /* eval */
 .evg{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px}
 .evbig{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
@@ -479,6 +493,10 @@ details.mu .m1 b{color:var(--text);font-weight:500}
       <div class="panel"><h3>Machine history</h3><p class="sub">Every visit, every attempt, in order.</p>
         <select class="fi" id="hist-machine" style="margin-bottom:20px"></select><div id="hist"></div></div>
     </div>
+    <div class="panel" id="fixpanel" style="margin-top:16px"><h3>How each fix performs over time</h3><p class="sub">Every attempt, in date order. When recent evidence contradicts an old lesson, the agent updates its belief and says so in the briefing.</p>
+      <select class="fi" id="fixfam" style="max-width:320px;margin-bottom:14px"></select>
+      <div class="fxlegend"><span><i style="background:var(--acid)"></i>worked</span><span><i style="background:var(--hot)"></i>failed</span><span><i style="background:var(--s3);box-shadow:0 0 0 2px var(--s1),0 0 0 3.5px var(--paper)"></i>unit installed 2023 or later</span></div>
+      <div id="fixbody"><div class="empty">Loading…</div></div></div>
     <div class="panel" id="evalpanel" style="margin-top:16px"><h3>Does memory actually help?</h3><p class="sub">Replay of the whole service history, in date order. Each incident is briefed using only what the company knew before that date.</p><div id="evalbody"><div class="empty">Loading…</div></div></div>
     <div class="admin">
       <button class="btn sm" id="seed-btn">Load service history into memory</button>
@@ -579,6 +597,7 @@ function briefHTML(res,opts={}){
   return `<div class="brief">
     <div class="conf rv" ${i()}><div class="meter" style="--c:${col}">${[1,2,3].map(k=>`<i class="${k<=lv?"f":""}" style="animation-delay:${k*.12}s"></i>`).join("")}</div>${esc(b.confidence)} confidence${res.use_memory?"":" · no memory"}</div>
     <h4 class="rv hl" ${i()} data-t="${esc(b.headline)}">${esc(b.headline)}</h4>
+    ${(res.belief_updates||[]).map(x=>`<div class="belief rv" ${i()}><span class="kick">Belief updated</span>${esc(x.text.replace(/^Belief updated:\s*/,""))}</div>`).join("")}
     <div class="blk rv" ${i()}><div class="kick">Likely cause</div><p>${esc(b.likely_cause)}</p></div>
     ${b.avoid.length?`<div class="blk avoid rv" ${i()}><div class="kick">Don't repeat</div><ul>${b.avoid.map((x,k)=>`<li><span class="strike" style="--k:${k}">${esc(x)}</span></li>`).join("")}</ul></div>`:""}
     <div class="blk rv" ${i()}><div class="kick">Do first</div><ol>${list(b.do_first)}</ol></div>
@@ -716,7 +735,7 @@ async function loadDash(){
   if(!$("#hist-machine").options.length){
     $("#hist-machine").innerHTML=REF.machines.map(m=>`<option value="${m.id}">${m.id} · ${esc(m.model)} · ${esc(m.location)}</option>`).join("");
     $("#hist-machine").onchange=loadHist}
-  loadHist();buildTicker();loadEval()}
+  loadHist();buildTicker();loadFixes();loadEval()}
 async function loadHist(){
   const h=await api(`/api/machines/${$("#hist-machine").value}/history`);
   $("#hist").innerHTML=h.length?`<div class="tl">${h.map((v,i)=>`<div class="it ${v.outcome==="revisit_needed"?"rv2":""} rv" style="--i:${i}">
@@ -874,6 +893,19 @@ function renderOutcome(r){
       ${r.job&&JOBS.find(j=>j.job_id===r.job.job_id)?`<button class="btn sm pri" style="margin-top:14px" onclick="goTech('${r.job.job_id}')">Open in technician view</button>`:""}</div>`}
   $("#outcome").innerHTML=h}
 function goTech(id){$$("#nav button")[0].click();selectJob(id)}
+
+/* ---------- fix outcomes over time ---------- */
+async function loadFixes(){
+  const sel=$("#fixfam");
+  if(!sel.options.length){
+    const fams=await api("/api/families");sel.innerHTML=fams.map(f=>`<option>${esc(f)}</option>`).join("");
+    if(fams.includes("Daikin VRV IV"))sel.value="Daikin VRV IV";sel.onchange=loadFixes}
+  const r=await api("/api/fix-outcomes?family="+encodeURIComponent(sel.value));
+  $("#fixbody").innerHTML=r.fixes.length?r.fixes.map(f=>`<div class="fxrow">
+    <div class="fxh"><b>${esc(f.fix)}</b><span>${f.worked} worked · ${f.failed} failed</span></div>
+    <div class="dots">${f.attempts.map((a,i)=>`<span class="dot ${a.result==="failed"?"f":""} ${a.installed>=2023?"new":""}" style="--i:${i}" title="${esc(a.date)} · ${esc(a.machine_id)} (installed ${a.installed}) · ${esc(a.job_id)} · ${a.result}"></span>`).join("")}</div>
+    <div class="fxax"><span>${esc(f.attempts[0].date)}</span><span>${esc(f.attempts[f.attempts.length-1].date)}</span></div>
+    ${f.belief?`<div class="belief" style="margin:14px 0 0"><span class="kick">Belief updated</span>${esc(f.belief.replace(/^Belief updated:\s*/,""))}</div>`:""}</div>`).join(""):`<div class="empty">No attempts recorded for this family.</div>`}
 
 /* ---------- replay evaluation ---------- */
 let evalTimer=null,evalMetric="ftf";

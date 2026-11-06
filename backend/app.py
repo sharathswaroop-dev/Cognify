@@ -86,7 +86,20 @@ try:
 except Exception as exc:
     log.error("Could not seed agent banks: %s", exc)
 
-app = FastAPI(title="SiteMemory", version="0.2.0")
+# ------------------------------------------------------------------ self-correcting memory
+from beliefs import BeliefEngine, timeline  # noqa: E402
+
+beliefs_engine = BeliefEngine(store, {"field": memory, "diagnostician": _memories["diagnostician"]}, _state, _set_state)
+agent.belief_fn = beliefs_engine.for_machine
+mesh.beliefs = beliefs_engine.for_machine
+try:
+    _b = beliefs_engine.sync()
+    if _b:
+        log.info("retained belief corrections to Hindsight: %s", _b)
+except Exception as exc:
+    log.error("Could not retain belief corrections: %s", exc)
+
+app = FastAPI(title="SiteMemory", version="0.3.0")
 
 
 # ------------------------------------------------------------------ models
@@ -177,6 +190,10 @@ def log_visit(job_id: str, body: VisitLog):
         raise HTTPException(502, f"Could not save to memory: {exc}") from exc
     store.add_logged(visit)
     learned = mesh.record_visit(visit)  # the other agents learn their slice of this visit
+    try:
+        beliefs_engine.sync()  # a new failure may confirm, deepen or create a correction
+    except Exception:
+        log.exception("belief sync failed")
     return {"saved": True, "visit": visit, "memory_text": rec["text"], "tags": rec["tags"],
             "memory_backend": memory.name, "agents_updated": ["field"] + list(learned)}
 
@@ -311,6 +328,22 @@ def mesh_stream(run_id: str):
 
     return StreamingResponse(gen(), media_type="text/event-stream",
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+
+# ------------------------------------------------------------------ beliefs + fix outcomes
+@app.get("/api/beliefs")
+def current_beliefs():
+    return beliefs_engine.current()
+
+
+@app.get("/api/fix-outcomes")
+def fix_outcomes(family: str):
+    return {"family": family, "fixes": timeline(store.all_visits(), store.machine, family)[:6]}
+
+
+@app.get("/api/families")
+def families():
+    return sorted({m["model_family"] for m in store.machines})
 
 
 # ------------------------------------------------------------------ voice logging
