@@ -328,6 +328,24 @@ details.mu .m1 b{color:var(--text);font-weight:500}
 .stk.warn{color:var(--amber)}
 .belief{padding:13px 15px;border-radius:12px;border:1px solid var(--amber);background:rgba(255,178,61,.08);font-size:13px;line-height:1.45;margin-bottom:12px}
 .belief .kick{color:var(--amber);margin-bottom:6px;display:block}
+/* eval */
+.evg{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px}
+.evbig{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.evcell{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--ink)}
+.evcell.on{border-color:var(--acid)}
+.evcell .v{font:800 clamp(38px,4.2vw,64px)/.95 var(--disp);letter-spacing:-.06em;margin:12px 0 8px}
+.evcell.on .v{color:var(--acid)}.evcell .ci{font:400 10.5px var(--mono);color:var(--mute)}
+.lg{display:flex;gap:16px;flex-wrap:wrap;font:400 11px var(--mono);color:var(--mute);margin:0 0 8px}
+.lg i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.tabs{display:inline-flex;gap:4px;padding:3px;border:1px solid var(--line);border-radius:999px;margin-bottom:10px}
+.tabs button{border:0;background:none;border-radius:999px;padding:5px 12px;font:600 11.5px var(--disp);color:var(--mute)}
+.tabs button.on{background:var(--acid);color:#0b0c0e}
+.prog{height:6px;border-radius:3px;background:var(--s3);overflow:hidden;margin:14px 0 8px}
+.prog i{display:block;height:100%;background:var(--acid);width:0;transition:width .6s var(--ease)}
+.lp{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.lp.w{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:dash 1.6s var(--ease) forwards}
+@keyframes dash{to{stroke-dashoffset:0}}
+@media (max-width:1180px){.evg{grid-template-columns:1fr}}
 @media (max-width:1180px){.mgrid{grid-template-columns:1fr}}
 @media (max-width:1180px){.grid{grid-template-columns:1fr 410px}.col{grid-column:1/-1}.phone-wrap{position:static}.queue{flex-direction:row;overflow-x:auto;padding-bottom:6px}.tk{min-width:290px}.dgrid,.diff{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:820px){header{flex-wrap:wrap;padding:12px 16px;gap:12px}.chips{display:none}nav button{padding:8px 12px}main{padding:22px 16px 60px}.grid{grid-template-columns:1fr}.phone-wrap{max-width:410px;margin:0 auto}.layer{padding:20px}.arow{grid-template-columns:1fr 110px 34px}}
@@ -435,6 +453,7 @@ details.mu .m1 b{color:var(--text);font-weight:500}
       <div class="panel"><h3>Machine history</h3><p class="sub">Every visit, every attempt, in order.</p>
         <select class="fi" id="hist-machine" style="margin-bottom:20px"></select><div id="hist"></div></div>
     </div>
+    <div class="panel" id="evalpanel" style="margin-top:16px"><h3>Does memory actually help?</h3><p class="sub">Replay of the whole service history, in date order. Each incident is briefed using only what the company knew before that date.</p><div id="evalbody"><div class="empty">Loading…</div></div></div>
     <div class="admin">
       <button class="btn sm" id="seed-btn">Load service history into memory</button>
       <button class="btn sm" id="reset-btn">Reset demo (clear live logs)</button>
@@ -671,7 +690,7 @@ async function loadDash(){
   if(!$("#hist-machine").options.length){
     $("#hist-machine").innerHTML=REF.machines.map(m=>`<option value="${m.id}">${m.id} · ${esc(m.model)} · ${esc(m.location)}</option>`).join("");
     $("#hist-machine").onchange=loadHist}
-  loadHist();buildTicker()}
+  loadHist();buildTicker();loadEval()}
 async function loadHist(){
   const h=await api(`/api/machines/${$("#hist-machine").value}/history`);
   $("#hist").innerHTML=h.length?`<div class="tl">${h.map((v,i)=>`<div class="it ${v.outcome==="revisit_needed"?"rv2":""} rv" style="--i:${i}">
@@ -747,6 +766,51 @@ function renderOutcome(r){
       ${r.job&&JOBS.find(j=>j.job_id===r.job.job_id)?`<button class="btn sm pri" style="margin-top:14px" onclick="goTech('${r.job.job_id}')">Open in technician view</button>`:""}</div>`}
   $("#outcome").innerHTML=h}
 function goTech(id){$$("#nav button")[0].click();selectJob(id)}
+
+/* ---------- replay evaluation ---------- */
+let evalTimer=null,evalMetric="ftf";
+const pc=x=>x==null?"n/a":Math.round(x*100)+"%";
+function lineChart(curve,metric){
+  const W=640,H=250,pl=40,pr=12,pt=14,pb=44,n=curve.length;if(n<2)return"";
+  const x=i=>pl+i/(n-1)*(W-pl-pr),y=v=>pt+(1-v)*(H-pt-pb);
+  const path=k=>curve.map((c,i)=>`${i?"L":"M"}${x(i).toFixed(1)} ${y(c[k]).toFixed(1)}`).join(" ");
+  const kw=`with_${metric}_roll`,ko=`without_${metric}_roll`;
+  const ticks=[0,Math.floor((n-1)/2),n-1];
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Learning curve">
+    ${[0,.25,.5,.75,1].map(f=>`<line x1="${pl}" x2="${W-pr}" y1="${y(f)}" y2="${y(f)}" stroke="#272b31" stroke-dasharray="2 5"/><text x="${pl-8}" y="${y(f)+3}" text-anchor="end" font-size="10" fill="#5b5f67" font-family="JetBrains Mono,monospace">${Math.round(f*100)}%</text>`).join("")}
+    ${ticks.map(i=>`<text x="${x(i)}" y="${H-24}" text-anchor="middle" font-size="10" fill="#8b8f97" font-family="JetBrains Mono,monospace">#${curve[i].n}</text><text x="${x(i)}" y="${H-10}" text-anchor="middle" font-size="9.5" fill="#5b5f67" font-family="JetBrains Mono,monospace">${curve[i].memory_visits} visits</text>`).join("")}
+    <path class="lp" d="${path(ko)}" stroke="#8b8f97" stroke-dasharray="4 6"/>
+    <path class="lp w" style="--len:3000" pathLength="3000" d="${path(kw)}" stroke="#d6ff3d"/>
+    ${curve.map((c,i)=>`<g class="col-g" data-i="${i}"><rect x="${x(i)-(W-pl-pr)/(n-1)/2}" y="0" width="${(W-pl-pr)/(n-1)}" height="${H-pb}" fill="transparent"/><circle cx="${x(i)}" cy="${y(c[kw])}" r="2.6" fill="#d6ff3d"/></g>`).join("")}
+  </svg>`}
+async function loadEval(){
+  clearInterval(evalTimer);
+  let r;try{r=await api("/api/eval/results")}catch(e){$("#evalbody").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
+  const st=await api("/api/eval/status").catch(()=>({state:"idle"}));
+  if(st.state==="running"){
+    $("#evalbody").innerHTML=`<div class="kick">Replaying history</div><div class="prog"><i style="width:${st.total?st.done/st.total*100:2}%"></i></div><div class="foot">${st.done}/${st.total||"?"} incidents · ${esc(st.message)}. A full run takes about 20 minutes on real Hindsight and Groq.</div>`;
+    evalTimer=setInterval(loadEval,6000);return}
+  if(!r.available||r.partial){
+    $("#evalbody").innerHTML=`<p class="sub" style="margin-bottom:14px">${r.partial?"A previous run did not finish.":"No evaluation has been run yet."} A full run replays every incident twice (without and with memory) and takes about 20 minutes.</p>
+      ${st.state==="error"?`<div class="err" style="margin-bottom:12px">${esc(st.message)}</div>`:""}<button class="btn pri mag" id="eval-run" data-cursor="Run">Run the replay evaluation</button>`;
+    $("#eval-run").onclick=async()=>{await api("/api/eval/run",{});loadEval()};return}
+  const S=r.summary,f=k=>S[k].ftf,fx=k=>S[k].fix;
+  const cell=(label,k,on)=>`<div class="evcell ${on?"on":""}"><div class="kick">${label}</div><div class="v" data-to="${Math.round(f(k).rate*100)}">0%</div><div class="ci">${f(k).k}/${f(k).n} incidents · 95% CI ${pc(f(k).ci[0])}–${pc(f(k).ci[1])}</div></div>`;
+  $("#evalbody").innerHTML=`<div class="evg"><div>
+    <div class="kick" style="margin-bottom:10px">Predicted first-time fix · ${r.n_incidents} incidents</div>
+    <div class="evbig">${cell("Without memory","without",0)}${cell("With memory","with",1)}</div>
+    <table><tr><th>Metric</th><th>Without</th><th>With</th></tr>
+      <tr><td>Fix recommended</td><td>${pc(fx("without").rate)}</td><td>${pc(fx("with").rate)}</td></tr>
+      <tr><td>Warned off failed attempts</td><td>${pc(S.without.warn.rate)}</td><td>${pc(S.with.warn.rate)}</td></tr>
+      <tr><td>Right part to bring</td><td>${pc(S.without.part.rate)}</td><td>${pc(S.with.part.rate)}</td></tr></table>
+    <div class="foot" style="margin-top:12px">The company's actual first-time-fix rate over these incidents was ${pc(r.actual_company_first_time_fix)}. Synthetic data, single run, LLM judge cross-checked by keyword matching (agree ${pc(r.judge_keyword_agreement_on_fix)}). Full method and caveats: docs/EVALUATION.md.</div></div>
+    <div><div class="tabs" id="evtabs"><button data-m="ftf" class="${evalMetric==="ftf"?"on":""}">First-time fix</button><button data-m="fix" class="${evalMetric==="fix"?"on":""}">Fix recommended</button></div>
+    <div class="lg"><span><i style="background:#d6ff3d"></i>with memory</span><span><i style="background:#8b8f97"></i>without</span><span>rolling 8 incidents · x = incident #, visits in memory</span></div>
+    <div class="readout" id="evread">Hover the curve.</div>${lineChart(r.curve,evalMetric)}</div></div>`;
+  $$("#evalbody .v").forEach(el=>countTo(el,+el.dataset.to,{suffix:"%"}));
+  $$("#evtabs button").forEach(b=>b.onclick=()=>{evalMetric=b.dataset.m;loadEval()});
+  $$("#evalbody .col-g").forEach(g=>g.onmouseenter=()=>{const c=r.curve[+g.dataset.i];
+    $("#evread").innerHTML=`<b>#${c.n} · ${c.date}</b> · ${c.memory_visits} visits in memory · with <em style="color:var(--acid)">${pc(c["with_"+evalMetric+"_roll"])}</em> vs without ${pc(c["without_"+evalMetric+"_roll"])}`})}
 
 /* ---------- boot ---------- */
 (async()=>{

@@ -312,6 +312,56 @@ def mesh_stream(run_id: str):
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+# ------------------------------------------------------------------ replay evaluation
+import threading  # noqa: E402
+import time  # noqa: E402
+
+from evaluation import PROGRESS, Evaluator, render_markdown  # noqa: E402
+from memory import bank_prefix  # noqa: E402
+
+EVAL_PATH = DATA / "eval_results.json"
+EVAL_MD = ROOT.parent / "docs" / "EVALUATION.md"
+
+
+def _run_eval(limit: int | None) -> None:
+    try:
+        mem = _build("eval", bank_id=f"{bank_prefix()}-eval-{int(time.time())}")
+        if mem.name == "local":
+            mem.reset()
+        ea = Agent(mem, store)
+        ea.llm, ea.belief_fn = agent.llm, agent.belief_fn
+        ev = Evaluator(store, ea, agent.llm, mem, EVAL_PATH, site_records=[ea.site_record(x) for x in store.sites],
+                       visit_record=ea.visit_record)
+        ev.run(limit)
+        EVAL_MD.parent.mkdir(exist_ok=True)
+        EVAL_MD.write_text(render_markdown(json.loads(EVAL_PATH.read_text(encoding="utf-8"))), encoding="utf-8")
+    except Exception as exc:
+        log.exception("evaluation failed")
+        PROGRESS.set(state="error", message=str(exc)[:300])
+
+
+@app.post("/api/eval/run")
+def eval_run(limit: int | None = None):
+    if PROGRESS.state == "running":
+        raise HTTPException(409, "An evaluation is already running")
+    PROGRESS.set(state="running", done=0, total=0, message="Starting")
+    threading.Thread(target=_run_eval, args=(limit,), daemon=True, name="eval").start()
+    return PROGRESS.public()
+
+
+@app.get("/api/eval/status")
+def eval_status():
+    return PROGRESS.public()
+
+
+@app.get("/api/eval/results")
+def eval_results():
+    if not EVAL_PATH.exists():
+        return {"available": False}
+    d = json.loads(EVAL_PATH.read_text(encoding="utf-8"))
+    return {"available": True, **d}
+
+
 # ------------------------------------------------------------------ frontend
 @app.get("/")
 def index():

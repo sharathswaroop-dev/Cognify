@@ -74,6 +74,8 @@ class Agent:
         self.memory = memory
         self.store = store  # data access (machines, sites, technicians, logged visits)
         self.llm = LLM()
+        # Optional self-correction hook: belief_fn(machine, as_of, visits) -> (prompt_text, [belief dicts])
+        self.belief_fn = None
 
     # ------------------------------------------------------------ retain
     def visit_record(self, visit: dict) -> dict:
@@ -128,7 +130,8 @@ class Agent:
         return {"machine": machine_mem, "family": family_mem, "site": site_mem, "reflection": reflection}
 
     # ------------------------------------------------------------ briefing
-    def briefing(self, job: dict, use_memory: bool, extra: str = "") -> dict[str, Any]:
+    def briefing(self, job: dict, use_memory: bool, extra: str = "", as_of: str | None = None,
+                 visits: list | None = None) -> dict[str, Any]:
         t0 = time.time()
         m = self.store.machine(job["machine_id"])
         s = self.store.site(m["site_id"])
@@ -141,6 +144,14 @@ class Agent:
         recall_ms = int((time.time() - t0) * 1000)
 
         mem_block = self._memory_prompt(ctx)
+        belief_updates: list[dict] = []
+        if use_memory and self.belief_fn:
+            try:
+                btxt, belief_updates = self.belief_fn(m, as_of, visits)
+                if btxt:
+                    mem_block = (mem_block + "\n\n" if mem_block else "") + btxt
+            except Exception as exc:
+                log.warning("belief check failed: %s", exc)
         user = (f"JOB TICKET\nJob: {job['job_id']} on {job['date']}\nSite: {s['name']}, {s['area']}\n"
                 f"Machine: {m['id']} - {m['model']} ({m['type']}) at {m['location']}, installed {m['installed']}\n"
                 f"Reported symptom: {job['symptom']}\n\n"
@@ -159,6 +170,7 @@ class Agent:
                 [{"level": "Site", **x.to_dict()} for x in ctx["site"]])
         return {"job_id": job["job_id"], "use_memory": use_memory, "briefing": data, "memories_used": used,
                 "reflection": ctx["reflection"], "generated_by": source, "memory_backend": self.memory.name,
+                "belief_updates": belief_updates,
                 "timing_ms": {"recall": recall_ms, "total": int((time.time() - t0) * 1000)}}
 
     @staticmethod
