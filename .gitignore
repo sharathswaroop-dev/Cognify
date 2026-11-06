@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+backend/data/local_memory.json
+backend/data/logged_visits.json
+backend/data/state.json
+.venv/
+
+# Event briefing PDFs are not part of the public repo
+docs/*.pdf

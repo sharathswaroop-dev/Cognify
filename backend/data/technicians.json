@@ -1,0 +1,44 @@
+[
+  {
+    "id": "T-01",
+    "name": "Arjun Rao",
+    "years": 9,
+    "joined": "2017-06-01",
+    "speciality": "VRV / VRF systems"
+  },
+  {
+    "id": "T-02",
+    "name": "Suresh Kumar",
+    "years": 6,
+    "joined": "2020-02-10",
+    "speciality": "Chillers and AHUs"
+  },
+  {
+    "id": "T-03",
+    "name": "Meena Iyer",
+    "years": 5,
+    "joined": "2021-07-19",
+    "speciality": "Precision cooling"
+  },
+  {
+    "id": "T-04",
+    "name": "Farhan Sheikh",
+    "years": 3,
+    "joined": "2023-04-03",
+    "speciality": "Split and cassette units"
+  },
+  {
+    "id": "T-05",
+    "name": "Deepak Gowda",
+    "years": 4,
+    "joined": "2022-09-12",
+    "speciality": "Ductable units"
+  },
+  {
+    "id": "T-06",
+    "name": "Ravi Shankar",
+    "years": 1,
+    "joined": "2026-10-06",
+    "speciality": "General HVAC (new joiner)"
+  }
+]

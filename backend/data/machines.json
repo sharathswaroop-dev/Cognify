@@ -1,0 +1,191 @@
+[
+  {
+    "id": "M-07",
+    "site_id": "S-01",
+    "model": "Daikin VRV IV RXYQ10",
+    "type": "VRV outdoor unit",
+    "location": "Roof, Bay 3",
+    "installed": 2019,
+    "model_family": "Daikin VRV IV"
+  },
+  {
+    "id": "M-08",
+    "site_id": "S-01",
+    "model": "Daikin VRV IV RXYQ12",
+    "type": "VRV outdoor unit",
+    "location": "Roof, Bay 4",
+    "installed": 2019,
+    "model_family": "Daikin VRV IV"
+  },
+  {
+    "id": "M-09",
+    "site_id": "S-01",
+    "model": "Daikin FXFQ cassette",
+    "type": "Cassette indoor unit",
+    "location": "Floor 6, cafeteria",
+    "installed": 2019,
+    "model_family": "Daikin FXFQ cassette"
+  },
+  {
+    "id": "M-11",
+    "site_id": "S-02",
+    "model": "Carrier 30XW screw chiller",
+    "type": "Water-cooled chiller",
+    "location": "Plant room, Chiller 1",
+    "installed": 2016,
+    "model_family": "Carrier 30XW screw chiller"
+  },
+  {
+    "id": "M-12",
+    "site_id": "S-02",
+    "model": "Blue Star split 2T",
+    "type": "Split AC",
+    "location": "ICU nurse station",
+    "installed": 2021,
+    "model_family": "Blue Star split 2T"
+  },
+  {
+    "id": "M-13",
+    "site_id": "S-02",
+    "model": "Zeco AHU 15000 CFM",
+    "type": "Air handling unit",
+    "location": "OT block AHU-2",
+    "installed": 2017,
+    "model_family": "Zeco AHU 15000 CFM"
+  },
+  {
+    "id": "M-21",
+    "site_id": "S-03",
+    "model": "Voltas ductable 11T",
+    "type": "Ductable AC",
+    "location": "Food court",
+    "installed": 2018,
+    "model_family": "Voltas ductable 11T"
+  },
+  {
+    "id": "M-22",
+    "site_id": "S-03",
+    "model": "Carrier 30XW screw chiller",
+    "type": "Water-cooled chiller",
+    "location": "B2 plant room, Chiller 2",
+    "installed": 2015,
+    "model_family": "Carrier 30XW screw chiller"
+  },
+  {
+    "id": "M-23",
+    "site_id": "S-03",
+    "model": "Zeco AHU 20000 CFM",
+    "type": "Air handling unit",
+    "location": "Level 1 AHU-4",
+    "installed": 2015,
+    "model_family": "Zeco AHU 20000 CFM"
+  },
+  {
+    "id": "M-31",
+    "site_id": "S-04",
+    "model": "Vertiv Liebert PEX 4",
+    "type": "Precision AC",
+    "location": "Hall 2, PAC-03",
+    "installed": 2019,
+    "model_family": "Vertiv Liebert PEX 4"
+  },
+  {
+    "id": "M-32",
+    "site_id": "S-04",
+    "model": "Vertiv Liebert PEX 4",
+    "type": "Precision AC",
+    "location": "Hall 2, PAC-05",
+    "installed": 2019,
+    "model_family": "Vertiv Liebert PEX 4"
+  },
+  {
+    "id": "M-41",
+    "site_id": "S-05",
+    "model": "Daikin VRV IV RXYQ14",
+    "type": "VRV outdoor unit",
+    "location": "Terrace, east",
+    "installed": 2018,
+    "model_family": "Daikin VRV IV"
+  },
+  {
+    "id": "M-42",
+    "site_id": "S-05",
+    "model": "Mitsubishi Electric cassette",
+    "type": "Cassette indoor unit",
+    "location": "Banquet hall",
+    "installed": 2020,
+    "model_family": "Mitsubishi Electric cassette"
+  },
+  {
+    "id": "M-51",
+    "site_id": "S-06",
+    "model": "Zeco AHU clean-room",
+    "type": "Air handling unit",
+    "location": "Clean room AHU-1",
+    "installed": 2020,
+    "model_family": "Zeco AHU clean-room"
+  },
+  {
+    "id": "M-52",
+    "site_id": "S-06",
+    "model": "Blue Star ductable 8.5T",
+    "type": "Ductable AC",
+    "location": "QC lab",
+    "installed": 2019,
+    "model_family": "Blue Star ductable 8.5T"
+  },
+  {
+    "id": "M-61",
+    "site_id": "S-07",
+    "model": "Daikin VRV IV RXYQ10",
+    "type": "VRV outdoor unit",
+    "location": "Terrace",
+    "installed": 2020,
+    "model_family": "Daikin VRV IV"
+  },
+  {
+    "id": "M-62",
+    "site_id": "S-07",
+    "model": "LG cassette 2T",
+    "type": "Cassette indoor unit",
+    "location": "Board room",
+    "installed": 2020,
+    "model_family": "LG cassette 2T"
+  },
+  {
+    "id": "M-63",
+    "site_id": "S-07",
+    "model": "Voltas split 1.5T",
+    "type": "Split AC",
+    "location": "Server room",
+    "installed": 2022,
+    "model_family": "Voltas split 1.5T"
+  },
+  {
+    "id": "M-71",
+    "site_id": "S-08",
+    "model": "Daikin VRV IV RXYQ8",
+    "type": "VRV outdoor unit",
+    "location": "Terrace, Block C",
+    "installed": 2021,
+    "model_family": "Daikin VRV IV"
+  },
+  {
+    "id": "M-72",
+    "site_id": "S-08",
+    "model": "Blue Star split 1.5T",
+    "type": "Split AC",
+    "location": "Clubhouse gym",
+    "installed": 2022,
+    "model_family": "Blue Star split 1.5T"
+  },
+  {
+    "id": "M-91",
+    "site_id": "S-09",
+    "model": "Daikin VRV IV RXYQ12",
+    "type": "VRV outdoor unit",
+    "location": "Roof",
+    "installed": 2024,
+    "model_family": "Daikin VRV IV"
+  }
+]

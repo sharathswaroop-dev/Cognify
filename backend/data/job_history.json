@@ -1,0 +1,1471 @@
+[
+  {
+    "job_id": "J-1032",
+    "incident_id": "I-023",
+    "visit_no": 1,
+    "date": "2025-11-02",
+    "technician_id": "T-02",
+    "machine_id": "M-51",
+    "site_id": "S-06",
+    "symptom": "AHU noise complaint from tenants",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1029",
+    "incident_id": "I-021",
+    "visit_no": 1,
+    "date": "2025-11-06",
+    "technician_id": "T-01",
+    "machine_id": "M-42",
+    "site_id": "S-05",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1001",
+    "incident_id": "I-001",
+    "visit_no": 1,
+    "date": "2025-11-13",
+    "technician_id": "T-03",
+    "machine_id": "M-08",
+    "site_id": "S-01",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Reset outdoor unit breaker",
+        "result": "failed",
+        "detail": "Unit restarted but tripped again within ~30 minutes."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1002",
+    "incident_id": "I-001",
+    "visit_no": 2,
+    "date": "2025-11-14",
+    "technician_id": "T-05",
+    "machine_id": "M-08",
+    "site_id": "S-01",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1003",
+    "incident_id": "I-002",
+    "visit_no": 1,
+    "date": "2025-11-16",
+    "technician_id": "T-02",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Cassette unit showing U4 error",
+    "actions": [
+      {
+        "action": "Power reset of indoor and outdoor units",
+        "result": "failed",
+        "detail": "Worked for a few hours; U4 returned next morning."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1005",
+    "incident_id": "I-003",
+    "visit_no": 1,
+    "date": "2025-11-17",
+    "technician_id": "T-04",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Cassette unit showing U4 error",
+    "actions": [
+      {
+        "action": "Replaced remote controller",
+        "result": "failed",
+        "detail": "Error persisted."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1004",
+    "incident_id": "I-002",
+    "visit_no": 2,
+    "date": "2025-11-18",
+    "technician_id": "T-05",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Cassette unit showing U4 error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1006",
+    "incident_id": "I-003",
+    "visit_no": 2,
+    "date": "2025-11-18",
+    "technician_id": "T-02",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Cassette unit showing U4 error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1010",
+    "incident_id": "I-006",
+    "visit_no": 1,
+    "date": "2025-11-23",
+    "technician_id": "T-05",
+    "machine_id": "M-12",
+    "site_id": "S-02",
+    "symptom": "Water dripping from indoor unit",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1048",
+    "incident_id": "I-033",
+    "visit_no": 1,
+    "date": "2025-12-07",
+    "technician_id": "T-02",
+    "machine_id": "M-71",
+    "site_id": "S-08",
+    "symptom": "Outdoor unit trips within minutes of start",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1007",
+    "incident_id": "I-004",
+    "visit_no": 1,
+    "date": "2025-12-18",
+    "technician_id": "T-04",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Indoor unit not responding, error U4 on remote",
+    "actions": [
+      {
+        "action": "Power reset of indoor and outdoor units",
+        "result": "failed",
+        "detail": "Worked for a few hours; U4 returned next morning."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1051",
+    "incident_id": "I-035",
+    "visit_no": 1,
+    "date": "2025-12-19",
+    "technician_id": "T-04",
+    "machine_id": "M-72",
+    "site_id": "S-08",
+    "symptom": "Indoor unit leaking water onto false ceiling",
+    "actions": [
+      {
+        "action": "Cleaned drain tray only",
+        "result": "failed",
+        "detail": "Leak stopped for 2 days, then returned."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1052",
+    "incident_id": "I-035",
+    "visit_no": 2,
+    "date": "2025-12-20",
+    "technician_id": "T-01",
+    "machine_id": "M-72",
+    "site_id": "S-08",
+    "symptom": "Indoor unit leaking water onto false ceiling",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1053",
+    "incident_id": "I-036",
+    "visit_no": 1,
+    "date": "2025-12-20",
+    "technician_id": "T-01",
+    "machine_id": "M-72",
+    "site_id": "S-08",
+    "symptom": "Indoor unit leaking water onto false ceiling",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1008",
+    "incident_id": "I-004",
+    "visit_no": 2,
+    "date": "2025-12-21",
+    "technician_id": "T-01",
+    "machine_id": "M-09",
+    "site_id": "S-01",
+    "symptom": "Indoor unit not responding, error U4 on remote",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1044",
+    "incident_id": "I-030",
+    "visit_no": 1,
+    "date": "2026-01-01",
+    "technician_id": "T-01",
+    "machine_id": "M-63",
+    "site_id": "S-07",
+    "symptom": "Indoor unit leaking water onto false ceiling",
+    "actions": [
+      {
+        "action": "Cleaned air filters",
+        "result": "failed",
+        "detail": "Leak continued the same evening."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1045",
+    "incident_id": "I-030",
+    "visit_no": 2,
+    "date": "2026-01-03",
+    "technician_id": "T-01",
+    "machine_id": "M-63",
+    "site_id": "S-07",
+    "symptom": "Indoor unit leaking water onto false ceiling",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1040",
+    "incident_id": "I-028",
+    "visit_no": 1,
+    "date": "2026-01-05",
+    "technician_id": "T-04",
+    "machine_id": "M-62",
+    "site_id": "S-07",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Replaced remote controller",
+        "result": "failed",
+        "detail": "Error persisted."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1041",
+    "incident_id": "I-028",
+    "visit_no": 2,
+    "date": "2026-01-07",
+    "technician_id": "T-05",
+    "machine_id": "M-62",
+    "site_id": "S-07",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1015",
+    "incident_id": "I-011",
+    "visit_no": 1,
+    "date": "2026-01-23",
+    "technician_id": "T-03",
+    "machine_id": "M-22",
+    "site_id": "S-03",
+    "symptom": "Chiller high head pressure alarm",
+    "actions": [
+      {
+        "action": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Condenser tubes scaled due to hard cooling-tower water; approach temperature 6.5C (normal <2C).",
+    "fix": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+    "parts_used": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Quarterly water-quality check on the cooling tower.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1017",
+    "incident_id": "I-013",
+    "visit_no": 1,
+    "date": "2026-01-23",
+    "technician_id": "T-04",
+    "machine_id": "M-23",
+    "site_id": "S-03",
+    "symptom": "Excessive vibration on AHU blower",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1054",
+    "incident_id": "I-037",
+    "visit_no": 1,
+    "date": "2026-02-06",
+    "technician_id": "T-01",
+    "machine_id": "M-72",
+    "site_id": "S-08",
+    "symptom": "Water dripping from indoor unit",
+    "actions": [
+      {
+        "action": "Cleaned drain tray only",
+        "result": "failed",
+        "detail": "Leak stopped for 2 days, then returned."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1012",
+    "incident_id": "I-008",
+    "visit_no": 1,
+    "date": "2026-02-07",
+    "technician_id": "T-01",
+    "machine_id": "M-13",
+    "site_id": "S-02",
+    "symptom": "AHU making loud grinding noise",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1055",
+    "incident_id": "I-037",
+    "visit_no": 2,
+    "date": "2026-02-08",
+    "technician_id": "T-04",
+    "machine_id": "M-72",
+    "site_id": "S-08",
+    "symptom": "Water dripping from indoor unit",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1021",
+    "incident_id": "I-016",
+    "visit_no": 1,
+    "date": "2026-02-17",
+    "technician_id": "T-04",
+    "machine_id": "M-32",
+    "site_id": "S-04",
+    "symptom": "Precision AC airflow low; hall temperature rising",
+    "actions": [
+      {
+        "action": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "EC fan motor drive fault on fan 2; fan running at ~40% speed.",
+    "fix": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+    "parts_used": [
+      "EC fan module 500mm (EBM-R3G500)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Keep one spare EC fan module on site; these units are 7 years old.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1046",
+    "incident_id": "I-031",
+    "visit_no": 1,
+    "date": "2026-02-24",
+    "technician_id": "T-01",
+    "machine_id": "M-63",
+    "site_id": "S-07",
+    "symptom": "Water leakage from wall-mounted split",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1019",
+    "incident_id": "I-015",
+    "visit_no": 1,
+    "date": "2026-02-26",
+    "technician_id": "T-01",
+    "machine_id": "M-31",
+    "site_id": "S-04",
+    "symptom": "Precision AC airflow low; hall temperature rising",
+    "actions": [
+      {
+        "action": "Restarted the unit from controller",
+        "result": "failed",
+        "detail": "Alarm cleared, came back within the hour."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1020",
+    "incident_id": "I-015",
+    "visit_no": 2,
+    "date": "2026-02-28",
+    "technician_id": "T-05",
+    "machine_id": "M-31",
+    "site_id": "S-04",
+    "symptom": "Precision AC airflow low; hall temperature rising",
+    "actions": [
+      {
+        "action": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "EC fan motor drive fault on fan 2; fan running at ~40% speed.",
+    "fix": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+    "parts_used": [
+      "EC fan module 500mm (EBM-R3G500)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Keep one spare EC fan module on site; these units are 7 years old.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1038",
+    "incident_id": "I-027",
+    "visit_no": 1,
+    "date": "2026-03-04",
+    "technician_id": "T-05",
+    "machine_id": "M-61",
+    "site_id": "S-07",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Topped up refrigerant (R410A)",
+        "result": "failed",
+        "detail": "Pressures were already normal; no improvement. Unit tripped again."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1039",
+    "incident_id": "I-027",
+    "visit_no": 2,
+    "date": "2026-03-05",
+    "technician_id": "T-05",
+    "machine_id": "M-61",
+    "site_id": "S-07",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1047",
+    "incident_id": "I-032",
+    "visit_no": 1,
+    "date": "2026-03-07",
+    "technician_id": "T-02",
+    "machine_id": "M-63",
+    "site_id": "S-07",
+    "symptom": "Water dripping from indoor unit",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-0901",
+    "incident_id": "I-901",
+    "visit_no": 1,
+    "date": "2026-03-12",
+    "technician_id": "T-01",
+    "machine_id": "M-07",
+    "site_id": "S-01",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Reset outdoor unit breaker",
+        "result": "failed",
+        "detail": "Unit restarted but tripped again within 30 minutes."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Measured supply at 192V around 3pm. Suspect contactor; part not in van."
+  },
+  {
+    "job_id": "J-0902",
+    "incident_id": "I-901",
+    "visit_no": 2,
+    "date": "2026-03-14",
+    "technician_id": "T-01",
+    "machine_id": "M-07",
+    "site_id": "S-01",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor (DK-CTR-24V)",
+        "result": "worked",
+        "detail": "Old contactor coil burnt, contacts pitted. Unit stable for 3 hours."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": "Told Priya the voltage dips will keep killing contactors."
+  },
+  {
+    "job_id": "J-1033",
+    "incident_id": "I-024",
+    "visit_no": 1,
+    "date": "2026-03-15",
+    "technician_id": "T-03",
+    "machine_id": "M-51",
+    "site_id": "S-06",
+    "symptom": "AHU noise complaint from tenants",
+    "actions": [
+      {
+        "action": "Tightened and aligned V-belts",
+        "result": "failed",
+        "detail": "Noise reduced briefly, returned in a day."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1034",
+    "incident_id": "I-024",
+    "visit_no": 2,
+    "date": "2026-03-17",
+    "technician_id": "T-03",
+    "machine_id": "M-51",
+    "site_id": "S-06",
+    "symptom": "AHU noise complaint from tenants",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1024",
+    "incident_id": "I-018",
+    "visit_no": 1,
+    "date": "2026-05-05",
+    "technician_id": "T-02",
+    "machine_id": "M-41",
+    "site_id": "S-05",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Reset outdoor unit breaker",
+        "result": "failed",
+        "detail": "Unit restarted but tripped again within ~30 minutes."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1025",
+    "incident_id": "I-018",
+    "visit_no": 2,
+    "date": "2026-05-06",
+    "technician_id": "T-01",
+    "machine_id": "M-41",
+    "site_id": "S-05",
+    "symptom": "Not cooling; outdoor unit tripping",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1016",
+    "incident_id": "I-012",
+    "visit_no": 1,
+    "date": "2026-05-09",
+    "technician_id": "T-01",
+    "machine_id": "M-22",
+    "site_id": "S-03",
+    "symptom": "Chilled water temperature rising above setpoint",
+    "actions": [
+      {
+        "action": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Condenser tubes scaled due to hard cooling-tower water; approach temperature 6.5C (normal <2C).",
+    "fix": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+    "parts_used": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Quarterly water-quality check on the cooling tower.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1009",
+    "incident_id": "I-005",
+    "visit_no": 1,
+    "date": "2026-05-14",
+    "technician_id": "T-01",
+    "machine_id": "M-11",
+    "site_id": "S-02",
+    "symptom": "Chiller tripping on HP during afternoon",
+    "actions": [
+      {
+        "action": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Condenser tubes scaled due to hard cooling-tower water; approach temperature 6.5C (normal <2C).",
+    "fix": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+    "parts_used": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Quarterly water-quality check on the cooling tower.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1014",
+    "incident_id": "I-010",
+    "visit_no": 1,
+    "date": "2026-05-14",
+    "technician_id": "T-03",
+    "machine_id": "M-21",
+    "site_id": "S-03",
+    "symptom": "Conference room not cooling below 27C",
+    "actions": [
+      {
+        "action": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Refrigerant leak at the flare joint on the liquid line near the indoor unit.",
+    "fix": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+    "parts_used": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Avoid flare joints on this line; use brazed joints.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1026",
+    "incident_id": "I-019",
+    "visit_no": 1,
+    "date": "2026-05-24",
+    "technician_id": "T-02",
+    "machine_id": "M-41",
+    "site_id": "S-05",
+    "symptom": "Indoor units blowing warm air, outdoor unit shows E3/trip",
+    "actions": [
+      {
+        "action": "Topped up refrigerant (R410A)",
+        "result": "failed",
+        "detail": "Pressures were already normal; no improvement. Unit tripped again."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1027",
+    "incident_id": "I-019",
+    "visit_no": 2,
+    "date": "2026-05-25",
+    "technician_id": "T-04",
+    "machine_id": "M-41",
+    "site_id": "S-05",
+    "symptom": "Indoor units blowing warm air, outdoor unit shows E3/trip",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1011",
+    "incident_id": "I-007",
+    "visit_no": 1,
+    "date": "2026-06-24",
+    "technician_id": "T-04",
+    "machine_id": "M-12",
+    "site_id": "S-02",
+    "symptom": "Water dripping from indoor unit",
+    "actions": [
+      {
+        "action": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Drain pipe clogged with algae and laid with reverse slope after an interior renovation.",
+    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+    "parts_used": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Add drain line to the quarterly PM checklist for this site.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1018",
+    "incident_id": "I-014",
+    "visit_no": 1,
+    "date": "2026-06-25",
+    "technician_id": "T-05",
+    "machine_id": "M-23",
+    "site_id": "S-03",
+    "symptom": "AHU making loud grinding noise",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1035",
+    "incident_id": "I-025",
+    "visit_no": 1,
+    "date": "2026-07-15",
+    "technician_id": "T-02",
+    "machine_id": "M-51",
+    "site_id": "S-06",
+    "symptom": "AHU noise complaint from tenants",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1049",
+    "incident_id": "I-034",
+    "visit_no": 1,
+    "date": "2026-07-22",
+    "technician_id": "T-02",
+    "machine_id": "M-71",
+    "site_id": "S-08",
+    "symptom": "Indoor units blowing warm air, outdoor unit shows E3/trip",
+    "actions": [
+      {
+        "action": "Topped up refrigerant (R410A)",
+        "result": "failed",
+        "detail": "Pressures were already normal; no improvement. Unit tripped again."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1050",
+    "incident_id": "I-034",
+    "visit_no": 2,
+    "date": "2026-07-24",
+    "technician_id": "T-04",
+    "machine_id": "M-71",
+    "site_id": "S-08",
+    "symptom": "Indoor units blowing warm air, outdoor unit shows E3/trip",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1030",
+    "incident_id": "I-022",
+    "visit_no": 1,
+    "date": "2026-08-11",
+    "technician_id": "T-03",
+    "machine_id": "M-42",
+    "site_id": "S-05",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Replaced remote controller",
+        "result": "failed",
+        "detail": "Error persisted."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1031",
+    "incident_id": "I-022",
+    "visit_no": 2,
+    "date": "2026-08-15",
+    "technician_id": "T-02",
+    "machine_id": "M-42",
+    "site_id": "S-05",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-0947",
+    "incident_id": "I-947",
+    "visit_no": 1,
+    "date": "2026-08-19",
+    "technician_id": "T-02",
+    "machine_id": "M-07",
+    "site_id": "S-01",
+    "symptom": "Outdoor unit trips within minutes of start",
+    "actions": [
+      {
+        "action": "Reset outdoor unit breaker",
+        "result": "failed",
+        "detail": "Tripped again in 20 minutes."
+      },
+      {
+        "action": "Topped up refrigerant (R410A)",
+        "result": "failed",
+        "detail": "Pressures were already normal; no improvement."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Did not have the contactor spare. 2 hours lost on gas top-up."
+  },
+  {
+    "job_id": "J-0949",
+    "incident_id": "I-947",
+    "visit_no": 2,
+    "date": "2026-08-21",
+    "technician_id": "T-02",
+    "machine_id": "M-07",
+    "site_id": "S-01",
+    "symptom": "Outdoor unit trips within minutes of start",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor (DK-CTR-24V)",
+        "result": "worked",
+        "detail": "Same failure as March: coil burnt."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": "Quoted servo stabilizer (Rs 68,000); Priya to get approval."
+  },
+  {
+    "job_id": "J-1013",
+    "incident_id": "I-009",
+    "visit_no": 1,
+    "date": "2026-08-23",
+    "technician_id": "T-03",
+    "machine_id": "M-13",
+    "site_id": "S-02",
+    "symptom": "AHU making loud grinding noise",
+    "actions": [
+      {
+        "action": "Replaced both blower bearings and realigned pulley.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Blower shaft bearing (drive end) worn out; shaft play measured.",
+    "fix": "Replaced both blower bearings and realigned pulley.",
+    "parts_used": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Vibration check every 6 months.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1028",
+    "incident_id": "I-020",
+    "visit_no": 1,
+    "date": "2026-08-26",
+    "technician_id": "T-04",
+    "machine_id": "M-41",
+    "site_id": "S-05",
+    "symptom": "Indoor units blowing warm air, outdoor unit shows E3/trip",
+    "actions": [
+      {
+        "action": "Replaced compressor contactor and checked phase voltages.",
+        "result": "worked",
+        "detail": "Diagnosed on first visit; unit stable after monitoring."
+      }
+    ],
+    "root_cause": "Compressor contactor (magnetic relay) coil burnt; contacts pitted. Linked to supply voltage dips (~190V).",
+    "fix": "Replaced compressor contactor and checked phase voltages.",
+    "parts_used": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Install a servo voltage stabilizer for the outdoor unit; customer approval pending.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1036",
+    "incident_id": "I-026",
+    "visit_no": 1,
+    "date": "2026-09-03",
+    "technician_id": "T-03",
+    "machine_id": "M-52",
+    "site_id": "S-06",
+    "symptom": "Conference room not cooling below 27C",
+    "actions": [
+      {
+        "action": "Cleaned indoor coil",
+        "result": "failed",
+        "detail": "Marginal improvement only."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1037",
+    "incident_id": "I-026",
+    "visit_no": 2,
+    "date": "2026-09-06",
+    "technician_id": "T-02",
+    "machine_id": "M-52",
+    "site_id": "S-06",
+    "symptom": "Conference room not cooling below 27C",
+    "actions": [
+      {
+        "action": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Refrigerant leak at the flare joint on the liquid line near the indoor unit.",
+    "fix": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+    "parts_used": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Avoid flare joints on this line; use brazed joints.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1022",
+    "incident_id": "I-017",
+    "visit_no": 1,
+    "date": "2026-10-02",
+    "technician_id": "T-04",
+    "machine_id": "M-32",
+    "site_id": "S-04",
+    "symptom": "High return-air temperature alarm on precision AC",
+    "actions": [
+      {
+        "action": "Restarted the unit from controller",
+        "result": "failed",
+        "detail": "Alarm cleared, came back within the hour."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1042",
+    "incident_id": "I-029",
+    "visit_no": 1,
+    "date": "2026-10-04",
+    "technician_id": "T-02",
+    "machine_id": "M-62",
+    "site_id": "S-07",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Replaced remote controller",
+        "result": "failed",
+        "detail": "Error persisted."
+      }
+    ],
+    "root_cause": "",
+    "fix": "",
+    "parts_used": [],
+    "outcome": "revisit_needed",
+    "recommendation": "",
+    "notes": "Root cause not confirmed on first visit."
+  },
+  {
+    "job_id": "J-1023",
+    "incident_id": "I-017",
+    "visit_no": 2,
+    "date": "2026-10-05",
+    "technician_id": "T-05",
+    "machine_id": "M-32",
+    "site_id": "S-04",
+    "symptom": "High return-air temperature alarm on precision AC",
+    "actions": [
+      {
+        "action": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "EC fan motor drive fault on fan 2; fan running at ~40% speed.",
+    "fix": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+    "parts_used": [
+      "EC fan module 500mm (EBM-R3G500)"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Keep one spare EC fan module on site; these units are 7 years old.",
+    "notes": ""
+  },
+  {
+    "job_id": "J-1043",
+    "incident_id": "I-029",
+    "visit_no": 2,
+    "date": "2026-10-08",
+    "technician_id": "T-05",
+    "machine_id": "M-62",
+    "site_id": "S-07",
+    "symptom": "Several cassettes in one zone stopped with communication error",
+    "actions": [
+      {
+        "action": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+        "result": "worked",
+        "detail": "Unit stable after 2 hours of monitoring."
+      }
+    ],
+    "root_cause": "Corroded and loose transmission wiring at F1-F2 terminals near the ceiling, likely from condensation.",
+    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+    "parts_used": [
+      "Ring lugs and heat-shrink set",
+      "IP65 junction box"
+    ],
+    "outcome": "resolved",
+    "recommendation": "Inspect the other junction boxes in the same ceiling zone.",
+    "notes": ""
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "job_id": "J-1201",
+    "date": "2026-11-07",
+    "machine_id": "M-07",
+    "site_id": "S-01",
+    "technician_id": "T-06",
+    "symptom": "Bay 3 not cooling. Outdoor unit tripped twice this morning.",
+    "priority": "High",
+    "reported_by": "Priya Nair",
+    "demo_role": "Hero: same machine, rich history. Memory turns a 2-visit job into 1."
+  },
+  {
+    "job_id": "J-1202",
+    "date": "2026-11-07",
+    "machine_id": "M-91",
+    "site_id": "S-09",
+    "technician_id": "T-06",
+    "symptom": "Outdoor unit tripping, offices warm since lunch.",
+    "priority": "Medium",
+    "reported_by": "Anita George",
+    "demo_role": "New site, no machine history: memory still helps via the model-wide pattern."
+  },
+  {
+    "job_id": "J-1203",
+    "date": "2026-11-08",
+    "machine_id": "M-12",
+    "site_id": "S-02",
+    "technician_id": "T-04",
+    "symptom": "Split AC at ICU nurse station dripping water onto the counter.",
+    "priority": "High",
+    "reported_by": "Manjunath",
+    "demo_role": "Shows site rules being recalled (ICU, service lift)."
+  },
+  {
+    "job_id": "J-1204",
+    "date": "2026-11-08",
+    "machine_id": "M-31",
+    "site_id": "S-04",
+    "technician_id": "T-06",
+    "symptom": "Hall 2 PAC-03 high return-air temperature alarm.",
+    "priority": "Critical",
+    "reported_by": "Sanjay Menon",
+    "demo_role": "Data center access rules plus known EC fan pattern."
+  }
+]

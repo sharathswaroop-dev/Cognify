@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SiteMemory — field service that remembers</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --ink: #14181f; --muted: #5d6673; --line: #e3e6eb;
+    --accent: #0f6fde; --accent-soft: #e7f0fd; --good: #13834a; --good-soft: #e5f5ec;
+    --bad: #c2362b; --bad-soft: #fbeceb; --warn: #a26200; --warn-soft: #fdf3e2;
+    --radius: 10px; --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--ink); }
+  header { background: var(--panel); border-bottom: 1px solid var(--line); padding: 12px 24px; display: flex; align-items: center; gap: 24px; position: sticky; top: 0; z-index: 5; }
+  .brand { font-weight: 700; font-size: 17px; letter-spacing: -0.2px; }
+  .brand small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  nav { display: flex; gap: 4px; }
+  nav button { border: 0; background: none; padding: 8px 14px; border-radius: 8px; font: inherit; color: var(--muted); cursor: pointer; }
+  nav button.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .status { margin-left: auto; display: flex; gap: 8px; font-size: 12px; }
+  .pill { padding: 3px 9px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+  .pill.ok { background: var(--good-soft); color: var(--good); border-color: transparent; }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); border-color: transparent; }
+  main { padding: 24px; max-width: 1280px; margin: 0 auto; }
+  .view { display: none; } .view.active { display: block; }
+  h2 { font-size: 18px; margin: 0 0 4px; } h3 { font-size: 14px; margin: 0 0 10px; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  .grid-tech { display: grid; grid-template-columns: 300px 390px 1fr; gap: 20px; align-items: start; }
+  .job { padding: 12px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); margin-bottom: 10px; cursor: pointer; }
+  .job:hover { border-color: #b9c3d0; } .job.sel { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
+  .job .meta { color: var(--muted); font-size: 12px; } .job .sym { margin: 4px 0; font-weight: 500; }
+  .prio { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 999px; }
+  .prio.Critical, .prio.High { background: var(--bad-soft); color: var(--bad); } .prio.Medium { background: var(--warn-soft); color: var(--warn); }
+  .phone { background: #10141a; border-radius: 34px; padding: 14px; box-shadow: 0 12px 40px rgba(16,20,26,.18); }
+  .screen { background: var(--bg); border-radius: 24px; min-height: 640px; max-height: 760px; overflow-y: auto; padding: 16px 14px; }
+  .screen .top { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .toggle { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 12px; }
+  .switch { position: relative; width: 42px; height: 24px; flex: none; } .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: #c4cad3; border-radius: 99px; cursor: pointer; transition: .15s; }
+  .slider:before { content: ""; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .15s; }
+  input:checked + .slider { background: var(--good); } input:checked + .slider:before { transform: translateX(18px); }
+  .brief h4 { margin: 0 0 6px; font-size: 15px; line-height: 1.3; }
+  .conf { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; }
+  .conf.high { color: var(--good); } .conf.medium { color: var(--warn); } .conf.low { color: var(--muted); }
+  .sec { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-top: 10px; }
+  .sec .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 4px; }
+  .sec ul { margin: 0; padding-left: 18px; } .sec li { margin: 2px 0; }
+  .sec.avoid { border-color: #f1c4c0; background: var(--bad-soft); } .sec.avoid .lbl { color: var(--bad); }
+  .sec.bring { border-color: #bfe3cd; background: var(--good-soft); } .sec.bring .lbl { color: var(--good); }
+  .empty { color: var(--muted); text-align: center; padding: 60px 10px; }
+  .btn { border: 1px solid var(--line); background: var(--panel); padding: 8px 14px; border-radius: 8px; font: inherit; cursor: pointer; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .mem { border-left: 3px solid var(--accent); background: var(--panel); border-radius: 6px; padding: 8px 10px; margin-bottom: 8px; font-size: 12.5px; white-space: pre-line; }
+  .mem .lvl { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .4px; }
+  .mem.family { border-left-color: #7a4fd6; } .mem.family .lvl { color: #7a4fd6; }
+  .mem.site { border-left-color: var(--warn); } .mem.site .lvl { color: var(--warn); }
+  .reflect { background: var(--accent-soft); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
+  .reflect b { color: var(--accent); }
+  .loading { color: var(--muted); font-style: italic; padding: 30px 0; text-align: center; }
+  form .row { display: grid; grid-template-columns: 1fr 110px 28px; gap: 6px; margin-bottom: 6px; }
+  input[type=text], select, textarea { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; font: inherit; background: #fff; }
+  textarea { min-height: 54px; resize: vertical; }
+  label.f { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+  .saved { background: var(--good-soft); color: var(--good); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 12.5px; white-space: pre-line; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .compare .col-h { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-weight: 700; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; } .dot.off { background: #9aa3ae; } .dot.on { background: var(--good); }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .kpi .v { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; } .kpi .k { color: var(--muted); font-size: 12px; }
+  .dash { display: grid; grid-template-columns: 1.3fr 1fr; gap: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; } td, th { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; }
+  .tl { border-left: 2px solid var(--line); margin-left: 6px; padding-left: 16px; }
+  .tl .it { position: relative; margin-bottom: 14px; } .tl .it:before { content: ""; position: absolute; left: -22px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--good); }
+  .tl .it.revisit:before { background: var(--bad); } .tl .d { font-size: 12px; color: var(--muted); }
+  .tag { display: inline-block; font-family: var(--mono); font-size: 10.5px; background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; margin: 2px 3px 0 0; color: var(--muted); }
+  .note { font-size: 12px; color: var(--muted); }
+  @media (max-width: 1100px) { .grid-tech { grid-template-columns: 1fr; } .compare, .dash { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">SiteMemory<small id="company">Field service that remembers</small></div>
+  <nav>
+    <button data-view="tech" class="active">Technician</button>
+    <button data-view="compare">Memory off vs on</button>
+    <button data-view="dash">Dashboard</button>
+  </nav>
+  <div class="status" id="status"></div>
+</header>
+
+<main>
+  <!-- TECHNICIAN -->
+  <section class="view active" id="view-tech">
+    <h2>Today's jobs</h2>
+    <p class="sub">Pick a job. SiteMemory recalls everything the company has learned about this machine, this model and this site.</p>
+    <div class="grid-tech">
+      <div id="jobs"></div>
+      <div class="phone"><div class="screen" id="phone"><div class="empty">Select a job to get a briefing</div></div></div>
+      <div>
+        <div class="card" id="memory-panel" style="max-height:620px;overflow-y:auto">
+          <h3>What Hindsight recalled</h3>
+          <div class="note">Memories used for this briefing appear here.</div>
+        </div>
+        <div class="card" style="margin-top:16px" id="log-panel">
+          <h3>After the visit: log what happened</h3>
+          <div class="note">Select a job first. Whatever you log is retained in memory, including what did <b>not</b> work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
+  <section class="view" id="view-compare">
+    <h2>Same job, memory off vs on</h2>
+    <p class="sub">Identical agent, identical model. The only difference is Hindsight memory.</p>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px">
+      <select id="cmp-job" style="max-width:520px"></select>
+      <button class="btn primary" id="cmp-run">Run both</button>
+    </div>
+    <div class="compare">
+      <div><div class="col-h"><span class="dot off"></span>Without memory</div><div id="cmp-off" class="card"><div class="empty">—</div></div></div>
+      <div><div class="col-h"><span class="dot on"></span>With Hindsight memory</div><div id="cmp-on" class="card"><div class="empty">—</div></div></div>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="view" id="view-dash">
+    <h2>Service manager dashboard</h2>
+    <p class="sub">Where repeat visits come from, and what the team keeps trying that doesn't work.</p>
+    <div class="kpis" id="kpis"></div>
+    <div class="dash">
+      <div class="card"><h3>Visits per month, and how many needed a second trip</h3><div id="chart"></div></div>
+      <div class="card"><h3>Attempts that keep failing</h3><div id="wasted"></div></div>
+      <div class="card"><h3>Machines with the most incidents</h3><div id="topm"></div></div>
+      <div class="card"><h3>Machine history</h3>
+        <select id="hist-machine" style="margin-bottom:12px"></select><div id="hist"></div></div>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:10px;align-items:center">
+      <button class="btn" id="seed-btn">Load service history into memory</button>
+      <button class="btn" id="reset-btn">Reset demo (clear live logs)</button>
+      <span class="note" id="admin-msg"></span>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const api = async (path, body) => {
+  const r = await fetch(path, body ? {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)} : {});
+  if (!r.ok) { let m = r.statusText; try { m = (await r.json()).detail || m; } catch {} throw new Error(typeof m === "string" ? m : JSON.stringify(m)); }
+  return r.json();
+};
+let JOBS = [], REF = null, current = null, useMemory = true;
+
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => {
+  document.querySelectorAll("nav button").forEach(x => x.classList.toggle("active", x === b));
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + b.dataset.view));
+  if (b.dataset.view === "dash") loadDash();
+});
+
+async function loadStatus() {
+  const s = await api("/api/status");
+  $("#company").textContent = `${s.company.name} · ${s.company.city}`;
+  $("#status").innerHTML =
+    `<span class="pill ${s.memory_backend === "hindsight" ? "ok" : "warn"}">Memory: ${s.memory_backend === "hindsight" ? "Hindsight" : "local fallback"} · ${s.memory_items} items</span>` +
+    `<span class="pill ${s.llm ? "ok" : "warn"}">LLM: ${s.llm ? esc(s.llm_model) : "offline (rules)"}</span>`;
+}
+
+function renderJobs() {
+  $("#jobs").innerHTML = JOBS.map(j => `
+    <div class="job ${current?.job_id === j.job_id ? "sel" : ""}" data-id="${j.job_id}">
+      <div class="meta">${j.job_id} · ${j.date} <span class="prio ${j.priority}">${j.priority}</span></div>
+      <div class="sym">${esc(j.symptom)}</div>
+      <div class="meta">${esc(j.site.name)} · ${esc(j.machine.model)}</div>
+      <div class="meta">Assigned: ${esc(j.technician.name)}</div>
+    </div>`).join("");
+  document.querySelectorAll(".job").forEach(el => el.onclick = () => selectJob(el.dataset.id));
+}
+
+function briefingHTML(res, job) {
+  const b = res.briefing, list = a => a.map(x => `<li>${esc(x)}</li>`).join("");
+  return `
+    <div class="brief">
+      <div class="conf ${b.confidence}">${b.confidence} confidence${res.use_memory ? "" : " · no memory"}</div>
+      <h4>${esc(b.headline)}</h4>
+      <div class="sec"><div class="lbl">Likely cause</div>${esc(b.likely_cause)}</div>
+      ${b.avoid.length ? `<div class="sec avoid"><div class="lbl">Don't repeat</div><ul>${list(b.avoid)}</ul></div>` : ""}
+      <div class="sec"><div class="lbl">Do first</div><ul>${list(b.do_first)}</ul></div>
+      <div class="sec bring"><div class="lbl">Bring</div><ul>${list(b.bring)}</ul></div>
+      ${b.site_notes.length ? `<div class="sec"><div class="lbl">Site notes</div><ul>${list(b.site_notes)}</ul></div>` : ""}
+      <div class="note" style="margin-top:10px">${res.memories_used.length} memories · recall ${res.timing_ms.recall} ms · ${res.generated_by === "llm" ? "written by LLM" : "rules fallback"}</div>
+    </div>`;
+}
+
+function memoriesHTML(res) {
+  if (!res.use_memory) return `<div class="note">Memory is switched off. The agent only sees the job ticket.</div>`;
+  if (!res.memories_used.length) return `<div class="note">Nothing relevant in memory yet.</div>`;
+  const cls = l => l.startsWith("Site") ? "site" : l.startsWith("Same") ? "family" : "";
+  return (res.reflection ? `<div class="reflect"><b>${res.memory_backend === "hindsight" ? "Hindsight reflect" : "Reflect (local)"}:</b> ${esc(res.reflection)}</div>` : "") +
+    res.memories_used.map(m => `
+      <div class="mem ${cls(m.level)}"><div class="lvl">${esc(m.level)}${m.date ? " · " + esc(m.date) : ""}</div>${esc(m.text)}
+      <div>${(m.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div></div>`).join("");
+}
+
+async function selectJob(id) {
+  current = JOBS.find(j => j.job_id === id);
+  renderJobs();
+  await runBriefing();
+  renderLogForm();
+}
+
+async function runBriefing() {
+  const j = current;
+  $("#phone").innerHTML = `
+    <div class="top"><span>${j.job_id}</span><span>${esc(j.technician.name)}</span></div>
+    <div class="sec" style="margin-top:0"><div class="lbl">Job</div><b>${esc(j.symptom)}</b><div class="note">${esc(j.site.name)}, ${esc(j.site.area)} · ${esc(j.machine.model)} · ${esc(j.machine.location)}</div></div>
+    <div class="toggle" style="margin-top:10px"><label class="switch"><input type="checkbox" id="mem-toggle" ${useMemory ? "checked" : ""}><span class="slider"></span></label>
+      <div><b>Memory ${useMemory ? "ON" : "OFF"}</b><div class="note">${useMemory ? "Using company history" : "Ticket only"}</div></div></div>
+    <div id="brief"><div class="loading">Recalling and briefing…</div></div>`;
+  $("#mem-toggle").onchange = e => { useMemory = e.target.checked; runBriefing(); };
+  $("#memory-panel").innerHTML = `<h3>What Hindsight recalled</h3><div class="loading">Recalling…</div>`;
+  try {
+    const res = await api("/api/briefing", {job_id: j.job_id, use_memory: useMemory});
+    if (current !== j) return;
+    $("#brief").innerHTML = briefingHTML(res, j);
+    $("#memory-panel").innerHTML = `<h3>What Hindsight recalled</h3>` + memoriesHTML(res);
+  } catch (e) {
+    $("#brief").innerHTML = `<div class="sec avoid">Could not get a briefing: ${esc(e.message)}</div>`;
+  }
+}
+
+function actionRow(a = "", r = "failed") {
+  return `<div class="row"><input type="text" class="a-act" placeholder="What did you try?" value="${esc(a)}">
+    <select class="a-res"><option value="failed" ${r === "failed" ? "selected" : ""}>Didn't work</option><option value="worked" ${r === "worked" ? "selected" : ""}>Worked</option><option value="partial" ${r === "partial" ? "selected" : ""}>Partly</option></select>
+    <button type="button" class="btn rm" title="Remove">×</button></div>`;
+}
+
+function renderLogForm() {
+  const j = current;
+  $("#log-panel").innerHTML = `
+    <h3>After the visit: log what happened</h3>
+    <form id="log-form">
+      <label class="f">What was tried (one row per attempt)</label>
+      <div id="acts">${actionRow()}</div>
+      <button type="button" class="btn" id="add-act" style="font-size:12px;padding:4px 10px">+ Add attempt</button>
+      <label class="f">Outcome</label>
+      <select id="outcome"><option value="revisit_needed">Not fixed — needs another visit</option><option value="resolved">Fixed</option></select>
+      <label class="f">Root cause (if found)</label><input type="text" id="cause" placeholder="e.g. Contactor coil burnt">
+      <label class="f">Parts used (comma separated)</label><input type="text" id="parts">
+      <label class="f">Notes for the next technician</label><textarea id="notes" placeholder="Site quirks, what you'd do differently…"></textarea>
+      <div style="margin-top:12px;display:flex;gap:8px"><button class="btn primary" id="save-btn">Save to memory</button></div>
+      <div id="save-msg"></div>
+    </form>`;
+  const bindRm = () => document.querySelectorAll(".rm").forEach(b => b.onclick = () => { if (document.querySelectorAll("#acts .row").length > 1) b.parentElement.remove(); });
+  bindRm();
+  $("#add-act").onclick = () => { $("#acts").insertAdjacentHTML("beforeend", actionRow("", "worked")); bindRm(); };
+  $("#log-form").onsubmit = async e => {
+    e.preventDefault();
+    const actions = [...document.querySelectorAll("#acts .row")].map(r => ({action: r.querySelector(".a-act").value.trim(), result: r.querySelector(".a-res").value, detail: ""})).filter(a => a.action.length > 1);
+    if (!actions.length) { $("#save-msg").innerHTML = `<div class="sec avoid">Add at least one attempt.</div>`; return; }
+    $("#save-btn").disabled = true;
+    try {
+      const res = await api(`/api/jobs/${j.job_id}/log`, {actions, outcome: $("#outcome").value, root_cause: $("#cause").value.trim(),
+        parts_used: $("#parts").value.split(",").map(s => s.trim()).filter(Boolean), notes: $("#notes").value.trim()});
+      $("#save-msg").innerHTML = `<div class="saved"><b>Retained in ${res.memory_backend === "hindsight" ? "Hindsight" : "local memory"}.</b>\n${esc(res.memory_text)}\n${res.tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>`;
+      loadStatus();
+      setTimeout(runBriefing, res.memory_backend === "hindsight" ? 2500 : 300);
+    } catch (err) {
+      $("#save-msg").innerHTML = `<div class="sec avoid">Save failed: ${esc(err.message)}</div>`;
+    } finally { $("#save-btn").disabled = false; }
+  };
+}
+
+// ---------------- compare
+async function runCompare() {
+  const id = $("#cmp-job").value, job = JOBS.find(j => j.job_id === id);
+  $("#cmp-off").innerHTML = $("#cmp-on").innerHTML = `<div class="loading">Thinking…</div>`;
+  const [off, on] = await Promise.allSettled([api("/api/briefing", {job_id: id, use_memory: false}), api("/api/briefing", {job_id: id, use_memory: true})]);
+  const show = (el, r) => el.innerHTML = r.status === "fulfilled" ? briefingHTML(r.value, job) : `<div class="sec avoid">${esc(r.reason.message)}</div>`;
+  show($("#cmp-off"), off); show($("#cmp-on"), on);
+}
+$("#cmp-run").onclick = runCompare;
+
+// ---------------- dashboard
+function barChart(months) {
+  const W = 560, H = 220, pad = 30, bw = (W - pad * 2) / months.length, max = Math.max(...months.map(m => m.visits), 1);
+  const y = v => H - pad - (v / max) * (H - pad * 2);
+  const label = m => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][+m.slice(5) - 1] + " " + m.slice(2, 4);
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Visits per month">
+    ${months.map((m, i) => `<g>
+      <rect x="${pad + i * bw + 4}" y="${y(m.visits)}" width="${bw - 8}" height="${H - pad - y(m.visits)}" fill="#cfe0f7" rx="3"><title>${m.visits} visits</title></rect>
+      <rect x="${pad + i * bw + 4}" y="${y(m.revisit_needed)}" width="${bw - 8}" height="${H - pad - y(m.revisit_needed)}" fill="#e0675d" rx="3"><title>${m.revisit_needed} needed a second trip</title></rect>
+      <text x="${pad + i * bw + bw / 2}" y="${H - 10}" font-size="10" text-anchor="middle" fill="#5d6673">${label(m.month)}</text></g>`).join("")}
+  </svg><div class="note"><span style="color:#e0675d">■</span> visits that ended with "needs another visit" &nbsp; <span style="color:#9fbfe9">■</span> all visits</div>`;
+}
+
+async function loadDash() {
+  const s = await api("/api/stats");
+  $("#kpis").innerHTML = [
+    [s.incidents, "Incidents (last 12 months)"], [Math.round(s.first_time_fix_rate * 100) + "%", "First-time fix rate"],
+    [s.repeat_visits, "Repeat visits (second trips)"], [s.memory_items, `Memories in ${s.memory_backend === "hindsight" ? "Hindsight" : "local memory"}`]
+  ].map(([v, k]) => `<div class="card kpi"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
+  $("#chart").innerHTML = barChart(s.months);
+  $("#wasted").innerHTML = `<table><tr><th>Attempt that didn't fix it</th><th>Times</th></tr>${s.most_wasted_attempts.map(w => `<tr><td>${esc(w.action)}</td><td>${w.times}</td></tr>`).join("")}</table>`;
+  $("#topm").innerHTML = `<table><tr><th>Machine</th><th>Site</th><th>Incidents</th></tr>${s.top_machines.map(t => `<tr><td>${t.machine.id} · ${esc(t.machine.model)}</td><td>${esc(t.site)}</td><td>${t.incidents}</td></tr>`).join("")}</table>`;
+  if (!$("#hist-machine").options.length) {
+    $("#hist-machine").innerHTML = REF.machines.map(m => `<option value="${m.id}">${m.id} · ${esc(m.model)} · ${esc(m.location)}</option>`).join("");
+    $("#hist-machine").onchange = loadHist;
+  }
+  loadHist();
+}
+
+async function loadHist() {
+  const h = await api(`/api/machines/${$("#hist-machine").value}/history`);
+  $("#hist").innerHTML = h.length ? `<div class="tl">${h.map(v => `
+    <div class="it ${v.outcome === "revisit_needed" ? "revisit" : ""}"><div class="d">${v.date} · ${esc(v.technician)} · visit ${v.visit_no}${v.live ? " · logged live" : ""}</div>
+      <div>${esc(v.symptom)}</div>
+      ${v.actions.map(a => `<div class="note">${a.result === "worked" ? "✓" : a.result === "failed" ? "✗" : "~"} ${esc(a.action)}</div>`).join("")}
+    </div>`).join("")}</div>` : `<div class="note">No visits yet.</div>`;
+}
+
+$("#seed-btn").onclick = async () => { $("#admin-msg").textContent = "Loading…"; try { const r = await api("/api/seed", {}); $("#admin-msg").textContent = `${r.seeded} records sent. ${r.note}`; loadStatus(); } catch (e) { $("#admin-msg").textContent = e.message; } };
+$("#reset-btn").onclick = async () => { const r = await api("/api/reset-demo", {}); $("#admin-msg").textContent = r.note || "Demo reset."; loadStatus(); loadDash(); };
+
+(async () => {
+  await loadStatus();
+  [JOBS, REF] = await Promise.all([api("/api/jobs/open"), api("/api/reference")]);
+  renderJobs();
+  $("#cmp-job").innerHTML = JOBS.map(j => `<option value="${j.job_id}">${j.job_id} · ${esc(j.site.name)} · ${esc(j.symptom)}</option>`).join("");
+})();
+</script>
+</body>
+</html>
