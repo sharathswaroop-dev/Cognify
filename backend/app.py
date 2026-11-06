@@ -354,7 +354,7 @@ import voice  # noqa: E402
 async def voice_report(job_id: str = Form(...), audio: UploadFile = File(...)):
     """Audio in; transcript + structured visit out. Nothing is saved: the technician confirms first."""
     job = store.job(job_id)
-    data = await audio.read()
+    data = await audio.read(voice.MAX_BYTES + 1)  # bounded: never buffer an unbounded upload
     try:
         tr = await run_in_threadpool(voice.transcribe, agent.llm.client, data, audio.filename or "report.webm")
     except voice.VoiceError as exc:

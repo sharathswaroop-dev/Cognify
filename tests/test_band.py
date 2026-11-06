@@ -98,6 +98,18 @@ def test_if_band_is_down_at_room_creation_we_still_run(build_mesh, store):
     assert run.status == "done" and run.transport == "local"
 
 
+def test_unrelated_messages_to_an_agent_are_skipped_not_mistaken_for_the_handoff(build_mesh, store):
+    fb, clients = band()
+    # a notice already waiting for the diagnostician before the real handoff arrives
+    fb.messages.append({"id": "noise1", "content": "Room created", "to": "id-diagnostician", "sender_id": "system",
+                        "sender_type": "System", "message_type": "event", "state": "pending"})
+    mesh, _, _ = build_mesh(band=clients)
+    run = wait(mesh.start(live(store, "LIVE-1")))
+    assert run.status == "done" and run.transport == "band"
+    assert next(m for m in fb.messages if m["id"] == "noise1")["state"] == "processed"
+    assert [e["transport"] for e in run.events if e["kind"] == "handoff"] == ["band"] * 3
+
+
 def test_load_clients_needs_all_four_keys(monkeypatch):
     for r in ROLES:
         monkeypatch.delenv(f"BAND_KEY_{r.upper()}", raising=False)

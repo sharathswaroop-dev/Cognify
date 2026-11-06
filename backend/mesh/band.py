@@ -129,7 +129,15 @@ class BandRoom:
         deadline = time.time() + self.poll_s
         while time.time() < deadline:
             msg = self.c[to].next_message(self.room_id)
-            if msg and (not mid or msg.get("id") == mid or parse_payload(msg.get("content", "")) is not None):
+            if msg and not (not mid or msg.get("id") == mid or parse_payload(msg.get("content", "")) is not None):
+                # something else addressed to this agent (a notice, an earlier message): acknowledge it and keep waiting for ours
+                try:
+                    self.c[to].mark(self.room_id, msg["id"], "processing")
+                    self.c[to].mark(self.room_id, msg["id"], "processed")
+                except BandError:
+                    pass
+                continue
+            if msg:
                 got = parse_payload(msg.get("content", ""))
                 try:
                     self.c[to].mark(self.room_id, msg["id"], "processing")

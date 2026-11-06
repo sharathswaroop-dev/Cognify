@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" role="img" aria-label="SiteMemory architecture: four agents coordinating in a Band room, each with its own Hindsight memory bank">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8b8f97"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#d6ff3d"/></marker>
+  </defs>
+  <style>
+    text{font-family:"Segoe UI",system-ui,sans-serif;fill:#ecebe5}
+    .m{font-family:Consolas,"JetBrains Mono",monospace;fill:#8b8f97;font-size:11px}
+    .t{font-size:14px;font-weight:700}
+    .s{font-size:11.5px;fill:#8b8f97}
+    .box{fill:#121417;stroke:#363b43;stroke-width:1.2}
+    .ag{fill:#181b1f;stroke:#d6ff3d;stroke-width:1.4}
+    .bank{fill:#0b0c0e;stroke:#d6ff3d;stroke-width:1.2;stroke-dasharray:5 4}
+    .room{fill:none;stroke:#8b8f97;stroke-width:1.2;stroke-dasharray:3 6}
+    .ln{stroke:#8b8f97;stroke-width:1.4;fill:none}
+    .gl{stroke:#d6ff3d;stroke-width:1.6;fill:none}
+  </style>
+  <rect width="1000" height="620" fill="#0b0c0e"/>
+  <text x="30" y="38" class="t" style="font-size:18px">SiteMemory: four agents, one Band room, four Hindsight banks</text>
+
+  <!-- left: inputs -->
+  <rect class="box" x="30" y="80" width="170" height="74" rx="12"/>
+  <text x="46" y="106" class="t">Alarm feed</text><text x="46" y="126" class="s">machine error codes</text><text x="46" y="142" class="s">start the flow</text>
+  <rect class="box" x="30" y="184" width="170" height="96" rx="12"/>
+  <text x="46" y="210" class="t">Technician phone</text><text x="46" y="230" class="s">briefing, memory on/off</text><text x="46" y="246" class="s">voice log via Whisper</text><text x="46" y="262" class="s">confirm, then retain</text>
+  <rect class="box" x="30" y="316" width="170" height="96" rx="12"/>
+  <text x="46" y="342" class="t">Manager dashboard</text><text x="46" y="362" class="s">fix outcomes over time</text><text x="46" y="378" class="s">replay evaluation</text><text x="46" y="394" class="s">live agent room</text>
+
+  <!-- Band room -->
+  <rect class="room" x="236" y="64" width="560" height="184" rx="18"/>
+  <text x="256" y="90" class="t">Band room</text><text x="336" y="90" class="s">handoffs are real Band messages; in-process fallback if Band is unreachable</text>
+  <rect class="ag" x="256" y="116" width="118" height="102" rx="12"/><text x="271" y="142" class="t">Dispatcher</text><text x="271" y="162" class="s">remote fix or</text><text x="271" y="178" class="s">send technician</text><text x="271" y="204" class="m">ledger + recall</text>
+  <rect class="ag" x="392" y="116" width="118" height="102" rx="12"/><text x="405" y="142" class="t">Diagnostician</text><text x="407" y="162" class="s">root cause with</text><text x="407" y="178" class="s">cited visits</text><text x="407" y="204" class="m">recall + reflect</text>
+  <rect class="ag" x="528" y="116" width="118" height="102" rx="12"/><text x="543" y="142" class="t">Parts agent</text><text x="543" y="162" class="s">what to carry</text><text x="543" y="178" class="s">van / warehouse</text><text x="543" y="204" class="m">recall + stock</text>
+  <rect class="ag" x="664" y="116" width="118" height="102" rx="12"/><text x="679" y="142" class="t">Field assistant</text><text x="679" y="162" class="s">briefs technician</text><text x="679" y="178" class="s">records the visit</text><text x="679" y="204" class="m">recall + reflect</text>
+  <path class="gl" d="M374 167H390" marker-end="url(#g)"/><path class="gl" d="M510 167H526" marker-end="url(#g)"/><path class="gl" d="M646 167H662" marker-end="url(#g)"/>
+
+  <!-- banks -->
+  <rect class="room" x="236" y="292" width="560" height="170" rx="18" style="stroke:#d6ff3d"/>
+  <text x="256" y="318" class="t" style="fill:#d6ff3d">Hindsight Cloud</text><text x="372" y="318" class="s">retain, recall, reflect: one bank per agent</text>
+  <rect class="bank" x="256" y="336" width="118" height="104" rx="10"/><text x="268" y="360" class="m" style="fill:#ecebe5">v2-dispatcher</text><text x="268" y="380" class="s">alarms, remote-fix</text><text x="268" y="396" class="s">outcomes, follow-ups</text>
+  <rect class="bank" x="392" y="336" width="118" height="104" rx="10"/><text x="404" y="360" class="m" style="fill:#ecebe5">v2-diagnostician</text><text x="404" y="380" class="s">visits, root causes,</text><text x="404" y="396" class="s">belief corrections</text>
+  <rect class="bank" x="528" y="336" width="118" height="104" rx="10"/><text x="540" y="360" class="m" style="fill:#ecebe5">v2-parts</text><text x="540" y="380" class="s">parts used; a missing</text><text x="540" y="396" class="s">part = second trip</text>
+  <rect class="bank" x="664" y="336" width="118" height="104" rx="10"/><text x="676" y="360" class="m" style="fill:#ecebe5">v2-field</text><text x="676" y="380" class="s">sites, visits,</text><text x="676" y="396" class="s">belief corrections</text>
+  <path class="ln" d="M315 218V334" marker-start="url(#a)" marker-end="url(#a)"/>
+  <path class="ln" d="M451 218V334" marker-start="url(#a)" marker-end="url(#a)"/>
+  <path class="ln" d="M587 218V334" marker-start="url(#a)" marker-end="url(#a)"/>
+  <path class="ln" d="M723 218V334" marker-start="url(#a)" marker-end="url(#a)"/>
+
+  <!-- right: LLM + beliefs -->
+  <rect class="box" x="830" y="116" width="140" height="74" rx="12"/><text x="846" y="142" class="t">Groq LLM</text><text x="846" y="162" class="s">gpt-oss-120b</text><text x="846" y="178" class="s">Whisper for voice</text>
+  <rect class="box" x="830" y="226" width="140" height="96" rx="12"/><text x="846" y="252" class="t">Belief engine</text><text x="846" y="272" class="s">fix outcomes by</text><text x="846" y="288" class="s">model family; flags</text><text x="846" y="304" class="s">contradicted lessons</text>
+  <path class="ln" d="M782 153H828" marker-start="url(#a)" marker-end="url(#a)"/>
+  <path class="ln" d="M830 274H808Q798 274 798 264V250" marker-end="url(#a)"/>
+  <text x="830" y="346" class="s">the correction is retained to the</text><text x="830" y="362" class="s">diagnostician and field banks</text>
+
+  <!-- left links -->
+  <path class="ln" d="M200 117H236" marker-end="url(#a)"/>
+  <path class="ln" d="M200 232H220Q228 232 228 224V167H236" marker-end="url(#a)"/>
+  <path class="ln" d="M200 364H220Q228 364 228 372V380H236" marker-end="url(#a)"/>
+
+  <!-- captions -->
+  <text x="30" y="500" class="m" style="fill:#ecebe5">alarm, decision, diagnosis, parts plan, briefing, visit recorded</text>
+  <text x="30" y="524" class="s">After a visit every agent retains its own slice: a diagnosis record, a parts record and the alarm outcome.</text>
+  <text x="30" y="542" class="s">Each message in the room shows which memories the agent used, with the job ids it cites. The room streams to the web UI live.</text>
+  <text x="30" y="560" class="s">Replay evaluation briefs every past incident with memory built only from earlier visits, then scores it against what actually happened.</text>
+  <text x="30" y="596" class="m">All data is synthetic (a fictional HVAC contractor in Bengaluru).</text>
+</svg>
