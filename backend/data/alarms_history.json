@@ -1,59 +1,311 @@
 [
  {
-  "id": "A-0001",
-  "ts": "2025-11-01T21:58:00",
+  "ts": "2025-11-05T09:15:00",
+  "machine_id": "M-71",
+  "site_id": "S-08",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 194,
+   "compressor_a": 23.0
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-074",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0001"
+ },
+ {
+  "ts": "2025-11-08T08:26:00",
+  "machine_id": "M-41",
+  "site_id": "S-05",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 186,
+   "compressor_a": 20.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-046",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0002"
+ },
+ {
+  "ts": "2025-11-10T10:11:00",
+  "machine_id": "M-129",
+  "site_id": "S-02",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-134",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0003"
+ },
+ {
+  "ts": "2025-11-11T07:49:00",
+  "machine_id": "M-24",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-033",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0004"
+ },
+ {
+  "ts": "2025-11-11T20:27:00",
+  "machine_id": "M-09",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0005"
+ },
+ {
+  "ts": "2025-11-12T15:34:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 397,
+   "discharge_bar": 23.3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0006"
+ },
+ {
+  "ts": "2025-11-18T14:33:00",
+  "machine_id": "M-62",
+  "site_id": "S-07",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0007"
+ },
+ {
+  "ts": "2025-11-19T06:37:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-100",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0008"
+ },
+ {
+  "ts": "2025-11-20T09:37:00",
+  "machine_id": "M-62",
+  "site_id": "S-07",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-068",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0009"
+ },
+ {
+  "ts": "2025-11-21T09:33:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-117",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0010"
+ },
+ {
+  "ts": "2025-11-27T06:31:00",
   "machine_id": "M-22",
   "site_id": "S-03",
   "code": "HP",
   "description": "Condenser high-pressure trip",
   "severity": "major",
   "readings": {
-   "discharge_bar": 23.4,
-   "cw_flow_pct": 72
+   "supply_v": 399,
+   "discharge_bar": 22.2
   },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-027",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0011"
  },
  {
-  "id": "A-0002",
-  "ts": "2025-11-02T08:09:00",
-  "machine_id": "M-51",
-  "site_id": "S-06",
-  "code": "VB",
-  "description": "High vibration alarm",
+  "ts": "2025-11-28T06:33:00",
+  "machine_id": "M-121",
+  "site_id": "S-12",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
   "severity": "major",
   "readings": {
-   "vibration_mm_s": 9.3
+   "supply_v": 193,
+   "compressor_a": 22.5
   },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-114",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0012"
+ },
+ {
+  "ts": "2025-11-30T08:15:00",
+  "machine_id": "M-41",
+  "site_id": "S-05",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 194,
+   "compressor_a": 19.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-047",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0013"
+ },
+ {
+  "ts": "2025-12-03T09:55:00",
+  "machine_id": "M-14",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
   "remote_action": null,
   "remote_result": "none",
   "dispatched": true,
-  "incident_id": "I-023",
-  "note": "No remote action possible; technician dispatched."
+  "incident_id": "I-018",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0014"
  },
  {
-  "id": "A-0003",
-  "ts": "2025-11-06T06:04:00",
-  "machine_id": "M-42",
-  "site_id": "S-05",
+  "ts": "2025-12-07T11:37:00",
+  "machine_id": "M-129",
+  "site_id": "S-02",
   "code": "U4",
   "description": "Indoor-outdoor communication error",
-  "severity": "major",
+  "severity": "critical",
   "readings": {
-   "units_offline": 3
+   "units_offline": 2
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-021",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-135",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0015"
  },
  {
-  "id": "A-0004",
-  "ts": "2025-11-13T08:37:00",
+  "ts": "2025-12-07T18:02:00",
+  "machine_id": "M-24",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0016"
+ },
+ {
+  "ts": "2025-12-08T13:29:00",
+  "machine_id": "M-102",
+  "site_id": "S-10",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 228,
+   "compressor_a": 22.5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0017"
+ },
+ {
+  "ts": "2025-12-10T17:25:00",
   "machine_id": "M-08",
   "site_id": "S-01",
   "code": "E3",
@@ -61,296 +313,180 @@
   "severity": "major",
   "readings": {
    "supply_v": 186,
-   "compressor_a": 23.4
+   "compressor_a": 19.6
   },
+  "remote_type": "reset",
   "remote_action": "Remote fault reset via controller",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-001",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0018"
  },
  {
-  "id": "A-0005",
-  "ts": "2025-11-16T07:02:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-002",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0006",
-  "ts": "2025-11-17T09:26:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-003",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0007",
-  "ts": "2025-11-23T07:05:00",
-  "machine_id": "M-12",
-  "site_id": "S-02",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
+  "ts": "2025-12-11T08:38:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
   "severity": "critical",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.8
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-006",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0008",
-  "ts": "2025-12-02T17:57:00",
-  "machine_id": "M-93",
-  "site_id": "S-08",
-  "code": "L8",
-  "description": "Compressor overcurrent",
-  "severity": "major",
-  "readings": {
-   "supply_v": 230,
-   "compressor_a": 22.8
-  },
-  "remote_action": "Remote fault reset via controller",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
+  "incident_id": "I-101",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0019"
  },
  {
-  "id": "A-0009",
-  "ts": "2025-12-07T06:52:00",
-  "machine_id": "M-71",
-  "site_id": "S-08",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 225,
-   "compressor_a": 23.6
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-033",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0010",
-  "ts": "2025-12-07T12:39:00",
-  "machine_id": "M-42",
-  "site_id": "S-05",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0011",
-  "ts": "2025-12-18T11:40:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-004",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0012",
-  "ts": "2025-12-19T10:37:00",
-  "machine_id": "M-72",
-  "site_id": "S-08",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "major",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.0
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-035",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0013",
-  "ts": "2025-12-20T07:02:00",
-  "machine_id": "M-72",
-  "site_id": "S-08",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "major",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.8
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-036",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0014",
-  "ts": "2026-01-01T07:18:00",
+  "ts": "2025-12-14T10:10:00",
   "machine_id": "M-63",
   "site_id": "S-07",
   "code": "WL",
   "description": "Water leak / drain sensor",
   "severity": "major",
   "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.1
+   "water_sensor": "wet"
   },
+  "remote_type": null,
   "remote_action": null,
   "remote_result": "none",
   "dispatched": true,
-  "incident_id": "I-030",
-  "note": "No remote action possible; technician dispatched."
+  "incident_id": "I-071",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0020"
  },
  {
-  "id": "A-0015",
-  "ts": "2026-01-04T07:29:00",
-  "machine_id": "M-62",
-  "site_id": "S-07",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
+  "ts": "2025-12-16T07:37:00",
+  "machine_id": "M-53",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
   "severity": "major",
   "readings": {
-   "units_offline": 1
+   "vibration_mm_s": 7.8
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0016",
-  "ts": "2026-01-05T10:07:00",
-  "machine_id": "M-62",
-  "site_id": "S-07",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 3
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-028",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-062",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0021"
  },
  {
-  "id": "A-0017",
-  "ts": "2026-01-17T20:51:00",
+  "ts": "2025-12-16T10:07:00",
+  "machine_id": "M-10",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-006",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0022"
+ },
+ {
+  "ts": "2025-12-17T06:51:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-118",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0023"
+ },
+ {
+  "ts": "2025-12-17T07:29:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 402,
+   "discharge_bar": 23.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-008",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0024"
+ },
+ {
+  "ts": "2025-12-18T14:35:00",
+  "machine_id": "M-61",
+  "site_id": "S-07",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 19.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0025"
+ },
+ {
+  "ts": "2025-12-18T15:34:00",
+  "machine_id": "M-126",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 187,
+   "compressor_a": 22.8
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0026"
+ },
+ {
+  "ts": "2025-12-19T10:27:00",
   "machine_id": "M-72",
   "site_id": "S-08",
   "code": "WL",
   "description": "Water leak / drain sensor",
   "severity": "major",
   "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 3.7
+   "water_sensor": "wet"
   },
+  "remote_type": null,
   "remote_action": null,
   "remote_result": "none",
   "dispatched": true,
   "incident_id": null,
-  "note": "Technician dispatched."
+  "note": "Technician dispatched.",
+  "id": "A-0027"
  },
  {
-  "id": "A-0018",
-  "ts": "2026-01-21T11:08:00",
-  "machine_id": "M-21",
-  "site_id": "S-03",
-  "code": "LC",
-  "description": "Low cooling capacity",
-  "severity": "major",
-  "readings": {},
-  "remote_action": "Remote setpoint reset via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0019",
-  "ts": "2026-01-23T10:36:00",
-  "machine_id": "M-23",
-  "site_id": "S-03",
-  "code": "VB",
-  "description": "High vibration alarm",
-  "severity": "major",
-  "readings": {
-   "vibration_mm_s": 10.4
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-013",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0020",
-  "ts": "2026-01-23T10:52:00",
-  "machine_id": "M-22",
-  "site_id": "S-03",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
-  "severity": "major",
-  "readings": {
-   "discharge_bar": 23.0,
-   "cw_flow_pct": 73
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-011",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0021",
-  "ts": "2026-02-02T14:18:00",
-  "machine_id": "M-09",
+  "ts": "2025-12-21T07:26:00",
+  "machine_id": "M-10",
   "site_id": "S-01",
   "code": "U4",
   "description": "Indoor-outdoor communication error",
@@ -358,33 +494,296 @@
   "readings": {
    "units_offline": 1
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
   "remote_result": "cleared",
   "dispatched": false,
   "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0028"
  },
  {
-  "id": "A-0022",
-  "ts": "2026-02-06T08:06:00",
+  "ts": "2025-12-21T19:48:00",
+  "machine_id": "M-10",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0029"
+ },
+ {
+  "ts": "2025-12-23T13:23:00",
+  "machine_id": "M-129",
+  "site_id": "S-02",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0030"
+ },
+ {
+  "ts": "2025-12-25T17:55:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 34.0
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0031"
+ },
+ {
+  "ts": "2025-12-26T09:25:00",
+  "machine_id": "M-125",
+  "site_id": "S-12",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-128",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0032"
+ },
+ {
+  "ts": "2025-12-30T06:15:00",
   "machine_id": "M-72",
   "site_id": "S-08",
   "code": "WL",
   "description": "Water leak / drain sensor",
   "severity": "major",
   "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.7
+   "water_sensor": "wet"
   },
+  "remote_type": null,
   "remote_action": null,
   "remote_result": "none",
   "dispatched": true,
-  "incident_id": "I-037",
-  "note": "No remote action possible; technician dispatched."
+  "incident_id": "I-076",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0033"
  },
  {
-  "id": "A-0023",
-  "ts": "2026-02-07T06:36:00",
+  "ts": "2025-12-31T07:03:00",
+  "machine_id": "M-74",
+  "site_id": "S-08",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-079",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0034"
+ },
+ {
+  "ts": "2026-01-02T08:48:00",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-012",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0035"
+ },
+ {
+  "ts": "2026-01-04T07:33:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-056",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0036"
+ },
+ {
+  "ts": "2026-01-06T08:58:00",
+  "machine_id": "M-24",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-034",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0037"
+ },
+ {
+  "ts": "2026-01-07T08:05:00",
+  "machine_id": "M-21",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-022",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0038"
+ },
+ {
+  "ts": "2026-01-09T08:10:00",
+  "machine_id": "M-115",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-110",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0039"
+ },
+ {
+  "ts": "2026-01-12T15:16:00",
+  "machine_id": "M-129",
+  "site_id": "S-02",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0040"
+ },
+ {
+  "ts": "2026-01-14T06:13:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 33.8
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-086",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0041"
+ },
+ {
+  "ts": "2026-01-16T14:40:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0042"
+ },
+ {
+  "ts": "2026-01-17T12:20:00",
+  "machine_id": "M-63",
+  "site_id": "S-07",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Technician dispatched.",
+  "id": "A-0043"
+ },
+ {
+  "ts": "2026-01-21T11:51:00",
+  "machine_id": "M-123",
+  "site_id": "S-12",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-122",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0044"
+ },
+ {
+  "ts": "2026-01-24T18:45:00",
   "machine_id": "M-13",
   "site_id": "S-02",
   "code": "VB",
@@ -393,661 +792,208 @@
   "readings": {
    "vibration_mm_s": 7.8
   },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-008",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0024",
-  "ts": "2026-02-08T12:01:00",
-  "machine_id": "M-71",
-  "site_id": "S-08",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 227,
-   "compressor_a": 19.1
-  },
-  "remote_action": "Remote fault reset via controller",
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
   "remote_result": "failed",
   "dispatched": true,
   "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0045"
  },
  {
-  "id": "A-0025",
-  "ts": "2026-02-08T13:52:00",
-  "machine_id": "M-32",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 34.0,
-   "supply_air_c": 17.7
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0026",
-  "ts": "2026-02-09T16:13:00",
-  "machine_id": "M-22",
+  "ts": "2026-01-25T09:35:00",
+  "machine_id": "M-24",
   "site_id": "S-03",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
+  "code": "LC",
+  "description": "Low cooling capacity",
   "severity": "major",
-  "readings": {
-   "discharge_bar": 22.9,
-   "cw_flow_pct": 89
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-035",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0046"
  },
  {
-  "id": "A-0027",
-  "ts": "2026-02-11T21:56:00",
+  "ts": "2026-01-26T11:02:00",
   "machine_id": "M-21",
   "site_id": "S-03",
   "code": "LC",
   "description": "Low cooling capacity",
   "severity": "major",
   "readings": {},
-  "remote_action": "Remote setpoint reset via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0028",
-  "ts": "2026-02-15T20:10:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0029",
-  "ts": "2026-02-17T07:31:00",
-  "machine_id": "M-32",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 33.7,
-   "supply_air_c": 18.3
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-016",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0030",
-  "ts": "2026-02-24T08:29:00",
-  "machine_id": "M-63",
-  "site_id": "S-07",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "major",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.9
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-031",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0031",
-  "ts": "2026-02-26T09:23:00",
-  "machine_id": "M-31",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 32.2,
-   "supply_air_c": 19.4
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-015",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0032",
-  "ts": "2026-03-04T11:49:00",
-  "machine_id": "M-61",
-  "site_id": "S-07",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 227,
-   "compressor_a": 17.6
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-027",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0033",
-  "ts": "2026-03-04T16:16:00",
-  "machine_id": "M-94",
-  "site_id": "S-05",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 230,
-   "compressor_a": 22.8
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0034",
-  "ts": "2026-03-07T08:33:00",
-  "machine_id": "M-63",
-  "site_id": "S-07",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "major",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 5.5
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-032",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0035",
-  "ts": "2026-03-12T08:46:00",
-  "machine_id": "M-07",
-  "site_id": "S-01",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 193,
-   "compressor_a": 19.0
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-901",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0036",
-  "ts": "2026-03-15T06:07:00",
-  "machine_id": "M-51",
-  "site_id": "S-06",
-  "code": "VB",
-  "description": "High vibration alarm",
-  "severity": "major",
-  "readings": {
-   "vibration_mm_s": 9.8
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-024",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0037",
-  "ts": "2026-03-16T21:53:00",
-  "machine_id": "M-31",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 33.1,
-   "supply_air_c": 17.6
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0038",
-  "ts": "2026-04-28T17:05:00",
-  "machine_id": "M-11",
-  "site_id": "S-02",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
-  "severity": "critical",
-  "readings": {
-   "discharge_bar": 21.3,
-   "cw_flow_pct": 85
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0039",
-  "ts": "2026-05-02T13:34:00",
-  "machine_id": "M-32",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 33.5,
-   "supply_air_c": 18.8
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0040",
-  "ts": "2026-05-05T07:48:00",
-  "machine_id": "M-41",
-  "site_id": "S-05",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 229,
-   "compressor_a": 18.1
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-018",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0041",
-  "ts": "2026-05-09T09:26:00",
-  "machine_id": "M-22",
-  "site_id": "S-03",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
-  "severity": "major",
-  "readings": {
-   "discharge_bar": 21.1,
-   "cw_flow_pct": 91
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-012",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0042",
-  "ts": "2026-05-14T06:48:00",
-  "machine_id": "M-11",
-  "site_id": "S-02",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
-  "severity": "critical",
-  "readings": {
-   "discharge_bar": 22.7,
-   "cw_flow_pct": 95
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-005",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0043",
-  "ts": "2026-05-14T08:21:00",
-  "machine_id": "M-21",
-  "site_id": "S-03",
-  "code": "LC",
-  "description": "Low cooling capacity",
-  "severity": "major",
-  "readings": {},
+  "remote_type": "setpoint",
   "remote_action": "Remote setpoint reset via BMS",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-010",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-023",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0047"
  },
  {
-  "id": "A-0044",
-  "ts": "2026-05-23T18:25:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0045",
-  "ts": "2026-05-24T11:22:00",
-  "machine_id": "M-41",
-  "site_id": "S-05",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 231,
-   "compressor_a": 21.1
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-019",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0046",
-  "ts": "2026-06-03T17:39:00",
-  "machine_id": "M-62",
-  "site_id": "S-07",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0047",
-  "ts": "2026-06-11T16:05:00",
+  "ts": "2026-01-27T08:56:00",
   "machine_id": "M-52",
   "site_id": "S-06",
   "code": "LC",
   "description": "Low cooling capacity",
   "severity": "major",
   "readings": {},
+  "remote_type": "setpoint",
   "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-057",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0048"
+ },
+ {
+  "ts": "2026-01-30T11:29:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 34.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-038",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0049"
+ },
+ {
+  "ts": "2026-02-04T10:40:00",
+  "machine_id": "M-121",
+  "site_id": "S-12",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 186,
+   "compressor_a": 23.7
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-115",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0050"
+ },
+ {
+  "ts": "2026-02-06T07:26:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0051"
+ },
+ {
+  "ts": "2026-02-14T12:03:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 399,
+   "discharge_bar": 21.5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
   "remote_result": "cleared",
   "dispatched": false,
   "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0052"
  },
  {
-  "id": "A-0048",
-  "ts": "2026-06-24T09:04:00",
+  "ts": "2026-02-17T07:41:00",
+  "machine_id": "M-123",
+  "site_id": "S-12",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-123",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0053"
+ },
+ {
+  "ts": "2026-02-18T06:18:00",
+  "machine_id": "M-32",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 31.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-042",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0054"
+ },
+ {
+  "ts": "2026-02-26T11:04:00",
   "machine_id": "M-12",
   "site_id": "S-02",
   "code": "WL",
   "description": "Water leak / drain sensor",
   "severity": "critical",
   "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 7.2
+   "water_sensor": "wet"
   },
+  "remote_type": null,
   "remote_action": null,
   "remote_result": "none",
   "dispatched": true,
-  "incident_id": "I-007",
-  "note": "No remote action possible; technician dispatched."
+  "incident_id": "I-013",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0055"
  },
  {
-  "id": "A-0049",
-  "ts": "2026-06-25T08:30:00",
-  "machine_id": "M-23",
-  "site_id": "S-03",
-  "code": "VB",
-  "description": "High vibration alarm",
-  "severity": "major",
-  "readings": {
-   "vibration_mm_s": 10.6
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-014",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0050",
-  "ts": "2026-06-26T18:47:00",
-  "machine_id": "M-21",
-  "site_id": "S-03",
-  "code": "LC",
-  "description": "Low cooling capacity",
-  "severity": "major",
-  "readings": {},
-  "remote_action": "Remote setpoint reset via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0051",
-  "ts": "2026-06-30T14:12:00",
-  "machine_id": "M-22",
-  "site_id": "S-03",
-  "code": "HP",
-  "description": "Condenser high-pressure trip",
-  "severity": "major",
-  "readings": {
-   "discharge_bar": 22.3,
-   "cw_flow_pct": 93
-  },
-  "remote_action": "Remote chiller restart via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0052",
-  "ts": "2026-07-01T09:07:00",
-  "machine_id": "M-42",
-  "site_id": "S-05",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 2
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0053",
-  "ts": "2026-07-04T21:19:00",
-  "machine_id": "M-31",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 31.6,
-   "supply_air_c": 19.2
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0054",
-  "ts": "2026-07-15T06:03:00",
-  "machine_id": "M-51",
-  "site_id": "S-06",
-  "code": "VB",
-  "description": "High vibration alarm",
-  "severity": "major",
-  "readings": {
-   "vibration_mm_s": 10.8
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-025",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0055",
-  "ts": "2026-07-15T10:34:00",
-  "machine_id": "M-41",
-  "site_id": "S-05",
-  "code": "L8",
-  "description": "Compressor overcurrent",
-  "severity": "major",
-  "readings": {
-   "supply_v": 224,
-   "compressor_a": 23.1
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0056",
-  "ts": "2026-07-22T08:41:00",
-  "machine_id": "M-71",
-  "site_id": "S-08",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 231,
-   "compressor_a": 19.0
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-034",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0057",
-  "ts": "2026-07-24T21:22:00",
-  "machine_id": "M-31",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 35.0,
-   "supply_air_c": 19.4
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0058",
-  "ts": "2026-07-29T17:09:00",
-  "machine_id": "M-31",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 34.0,
-   "supply_air_c": 17.9
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0059",
-  "ts": "2026-08-02T09:23:00",
+  "ts": "2026-02-28T11:33:00",
   "machine_id": "M-62",
   "site_id": "S-07",
   "code": "U4",
   "description": "Indoor-outdoor communication error",
   "severity": "major",
   "readings": {
-   "units_offline": 1
+   "units_offline": 2
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0060",
-  "ts": "2026-08-08T10:01:00",
-  "machine_id": "M-12",
-  "site_id": "S-02",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "critical",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 7.0
-  },
-  "remote_action": null,
-  "remote_result": "none",
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
   "dispatched": true,
   "incident_id": null,
-  "note": "Technician dispatched."
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0056"
  },
  {
-  "id": "A-0061",
-  "ts": "2026-08-11T09:56:00",
+  "ts": "2026-03-09T08:13:00",
   "machine_id": "M-42",
   "site_id": "S-05",
   "code": "U4",
@@ -1056,308 +1002,2226 @@
   "readings": {
    "units_offline": 4
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-022",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-050",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0057"
  },
  {
-  "id": "A-0062",
-  "ts": "2026-08-19T06:29:00",
+  "ts": "2026-03-09T08:39:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-102",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0058"
+ },
+ {
+  "ts": "2026-03-12T06:56:00",
+  "machine_id": "M-41",
+  "site_id": "S-05",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 194,
+   "compressor_a": 18.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-048",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0059"
+ },
+ {
+  "ts": "2026-03-12T11:02:00",
   "machine_id": "M-07",
   "site_id": "S-01",
   "code": "E3",
   "description": "High-pressure / compressor protection trip",
   "severity": "major",
   "readings": {
-   "supply_v": 191,
-   "compressor_a": 18.2
+   "supply_v": 193,
+   "compressor_a": 23.5
   },
+  "remote_type": "reset",
   "remote_action": "Remote fault reset via controller",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-947",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-901",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0060"
  },
  {
-  "id": "A-0063",
-  "ts": "2026-08-23T06:31:00",
+  "ts": "2026-03-12T11:33:00",
+  "machine_id": "M-114",
+  "site_id": "S-11",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 194,
+   "compressor_a": 18.7
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-108",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0061"
+ },
+ {
+  "ts": "2026-03-17T06:34:00",
+  "machine_id": "M-14",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-019",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0062"
+ },
+ {
+  "ts": "2026-03-18T08:14:00",
+  "machine_id": "M-124",
+  "site_id": "S-12",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 9.9
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-126",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0063"
+ },
+ {
+  "ts": "2026-03-19T20:33:00",
+  "machine_id": "M-128",
+  "site_id": "S-06",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Technician dispatched.",
+  "id": "A-0064"
+ },
+ {
+  "ts": "2026-03-22T09:05:00",
+  "machine_id": "M-61",
+  "site_id": "S-07",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 17.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-065",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0065"
+ },
+ {
+  "ts": "2026-03-22T09:24:00",
+  "machine_id": "M-106",
+  "site_id": "S-10",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 10.0
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-094",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0066"
+ },
+ {
+  "ts": "2026-03-22T09:43:00",
+  "machine_id": "M-127",
+  "site_id": "S-04",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 405,
+   "discharge_bar": 21.5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-131",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0067"
+ },
+ {
+  "ts": "2026-03-29T07:10:00",
   "machine_id": "M-13",
   "site_id": "S-02",
   "code": "VB",
   "description": "High vibration alarm",
   "severity": "critical",
   "readings": {
-   "vibration_mm_s": 7.8
+   "vibration_mm_s": 10.0
   },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": "I-009",
-  "note": "No remote action possible; technician dispatched."
- },
- {
-  "id": "A-0064",
-  "ts": "2026-08-26T08:08:00",
-  "machine_id": "M-41",
-  "site_id": "S-05",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 227,
-   "compressor_a": 19.8
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-020",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0065",
-  "ts": "2026-09-02T21:42:00",
-  "machine_id": "M-63",
-  "site_id": "S-07",
-  "code": "WL",
-  "description": "Water leak / drain sensor",
-  "severity": "major",
-  "readings": {
-   "water_sensor": "wet",
-   "indoor_coil_c": 3.8
-  },
-  "remote_action": null,
-  "remote_result": "none",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Technician dispatched."
- },
- {
-  "id": "A-0066",
-  "ts": "2026-09-03T09:05:00",
-  "machine_id": "M-52",
-  "site_id": "S-06",
-  "code": "LC",
-  "description": "Low cooling capacity",
-  "severity": "major",
-  "readings": {},
-  "remote_action": "Remote setpoint reset via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-026",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0067",
-  "ts": "2026-09-04T07:06:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0068",
-  "ts": "2026-09-09T07:28:00",
-  "machine_id": "M-92",
-  "site_id": "S-09",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 230,
-   "compressor_a": 20.8
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-951",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0069",
-  "ts": "2026-09-21T14:22:00",
-  "machine_id": "M-62",
-  "site_id": "S-07",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0070",
-  "ts": "2026-09-21T18:03:00",
-  "machine_id": "M-09",
-  "site_id": "S-01",
-  "code": "U4",
-  "description": "Indoor-outdoor communication error",
-  "severity": "major",
-  "readings": {
-   "units_offline": 1
-  },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0071",
-  "ts": "2026-09-23T07:52:00",
-  "machine_id": "M-93",
-  "site_id": "S-08",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 230,
-   "compressor_a": 23.0
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": "I-952",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
- },
- {
-  "id": "A-0072",
-  "ts": "2026-09-26T08:44:00",
-  "machine_id": "M-32",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 33.1,
-   "supply_air_c": 19.7
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
-  "remote_result": "cleared",
-  "dispatched": false,
-  "incident_id": null,
-  "note": "Cleared by the remote action. No visit needed."
- },
- {
-  "id": "A-0073",
-  "ts": "2026-09-29T09:33:00",
-  "machine_id": "M-41",
-  "site_id": "S-05",
-  "code": "E3",
-  "description": "High-pressure / compressor protection trip",
-  "severity": "major",
-  "readings": {
-   "supply_v": 230,
-   "compressor_a": 23.9
-  },
-  "remote_action": "Remote fault reset via controller",
-  "remote_result": "failed",
-  "dispatched": true,
-  "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
- },
- {
-  "id": "A-0074",
-  "ts": "2026-10-02T08:45:00",
-  "machine_id": "M-32",
-  "site_id": "S-04",
-  "code": "HT",
-  "description": "High return-air temperature",
-  "severity": "critical",
-  "readings": {
-   "return_air_c": 32.7,
-   "supply_air_c": 18.1
-  },
-  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
   "remote_result": "failed",
   "dispatched": true,
   "incident_id": "I-017",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0068"
  },
  {
-  "id": "A-0075",
-  "ts": "2026-10-04T09:14:00",
-  "machine_id": "M-62",
-  "site_id": "S-07",
+  "ts": "2026-04-01T06:56:00",
+  "machine_id": "M-08",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 20.3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0069"
+ },
+ {
+  "ts": "2026-04-03T10:48:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-103",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0070"
+ },
+ {
+  "ts": "2026-04-10T08:25:00",
+  "machine_id": "M-33",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 32.1
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-044",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0071"
+ },
+ {
+  "ts": "2026-04-13T11:41:00",
+  "machine_id": "M-08",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 188,
+   "compressor_a": 20.3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-001",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0072"
+ },
+ {
+  "ts": "2026-04-13T19:54:00",
+  "machine_id": "M-113",
+  "site_id": "S-11",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0073"
+ },
+ {
+  "ts": "2026-04-15T06:22:00",
+  "machine_id": "M-101",
+  "site_id": "S-10",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 187,
+   "compressor_a": 22.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-082",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0074"
+ },
+ {
+  "ts": "2026-04-16T07:36:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 34.5
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-039",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0075"
+ },
+ {
+  "ts": "2026-04-16T07:52:00",
+  "machine_id": "M-115",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-111",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0076"
+ },
+ {
+  "ts": "2026-04-17T09:55:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-104",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0077"
+ },
+ {
+  "ts": "2026-04-22T11:09:00",
+  "machine_id": "M-23",
+  "site_id": "S-03",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 10.6
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-030",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0078"
+ },
+ {
+  "ts": "2026-04-22T16:46:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 33.6
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0079"
+ },
+ {
+  "ts": "2026-04-24T08:11:00",
+  "machine_id": "M-10",
+  "site_id": "S-01",
   "code": "U4",
   "description": "Indoor-outdoor communication error",
   "severity": "major",
   "readings": {
-   "units_offline": 5
+   "units_offline": 3
   },
-  "remote_action": "Remote power-cycle of the indoor group via BMS",
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-029",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-007",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0080"
  },
  {
-  "id": "A-0076",
-  "ts": "2026-10-05T09:58:00",
+  "ts": "2026-04-25T09:05:00",
+  "machine_id": "M-61",
+  "site_id": "S-07",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 193,
+   "compressor_a": 21.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-066",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0081"
+ },
+ {
+  "ts": "2026-04-25T10:07:00",
+  "machine_id": "M-51",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 8.1
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-054",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0082"
+ },
+ {
+  "ts": "2026-04-27T11:36:00",
   "machine_id": "M-22",
   "site_id": "S-03",
   "code": "HP",
   "description": "Condenser high-pressure trip",
   "severity": "major",
   "readings": {
-   "discharge_bar": 23.3,
-   "cw_flow_pct": 94
+   "supply_v": 401,
+   "discharge_bar": 22.5
   },
-  "remote_action": "Remote chiller restart via BMS",
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-028",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0083"
+ },
+ {
+  "ts": "2026-04-28T08:05:00",
+  "machine_id": "M-74",
+  "site_id": "S-08",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-080",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0084"
+ },
+ {
+  "ts": "2026-05-02T11:43:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-058",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0085"
+ },
+ {
+  "ts": "2026-05-02T18:47:00",
+  "machine_id": "M-33",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 34.2
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
   "remote_result": "failed",
   "dispatched": true,
   "incident_id": null,
-  "note": "Remote action failed; technician dispatched."
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0086"
  },
  {
-  "id": "A-0077",
-  "ts": "2026-10-06T06:11:00",
-  "machine_id": "M-94",
+  "ts": "2026-05-03T15:16:00",
+  "machine_id": "M-33",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 31.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0087"
+ },
+ {
+  "ts": "2026-05-07T20:06:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 400,
+   "discharge_bar": 21.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0088"
+ },
+ {
+  "ts": "2026-05-10T10:01:00",
+  "machine_id": "M-123",
+  "site_id": "S-12",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-124",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0089"
+ },
+ {
+  "ts": "2026-05-17T07:07:00",
+  "machine_id": "M-128",
+  "site_id": "S-06",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-132",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0090"
+ },
+ {
+  "ts": "2026-05-24T09:56:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 399,
+   "discharge_bar": 23.8
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-009",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0091"
+ },
+ {
+  "ts": "2026-05-27T19:39:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 33.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0092"
+ },
+ {
+  "ts": "2026-05-29T10:43:00",
+  "machine_id": "M-62",
+  "site_id": "S-07",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-069",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0093"
+ },
+ {
+  "ts": "2026-05-29T17:35:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0094"
+ },
+ {
+  "ts": "2026-05-30T08:36:00",
+  "machine_id": "M-129",
+  "site_id": "S-02",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0095"
+ },
+ {
+  "ts": "2026-05-31T14:13:00",
+  "machine_id": "M-104",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 32.8
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0096"
+ },
+ {
+  "ts": "2026-06-01T06:21:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-059",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0097"
+ },
+ {
+  "ts": "2026-06-01T08:47:00",
+  "machine_id": "M-41",
   "site_id": "S-05",
   "code": "E3",
   "description": "High-pressure / compressor protection trip",
   "severity": "major",
   "readings": {
-   "supply_v": 226,
-   "compressor_a": 18.6
+   "supply_v": 194,
+   "compressor_a": 17.1
   },
+  "remote_type": "reset",
   "remote_action": "Remote fault reset via controller",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-953",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-049",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0098"
  },
  {
-  "id": "A-0078",
-  "ts": "2026-10-19T07:00:00",
-  "machine_id": "M-95",
+  "ts": "2026-06-03T13:07:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 397,
+   "discharge_bar": 23.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0099"
+ },
+ {
+  "ts": "2026-06-06T09:22:00",
+  "machine_id": "M-10",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0100"
+ },
+ {
+  "ts": "2026-06-10T14:24:00",
+  "machine_id": "M-105",
+  "site_id": "S-10",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 407,
+   "discharge_bar": 21.8
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0101"
+ },
+ {
+  "ts": "2026-06-11T11:11:00",
+  "machine_id": "M-23",
+  "site_id": "S-03",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 10.7
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-031",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0102"
+ },
+ {
+  "ts": "2026-06-14T06:48:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0103"
+ },
+ {
+  "ts": "2026-06-20T16:36:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 32.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0104"
+ },
+ {
+  "ts": "2026-06-22T10:06:00",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-014",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0105"
+ },
+ {
+  "ts": "2026-06-25T07:42:00",
+  "machine_id": "M-126",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 193,
+   "compressor_a": 22.3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-130",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0106"
+ },
+ {
+  "ts": "2026-06-26T07:38:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-060",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0107"
+ },
+ {
+  "ts": "2026-06-28T10:59:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 33.6
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-040",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0108"
+ },
+ {
+  "ts": "2026-06-30T06:04:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-119",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0109"
+ },
+ {
+  "ts": "2026-07-01T07:00:00",
+  "machine_id": "M-21",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-024",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0110"
+ },
+ {
+  "ts": "2026-07-04T06:23:00",
+  "machine_id": "M-127",
+  "site_id": "S-04",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 403,
+   "discharge_bar": 21.1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0111"
+ },
+ {
+  "ts": "2026-07-04T10:33:00",
+  "machine_id": "M-14",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-020",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0112"
+ },
+ {
+  "ts": "2026-07-08T08:09:00",
+  "machine_id": "M-125",
+  "site_id": "S-12",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-129",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0113"
+ },
+ {
+  "ts": "2026-07-10T09:16:00",
+  "machine_id": "M-09",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-003",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0114"
+ },
+ {
+  "ts": "2026-07-11T09:38:00",
+  "machine_id": "M-101",
+  "site_id": "S-10",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 190,
+   "compressor_a": 23.6
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-083",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0115"
+ },
+ {
+  "ts": "2026-07-12T09:40:00",
+  "machine_id": "M-104",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 33.5
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-089",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0116"
+ },
+ {
+  "ts": "2026-07-13T07:28:00",
+  "machine_id": "M-62",
+  "site_id": "S-07",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0117"
+ },
+ {
+  "ts": "2026-07-15T09:37:00",
+  "machine_id": "M-42",
+  "site_id": "S-05",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-051",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0118"
+ },
+ {
+  "ts": "2026-07-16T06:14:00",
+  "machine_id": "M-08",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 191,
+   "compressor_a": 20.1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-002",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0119"
+ },
+ {
+  "ts": "2026-07-18T06:54:00",
+  "machine_id": "M-33",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 32.5
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-045",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0120"
+ },
+ {
+  "ts": "2026-07-19T08:28:00",
+  "machine_id": "M-63",
+  "site_id": "S-07",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-072",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0121"
+ },
+ {
+  "ts": "2026-07-19T08:28:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-121",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0122"
+ },
+ {
+  "ts": "2026-07-19T09:46:00",
+  "machine_id": "M-113",
+  "site_id": "S-11",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-106",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0123"
+ },
+ {
+  "ts": "2026-07-20T11:39:00",
+  "machine_id": "M-122",
+  "site_id": "S-12",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-120",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0124"
+ },
+ {
+  "ts": "2026-07-22T08:55:00",
+  "machine_id": "M-106",
+  "site_id": "S-10",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 8.9
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-095",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0125"
+ },
+ {
+  "ts": "2026-07-22T09:30:00",
+  "machine_id": "M-72",
+  "site_id": "S-08",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-077",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0126"
+ },
+ {
+  "ts": "2026-07-24T07:06:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 33.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-041",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0127"
+ },
+ {
+  "ts": "2026-07-25T06:13:00",
+  "machine_id": "M-114",
+  "site_id": "S-11",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 23.9
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-109",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0128"
+ },
+ {
+  "ts": "2026-07-26T07:55:00",
+  "machine_id": "M-111",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-097",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0129"
+ },
+ {
+  "ts": "2026-07-26T08:45:00",
+  "machine_id": "M-62",
+  "site_id": "S-07",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-070",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0130"
+ },
+ {
+  "ts": "2026-08-02T11:42:00",
+  "machine_id": "M-123",
+  "site_id": "S-12",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-125",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0131"
+ },
+ {
+  "ts": "2026-08-05T07:51:00",
+  "machine_id": "M-51",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 8.0
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-055",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0132"
+ },
+ {
+  "ts": "2026-08-07T09:08:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 33.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-087",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0133"
+ },
+ {
+  "ts": "2026-08-08T11:34:00",
+  "machine_id": "M-09",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-004",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0134"
+ },
+ {
+  "ts": "2026-08-11T07:39:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 404,
+   "discharge_bar": 21.9
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-010",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0135"
+ },
+ {
+  "ts": "2026-08-12T10:34:00",
+  "machine_id": "M-32",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 34.9
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-043",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0136"
+ },
+ {
+  "ts": "2026-08-14T08:55:00",
+  "machine_id": "M-115",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-112",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0137"
+ },
+ {
+  "ts": "2026-08-14T11:16:00",
+  "machine_id": "M-111",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-098",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0138"
+ },
+ {
+  "ts": "2026-08-15T09:15:00",
+  "machine_id": "M-61",
   "site_id": "S-07",
   "code": "E3",
   "description": "High-pressure / compressor protection trip",
   "severity": "major",
   "readings": {
-   "supply_v": 231,
-   "compressor_a": 22.8
+   "supply_v": 188,
+   "compressor_a": 20.6
   },
+  "remote_type": "reset",
   "remote_action": "Remote fault reset via controller",
   "remote_result": "failed",
   "dispatched": true,
-  "incident_id": "I-954",
-  "note": "Remote action did not clear the alarm; it returned within 30 minutes. Technician dispatched."
+  "incident_id": "I-067",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0139"
+ },
+ {
+  "ts": "2026-08-19T06:47:00",
+  "machine_id": "M-07",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 19.1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-947",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0140"
+ },
+ {
+  "ts": "2026-08-21T19:52:00",
+  "machine_id": "M-53",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 9.5
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0141"
+ },
+ {
+  "ts": "2026-08-24T09:42:00",
+  "machine_id": "M-52",
+  "site_id": "S-06",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-061",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0142"
+ },
+ {
+  "ts": "2026-08-24T10:08:00",
+  "machine_id": "M-105",
+  "site_id": "S-10",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 403,
+   "discharge_bar": 24.0
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-091",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0143"
+ },
+ {
+  "ts": "2026-08-27T11:31:00",
+  "machine_id": "M-11",
+  "site_id": "S-02",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "critical",
+  "readings": {
+   "supply_v": 406,
+   "discharge_bar": 21.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-011",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0144"
+ },
+ {
+  "ts": "2026-08-28T08:47:00",
+  "machine_id": "M-09",
+  "site_id": "S-01",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-005",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0145"
+ },
+ {
+  "ts": "2026-08-29T10:32:00",
+  "machine_id": "M-21",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-025",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0146"
+ },
+ {
+  "ts": "2026-08-31T08:35:00",
+  "machine_id": "M-53",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 8.8
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-063",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0147"
+ },
+ {
+  "ts": "2026-09-02T09:14:00",
+  "machine_id": "M-113",
+  "site_id": "S-11",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "critical",
+  "readings": {
+   "units_offline": 3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-107",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0148"
+ },
+ {
+  "ts": "2026-09-07T11:53:00",
+  "machine_id": "M-71",
+  "site_id": "S-08",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 194,
+   "compressor_a": 19.5
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-075",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0149"
+ },
+ {
+  "ts": "2026-09-07T13:00:00",
+  "machine_id": "M-32",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "critical",
+  "readings": {
+   "return_air_c": 33.4
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0150"
+ },
+ {
+  "ts": "2026-09-10T08:48:00",
+  "machine_id": "M-105",
+  "site_id": "S-10",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 402,
+   "discharge_bar": 22.6
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-092",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0151"
+ },
+ {
+  "ts": "2026-09-15T06:26:00",
+  "machine_id": "M-106",
+  "site_id": "S-10",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 9.9
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-096",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0152"
+ },
+ {
+  "ts": "2026-09-16T08:54:00",
+  "machine_id": "M-23",
+  "site_id": "S-03",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 11.8
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-032",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0153"
+ },
+ {
+  "ts": "2026-09-16T09:39:00",
+  "machine_id": "M-21",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-026",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0154"
+ },
+ {
+  "ts": "2026-09-17T07:35:00",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-015",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0155"
+ },
+ {
+  "ts": "2026-09-17T10:24:00",
+  "machine_id": "M-53",
+  "site_id": "S-06",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 9.1
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-064",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0156"
+ },
+ {
+  "ts": "2026-09-17T11:55:00",
+  "machine_id": "M-103",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 34.5
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-088",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0157"
+ },
+ {
+  "ts": "2026-09-18T06:15:00",
+  "machine_id": "M-102",
+  "site_id": "S-10",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 227,
+   "compressor_a": 18.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-085",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0158"
+ },
+ {
+  "ts": "2026-09-19T10:25:00",
+  "machine_id": "M-64",
+  "site_id": "S-07",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 229,
+   "compressor_a": 24.0
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-073",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0159"
+ },
+ {
+  "ts": "2026-09-21T07:27:00",
+  "machine_id": "M-124",
+  "site_id": "S-12",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "major",
+  "readings": {
+   "vibration_mm_s": 9.8
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-127",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0160"
+ },
+ {
+  "ts": "2026-09-22T10:50:00",
+  "machine_id": "M-13",
+  "site_id": "S-02",
+  "code": "VB",
+  "description": "High vibration alarm",
+  "severity": "critical",
+  "readings": {
+   "vibration_mm_s": 8.8
+  },
+  "remote_type": "read_log",
+  "remote_action": "Read the vibration trend from the controller log",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": null,
+  "note": "Remote action failed; technician dispatched.",
+  "id": "A-0161"
+ },
+ {
+  "ts": "2026-09-24T08:16:00",
+  "machine_id": "M-123",
+  "site_id": "S-12",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 1
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "cleared",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "Cleared by the remote action. No visit needed.",
+  "id": "A-0162"
+ },
+ {
+  "ts": "2026-09-26T06:07:00",
+  "machine_id": "M-112",
+  "site_id": "S-11",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "critical",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-105",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0163"
+ },
+ {
+  "ts": "2026-09-26T08:01:00",
+  "machine_id": "M-105",
+  "site_id": "S-10",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 404,
+   "discharge_bar": 21.3
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-093",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0164"
+ },
+ {
+  "ts": "2026-09-27T07:25:00",
+  "machine_id": "M-22",
+  "site_id": "S-03",
+  "code": "HP",
+  "description": "Condenser high-pressure trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 397,
+   "discharge_bar": 22.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote chiller reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-029",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0165"
+ },
+ {
+  "ts": "2026-09-27T08:40:00",
+  "machine_id": "M-24",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-036",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0166"
+ },
+ {
+  "ts": "2026-09-27T10:56:00",
+  "machine_id": "M-128",
+  "site_id": "S-06",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-133",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0167"
+ },
+ {
+  "ts": "2026-09-28T11:06:00",
+  "machine_id": "M-74",
+  "site_id": "S-08",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "major",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-081",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0168"
+ },
+ {
+  "ts": "2026-09-29T09:15:00",
+  "machine_id": "M-14",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-021",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0169"
+ },
+ {
+  "ts": "2026-10-02T08:19:00",
+  "machine_id": "M-73",
+  "site_id": "S-08",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 226,
+   "compressor_a": 17.7
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-078",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0170"
+ },
+ {
+  "ts": "2026-10-03T06:48:00",
+  "machine_id": "M-101",
+  "site_id": "S-10",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 191,
+   "compressor_a": 21.6
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-084",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0171"
+ },
+ {
+  "ts": "2026-10-12T09:40:00",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-016",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0172"
+ },
+ {
+  "ts": "2026-10-14T07:55:00",
+  "machine_id": "M-115",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-113",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0173"
+ },
+ {
+  "ts": "2026-10-14T09:06:00",
+  "machine_id": "M-24",
+  "site_id": "S-03",
+  "code": "LC",
+  "description": "Low cooling capacity",
+  "severity": "major",
+  "readings": {},
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint reset via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-037",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0174"
+ },
+ {
+  "ts": "2026-10-14T11:06:00",
+  "machine_id": "M-104",
+  "site_id": "S-10",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 34.3
+  },
+  "remote_type": "setpoint",
+  "remote_action": "Remote setpoint and fan-speed adjustment via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-090",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0175"
+ },
+ {
+  "ts": "2026-10-15T07:07:00",
+  "machine_id": "M-121",
+  "site_id": "S-12",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 187,
+   "compressor_a": 19.4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-116",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0176"
+ },
+ {
+  "ts": "2026-10-15T08:38:00",
+  "machine_id": "M-111",
+  "site_id": "S-11",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet"
+  },
+  "remote_type": null,
+  "remote_action": null,
+  "remote_result": "none",
+  "dispatched": true,
+  "incident_id": "I-099",
+  "note": "No remote action possible; technician dispatched.",
+  "id": "A-0177"
+ },
+ {
+  "ts": "2026-10-15T10:55:00",
+  "machine_id": "M-42",
+  "site_id": "S-05",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "major",
+  "readings": {
+   "units_offline": 4
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote reset of the indoor group via BMS",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-052",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0178"
+ },
+ {
+  "ts": "2026-10-17T07:28:00",
+  "machine_id": "M-43",
+  "site_id": "S-05",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 229,
+   "compressor_a": 23.7
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": true,
+  "incident_id": "I-053",
+  "note": "Remote action did not clear it; the alarm returned within 30 minutes.",
+  "id": "A-0179"
+ },
+ {
+  "ts": "2026-10-24T09:40:00",
+  "machine_id": "M-07",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 188,
+   "compressor_a": 18.2
+  },
+  "remote_type": "reset",
+  "remote_action": "Remote fault reset via controller",
+  "remote_result": "failed",
+  "dispatched": false,
+  "incident_id": null,
+  "note": "The reset held for two days, then the unit tripped again. No visit was booked.",
+  "id": "A-0180"
  }
 ]

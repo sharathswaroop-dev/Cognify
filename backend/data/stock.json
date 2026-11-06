@@ -1,14 +1,26 @@
 [
  {
+  "part": "Airflow sensor (VRT-AFS-2)",
+  "van": 0,
+  "warehouse": 7,
+  "lead_time_days": 1
+ },
+ {
   "part": "Bearing 6206-2RS (x2)",
-  "van": 2,
-  "warehouse": 3,
+  "van": 1,
+  "warehouse": 2,
   "lead_time_days": 2
  },
  {
   "part": "Brazing rods",
   "van": 2,
-  "warehouse": 11,
+  "warehouse": 4,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Coil cleaner (5L)",
+  "van": 0,
+  "warehouse": 7,
   "lead_time_days": 1
  },
  {
@@ -18,40 +30,64 @@
   "lead_time_days": 2
  },
  {
-  "part": "Condenser end-cover gasket set",
+  "part": "Compressor relay board (DK-RLY-B2)",
   "van": 2,
   "warehouse": 3,
+  "lead_time_days": 2
+ },
+ {
+  "part": "Condensate pump (SPL-CP-12)",
+  "van": 0,
+  "warehouse": 10,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Condenser end-cover gasket set",
+  "van": 1,
+  "warehouse": 7,
   "lead_time_days": 1
  },
  {
   "part": "Copper coupler 3/8\"",
-  "van": 0,
-  "warehouse": 6,
+  "van": 1,
+  "warehouse": 5,
   "lead_time_days": 1
  },
  {
   "part": "Descaling chemical (40L)",
-  "van": 1,
+  "van": 2,
   "warehouse": 3,
   "lead_time_days": 1
  },
  {
   "part": "Drain trap",
   "van": 0,
-  "warehouse": 11,
+  "warehouse": 7,
   "lead_time_days": 1
  },
  {
   "part": "EC fan module 500mm (EBM-R3G500)",
   "van": 1,
+  "warehouse": 1,
+  "lead_time_days": 2
+ },
+ {
+  "part": "HP pressure transducer (CAR-HPT-30)",
+  "van": 0,
   "warehouse": 3,
   "lead_time_days": 2
  },
  {
   "part": "IP65 junction box",
   "van": 0,
-  "warehouse": 4,
+  "warehouse": 11,
   "lead_time_days": 1
+ },
+ {
+  "part": "Indoor unit PCB (CAS-PCB-A1)",
+  "van": 0,
+  "warehouse": 1,
+  "lead_time_days": 5
  },
  {
   "part": "Inverter PCB A2P rev D (DK-PCB-A2P-D)",
@@ -61,20 +97,20 @@
  },
  {
   "part": "PVC drain pipe 20mm (3m)",
-  "van": 1,
-  "warehouse": 8,
+  "van": 0,
+  "warehouse": 3,
   "lead_time_days": 1
  },
  {
   "part": "Refrigerant R410A (3kg)",
-  "van": 2,
-  "warehouse": 11,
+  "van": 1,
+  "warehouse": 6,
   "lead_time_days": 1
  },
  {
   "part": "Ring lugs and heat-shrink set",
-  "van": 2,
-  "warehouse": 11,
+  "van": 0,
+  "warehouse": 8,
   "lead_time_days": 1
  },
  {

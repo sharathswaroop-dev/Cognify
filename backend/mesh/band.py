@@ -22,7 +22,7 @@ import httpx
 
 log = logging.getLogger("sitememory.band")
 DEFAULT_BASE = "https://app.band.ai/api/v1"
-ROLES = ("dispatcher", "diagnostician", "parts", "field")
+ROLES = ("dispatcher", "diagnostician", "parts", "verifier")
 _JSON_BLOCK = re.compile(r"```json\s*(\{.*?\})\s*```", re.S)
 
 

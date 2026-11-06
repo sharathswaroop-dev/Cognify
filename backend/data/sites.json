@@ -1,96 +1,126 @@
 [
-  {
-    "id": "S-01",
-    "name": "Orion Tech Park, Tower B",
-    "area": "Whitefield",
-    "contact": "Priya Nair (Facility Manager)",
-    "notes": [
-      "Roof access key is kept at the B-wing security desk; sign the register.",
-      "Gate code changed to 4471 in Sep 2026.",
-      "Priya prefers a phone call before 10am; she does not reply to WhatsApp during the day.",
-      "Roof work after 6pm needs a hot-work / height permit from building security.",
-      "Grid voltage dips to ~190V during afternoon peak; noted on multiple visits."
-    ]
-  },
-  {
-    "id": "S-02",
-    "name": "Sunrise Multispeciality Hospital",
-    "area": "Indiranagar",
-    "contact": "Dr. Kavitha Rao (Admin) / Manjunath (Biomedical)",
-    "notes": [
-      "OT and ICU units are critical: inform Manjunath before switching anything off.",
-      "Use the service lift behind the pharmacy; main lifts are for patients.",
-      "Visitor parking is full after 9am; park at the rear gate on 12th Main."
-    ]
-  },
-  {
-    "id": "S-03",
-    "name": "Green Leaf Mall",
-    "area": "Koramangala",
-    "contact": "Imran Pasha (Mall Engineering)",
-    "notes": [
-      "Plant room is on B2; collect the key from the engineering office on B1.",
-      "No noisy work inside the mall between 11am and 9pm; plan plant-room work early.",
-      "Mall security asks for the job card copy at entry."
-    ]
-  },
-  {
-    "id": "S-04",
-    "name": "Nexa Data Center, Hall 2",
-    "area": "Electronic City",
-    "contact": "Sanjay Menon (DC Operations)",
-    "notes": [
-      "Strict access: carry company ID and get pre-approved 24 hours ahead.",
-      "No food or liquids on the data hall floor.",
-      "Any unit shutdown needs a change ticket from Sanjay's team."
-    ]
-  },
-  {
-    "id": "S-05",
-    "name": "Hotel Silver Palm",
-    "area": "MG Road",
-    "contact": "Rahul D'Souza (Chief Engineer)",
-    "notes": [
-      "Guest room work only between 11am and 4pm (checkout to check-in).",
-      "Use the staff entrance on Church Street side."
-    ]
-  },
-  {
-    "id": "S-06",
-    "name": "Vega Pharma Plant",
-    "area": "Peenya Industrial Area",
-    "contact": "Lakshmi Prasad (Utilities)",
-    "notes": [
-      "Clean-room AHUs: gowning required; allow 20 minutes for entry procedure.",
-      "Safety induction video must be watched once per year at the gate."
-    ]
-  },
-  {
-    "id": "S-07",
-    "name": "Kaveri Corporate Office",
-    "area": "HSR Layout",
-    "contact": "Nikhil Jain (Admin)",
-    "notes": [
-      "Office is empty on Saturdays; best day for planned maintenance.",
-      "Ceiling cassettes are 3.6m high; carry the tall ladder."
-    ]
-  },
-  {
-    "id": "S-08",
-    "name": "Lakeview Apartments, Block C",
-    "area": "Hebbal",
-    "contact": "Association office (Mr. Venkatesh)",
-    "notes": [
-      "Terrace door is locked; key with the association office (open 10am-1pm)."
-    ]
-  },
-  {
-    "id": "S-09",
-    "name": "Brookfield Business Centre",
-    "area": "ITPL Main Road",
-    "contact": "Anita George (Operations)",
-    "notes": [
-      "New customer from Nov 2026. No visit history yet."
-    ]
-  }
+ {
+  "id": "S-01",
+  "name": "Orion Tech Park, Tower B",
+  "area": "Whitefield",
+  "contact": "Priya Nair (Facility Manager)",
+  "notes": [
+   "Roof access key is kept at the B-wing security desk; sign the register.",
+   "Gate code changed to 4471 in Sep 2026.",
+   "Priya prefers a phone call before 10am; she does not reply to WhatsApp during the day.",
+   "Roof work after 6pm needs a hot-work / height permit from building security.",
+   "Grid voltage dips to ~190V during afternoon peak; noted on multiple visits."
+  ]
+ },
+ {
+  "id": "S-02",
+  "name": "Sunrise Multispeciality Hospital",
+  "area": "Indiranagar",
+  "contact": "Dr. Kavitha Rao (Admin) / Manjunath (Biomedical)",
+  "notes": [
+   "OT and ICU units are critical: inform Manjunath before switching anything off.",
+   "Use the service lift behind the pharmacy; main lifts are for patients.",
+   "Visitor parking is full after 9am; park at the rear gate on 12th Main."
+  ]
+ },
+ {
+  "id": "S-03",
+  "name": "Green Leaf Mall",
+  "area": "Koramangala",
+  "contact": "Imran Pasha (Mall Engineering)",
+  "notes": [
+   "Plant room is on B2; collect the key from the engineering office on B1.",
+   "No noisy work inside the mall between 11am and 9pm; plan plant-room work early.",
+   "Mall security asks for the job card copy at entry."
+  ]
+ },
+ {
+  "id": "S-04",
+  "name": "Nexa Data Center, Hall 2",
+  "area": "Electronic City",
+  "contact": "Sanjay Menon (DC Operations)",
+  "notes": [
+   "Strict access: carry company ID and get pre-approved 24 hours ahead.",
+   "No food or liquids on the data hall floor.",
+   "Any unit shutdown needs a change ticket from Sanjay's team."
+  ]
+ },
+ {
+  "id": "S-05",
+  "name": "Hotel Silver Palm",
+  "area": "MG Road",
+  "contact": "Rahul D'Souza (Chief Engineer)",
+  "notes": [
+   "Guest room work only between 11am and 4pm (checkout to check-in).",
+   "Use the staff entrance on Church Street side."
+  ]
+ },
+ {
+  "id": "S-06",
+  "name": "Vega Pharma Plant",
+  "area": "Peenya Industrial Area",
+  "contact": "Lakshmi Prasad (Utilities)",
+  "notes": [
+   "Clean-room AHUs: gowning required; allow 20 minutes for entry procedure.",
+   "Safety induction video must be watched once per year at the gate."
+  ]
+ },
+ {
+  "id": "S-07",
+  "name": "Kaveri Corporate Office",
+  "area": "HSR Layout",
+  "contact": "Nikhil Jain (Admin)",
+  "notes": [
+   "Office is empty on Saturdays; best day for planned maintenance.",
+   "Ceiling cassettes are 3.6m high; carry the tall ladder."
+  ]
+ },
+ {
+  "id": "S-08",
+  "name": "Lakeview Apartments, Block C",
+  "area": "Hebbal",
+  "contact": "Association office (Mr. Venkatesh)",
+  "notes": [
+   "Terrace door is locked; key with the association office (open 10am-1pm)."
+  ]
+ },
+ {
+  "id": "S-09",
+  "name": "Brookfield Business Centre",
+  "area": "ITPL Main Road",
+  "contact": "Anita George (Operations)",
+  "notes": [
+   "New customer from Nov 2026. No visit history yet."
+  ]
+ },
+ {
+  "id": "S-10",
+  "name": "Infinity Software Campus",
+  "area": "Manyata Tech Park",
+  "contact": "Rohit Bhat (Admin)",
+  "notes": [
+   "Vehicle entry needs a gate pass from the admin desk 1 hour ahead.",
+   "Server room units: work only after 8pm unless it is an outage."
+  ]
+ },
+ {
+  "id": "S-11",
+  "name": "Cauvery Diagnostics Lab",
+  "area": "Jayanagar",
+  "contact": "Dr. Sunita Hegde (Lab Head)",
+  "notes": [
+   "Sample storage rooms must not exceed 8C: tell Dr. Hegde before any shutdown.",
+   "Visitors must wear shoe covers inside the lab."
+  ]
+ },
+ {
+  "id": "S-12",
+  "name": "Skyline Residency Clubhouse",
+  "area": "Bellandur",
+  "contact": "Facility desk (Mr. Anwar)",
+  "notes": [
+   "Pool-side units: bring wet-weather covers in monsoon season.",
+   "Residents' quiet hours 1pm-3pm."
+  ]
+ }
 ]

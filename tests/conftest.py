@@ -10,13 +10,13 @@ sys.path.insert(0, str(ROOT / "backend"))
 for k in ("GROQ_API_KEY", "HINDSIGHT_API_KEY", "HINDSIGHT_BASE_URL", "BAND_KEY_DISPATCHER"):
     os.environ.pop(k, None)
 
-from agent import Agent  # noqa: E402
+import records  # noqa: E402
 from memory import LocalMemory  # noqa: E402
 from store import Store  # noqa: E402
 
 
 class FakeLLM:
-    """Deterministic stand-in for Groq. replies maps a substring of the system prompt to a dict or callable(user)->dict."""
+    """Deterministic stand-in for Groq. replies maps a substring of the system prompt to a dict or callable(user) -> dict."""
     available = True
     model = "fake"
 
@@ -27,59 +27,64 @@ class FakeLLM:
         self.calls.append((system[:40], user))
         for key, reply in self.replies.items():
             if key in system:
-                d = reply(user) if callable(reply) else reply
-                return d
+                return reply(user) if callable(reply) else reply
         return None
 
 
-DISPATCH_SEND = {"decision": "SEND_TECHNICIAN", "remote_action": None, "confidence": "high",
-                 "rationale": "Remote resets failed before.", "evidence": ["Ledger says resets failed"]}
+def _blocks(user):
+    return [b for b in user.split("\n---\n")]
+
+
+def _ids(user, needle, extra=None):
+    out = []
+    for b in _blocks(user):
+        m = re.search(r"\[source (J-\d+)", b)
+        if m and needle.lower() in b.lower() and (extra is None or extra.lower() in b.lower()):
+            out.append(m.group(1))
+    return out[:5]
 
 
 def diag_reply(user):
-    ids = re.findall(r"\bJ-\d{3,5}\b", user)
-    ev = [{"job_id": ids[0], "date": "2026-03-14", "fact": "contactor fixed it"}] if ids else []
-    ev.append({"job_id": "J-9999", "date": "2020-01-01", "fact": "invented"})  # must be dropped
-    return {"root_cause": "Compressor contactor burnt by voltage dips", "confidence": "high", "evidence": ev,
-            "already_failed": ["Reset outdoor unit breaker"], "next_checks": ["Measure supply voltage"]}
+    """Like a real LLM: it proposes what the memories show most often. After Verifier feedback it proposes the other fix."""
+    if "VERIFIER FEEDBACK" in user:
+        return {"causes": [{"cause": "Inverter PCB revision C", "fix": "Replaced inverter PCB (A2P) and updated its firmware.",
+                            "evidence_jobs": _ids(user, "inverter PCB", "FIXED IT"), "why": "Fixed the newer units"}]}
+    return {"causes": [{"cause": "Burnt compressor contactor", "fix": "Replaced compressor contactor and checked phase voltages.",
+                        "evidence_jobs": _ids(user, "contactor", "FIXED IT"), "why": "Fixed this model many times"}]}
 
 
-PARTS_REPLY = {"carry": [{"part": "Compressor contactor 24V coil (DK-CTR-24V)", "qty": 1, "reason": "fixed it 9 times"},
-                         {"part": "Inverter PCB A2P rev D (DK-PCB-A2P-D)", "qty": 1, "reason": "newer units"}],
-               "also_consider": []}
-BRIEF_REPLY = {"headline": "Replace the contactor", "likely_cause": "Burnt contactor", "confidence": "high",
-               "do_first": ["Replace contactor"], "avoid": ["Reset breaker"], "bring": ["DK-CTR-24V"], "site_notes": ["Gate 4471"]}
+def parts_reply(user):
+    fix = re.search(r"\(fix: (.*?)\)", user).group(1)
+    if "inverter" in fix.lower():
+        return {"carry": [{"part": "Inverter PCB A2P rev D (DK-PCB-A2P-D)", "qty": 1, "reason": "fixed the newer units",
+                           "evidence_jobs": _ids(user, "inverter PCB", "FIXED IT")}]}
+    carry = [{"part": "Compressor contactor 24V coil (DK-CTR-24V)", "qty": 1, "reason": "fixed it before", "evidence_jobs": _ids(user, "DK-CTR-24V", "FIXED IT")}]
+    if "VERIFIER FEEDBACK" not in user:   # the trap: a part that past visits replaced on a hunch
+        carry.append({"part": "Compressor relay board (DK-RLY-B2)", "qty": 1, "reason": "was suspected before", "evidence_jobs": _ids(user, "DK-RLY-B2")})
+    return {"carry": carry}
+
+
+BRIEF = lambda user: {"headline": "Brief", "likely_cause": "x", "do_first": ["Replace the part named in the plan"], "avoid": ["The vetoed fix"],
+                      "bring": ["Part from the plan"], "site_notes": ["Gate 4471"]}
 
 
 def make_llm(**over):
-    base = {"Dispatcher agent": DISPATCH_SEND, "Diagnostician agent": diag_reply, "Parts agent": PARTS_REPLY,
-            "briefs HVAC field technicians": BRIEF_REPLY}
+    base = {"Diagnostician agent": diag_reply, "Parts agent": parts_reply, "field technician reads": BRIEF}
     base.update(over)
     return FakeLLM(base)
 
 
 @pytest.fixture()
-def store(tmp_path, monkeypatch):
-    import store as store_mod
-    monkeypatch.setattr(store_mod, "DATA", store_mod.DATA)  # read real data...
+def store(tmp_path):
     s = Store()
-    s.logged_path = tmp_path / "logged.json"  # ...but never write into the repo
+    s.logged_path = tmp_path / "logged.json"   # never write into the repo
     s.logged = []
     return s
 
 
 @pytest.fixture()
-def build_mesh(store, tmp_path):
-    from mesh.runner import Mesh
-
-    def _build(llm=None, band=None):
-        llm = llm or make_llm()
-        mems = {r: LocalMemory(tmp_path / f"{r}.json") for r in ("field", "dispatcher", "diagnostician", "parts")}
-        agent = Agent(mems["field"], store)
-        agent.llm = llm
-        mesh = Mesh(store, agent, mems, llm, band_clients=band if band is not None else {})
-        state = {}
-        agent.seed()
-        mesh.seed_banks(lambda: state, lambda **kw: state.update(kw))
-        return mesh, mems, llm
-    return _build
+def shared(store, tmp_path):
+    """The one shared memory bank, seeded exactly as the app seeds Hindsight (but the local keyword backend)."""
+    mem = LocalMemory(tmp_path / "shared.json")
+    mem.retain_many(records.build_all(store))
+    return mem

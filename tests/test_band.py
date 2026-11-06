@@ -3,11 +3,11 @@ import json
 import time
 
 import httpx
+import pytest
 
 from conftest import make_llm
-from mesh.band import BandClient, BandError, load_clients, parse_payload
-
-ROLES = ("dispatcher", "diagnostician", "parts", "field")
+from mesh.band import BandClient, BandError, load_clients, parse_payload, ROLES
+from mesh.runner import ControlRoom
 
 
 class FakeBand:
@@ -34,8 +34,8 @@ class FakeBand:
         if path.endswith("/messages") and req.method == "POST":
             m = json.loads(req.content)["message"]
             assert m["mentions"] and m["mentions"][0]["id"], "Band requires at least one mention"
-            msg = {"id": f"m{len(self.messages) + 1}", "content": m["content"], "to": m["mentions"][0]["id"],
-                   "sender_id": who["id"], "sender_type": "Agent", "message_type": "text", "state": "pending"}
+            msg = {"id": f"m{len(self.messages) + 1}", "content": m["content"], "to": m["mentions"][0]["id"], "sender_id": who["id"],
+                   "sender_type": "Agent", "message_type": "text", "state": "pending"}
             self.messages.append(msg)
             return httpx.Response(201, json={"data": {"id": msg["id"], "success": True, "recipients": []}})
         if path.endswith("/messages/next"):
@@ -43,8 +43,7 @@ class FakeBand:
             return httpx.Response(200, json={"data": nxt}) if nxt else httpx.Response(204)
         for state in ("processing", "processed"):
             if path.endswith("/" + state):
-                mid = path.split("/")[-2]
-                next(m for m in self.messages if m["id"] == mid)["state"] = state
+                next(m for m in self.messages if m["id"] == path.split("/")[-2])["state"] = state
                 return httpx.Response(200, json={"data": {}})
         return httpx.Response(404)
 
@@ -52,62 +51,55 @@ class FakeBand:
 def band(fail_on=None):
     fb = FakeBand(fail_on)
     transport = httpx.MockTransport(fb.handler)
-    clients = {r: BandClient(r, f"key-{r}", "https://app.band.ai/api/v1", transport=transport) for r in ROLES}
-    return fb, clients
+    return fb, {r: BandClient(r, f"key-{r}", "https://app.band.ai/api/v1", transport=transport) for r in ROLES}
 
 
-def wait(run, timeout=20):
+def run_with(store, shared, clients, scenario="LIVE-1"):
+    room = ControlRoom(store, shared, make_llm(), band_clients=clients)
+    run = room.start(scenario)
     t = time.time()
-    while run.status == "running" and time.time() - t < timeout:
+    while run.status == "running" and time.time() - t < 30:
         time.sleep(0.05)
     return run
 
 
-def live(store, i):
-    sc = next(a for a in store.live_alarms if a["id"] == i)
-    return {**sc, "id": sc["id"] + "-b", "remote_action": None, "remote_result": "none", "dispatched": False}
-
-
-def test_handoffs_travel_through_a_band_room(build_mesh, store):
+def test_the_with_path_hands_off_through_a_band_room(store, shared):
     fb, clients = band()
-    mesh, _, _ = build_mesh(band=clients)
-    run = wait(mesh.start(live(store, "LIVE-1")))
-    assert run.status == "done" and run.transport == "band"
-    assert [e["transport"] for e in run.events if e["kind"] == "handoff"] == ["band"] * 3
-    senders = [m["sender_id"] for m in fb.messages]
-    assert senders == ["id-dispatcher", "id-diagnostician", "id-parts"]  # each agent posted with its own key
-    assert all(m["state"] == "processed" for m in fb.messages)          # receivers read and acknowledged them
-    assert ("POST", "/agent/chats", "sm_dispatcher") in fb.calls
-    assert sum(1 for c in fb.calls if c[1].endswith("/participants")) == 3
+    run = run_with(store, shared, clients)
+    assert run.status == "done" and run.transport["with"] == "band" and run.transport["without"] == "in-process"
+    assert [m["sender_id"] for m in fb.messages] == ["id-dispatcher", "id-diagnostician", "id-parts", "id-verifier"]  # each agent posts with its own key
+    assert all(m["state"] == "processed" for m in fb.messages)             # receivers read and acknowledged them
+    assert sum(1 for c in fb.calls if c[1].endswith("/participants")) == 3 and ("POST", "/agent/chats", "sm_dispatcher") in fb.calls
     assert parse_payload(fb.messages[0]["content"])["alarm"]["code"] == "E3"
+    hands = [e for e in run.events if e["kind"] == "handoff" and e["path"] == "with"]
+    assert hands and all(e["data"]["via"] == "band" for e in hands)
 
 
-def test_if_band_fails_the_run_continues_in_process(build_mesh, store):
+def test_if_band_fails_midway_the_run_continues_in_process(store, shared):
     fb, clients = band(fail_on="/messages")
-    mesh, _, _ = build_mesh(band=clients)
-    run = wait(mesh.start(live(store, "LIVE-1")))
-    assert run.status == "done" and run.result["decision"] == "SEND_TECHNICIAN"
-    assert run.transport == "local"
+    run = run_with(store, shared, clients)
+    assert run.status == "done" and "with" in run.plans and run.transport["with"] == "in-process"
     assert any("Band unreachable" in e["text"] for e in run.events if e["kind"] == "system")
 
 
-def test_if_band_is_down_at_room_creation_we_still_run(build_mesh, store):
+def test_if_band_is_down_at_room_creation_we_still_run(store, shared):
     fb, clients = band(fail_on="/agent/chats")
-    mesh, _, _ = build_mesh(band=clients)
-    run = wait(mesh.start(live(store, "LIVE-1")))
-    assert run.status == "done" and run.transport == "local"
+    run = run_with(store, shared, clients)
+    assert run.status == "done" and "with" in run.plans and run.transport["with"] == "in-process"
 
 
-def test_unrelated_messages_to_an_agent_are_skipped_not_mistaken_for_the_handoff(build_mesh, store):
+def test_unrelated_messages_to_an_agent_are_skipped_not_mistaken_for_the_handoff(store, shared):
     fb, clients = band()
-    # a notice already waiting for the diagnostician before the real handoff arrives
-    fb.messages.append({"id": "noise1", "content": "Room created", "to": "id-diagnostician", "sender_id": "system",
-                        "sender_type": "System", "message_type": "event", "state": "pending"})
-    mesh, _, _ = build_mesh(band=clients)
-    run = wait(mesh.start(live(store, "LIVE-1")))
-    assert run.status == "done" and run.transport == "band"
-    assert next(m for m in fb.messages if m["id"] == "noise1")["state"] == "processed"
-    assert [e["transport"] for e in run.events if e["kind"] == "handoff"] == ["band"] * 3
+    fb.messages.append({"id": "noise1", "content": "Room created", "to": "id-diagnostician", "sender_id": "system", "sender_type": "System",
+                        "message_type": "event", "state": "pending"})
+    run = run_with(store, shared, clients)
+    assert run.transport["with"] == "band" and next(m for m in fb.messages if m["id"] == "noise1")["state"] == "processed"
+
+
+def test_the_baseline_path_never_touches_band(store, shared):
+    fb, clients = band()
+    run_with(store, shared, clients)
+    assert all(c[1] != "/agent/chats" or c[0] == "POST" for c in fb.calls) and sum(1 for c in fb.calls if c[1] == "/agent/chats") == 1
 
 
 def test_load_clients_needs_all_four_keys(monkeypatch):
@@ -117,14 +109,11 @@ def test_load_clients_needs_all_four_keys(monkeypatch):
     for r in ROLES[:3]:
         monkeypatch.setenv(f"BAND_KEY_{r.upper()}", "k")
     assert load_clients() is None
-    monkeypatch.setenv("BAND_KEY_FIELD", "k")
-    assert set(load_clients()) == set(ROLES)
+    monkeypatch.setenv(f"BAND_KEY_{ROLES[3].upper()}", "k")
+    assert set(load_clients()) == set(ROLES) and ROLES == ("dispatcher", "diagnostician", "parts", "verifier")
 
 
 def test_error_responses_raise_band_error():
     c = BandClient("x", "k", transport=httpx.MockTransport(lambda r: httpx.Response(401, text="nope")))
-    try:
+    with pytest.raises(BandError, match="401"):
         c.me()
-        assert False
-    except BandError as exc:
-        assert "401" in str(exc)
