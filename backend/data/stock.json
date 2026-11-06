@@ -1,0 +1,86 @@
+[
+ {
+  "part": "Bearing 6206-2RS (x2)",
+  "van": 2,
+  "warehouse": 3,
+  "lead_time_days": 2
+ },
+ {
+  "part": "Brazing rods",
+  "van": 2,
+  "warehouse": 11,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Compressor contactor 24V coil (DK-CTR-24V)",
+  "van": 1,
+  "warehouse": 4,
+  "lead_time_days": 2
+ },
+ {
+  "part": "Condenser end-cover gasket set",
+  "van": 2,
+  "warehouse": 3,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Copper coupler 3/8\"",
+  "van": 0,
+  "warehouse": 6,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Descaling chemical (40L)",
+  "van": 1,
+  "warehouse": 3,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Drain trap",
+  "van": 0,
+  "warehouse": 11,
+  "lead_time_days": 1
+ },
+ {
+  "part": "EC fan module 500mm (EBM-R3G500)",
+  "van": 1,
+  "warehouse": 3,
+  "lead_time_days": 2
+ },
+ {
+  "part": "IP65 junction box",
+  "van": 0,
+  "warehouse": 4,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Inverter PCB A2P rev D (DK-PCB-A2P-D)",
+  "van": 0,
+  "warehouse": 1,
+  "lead_time_days": 5
+ },
+ {
+  "part": "PVC drain pipe 20mm (3m)",
+  "van": 1,
+  "warehouse": 8,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Refrigerant R410A (3kg)",
+  "van": 2,
+  "warehouse": 11,
+  "lead_time_days": 1
+ },
+ {
+  "part": "Ring lugs and heat-shrink set",
+  "van": 2,
+  "warehouse": 11,
+  "lead_time_days": 1
+ },
+ {
+  "part": "V-belt B-48",
+  "van": 0,
+  "warehouse": 7,
+  "lead_time_days": 1
+ }
+]

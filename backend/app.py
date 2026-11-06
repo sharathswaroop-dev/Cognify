@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
@@ -38,58 +38,7 @@ DATA = ROOT / "data"
 FRONTEND = ROOT.parent / "frontend"
 
 
-def _load(name: str):
-    return json.loads((DATA / name).read_text())
-
-
-class Store:
-    """Read-only reference data + the visits logged live during the demo."""
-
-    def __init__(self) -> None:
-        self.company = _load("company.json")
-        self.sites = _load("sites.json")
-        self.machines = _load("machines.json")
-        self.techs = _load("technicians.json")
-        self.history = _load("job_history.json")
-        self.open_jobs = _load("open_jobs.json")
-        self.logged_path = DATA / "logged_visits.json"
-        self.logged = json.loads(self.logged_path.read_text()) if self.logged_path.exists() else []
-        self._m = {m["id"]: m for m in self.machines}
-        self._s = {s["id"]: s for s in self.sites}
-        self._t = {t["id"]: t for t in self.techs}
-
-    def machine(self, mid):
-        if mid not in self._m:
-            raise HTTPException(404, f"Unknown machine {mid}")
-        return self._m[mid]
-
-    def site(self, sid):
-        if sid not in self._s:
-            raise HTTPException(404, f"Unknown site {sid}")
-        return self._s[sid]
-
-    def tech(self, tid):
-        if tid not in self._t:
-            raise HTTPException(404, f"Unknown technician {tid}")
-        return self._t[tid]
-
-    def job(self, jid):
-        for j in self.open_jobs:
-            if j["job_id"] == jid:
-                return j
-        raise HTTPException(404, f"Unknown job {jid}")
-
-    def all_visits(self):
-        return sorted(self.history + self.logged, key=lambda v: v["date"])
-
-    def add_logged(self, visit):
-        self.logged.append(visit)
-        self.logged_path.write_text(json.dumps(self.logged, indent=1, ensure_ascii=False))
-
-    def clear_logged(self):
-        self.logged = []
-        if self.logged_path.exists():
-            self.logged_path.unlink()
+from store import Store  # noqa: E402
 
 
 store = Store()
@@ -121,7 +70,22 @@ elif memory.name == "hindsight" and not _state().get(f"seeded_hindsight_{memory.
     except Exception as exc:
         log.error("Could not seed Hindsight (check HINDSIGHT_API_KEY / URL): %s", exc)
 
-app = FastAPI(title="SiteMemory", version="0.1.0")
+# ------------------------------------------------------------------ multi-agent mesh (one Hindsight bank per agent)
+from memory import build_memory as _build  # noqa: E402
+from mesh.records import MISSIONS  # noqa: E402
+from mesh.runner import AlarmFeed, Mesh  # noqa: E402
+
+_memories = {"field": memory, **{r: _build(r, mission=MISSIONS[r]) for r in MISSIONS}}
+mesh = Mesh(store, agent, _memories, agent.llm)
+feed = AlarmFeed(mesh, store.live_alarms)
+try:
+    _seeded = mesh.seed_banks(_state, _set_state)
+    if _seeded:
+        log.info("seeded agent banks: %s", _seeded)
+except Exception as exc:
+    log.error("Could not seed agent banks: %s", exc)
+
+app = FastAPI(title="SiteMemory", version="0.2.0")
 
 
 # ------------------------------------------------------------------ models
@@ -211,8 +175,9 @@ def log_visit(job_id: str, body: VisitLog):
         log.exception("retain failed")
         raise HTTPException(502, f"Could not save to memory: {exc}") from exc
     store.add_logged(visit)
+    learned = mesh.record_visit(visit)  # the other agents learn their slice of this visit
     return {"saved": True, "visit": visit, "memory_text": rec["text"], "tags": rec["tags"],
-            "memory_backend": memory.name}
+            "memory_backend": memory.name, "agents_updated": ["field"] + list(learned)}
 
 
 @app.post("/api/seed")
@@ -271,6 +236,80 @@ def stats():
         "top_machines": top_machines,
         "memory_items": memory.count(), "memory_backend": memory.name,
     }
+
+
+# ------------------------------------------------------------------ mesh + alarm feed
+@app.get("/api/mesh/status")
+def mesh_status():
+    return mesh.status()
+
+
+@app.get("/api/alarms")
+def alarms():
+    hist = sorted(store.alarms, key=lambda a: a["ts"], reverse=True)[:30]
+    return {"live": store.live_alarms, "history": hist, "feed": feed.state()}
+
+
+@app.post("/api/alarms/{alarm_id}/fire")
+def fire_alarm(alarm_id: str):
+    try:
+        run = feed.fire(alarm_id)
+    except KeyError:
+        raise HTTPException(404, f"Unknown live alarm {alarm_id}")
+    return {"run_id": run.id, "alarm": run.alarm}
+
+
+@app.post("/api/alarm-feed/start")
+def feed_start(interval: float = 45.0):
+    feed.start(max(5.0, interval))
+    return feed.state()
+
+
+@app.post("/api/alarm-feed/stop")
+def feed_stop():
+    feed.stop()
+    return feed.state()
+
+
+@app.get("/api/alarm-feed")
+def feed_state():
+    return feed.state()
+
+
+@app.get("/api/mesh/runs/{run_id}")
+def mesh_run(run_id: str):
+    run = mesh.get(run_id)
+    if not run:
+        raise HTTPException(404, "Unknown run")
+    return run.public()
+
+
+@app.get("/api/mesh/runs/{run_id}/stream")
+def mesh_stream(run_id: str):
+    run = mesh.get(run_id)
+    if not run:
+        raise HTTPException(404, "Unknown run")
+
+    def gen():
+        i = 0
+        while True:
+            with run.cond:
+                while i >= len(run.events) and run.status == "running":
+                    run.cond.wait(timeout=10)
+                    if i >= len(run.events) and run.status == "running":
+                        break
+                batch, status = run.events[i:], run.status
+            for ev in batch:
+                yield f"data: {json.dumps(ev)}\n\n"
+                i += 1
+            if status != "running" and i >= len(run.events):
+                yield f"event: end\ndata: {json.dumps({'status': status, 'result': run.result})}\n\n"
+                return
+            if not batch:
+                yield ": keepalive\n\n"
+
+    return StreamingResponse(gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
 # ------------------------------------------------------------------ frontend

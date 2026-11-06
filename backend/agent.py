@@ -128,7 +128,7 @@ class Agent:
         return {"machine": machine_mem, "family": family_mem, "site": site_mem, "reflection": reflection}
 
     # ------------------------------------------------------------ briefing
-    def briefing(self, job: dict, use_memory: bool) -> dict[str, Any]:
+    def briefing(self, job: dict, use_memory: bool, extra: str = "") -> dict[str, Any]:
         t0 = time.time()
         m = self.store.machine(job["machine_id"])
         s = self.store.site(m["site_id"])
@@ -144,7 +144,8 @@ class Agent:
         user = (f"JOB TICKET\nJob: {job['job_id']} on {job['date']}\nSite: {s['name']}, {s['area']}\n"
                 f"Machine: {m['id']} - {m['model']} ({m['type']}) at {m['location']}, installed {m['installed']}\n"
                 f"Reported symptom: {job['symptom']}\n\n"
-                f"{mem_block if mem_block else 'MEMORY: none available for this job.'}")
+                f"{mem_block if mem_block else 'MEMORY: none available for this job.'}"
+                f"{chr(10) + chr(10) + extra if extra else ''}")
 
         data = self.llm.json_chat(SYSTEM_PROMPT, user, required=BRIEFING_KEYS)
         source = "llm"
@@ -164,9 +165,9 @@ class Agent:
     def _memory_prompt(ctx: dict) -> str:
         parts = []
         if ctx["machine"]:
-            parts.append("MEMORIES - THIS EXACT MACHINE:\n" + "\n---\n".join(x.text for x in ctx["machine"]))
+            parts.append("MEMORIES - THIS EXACT MACHINE:\n" + "\n---\n".join(x.cited() for x in ctx["machine"]))
         if ctx["family"]:
-            parts.append("MEMORIES - SAME MODEL AT OTHER SITES:\n" + "\n---\n".join(x.text for x in ctx["family"]))
+            parts.append("MEMORIES - SAME MODEL AT OTHER SITES:\n" + "\n---\n".join(x.cited() for x in ctx["family"]))
         if ctx["site"]:
             parts.append("MEMORIES - SITE:\n" + "\n".join(x.text for x in ctx["site"]))
         if ctx["reflection"]:

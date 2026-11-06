@@ -1,0 +1,76 @@
+[
+ {
+  "id": "LIVE-1",
+  "ts": "2026-11-07T09:12:00",
+  "machine_id": "M-07",
+  "site_id": "S-01",
+  "code": "E3",
+  "description": "High-pressure / compressor protection trip",
+  "severity": "major",
+  "readings": {
+   "supply_v": 189,
+   "compressor_a": 22.4
+  },
+  "job_id": "J-1201",
+  "headline": "M-07 tripped on E3 at 189V supply"
+ },
+ {
+  "id": "LIVE-2",
+  "ts": "2026-11-07T10:03:00",
+  "machine_id": "M-42",
+  "site_id": "S-05",
+  "code": "U4",
+  "description": "Indoor-outdoor communication error",
+  "severity": "minor",
+  "readings": {
+   "units_offline": 1
+  },
+  "job_id": null,
+  "headline": "M-42 cassette lost communication"
+ },
+ {
+  "id": "LIVE-3",
+  "ts": "2026-11-07T11:20:00",
+  "machine_id": "M-31",
+  "site_id": "S-04",
+  "code": "HT",
+  "description": "High return-air temperature",
+  "severity": "major",
+  "readings": {
+   "return_air_c": 32.4,
+   "supply_air_c": 18.1
+  },
+  "job_id": "J-1204",
+  "headline": "M-31 return air at 32.4C in Hall 2"
+ },
+ {
+  "id": "LIVE-4",
+  "ts": "2026-11-07T13:45:00",
+  "machine_id": "M-91",
+  "site_id": "S-09",
+  "code": "L8",
+  "description": "Compressor overcurrent",
+  "severity": "major",
+  "readings": {
+   "supply_v": 228,
+   "compressor_a": 23.1
+  },
+  "job_id": "J-1202",
+  "headline": "M-91 compressor overcurrent, supply normal"
+ },
+ {
+  "id": "LIVE-5",
+  "ts": "2026-11-07T14:30:00",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "code": "WL",
+  "description": "Water leak / drain sensor",
+  "severity": "critical",
+  "readings": {
+   "water_sensor": "wet",
+   "indoor_coil_c": 4.1
+  },
+  "job_id": "J-1203",
+  "headline": "M-12 leaking in the ICU"
+ }
+]

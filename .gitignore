@@ -8,3 +8,6 @@ backend/data/state.json
 
 # Event briefing PDFs are not part of the public repo
 docs/*.pdf
+backend/data/local_memory_*.json
+backend/data/mesh_runs.json
+agent_config.yaml

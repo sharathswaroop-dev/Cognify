@@ -45,13 +45,23 @@ class Memory:
         return {"text": self.text, "tags": self.tags, "date": self.date,
                 "score": round(self.score, 3), "meta": self.meta}
 
+    def ref(self) -> str:
+        """The source record this memory came from (e.g. J-0949), so agents can cite it."""
+        m = self.meta or {}
+        doc = str(m.get("document_id") or "")
+        return str(m.get("job_id") or m.get("alarm_id") or (doc.split("-", 1)[1] if "-" in doc else ""))
+
+    def cited(self) -> str:
+        r = self.ref()
+        return f"[source {r}{', ' + self.date if self.date else ''}] {self.text}" if r else self.text
+
 
 # ---------------------------------------------------------------- formatting
 
 def visit_to_text(visit: dict, machine: dict, site: dict, tech: dict) -> str:
     """Turn a structured visit record into the natural-language memory we retain."""
     lines = [
-        f"On {visit['date']}, technician {tech['name']} visited {site['name']} ({site['area']}) "
+        f"Job {visit['job_id']}: on {visit['date']}, technician {tech['name']} visited {site['name']} ({site['area']}) "
         f"for machine {machine['id']}, a {machine['model']} {machine['type']} at {machine['location']}.",
         f"Reported symptom: {visit['symptom']}.",
     ]
@@ -192,7 +202,8 @@ class HindsightMemory:
 
     name = "hindsight"
 
-    def __init__(self, base_url: str, api_key: str | None, bank_id: str):
+    def __init__(self, base_url: str, api_key: str | None, bank_id: str, mission: str | None = None,
+                 label: str = "field service"):
         from hindsight_client import Hindsight  # imported lazily so local mode needs no package
 
         self._io = _LoopThread()
@@ -202,9 +213,9 @@ class HindsightMemory:
         try:
             self._io.run(self.client.acreate_bank(
                 bank_id,
-                name="SiteMemory - CoolCare field service",
-                mission=("Remember every HVAC service visit: symptoms, what was tried, what failed, what fixed it, "
-                         "parts, and each customer site's access rules, so the next technician fixes it first time."),
+                name=f"SiteMemory - {label}",
+                mission=mission or ("Remember every HVAC service visit: symptoms, what was tried, what failed, what fixed it, "
+                                    "parts, and each customer site's access rules, so the next technician fixes it first time."),
             ))
             log.info("created Hindsight bank %s", bank_id)
         except Exception as exc:  # bank already exists or create not permitted - both fine
@@ -219,7 +230,9 @@ class HindsightMemory:
 
     def retain_many(self, records: list[dict]) -> None:
         items = [{"content": r["text"], "timestamp": r.get("date"), "context": "field service visit log",
-                  "document_id": r["doc_id"], "tags": r["tags"]} for r in records]
+                  "document_id": r["doc_id"], "tags": r["tags"],
+                  "metadata": {k: str(v) for k, v in (r.get("meta") or {}).items() if isinstance(v, (str, int, float))}}
+                 for r in records]
         for start in range(0, len(items), 20):  # keep requests small
             self._io.run(self.client.aretain_batch(self.bank_id, items[start:start + 20], retain_async=True))
         self._retained += len(items)
@@ -230,7 +243,10 @@ class HindsightMemory:
         out = []
         for r in (resp.results or [])[:limit]:
             date = str(r.occurred_start or r.mentioned_at or "")[:10] or None
-            out.append(Memory(r.text, list(r.tags or []), date, 0.0, dict(r.metadata or {})))
+            meta = dict(r.metadata or {})
+            if getattr(r, "document_id", None):
+                meta["document_id"] = r.document_id
+            out.append(Memory(r.text, list(r.tags or []), date, 0.0, meta))
         return out
 
     def reflect(self, query: str, tags: list[str]) -> str | None:
@@ -252,14 +268,20 @@ class HindsightMemory:
 
 # ---------------------------------------------------------------- factory
 
-def build_memory() -> LocalMemory | HindsightMemory:
+def bank_prefix() -> str:
+    return os.getenv("HINDSIGHT_BANK_PREFIX", "sitememory-v2").strip()
+
+
+def build_memory(role: str = "field", bank_id: str | None = None, mission: str | None = None):
+    """One memory per agent role. Each role gets its own Hindsight bank (or its own local file)."""
     key = os.getenv("HINDSIGHT_API_KEY", "").strip()
     url = os.getenv("HINDSIGHT_BASE_URL", "").strip()
-    bank = os.getenv("HINDSIGHT_BANK_ID", "sitememory-coolcare").strip()
+    bank = bank_id or (os.getenv("HINDSIGHT_BANK_ID", "").strip() if role == "field" else "") or f"{bank_prefix()}-{role}"
     if key or url:
         try:
-            return HindsightMemory(url or "https://api.hindsight.vectorize.io", key or None, bank)
+            return HindsightMemory(url or "https://api.hindsight.vectorize.io", key or None, bank,
+                                   mission=mission, label=f"{role} agent")
         except Exception as exc:
             log.error("Hindsight unavailable (%s); falling back to local memory", exc)
-    log.warning("No Hindsight credentials set - using LOCAL fallback memory")
-    return LocalMemory()
+    log.warning("No Hindsight credentials set - using LOCAL fallback memory for %s", role)
+    return LocalMemory(DATA_DIR / f"local_memory_{role}.json")
