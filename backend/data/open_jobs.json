@@ -12,31 +12,61 @@
  {
   "job_id": "J-1202",
   "date": "2026-11-07",
-  "machine_id": "M-91",
-  "site_id": "S-09",
-  "technician_id": "T-06",
-  "symptom": "Outdoor unit tripping, offices warm since lunch.",
+  "machine_id": "M-113",
+  "site_id": "S-11",
+  "technician_id": "T-04",
+  "symptom": "Indoor-outdoor communication error.",
   "priority": "Medium",
-  "reported_by": "Anita George"
+  "reported_by": "Site facility desk"
  },
  {
   "job_id": "J-1203",
-  "date": "2026-11-08",
-  "machine_id": "M-12",
-  "site_id": "S-02",
-  "technician_id": "T-04",
-  "symptom": "Split AC at ICU nurse station dripping water onto the counter.",
-  "priority": "High",
-  "reported_by": "Manjunath"
- },
- {
-  "job_id": "J-1204",
-  "date": "2026-11-08",
+  "date": "2026-11-07",
   "machine_id": "M-31",
   "site_id": "S-04",
   "technician_id": "T-06",
   "symptom": "Hall 2 PAC-03 high return-air temperature alarm.",
-  "priority": "Critical",
+  "priority": "High",
   "reported_by": "Sanjay Menon"
+ },
+ {
+  "job_id": "J-1204",
+  "date": "2026-11-07",
+  "machine_id": "M-91",
+  "site_id": "S-09",
+  "technician_id": "T-06",
+  "symptom": "Outdoor unit tripping, offices warm since lunch.",
+  "priority": "High",
+  "reported_by": "Anita George"
+ },
+ {
+  "job_id": "J-1205",
+  "date": "2026-11-07",
+  "machine_id": "M-12",
+  "site_id": "S-02",
+  "technician_id": "T-04",
+  "symptom": "Split AC at ICU nurse station dripping water onto the counter.",
+  "priority": "Critical",
+  "reported_by": "Manjunath"
+ },
+ {
+  "job_id": "J-1206",
+  "date": "2026-11-07",
+  "machine_id": "M-21",
+  "site_id": "S-03",
+  "technician_id": "T-05",
+  "symptom": "Low cooling capacity.",
+  "priority": "High",
+  "reported_by": "Imran Pasha"
+ },
+ {
+  "job_id": "J-1207",
+  "date": "2026-11-07",
+  "machine_id": "M-22",
+  "site_id": "S-03",
+  "technician_id": "T-02",
+  "symptom": "Condenser high-pressure trip.",
+  "priority": "High",
+  "reported_by": "Imran Pasha"
  }
 ]

@@ -30,10 +30,10 @@ class TracedMemory:
                 if t.startswith("machine:") and not self.store.has_machine(t.split(":", 1)[1]):
                     raise UnknownMachine(f"Refusing to use memory for unknown machine {t.split(':', 1)[1]!r}")
 
-    def recall(self, query: str, tags: list[str], limit: int = 6) -> list[Memory]:
+    def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
         self._check(tags)
         t0 = time.time()
-        res = self.inner.recall(query, tags, limit=limit)
+        res = self.inner.recall(query, tags, limit=limit, match=match)
         self.emit({"op": "recall", "who": self.who, "bank": self.bank_id, "query": query, "tags": tags, "hits": [_brief(m) for m in res],
                    "ms": int((time.time() - t0) * 1000)})
         return res
@@ -68,7 +68,7 @@ class NullMemory:
     def as_(self, who: str) -> "NullMemory":
         return NullMemory(self.emit, who)
 
-    def recall(self, query: str, tags: list[str], limit: int = 6) -> list[Memory]:
+    def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
         self.emit({"op": "recall", "who": self.who, "bank": self.bank_id, "query": query, "tags": tags, "hits": [], "ms": 0, "skipped": True})
         return []
 

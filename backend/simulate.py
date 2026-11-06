@@ -21,12 +21,22 @@ def _tok(s: str) -> set[str]:
     return {w for w in re.findall(r"[a-z0-9]+", (s or "").lower()) if len(w) > 2 and w not in STOP}
 
 
+def fix_match(plan_text: str, truth_text: str) -> bool:
+    """The plan names the repair that really fixed it: the same normalised fix, enough shared words, or the plan's phrase sits inside the truth's."""
+    import evidence as ev
+    if not plan_text or not truth_text:
+        return False
+    if ev.fix_key(plan_text) == ev.fix_key(truth_text):
+        return True
+    w, p = _tok(truth_text), _tok(plan_text)
+    return bool(w) and (len(w & p) / len(w) >= 0.6 or (len(p) >= 2 and p <= w))
+
+
 def plan_hits(plan: dict, truth: dict) -> dict:
     """Does the plan name the repair that really fixes it, and carry every part it really needs?"""
     top = plan["diagnosis"]["causes"][0] if plan.get("diagnosis") else {"fix": ""}
-    text = " ".join([top["fix"]] + plan.get("briefing", {}).get("do_first", [])[:2])
-    want = _tok(truth["fix_key"])
-    fix_hit = bool(want) and len(want & _tok(text)) / len(want) >= 0.6
+    cands = [top["fix"]] + plan.get("briefing", {}).get("do_first", [])[:2]
+    fix_hit = any(fix_match(c, truth["fix_key"]) for c in cands)
     carry = " ".join(p["part"].lower() for p in plan.get("parts", {}).get("carry", []))
     missing = [p for p in truth["parts"] if p.lower() not in carry and not (_tok(p) and len(_tok(p) & _tok(carry)) / len(_tok(p)) >= 0.5)]
     return {"fix_hit": fix_hit, "parts_hit": not missing, "missing_parts": missing}

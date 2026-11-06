@@ -33,7 +33,7 @@ import records  # noqa: E402
 import simulate  # noqa: E402
 import voice  # noqa: E402
 from llm import LLM  # noqa: E402
-from memory import build_memory  # noqa: E402
+from memory import FallbackMemory, LocalMemory, build_memory  # noqa: E402
 from mesh.runner import ControlRoom  # noqa: E402
 from store import DATA, NotFound, Store, UnknownMachine  # noqa: E402
 from traced import TracedMemory  # noqa: E402
@@ -46,7 +46,9 @@ EVAL_PATH = DATA / "eval_results.json"
 
 store = Store()
 llm = LLM()
-memory = build_memory("shared", bank_id=os.getenv("HINDSIGHT_BANK_ID", "sitememory-v3-coolcare"), mission=records.MISSION)
+_primary = build_memory("shared", bank_id=os.getenv("HINDSIGHT_BANK_ID", "sitememory-v3-coolcare"), mission=records.MISSION)
+# Hindsight when it works; the local keyword memory (kept in step) when it does not, with the reason shown in the UI
+memory = FallbackMemory(_primary, LocalMemory(DATA / "local_memory_shared.json")) if _primary.name == "hindsight" else _primary
 state_path = DATA / "state.json"
 
 
@@ -67,10 +69,13 @@ def seed() -> int:
 
 
 _key = f"seeded_{getattr(memory, 'bank_id', 'local')}"
+if isinstance(memory, FallbackMemory) and memory.secondary.count() == 0:
+    memory.secondary.retain_many(records.build_all(store, visits=store.history))   # the local copy is cheap and always kept
 if not _state().get(_key) and (memory.name == "hindsight" or memory.count() == 0):
     try:
         _n = seed()
-        _set_state(**{_key: _n})
+        if not getattr(memory, "degraded", False):
+            _set_state(**{_key: _n})
         log.info("seeded the shared bank %s with %d records (Hindsight processes them in the background)", getattr(memory, "bank_id", "local"), _n)
     except Exception as exc:
         log.error("Could not seed memory: %s", exc)
@@ -101,7 +106,8 @@ def _not_found(request, exc):
 @app.get("/api/status")
 def status():
     s = room.status()
-    return {**s, "memory_items": memory.count(), "llm": llm.available, "llm_model": llm.model if llm.available else None, "company": store.company,
+    return {**s, "memory_degraded": bool(getattr(memory, "degraded", False)), "memory_degraded_reason": getattr(memory, "reason", ""),
+            "memory_items": memory.count(), "llm": llm.available, "llm_model": llm.model if llm.available else None, "company": store.company,
             "seeded": bool(_state().get(_key)), "machines": len(store.machines), "sites": len(store.sites), "visits": len(store.all_visits())}
 
 

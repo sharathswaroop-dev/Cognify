@@ -14,6 +14,7 @@ from datetime import datetime
 from typing import Any
 
 from agents import Case, Diagnostician, Dispatcher, PartsAgent, Verifier, feedback_text
+from plan import drop_vetoed
 from simulate import simulate
 from traced import NullMemory, TracedMemory
 from .band import BandError, BandRoom, load_clients
@@ -230,7 +231,8 @@ class ControlRoom:
             if any(x["target"] == "diagnostician" for x in v["vetoes"]):
                 ctx.hand("verifier", "diagnostician", "Vetoed: please revise", {"vetoes": v["vetoes"]})
                 i = ctx.mark()
-                diag = self.diagnostician.diagnose(case, feedback_text(v["vetoes"], "diagnostician"), prior=diag)
+                hint = next((x.get("alternative") for x in v["vetoes"] if x.get("alternative")), None)
+                diag = self.diagnostician.diagnose(case, feedback_text(v["vetoes"], "diagnostician"), prior=diag, hint=hint)
                 ctx.say("diagnostician", "Revised. " + self._diag_text(diag), "revise", diag, i)
                 i = ctx.mark()
                 parts = self.parts.plan(case, diag, feedback_text(v["vetoes"], "parts"))
@@ -262,12 +264,7 @@ class ControlRoom:
 
     @staticmethod
     def _drop_vetoed(diag: dict, parts: dict, vetoes: list[dict]) -> None:
-        gone = {v["item"] for v in vetoes if v["target"] == "parts"}
-        parts["carry"] = [p for p in parts["carry"] if p["part"] not in gone]
-        bad = {v["item"] for v in vetoes if v["target"] == "diagnostician"}
-        diag["causes"] = [c for c in diag["causes"] if c["fix"] not in bad] or [
-            {"cause": "Unverified: escalate to a senior technician", "fix": "Escalate to a senior technician", "why": "", "evidence_jobs": [],
-             "stats": {"n": 0, "weak": True, "rate": None, "ci": [0, 1], "verified": 0, "provisional": 0, "failed": 0}, "confidence": "weak"}]
+        drop_vetoed(diag, parts, vetoes)
 
     def _brief(self, case: Case, plan: dict) -> dict:
         diag, parts, top = plan["diagnosis"], plan["parts"], plan["diagnosis"]["causes"][0]
@@ -276,7 +273,9 @@ class ControlRoom:
             for c in diag["causes"][1:]:
                 pass
             for vt in plan["verifier"]["vetoes"]:
-                avoid.append(f"{vt['item']}: " + vt["reasons"][0])
+                real = [r for r in vt["reasons"] if "contain no attempt" not in r and "No visit on comparable" not in r]
+                if real and vt["item"] not in " ".join(avoid):   # a vetoed generic placeholder is not advice worth showing a technician
+                    avoid.append(f"{vt['item']}: " + real[0])
         user = (f"Plan\nAlarm: {case.alarm.get('code')} {case.alarm.get('description')}. Machine {case.machine['model']} installed {case.machine['installed']}.\n"
                 f"Dispatch: {plan['dispatch']['decision']} {plan['dispatch'].get('remote_action') or ''}\nCause: {top['cause']}\nRepair: {top['fix']}\n"
                 f"Evidence: {stat_line(top)}\nAlready failed or vetoed: {avoid or 'nothing recorded'}\nParts: {[(p['part'], p['stock']) for p in parts['carry']]} flags {parts['flags']}\n"

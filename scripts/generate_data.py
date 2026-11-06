@@ -267,6 +267,8 @@ def build_history():
                 visits.append(visit(f"J-{jn}", f"I-{inc:03d}", 1, d, tech, m, fc, symptom, "", [{"action": act, "result": "failed", "detail": det}],
                                     "revisit_needed", False, notes="Root cause not confirmed on first visit."))
                 kind = "generic"
+                if fc == "vrv_pcb":   # the usual contactor swap really was done, with a real part, and it did not help
+                    visits[-1]["parts_used"] = list(FAULTS["vrv_contactor"]["parts"])
             else:             # diagnosed and fixed first time
                 visits.append(visit(f"J-{jn}", f"I-{inc:03d}", 1, d, tech, m, fc, symptom, f["root_cause"].split(".")[0],
                                     [{"action": f["fix"], "result": "worked", "detail": "Diagnosed on first visit; unit stable after monitoring."}],
@@ -395,10 +397,17 @@ def main():
     live = []
     for sc in LIVE:
         sc = dict(sc); sc["site_id"] = next(m[1] for m in MACHINES if m[0] == sc["machine_id"]); live.append(sc)
-    open_jobs = [{"job_id": "J-1201", "date": "2026-11-07", "machine_id": "M-07", "site_id": "S-01", "technician_id": "T-06", "symptom": "Bay 3 not cooling. Outdoor unit tripped twice this morning.", "priority": "High", "reported_by": "Priya Nair"},
-                 {"job_id": "J-1202", "date": "2026-11-07", "machine_id": "M-91", "site_id": "S-09", "technician_id": "T-06", "symptom": "Outdoor unit tripping, offices warm since lunch.", "priority": "Medium", "reported_by": "Anita George"},
-                 {"job_id": "J-1203", "date": "2026-11-08", "machine_id": "M-12", "site_id": "S-02", "technician_id": "T-04", "symptom": "Split AC at ICU nurse station dripping water onto the counter.", "priority": "High", "reported_by": "Manjunath"},
-                 {"job_id": "J-1204", "date": "2026-11-08", "machine_id": "M-31", "site_id": "S-04", "technician_id": "T-06", "symptom": "Hall 2 PAC-03 high return-air temperature alarm.", "priority": "Critical", "reported_by": "Sanjay Menon"}]
+    techs = {"LIVE-1": "T-06", "LIVE-2": "T-04", "LIVE-3": "T-06", "LIVE-4": "T-06", "LIVE-5": "T-04", "LIVE-6": "T-05", "LIVE-7": "T-02"}
+    prio = {"minor": "Medium", "major": "High", "critical": "Critical"}
+    reporters = {"S-01": "Priya Nair", "S-02": "Manjunath", "S-03": "Imran Pasha", "S-04": "Sanjay Menon", "S-05": "Rahul D'Souza", "S-09": "Anita George"}
+    open_jobs = []
+    for n, sc in enumerate(live, 1):
+        sc["job_id"] = f"J-12{n:02d}"
+        symptoms = {"LIVE-1": "Bay 3 not cooling. Outdoor unit tripped twice this morning.", "LIVE-4": "Outdoor unit tripping, offices warm since lunch.",
+                    "LIVE-5": "Split AC at ICU nurse station dripping water onto the counter.", "LIVE-3": "Hall 2 PAC-03 high return-air temperature alarm."}
+        open_jobs.append({"job_id": sc["job_id"], "date": "2026-11-07", "machine_id": sc["machine_id"], "site_id": sc["site_id"], "technician_id": techs[sc["id"]],
+                          "symptom": symptoms.get(sc["id"], sc["description"] + "."), "priority": prio[sc["severity"]],
+                          "reported_by": reporters.get(sc["site_id"], "Site facility desk")})
     parts = sorted({p for v in visits for p in v["parts_used"] + v["parts_missing"]})
     stock = []
     for p in parts:

@@ -112,9 +112,8 @@ class Dispatcher:
                         "rationale": "No alarm history is available, so the generic first step is a remote reset.", "citations": []}
             return {"decision": "SEND_TECHNICIAN", "remote_type": None, "remote_action": None, "blocked": None, "ledger": None,
                     "rationale": "No remote option known for this alarm, and no history to say otherwise.", "citations": []}
-        tags = [f"code:{a['code']}"]
-        mems = case.memory.recall(f"alarm {a['code']} {a.get('description', '')} remote action result on {case.machine['model']}", tags, limit=5)
-        mine = case.memory.recall(f"alarms and remote actions on machine {case.machine['id']}", [f"machine:{case.machine['id']}", "kind:alarm"], limit=3)
+        mems = case.memory.recall(f"alarm {a['code']} {a.get('description', '')} remote action result on {case.machine['model']}", [f"code:{a['code']}", "kind:alarm"], 5, "all")
+        mine = case.memory.recall(f"alarms and remote actions on machine {case.machine['id']}", [f"machine:{case.machine['id']}", "kind:alarm"], 3, "all")
         led = ledger(case.alarms, a["code"], a["readings"].get("units_offline"))
         blocked = recent_remote_failure(case.alarms, case.machine["id"], rtype, case.as_of) if rtype else None
         usable = bool(rtype) and led["attempts"] >= 3 and (led["rate"] or 0) >= 0.5 and not blocked
@@ -150,17 +149,18 @@ Return ONLY JSON: {"causes":[{"cause":string,"fix":string (the repair, as a shor
 class Diagnostician:
     name = "diagnostician"
 
-    def diagnose(self, case: Case, feedback: str = "", prior: dict | None = None) -> dict:
+    def diagnose(self, case: Case, feedback: str = "", prior: dict | None = None, hint: str | None = None) -> dict:
         m, fam = case.machine, f"family:{slug(case.machine['model_family'])}"
         recalled, reflection = [], None
         if case.use_memory and not feedback:
             q = f"{m['model']} {m['type']}: {case.job['symptom']}; alarm {case.alarm.get('code', '')} {case.alarm.get('description', '')}"
-            with ThreadPoolExecutor(max_workers=3) as pool:
-                f1 = pool.submit(case.memory.recall, q, [f"machine:{m['id']}"], 5)
-                f2 = pool.submit(case.memory.recall, q, [fam], 8)
-                f3 = pool.submit(case.memory.recall, f"access rules, contacts and quirks at {case.site['name']}", [f"site:{case.site['id']}"], 2)
-                mine, family, site = f1.result(), [x for x in f2.result() if f"machine:{m['id']}" not in x.tags][:5], f3.result()
-            recalled = mine + family
+            with ThreadPoolExecutor(max_workers=4) as pool:
+                f1 = pool.submit(case.memory.recall, q, [f"machine:{m['id']}", "kind:visit"], 5, "all")
+                f2 = pool.submit(case.memory.recall, q, [fam, "kind:visit"], 8, "all")
+                f3 = pool.submit(case.memory.recall, f"access rules, contacts and quirks at {case.site['name']}", [f"site:{case.site['id']}", "kind:site"], 2, "all")
+                f4 = pool.submit(case.memory.recall, f"follow-up: did the fix hold on {m['id']}", [f"machine:{m['id']}", "kind:followup"], 3, "all")
+                mine, family, site, follow = f1.result(), [x for x in f2.result() if f"machine:{m['id']}" not in x.tags][:5], f3.result(), f4.result()
+            recalled = mine + family + follow
             try:
                 reflection = case.memory.reflect(f"For a {m['model']} showing '{case.job['symptom']}': what is the most likely root cause, what has failed before, "
                                                  f"and does it depend on how old the unit is?", [f"machine:{m['id']}", fam])
@@ -168,7 +168,11 @@ class Diagnostician:
                 log.warning("reflect failed: %s", str(exc)[:100])
             site_notes = [x.text for x in site]
         elif prior:
-            recalled, reflection, site_notes = prior.get("_recalled", []), prior.get("reflection"), prior.get("site_notes", [])
+            recalled, reflection, site_notes = list(prior.get("_recalled", [])), prior.get("reflection"), prior.get("site_notes", [])
+            if hint and case.use_memory:   # look for the evidence behind the alternative the Verifier named
+                extra = case.memory.recall(f"{hint} fixed {case.machine['model']} that was tripping", [fam, "kind:visit"], 6, "all")
+                seen = {x.ref() for x in recalled}
+                recalled = [x for x in extra if x.ref() not in seen] + recalled
         else:
             site_notes = []
         user = (_facts(case) + "\n\nMEMORIES:\n" + _cited(recalled) + (f"\n\nLESSONS (Hindsight reflect):\n{reflection}" if reflection else "")
@@ -214,8 +218,8 @@ class PartsAgent:
         if case.use_memory:
             q = f"parts used to fix {top['fix']} on {case.machine['model']}; parts replaced for {case.job['symptom']}"
             with ThreadPoolExecutor(max_workers=2) as pool:
-                f1 = pool.submit(case.memory.recall, q, [f"family:{slug(case.family)}", "kind:visit"], 10)
-                f2 = pool.submit(case.memory.recall, q, [f"machine:{case.machine['id']}", "kind:visit"], 4)
+                f1 = pool.submit(case.memory.recall, q, [f"family:{slug(case.family)}", "kind:visit"], 10, "all")
+                f2 = pool.submit(case.memory.recall, q, [f"machine:{case.machine['id']}", "kind:visit"], 4, "all")
                 mems = f2.result() + [x for x in f1.result() if x.ref() not in {y.ref() for y in f2.result()}]
         user = (_facts(case) + f"\nDiagnosis to prepare for: {top['cause']} (fix: {top['fix']}).\n\nMEMORIES:\n" + _cited(mems)
                 + "\n\nSTOCK LIST:\n" + "\n".join(f"- {s['part']} (van {s['van']}, warehouse {s['warehouse']})" for s in case.store.stock)
@@ -257,6 +261,9 @@ class Verifier:
     """Sees only raw records. No LLM: every check is deterministic, so the same inputs always give the same verdict."""
     name = "verifier"
 
+    def __init__(self, min_wins: int = 2):
+        self.min_wins = min_wins   # how many fixes a part needs on comparable units; tuned on the training machines only
+
     def review(self, case: Case, dispatch: dict, diag: dict, parts: dict) -> dict:
         lv = ev.visit_levels(case.visits, case.as_of)
         by_job = {v["job_id"]: v for v in case.visits}
@@ -277,7 +284,7 @@ class Verifier:
         if not case.visits:
             approvals.append({"target": "diagnostician", "item": top["fix"], "note": "No records to verify against."})
         else:
-            reasons, jobs = [], []
+            reasons, jobs, alternative = [], [], None
             cited = top.get("evidence_jobs", [])
             supporting = []
             for j in cited:
@@ -299,35 +306,40 @@ class Verifier:
                 if bl and (bl["cohort_from"] is None or newer):
                     reasons.append(bl["text"].replace("Belief updated: ", "Recent evidence contradicts this lesson: "))
                     jobs += bl["recent"]["jobs"][-4:]
+                    alternative = bl.get("alternative")
                 elif bl is None and st["recent_n"] >= 3 and (st["recent_rate"] or 0) <= 0.25 and (st["rate"] or 0) >= 0.5:
                     reasons.append(f"Only {st['recent_verified']} of the last {st['recent_n']} attempts of this fix held, against {st['verified']} of {st['n']} overall.")
                 if not supporting and cited:
                     reasons.append("None of the cited visits supports the claim.")
             if reasons:
-                vetoes.append({"target": "diagnostician", "item": top["fix"], "reasons": reasons, "jobs": list(dict.fromkeys(jobs + [j for j in cited if j in by_job]))[:6]})
+                vetoes.append({"target": "diagnostician", "item": top["fix"], "reasons": reasons, "alternative": alternative,
+                               "jobs": list(dict.fromkeys(jobs + [j for j in cited if j in by_job]))[:6]})
             else:
                 st = ev.fix_stats(att)
                 tag = "weak signal" if st["weak"] else f"{st['verified']} of {st['n']} verified"
                 approvals.append({"target": "diagnostician", "item": top["fix"], "note": f"Every cited visit supports it ({tag})."})
-        # ---- parts
+        # ---- parts (support is counted only on units comparable to this one: a part that fixes older units says nothing about a newer generation)
+        cohorts = [b["cohort_from"] for b in beliefs.analyse(case.visits, case.store.machine, case.as_of) if b["family"] == case.family and b["cohort_from"]]
+        y = min(cohorts) if cohorts else None
+        comparable = (lambda inst: (inst >= y) == (case.machine["installed"] >= y)) if y else (lambda inst: True)
         for p in parts["carry"]:
             code = part_code(p["part"])
             if not (code or self._tracked(case, p["part"])):
                 approvals.append({"target": "parts", "item": p["part"], "note": "A tool or consumable: nothing to verify."})
                 continue
             used = [v for v in case.visits if any(p["part"].lower() in x.lower() or (code and code.lower() in x.lower()) for x in v.get("parts_used", []))
-                    and case.store.machine(v["machine_id"])["model_family"] == case.family]
+                    and case.store.machine(v["machine_id"])["model_family"] == case.family and comparable(case.store.machine(v["machine_id"])["installed"])]
             wins = [v for v in used if any(a["result"] == "worked" for a in v["actions"]) and lv.get(v["job_id"], {}).get("level") != "suspected"
                     and not lv.get(v["job_id"], {}).get("recurred")]
             losses = [v for v in used if v not in wins]
-            if len(wins) >= 2 or (len(wins) == 1 and not losses):
+            if len(wins) >= self.min_wins or (len(wins) == 1 and not losses):
                 approvals.append({"target": "parts", "item": p["part"], "note": f"Fixed the fault in {len(wins)} visit(s) on this family."})
             else:
-                why = [f"Used in {len(used)} visit(s) on {case.family}, but it fixed the fault in {len(wins)}."]
+                why = [f"Used in {len(used)} visit(s) on comparable {case.family} units, but it fixed the fault in {len(wins)}."]
                 if losses:
                     why.append("It was replaced without fixing the fault in " + ", ".join(v["job_id"] for v in losses[:4]) + ".")
                 if not used:
-                    why = [f"No visit on {case.family} in the records used this part."]
+                    why = [f"No visit on comparable {case.family} units in the records used this part."]
                 vetoes.append({"target": "parts", "item": p["part"], "reasons": why, "jobs": [v["job_id"] for v in used][:6]})
         return {"vetoes": vetoes, "approvals": approvals, "ok": not vetoes}
 

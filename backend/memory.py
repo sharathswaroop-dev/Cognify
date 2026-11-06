@@ -134,14 +134,29 @@ class LocalMemory:
             self.items = [i for i in self.items if i["doc_id"] not in ids] + records
             self._save()
 
-    def recall(self, query: str, tags: list[str], limit: int = 6) -> list[Memory]:
-        q = _tokens(query)
+    def _index(self):
+        """BM25 statistics over the whole corpus, rebuilt only when the memory changes."""
+        if getattr(self, "_idx_n", -1) != len(self.items):
+            import math
+            from collections import Counter
+            docs = [Counter(_WORD.findall(i["text"].lower())) for i in self.items]
+            df = Counter(t for d in docs for t in d)
+            n = max(1, len(docs))
+            self._docs, self._len = docs, [sum(d.values()) or 1 for d in docs]
+            self._avg = sum(self._len) / n
+            self._idf = {t: math.log(1 + (n - c + 0.5) / (c + 0.5)) for t, c in df.items()}
+            self._idx_n = len(self.items)
+
+    def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
+        """Plain BM25 keyword search (k1=1.5, b=0.75) over memories that carry one of the tags: the 'basic search' baseline."""
+        self._index()
+        q = [t for t in _WORD.findall(query.lower()) if t not in _STOP and len(t) > 1]
         out = []
-        for i in self.items:
-            if tags and not set(tags) & set(i["tags"]):
+        for idx, i in enumerate(self.items):
+            if tags and not (set(tags) <= set(i["tags"]) if match == "all" else set(tags) & set(i["tags"])):
                 continue
-            overlap = len(q & _tokens(i["text"]))
-            score = overlap / (len(q) or 1)
+            d, dl = self._docs[idx], self._len[idx]
+            score = sum(self._idf.get(t, 0) * d[t] * 2.5 / (d[t] + 1.5 * (0.25 + 0.75 * dl / self._avg)) for t in set(q) if t in d)
             out.append(Memory(i["text"], i["tags"], i["date"], score, i.get("meta", {})))
         out.sort(key=lambda m: (m.score, m.date or ""), reverse=True)
         return out[:limit]
@@ -237,9 +252,9 @@ class HindsightMemory:
             self._io.run(self.client.aretain_batch(self.bank_id, items[start:start + 20], retain_async=True))
         self._retained += len(items)
 
-    def recall(self, query: str, tags: list[str], limit: int = 6) -> list[Memory]:
+    def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
         resp = self._io.run(self.client.arecall(
-            self.bank_id, query, tags=tags or None, tags_match="any", budget="mid", max_tokens=2048))
+            self.bank_id, query, tags=tags or None, tags_match=match, budget="mid", max_tokens=2048))
         out = []
         for r in (resp.results or [])[:limit]:
             date = str(r.occurred_start or r.mentioned_at or "")[:10] or None
@@ -285,3 +300,65 @@ def build_memory(role: str = "field", bank_id: str | None = None, mission: str |
             log.error("Hindsight unavailable (%s); falling back to local memory", exc)
     log.warning("No Hindsight credentials set - using LOCAL fallback memory for %s", role)
     return LocalMemory(DATA_DIR / f"local_memory_{role}.json")
+
+
+# ---------------------------------------------------------------- resilience
+
+class FallbackMemory:
+    """Hindsight first, local keyword memory if Hindsight fails (no credits, outage, bad key).
+
+    The first failure opens a circuit: from then on everything is served by the local memory and `reason` says why, so the UI can
+    show it instead of pretending. Every retain also goes to the local memory so the two stay in step."""
+
+    def __init__(self, primary, secondary):
+        self.primary, self.secondary = primary, secondary
+        self.degraded, self.reason = False, ""
+        self.bank_id = getattr(primary, "bank_id", "local")
+
+    @property
+    def name(self) -> str:
+        return "local (Hindsight unavailable)" if self.degraded else self.primary.name
+
+    def _trip(self, op: str, exc: Exception) -> None:
+        if not self.degraded:
+            self.degraded = True
+            self.reason = f"{op} failed: {str(exc)[:200]}"
+            log.error("Hindsight unavailable, switching to the local memory. %s", self.reason)
+
+    def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
+        if not self.degraded:
+            try:
+                return self.primary.recall(query, tags, limit=limit, match=match)
+            except Exception as exc:
+                self._trip("recall", exc)
+        return self.secondary.recall(query, tags, limit=limit, match=match)
+
+    def reflect(self, query: str, tags: list[str]):
+        if not self.degraded:
+            try:
+                return self.primary.reflect(query, tags)
+            except Exception as exc:
+                self._trip("reflect", exc)
+        return self.secondary.reflect(query, tags)
+
+    def retain(self, text: str, tags: list[str], date: str | None, doc_id: str, meta: dict | None = None) -> None:
+        self.secondary.retain(text, tags, date, doc_id, meta)
+        if not self.degraded:
+            try:
+                self.primary.retain(text, tags, date, doc_id, meta)
+            except Exception as exc:
+                self._trip("retain", exc)
+
+    def retain_many(self, records: list[dict]) -> None:
+        self.secondary.retain_many(records)
+        if not self.degraded:
+            try:
+                self.primary.retain_many(records)
+            except Exception as exc:
+                self._trip("retain_many", exc)
+
+    def count(self) -> int:
+        return self.secondary.count() if self.degraded else self.primary.count()
+
+    def reset(self) -> None:
+        self.secondary.reset()

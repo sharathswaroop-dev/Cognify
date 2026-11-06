@@ -5733,7 +5733,9 @@
   ],
   "root_cause": "",
   "fix": "",
-  "parts_used": [],
+  "parts_used": [
+   "Compressor contactor 24V coil (DK-CTR-24V)"
+  ],
   "parts_missing": [],
   "outcome": "revisit_needed",
   "evidence": "",
@@ -5792,7 +5794,9 @@
   ],
   "root_cause": "",
   "fix": "",
-  "parts_used": [],
+  "parts_used": [
+   "Compressor contactor 24V coil (DK-CTR-24V)"
+  ],
   "parts_missing": [],
   "outcome": "revisit_needed",
   "evidence": "",
@@ -6397,7 +6401,9 @@
   ],
   "root_cause": "",
   "fix": "",
-  "parts_used": [],
+  "parts_used": [
+   "Compressor contactor 24V coil (DK-CTR-24V)"
+  ],
   "parts_missing": [],
   "outcome": "revisit_needed",
   "evidence": "",
@@ -6785,7 +6791,9 @@
   ],
   "root_cause": "",
   "fix": "",
-  "parts_used": [],
+  "parts_used": [
+   "Compressor contactor 24V coil (DK-CTR-24V)"
+  ],
   "parts_missing": [],
   "outcome": "revisit_needed",
   "evidence": "",

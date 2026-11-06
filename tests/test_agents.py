@@ -234,3 +234,23 @@ def test_the_dataset_has_the_messy_cases_real_logs_have(store):
     lv = ev.visit_levels(h)
     assert sum(1 for v in h if lv[v["job_id"]]["recurred"]) >= 3, "some fixes came back within 30 days"
     assert len(store.holdout_ids()) >= 6
+
+
+# ------------------------------------------------------------------------------------ resilience
+def test_hindsight_failure_degrades_to_local_memory_and_says_why(store, tmp_path):
+    from memory import FallbackMemory, LocalMemory
+
+    class Dead:
+        name, bank_id = "hindsight", "b"
+        def recall(self, *a, **k): raise RuntimeError("402 Insufficient credits")
+        def reflect(self, *a, **k): raise RuntimeError("402")
+        def retain(self, *a, **k): raise RuntimeError("402")
+        def retain_many(self, *a, **k): raise RuntimeError("402 Insufficient credits")
+        def count(self): return 0
+
+    mem = FallbackMemory(Dead(), LocalMemory(tmp_path / "l.json"))
+    mem.retain_many(records.build_all(store))                       # does not raise; the local copy is kept
+    assert mem.degraded and "Insufficient credits" in mem.reason and mem.name.startswith("local")
+    hits = mem.recall("compressor contactor trips", ["machine:M-07"], 5)
+    assert hits and all("machine:M-07" in h.tags for h in hits)     # the fallback still answers, scoped by tag
+    assert mem.count() > 100

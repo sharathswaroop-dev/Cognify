@@ -32,7 +32,7 @@
   "readings": {
    "units_offline": 1
   },
-  "job_id": null,
+  "job_id": "J-1202",
   "headline": "M-113 cassette lost communication",
   "truth": {
    "cause": "Communication glitch",
@@ -53,7 +53,7 @@
    "return_air_c": 32.4,
    "supply_air_c": 18.1
   },
-  "job_id": "J-1204",
+  "job_id": "J-1203",
   "headline": "M-31 return air at 32.4C in Hall 2",
   "truth": {
    "cause": "EC fan drive fault on fan 2",
@@ -76,7 +76,7 @@
    "supply_v": 228,
    "compressor_a": 23.1
   },
-  "job_id": "J-1202",
+  "job_id": "J-1204",
   "headline": "M-91 compressor overcurrent, supply normal",
   "truth": {
    "cause": "Inverter PCB revision C",
@@ -99,7 +99,7 @@
    "water_sensor": "wet",
    "indoor_coil_c": 4.1
   },
-  "job_id": "J-1203",
+  "job_id": "J-1205",
   "headline": "M-12 leaking in the ICU",
   "truth": {
    "cause": "Drain line blocked and laid with reverse slope",
@@ -120,7 +120,7 @@
   "description": "Low cooling capacity",
   "severity": "major",
   "readings": {},
-  "job_id": null,
+  "job_id": "J-1206",
   "headline": "M-21 food-court ductable not cooling",
   "truth": {
    "cause": "Leak at the flare joint (a top-up only holds weeks)",
@@ -145,7 +145,7 @@
    "discharge_bar": 23.1,
    "cw_flow_pct": 82
   },
-  "job_id": null,
+  "job_id": "J-1207",
   "headline": "M-22 chiller tripping on high pressure",
   "truth": {
    "cause": "Scaled condenser tubes",
