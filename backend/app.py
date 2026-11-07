@@ -107,7 +107,7 @@ def _not_found(request, exc):
 def status():
     s = room.status()
     return {**s, "memory_degraded": bool(getattr(memory, "degraded", False)), "memory_degraded_reason": getattr(memory, "reason", ""),
-            "memory_items": memory.count(), "llm": llm.available, "llm_model": llm.model if llm.available else None, "company": store.company,
+            "memory_items": memory.count(), "llm": llm.available, "llm_model": llm.model if llm.available else None, "llm_models": list(getattr(llm, "models", []) or []), "llm_used": dict(getattr(llm, "used", {}) or {}), "company": store.company,
             "seeded": bool(_state().get(_key)), "machines": len(store.machines), "sites": len(store.sites), "visits": len(store.all_visits())}
 
 

@@ -373,6 +373,115 @@ details summary{cursor:pointer}
 
 .rvl{opacity:0;translate:0 44px;transition:opacity .8s var(--ease),translate .9s var(--ease)}.rvl.in{opacity:1;translate:0 0}
 @media (prefers-reduced-motion:reduce){.rvl{opacity:1;translate:none}}
+
+/* ---------------- live demo: acts, mesh, drills ---------------- */
+.act{display:flex;gap:18px;align-items:flex-start;margin:62px 0 22px}
+.act:first-of-type{margin-top:6px}
+.act .n{flex:none;width:56px;height:56px;border-radius:50% 46% 52% 48%/48% 54% 46% 52%;background:var(--hot);color:#fff8ea;border:2.5px solid var(--text);display:grid;place-items:center;font:900 28px var(--disp);box-shadow:3px 4px 0 var(--text);font-variation-settings:"SOFT" 100,"WONK" 1}
+.act h2{margin:2px 0 4px;font:900 clamp(28px,3.2vw,44px)/1 var(--disp);letter-spacing:-.04em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.act p{margin:0;max-width:700px;color:var(--mute);font-size:16px}
+.act .hand{font-size:24px;display:block;margin-bottom:2px}
+
+.packet{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;margin:0 0 20px;padding:18px 22px;border:2.5px solid var(--text);border-radius:var(--wob2);background:var(--s1);box-shadow:var(--soft);position:relative}
+.packet .code{font:700 34px/1 var(--hand);color:var(--hot);border:4px solid var(--hot);border-radius:10px 14px 9px 13px;padding:4px 16px 2px;transform:rotate(-4deg);white-space:nowrap}
+.packet h4{margin:0 0 4px;font:800 21px/1.15 var(--disp);letter-spacing:-.02em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.packet .meta{font:400 12.5px/1.6 var(--mono);color:var(--mute)}
+.packet .rd{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.packet .rd span{padding:5px 12px;border:2px solid var(--text);border-radius:999px;font:500 12px var(--mono);background:#fff1c9}
+.drills{display:flex;gap:10px;flex-wrap:wrap;align-items:stretch;margin:0 0 6px}
+.drill{flex:1 1 190px;text-align:left;padding:12px 16px;border:2.5px solid var(--text);border-radius:var(--wob);background:var(--s1);color:var(--text);transition:transform .25s var(--ease),box-shadow .25s,background .2s;box-shadow:2px 3px 0 var(--text)}
+.drill b{display:block;font:800 16px var(--body)}.drill small{display:block;margin-top:2px;font:400 11.5px/1.45 var(--mono);color:var(--mute)}
+.drill:hover{transform:translate(-2px,-3px);box-shadow:5px 7px 0 var(--text)}
+.drill.on{background:var(--hl);transform:translate(-2px,-3px) rotate(-.6deg);box-shadow:5px 7px 0 var(--text)}
+.drill.on.bad{background:#ffd1c4}
+.drillnote{font:700 22px/1.1 var(--hand);color:var(--hot);margin:10px 4px 0;min-height:26px}
+
+.mesh{position:relative;border:2.5px solid var(--text);border-radius:var(--wob);background:var(--s1);box-shadow:var(--soft);padding:16px 16px 12px;overflow:hidden}
+.meshtop{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px}
+.meshtop .chip b{font-weight:500;color:var(--mute)}
+.meshtop .chip.fb{background:var(--hl)}
+.stage{position:relative;width:100%;aspect-ratio:2.1/1;min-width:720px}
+.meshscroll{overflow-x:auto}
+.stage svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.stage .eg{fill:none;stroke:var(--line);stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke;transition:stroke .4s}
+.stage .eg.used{stroke:var(--text)}
+.stage .eg.bank{stroke-dasharray:3 6;stroke:#d6c79b}
+.stage .eg.veto{stroke:var(--hot)}
+.stage .roomrect{fill:rgba(247,201,72,.12);stroke:var(--text);stroke-width:2;stroke-dasharray:7 7;vector-effect:non-scaling-stroke}
+.stage .roomrect.down{stroke:var(--hot);fill:rgba(229,83,61,.08)}
+.stage .dot{fill:var(--hot);stroke:var(--text);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.roomlab{position:absolute;left:19.5%;top:5%;font:700 24px/1 var(--hand);color:var(--text);transform:rotate(-2deg);display:flex;gap:8px;align-items:center}
+.roomlab em{font-style:normal;font:500 11px var(--mono);padding:2px 9px;border-radius:999px;background:var(--text);color:#fff8ea}
+.roomlab em.fb{background:var(--hot)}
+.mn{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:4px;width:150px;text-align:center}
+.mn .disc{position:relative;width:clamp(48px,5.6vw,76px);height:clamp(48px,5.6vw,76px);border-radius:50% 46% 52% 48%/48% 54% 46% 52%;background:var(--c,#e9dfc4);border:2.5px solid var(--text);display:grid;place-items:center;transition:transform .35s var(--ease),box-shadow .35s,background .3s}
+.mn .disc svg{width:56%;height:56%}
+.mn b{font:800 clamp(11px,1.15vw,15px)/1.1 var(--body)}
+.mn .cap{font:400 clamp(9.5px,.9vw,11.5px)/1.3 var(--mono);color:var(--mute);max-width:150px;min-height:2.6em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mn.work .disc{transform:scale(1.14) rotate(-4deg);box-shadow:0 0 0 6px rgba(213,138,16,.28);animation:wob 1s ease-in-out infinite}
+@keyframes wob{50%{transform:scale(1.18) rotate(4deg)}}
+.mn.done .disc::after,.mn.ok .disc::after{content:"✓";position:absolute;right:-6px;top:-8px;width:22px;height:22px;border-radius:50%;background:var(--acid);color:#fff8ea;display:grid;place-items:center;font:700 13px var(--mono);border:2px solid var(--text)}
+.mn.done .disc::after{background:var(--dim)}
+.mn.ok .disc{box-shadow:0 0 0 6px rgba(61,132,86,.28)}
+.mn.veto .disc{background:#ffb5a2;animation:shake .5s}
+.mn.veto .disc::after{content:"NO";position:absolute;right:-14px;top:-12px;padding:0 7px;border-radius:7px;background:var(--hot);color:#fff8ea;font:700 17px/1.2 var(--hand);border:2px solid var(--text);transform:rotate(8deg)}
+@keyframes shake{20%{transform:translateX(-7px) rotate(-5deg)}40%{transform:translateX(7px) rotate(5deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.mn.bank .disc{border-radius:12px 12px 38% 38%/12px 12px 22% 22%;width:clamp(90px,10vw,140px);background:#ffefb0}
+.mn.bank .cap{min-height:1.4em}
+.mn.bank.lit .disc{box-shadow:0 0 0 6px rgba(47,111,159,.3)}
+.mn.tech .disc{background:#bcd9e6}.mn.feed .disc{background:#ffd1c4}
+.stage.hint::after{content:"Pick an alarm and press the big button. The mesh lights up as each agent hands the work on.";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);width:min(420px,60%);text-align:center;font:700 26px/1.15 var(--hand);color:var(--mute);pointer-events:none;background:rgba(255,250,238,.8);padding:6px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;font:400 11.5px var(--mono);color:var(--mute)}
+.legend i{display:inline-block;width:18px;height:3px;margin-right:6px;vertical-align:middle;border-radius:2px}
+
+.lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.lane{padding:20px 20px 18px;border:2.5px solid var(--text);border-radius:var(--wob2);background:var(--s1);box-shadow:var(--soft)}
+.lane h4{margin:0 0 4px;font:800 21px/1.1 var(--disp);letter-spacing:-.03em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.lane p{margin:0 0 14px;font-size:13.5px;color:var(--mute)}
+.chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.link{padding:6px 12px;border:2px solid var(--text);border-radius:999px;font:500 11.5px var(--mono);background:#fff;opacity:.55;transition:all .3s}
+.link.on{opacity:1;background:var(--sage)}
+.link.bk.on{background:var(--hl);animation:pop .6s var(--ease)}
+.link.bad{background:#ffd1c4;text-decoration:line-through;opacity:.9}
+.chain .ar{font:700 22px var(--hand);color:var(--hot)}
+@keyframes pop{0%{transform:scale(.7) rotate(-6deg)}60%{transform:scale(1.12) rotate(2deg)}100%{transform:none}}
+.reslog{margin-top:18px;padding:16px 18px;border:2px dashed var(--text);border-radius:var(--wob);background:rgba(255,250,238,.7);font:400 12.5px/1.6 var(--mono);min-height:62px}
+.reslog div{padding:4px 0;border-bottom:1px dashed var(--line)}.reslog div:last-child{border:0}
+.reslog b{font:700 18px var(--hand);color:var(--hot);margin-right:6px}
+
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.lstep{position:relative;padding:24px;border:2.5px solid var(--text);border-radius:var(--wob);background:var(--s1);box-shadow:var(--soft)}
+.lstep h4{margin:0 0 6px;font:800 22px/1.1 var(--disp);letter-spacing:-.03em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.lstep>p{margin:0 0 14px;color:var(--mute);font-size:14.5px}
+.delta{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.delta div{padding:10px 12px;border:2px solid var(--text);border-radius:14px;background:#fff8e1}
+.delta small{display:block;font:500 10.5px var(--mono);color:var(--mute)}
+.delta b{font:900 24px/1.1 var(--disp);letter-spacing:-.03em}.delta b i{font-style:normal;color:var(--hot)}
+.delta s{color:var(--dim);font-weight:700;margin-right:6px}
+.diffbox{margin-top:14px;padding:14px 16px;border:2.5px solid var(--text);border-radius:var(--wob2);background:var(--hl);font-size:14.5px;line-height:1.5;transform:rotate(-.4deg)}
+.diffbox b{font:700 22px var(--hand);color:var(--hot);display:block}
+.cmp2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.cmp2>div{border:2px dashed var(--text);border-radius:var(--wob2);padding:12px;background:rgba(255,250,238,.6)}
+.cmp2 h5{margin:0 0 6px;font:700 20px var(--hand);color:var(--hot)}
+.cmp2 .out{margin:0;border-width:2px}
+.resetlink{background:none;border:0;border-bottom:2px dotted var(--mute);color:var(--mute);font:400 12px var(--mono);padding:0;margin-left:10px}
+
+.accgrid{display:grid;grid-template-columns:1fr 1.1fr;gap:24px}
+.bars{display:flex;flex-direction:column;gap:16px}
+.bar .t{display:flex;justify-content:space-between;gap:10px;font:700 14px var(--body);margin-bottom:5px}
+.bar .t span{font:400 11.5px var(--mono);color:var(--mute)}
+.bar .tr{position:relative;height:30px;border:2.5px solid var(--text);border-radius:999px;background:#fff;overflow:hidden}
+.bar .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--c);border-right:2.5px solid var(--text);transition:width 1.1s var(--ease)}
+.bar .ci{position:absolute;top:50%;height:4px;margin-top:-2px;background:var(--text);opacity:.55}
+.bar .v{position:absolute;right:12px;top:50%;transform:translateY(-50%);font:900 18px var(--disp);letter-spacing:-.03em}
+.curve{width:100%;height:auto;display:block}
+.curve text{font:500 11px var(--mono);fill:var(--mute)}
+.curve .ln{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset 1.6s var(--ease)}
+.curve.go .ln{stroke-dashoffset:0}
+.keyrow{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0 0;font:500 11.5px var(--mono)}
+.keyrow i{display:inline-block;width:20px;height:5px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.accnote{margin-top:16px;font:400 12px/1.65 var(--mono);color:var(--mute)}
+@media (max-width:1100px){.lanes,.learn,.accgrid{grid-template-columns:1fr}.packet{grid-template-columns:1fr}.packet .rd{justify-content:flex-start}}
 </style>
 </head>
 <body class="fx">
@@ -383,7 +492,7 @@ details summary{cursor:pointer}
   <a class="logo" href="#"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f7c948"/></svg>
     <div><b>SiteMemory</b><small id="company">Field service that remembers</small></div></a>
   <nav id="nav"><div id="navpill"></div>
-    <button data-view="home" class="on">Home</button><button data-view="room">Control room</button><button data-view="phone">Technician</button><button data-view="dash">Dashboard</button></nav>
+    <button data-view="home" class="on">Home</button><button data-view="room">Live demo</button><button data-view="phone">Technician</button><button data-view="dash">Dashboard</button></nav>
   <div class="chips" id="status"></div>
 </header>
 <div class="ticker" id="ticker" aria-hidden="true"><div id="tickin"></div></div>
@@ -396,7 +505,7 @@ details summary{cursor:pointer}
       <span class="hand top">for the service desk, 6:40 on a Tuesday morning</span>
       <h1><span class="ln"><span>The one who</span></span><span class="ln"><span>knew has left.</span></span><span class="ln"><span class="scrib">The memory stays.</span></span></h1>
       <p class="lede">SiteMemory is a small crew of agents for field-service teams. They remember every machine you have repaired, <em>including the fixes that failed</em>, and a Verifier checks their advice against the raw job cards before it reaches your technician.</p>
-      <div class="cta"><button class="btn pri mag" data-go="room" data-cursor="Go">Open the control room</button><button class="btn mag" data-go="dash" data-cursor="Look">See how it scores</button></div>
+      <div class="cta"><button class="btn pri mag" data-go="room" data-cursor="Go">Open the live demo</button><button class="btn mag" data-go="dash" data-cursor="Look">See how it scores</button></div>
       <p class="fine">Built on Hindsight agent memory, coordinated on Band. The workshop here is fictional: 12 sites, 51 machines, 231 visits, all synthetic.</p>
     </div>
     <div class="collage" id="collage">
@@ -454,15 +563,27 @@ details summary{cursor:pointer}
     </div>
   </div>
 
-  <div class="cta2 rvl"><h2>See it say <em>no</em> to the wrong fix.</h2><p>Pick an alarm. Watch both paths run side by side, with every memory the agents touch lighting up.</p><button class="btn mag" data-go="room" data-cursor="Go">Open the control room</button></div>
+  <div class="cta2 rvl"><h2>See it say <em>no</em> to the wrong fix.</h2><p>Pick an alarm. Watch both paths run side by side, with every memory the agents touch lighting up.</p><button class="btn mag" data-go="room" data-cursor="Go">Open the live demo</button></div>
   <p class="honest">Honest numbers: the history is synthetic, anything labelled simulated is a replay and not a field result, and the evaluation page says what was and was not run. Nothing is tuned on the held-out machines.</p>
 </section>
 
 <section class="view" id="view-room">
-  <div class="title"><div><div class="kick"><b>01</b> — One alarm, two paths</div><h1 id="h-room"></h1></div>
-    <p>The same four agents work the same alarm: once with no memory, once on the shared Hindsight bank. Watch what they say, what the Verifier vetoes, and what it would have cost.</p></div>
+  <div class="title"><div><div class="kick">the full flow, live</div><h1 id="h-room"></h1></div>
+    <p>One alarm goes in. Four agents work it in a Band room on one shared Hindsight memory, next to the same agents with no memory at all. Switch a dependency off on purpose and watch the backup take over. Then teach it something and ask again.</p></div>
+
+  <div class="act"><div class="n">1</div><div><span class="hand">input</span><h2>An alarm comes in</h2><p>Machines send error codes. Pick one. Machines marked held-out were never used to tune anything.</p></div></div>
   <div class="scs" id="scs"></div>
-  <div class="runbar"><button class="btn pri mag" id="run" data-cursor="Run">Run both paths</button><span class="info" id="runinfo">Pick an alarm. Machines marked “held out” were never used to tune anything.</span></div>
+  <div class="packet" id="packet"></div>
+  <div class="drills" id="drills"></div>
+  <div class="drillnote" id="drillnote"></div>
+  <div class="runbar"><button class="btn pri mag" id="run" data-cursor="Run">Send the alarm into the mesh</button><span class="info" id="runinfo">Pick an alarm.</span></div>
+
+  <div class="act"><div class="n">2</div><div><span class="hand">the mesh</span><h2>Four agents hand the work on</h2><p>Dispatcher decides remote fix or technician. Diagnostician finds the cause. Parts decides the van. The Verifier reads only the raw job records and can say no. Every memory they touch lights up the bank.</p></div></div>
+  <div class="mesh"><div class="meshtop"><span class="chip" id="mx-transport"><i></i>Coordination: Band room</span><span class="chip" id="mx-memory"><i></i>Memory: Hindsight bank</span><span class="chip" id="mx-model"><i></i>Model: waiting</span></div>
+    <div class="meshscroll"><div class="stage hint" id="stage"></div></div>
+    <div class="legend"><span><i style="background:var(--text)"></i>hand-off</span><span><i style="background:var(--hot)"></i>veto</span><span><i style="background:#2f6f9f"></i>recall</span><span><i style="background:#d58a10"></i>reflect</span><span><i style="background:#3d8456"></i>retain</span></div></div>
+
+  <div class="act"><div class="n">3</div><div><span class="hand">with and without</span><h2>Same alarm, two outcomes</h2><p>Left: the same agents with no records. Right: the shared Hindsight memory, checked by the Verifier. The cost below each is a simulation from a synthetic history.</p></div></div>
   <div class="board">
     <div class="path without" id="p-without"><div class="ph"><h3>Without memory</h3><span class="chip">no records</span></div><div class="agstrip" data-agents></div><div class="stream" id="s-without"><div class="empty">Waiting for an alarm</div></div><div id="o-without"></div></div>
     <div class="path with" id="p-with"><div class="ph"><h3>With Hindsight memory</h3><span class="chip ok"><i></i>shared bank</span></div><div class="agstrip" data-agents></div><div class="stream" id="s-with"><div class="empty">Waiting for an alarm</div></div><div id="o-with"></div></div>
@@ -471,6 +592,23 @@ details summary{cursor:pointer}
       <div class="mlist" id="mlist"><div class="empty">No memory operations yet</div></div></aside>
   </div>
   <div id="cmp"></div>
+
+  <div class="act"><div class="n">4</div><div><span class="hand">when something breaks</span><h2>Every dependency has a backup</h2><p>Use the drills in step 1 to switch Band, Hindsight or the main model off for one run. The agents notice, switch over and finish the job. Nothing is faked: the same code path runs in a real outage.</p></div></div>
+  <div class="lanes">
+    <div class="lane"><h4>Coordination</h4><p>Agents talk in a Band room. If Band is unreachable, the same four agents hand off in-process.</p><div class="chain"><span class="link" id="l-band">Band room</span><span class="ar">then</span><span class="link bk" id="l-band-bk">in-process</span></div></div>
+    <div class="lane"><h4>Memory</h4><p>Hindsight is the memory. If it stops answering, a local keyword memory kept in step takes over, with a banner.</p><div class="chain"><span class="link" id="l-mem">Hindsight</span><span class="ar">then</span><span class="link bk" id="l-mem-bk">local memory</span></div></div>
+    <div class="lane"><h4>Reasoning</h4><p>Models are tried in order and rate limits are waited out. The Verifier has no model to lose: it is plain code.</p><div class="chain" id="l-llm"></div></div>
+  </div>
+  <div class="reslog" id="reslog">Nothing has failed yet. Choose a drill in step 1 and send an alarm.</div>
+
+  <div class="act"><div class="n">5</div><div><span class="hand">self-learning</span><h2>When the fix fails, it learns</h2><p>Tell the memory the recommended fix did not hold on site. The failure is retained, the evidence counts change, and the next briefing for the same alarm changes with it.</p></div></div>
+  <div class="learn">
+    <div class="lstep"><h4>1. The fix does not hold</h4><p>The technician follows the plan and it fails. That visit is retained to the bank like any other.</p><button class="btn mag" id="teachbtn" disabled data-cursor="Fail">Log: the recommended fix failed</button><button class="resetlink" id="resetbtn">reset the demo memory</button><div id="l1out"></div></div>
+    <div class="lstep"><h4>2. Ask again</h4><p>The same alarm is briefed again, with memory only. Compare it with the first briefing.</p><button class="btn pri mag" id="rebrief" disabled data-cursor="Ask">Brief the same alarm again</button><div id="l2out"></div></div>
+  </div>
+
+  <div class="act"><div class="n">6</div><div><span class="hand">how accurate</span><h2>Does it actually help?</h2><p>Every incident in the history is replayed in date order, planned using only records from before that day, and scored against what really fixed it. Final score on machines held out of tuning.</p></div></div>
+  <div class="panel" id="accpanel"><div class="empty">Loading…</div></div>
 </section>
 
 <section class="view" id="view-phone">
@@ -511,10 +649,10 @@ addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;const sp=e.target.c
 (function loop(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loop)})();
 $("#clock").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
-const HEADS={room:"Agent Control Room",phone:"Technician phone",dash:"Service dashboard"};
+const HEADS={room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
 function setHead(v){words($("#h-"+v),HEADS[v])}
 function movePill(){const b=$("#nav button.on"),p=$("#navpill");p.style.width=b.offsetWidth+"px";p.style.transform=`translateX(${b.offsetLeft}px)`}
-function go(v){$$("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.view===v));movePill();$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(v!=="home")setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="home")loadHome();
+function go(v){$$("#nav button").forEach(x=>x.classList.toggle("on",x.dataset.view===v));movePill();$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(v!=="home")setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="home")loadHome();if(v==="room")loadAcc();
   if(v==="dash")loadDash();if(v==="phone")loadPhone();history.replaceState(null,"","#"+v)}
 $$("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.view));
 document.addEventListener("click",e=>{const g=e.target.closest&&e.target.closest("[data-go]");if(g)go(g.dataset.go)});
@@ -538,7 +676,7 @@ function renderScenarios(){
   $("#scs").innerHTML=SC.map(s=>`<button class="sc ${s.severity==="minor"?"minor":""} ${selSc===s.id?"sel":""}" data-id="${s.id}" data-cursor="Select">
     <div class="t"><span>${esc(s.machine.id)} · ${esc(s.site.name.split(",")[0])}</span><span class="code">${esc(s.code)}</span></div><h4>${esc(s.headline)}</h4>
     <div class="rd">${esc(Object.entries(s.readings||{}).map(([k,v])=>k.replace(/_/g," ")+" "+v).join(" · "))||"no readings"} · installed ${s.machine.installed}</div>${s.holdout?'<div class="ho">held-out machine</div>':""}</button>`).join("");
-  $$(".sc",$("#scs")).forEach(b=>b.onclick=()=>{selSc=b.dataset.id;renderScenarios();const s=SC.find(x=>x.id===selSc);$("#runinfo").textContent=`${s.machine.model} · ${s.machine.location} · ${s.site.name}`})}
+  $$(".sc",$("#scs")).forEach(b=>b.onclick=()=>{selSc=b.dataset.id;renderScenarios();const s=SC.find(x=>x.id===selSc);$("#runinfo").textContent=`${s.machine.model} · ${s.machine.location} · ${s.site.name}`;renderPacket()})}
 
 const AGC={dispatcher:["D","#ffb23d"],diagnostician:["G","#ffe14d"],parts:["P","#f1ecdc"],verifier:["V","#8eaaff"],briefing:["B","#ff9a6b"],system:["·","#a8a490"],feed:["!","#ff6a3d"],technician:["T","#f1ecdc"]};
 const AGN=["dispatcher","diagnostician","parts","verifier"];
@@ -553,6 +691,7 @@ function bubble(e){
   const [ini,col]=AGC[e.agent]||AGC.system;const k={veto:"veto",revise:"revised",approve:"approved",plan:"plan"}[e.kind];
   return `<div class="m ${e.kind}"><div class="av" style="--c:${col}">${ini}</div><div><div class="who">${esc(e.label)} ${k?`<span class="k">${k}</span>`:""}</div><div class="bub">${esc(e.text)}</div>${opsRow(e.ops)}</div></div>`}
 function onEvent(e){
+  meshEvent(e);
   if(e.kind==="memory"){memOp(e);return}
   const st=$("#s-"+e.path);if(!st)return;if(st.querySelector(".empty"))st.innerHTML="";
   const h=bubble(e);if(h){st.insertAdjacentHTML("beforeend",h);st.scrollTop=st.scrollHeight}
@@ -564,7 +703,7 @@ function onEvent(e){
   if(e.kind==="plan")AGN.forEach(a=>{const c=$(`#p-${e.path} .agc[data-a="${a}"]`);if(c&&c.classList.contains("work"))chip(e.path,a,"done")})}
 function memOp(e){
   const d=e.data;if(e.path==="without"||d.skipped)return;
-  counts[d.op]=(counts[d.op]||0)+1;const c=$("#c-"+d.op);if(c){c.querySelector("b").textContent=counts[d.op];c.classList.add("lit");setTimeout(()=>c.classList.remove("lit"),900)}
+  counts[d.op]=(counts[d.op]||0)+1;meshMem(d);const c=$("#c-"+d.op);if(c){c.querySelector("b").textContent=counts[d.op];c.classList.add("lit");setTimeout(()=>c.classList.remove("lit"),900)}
   const l=$("#mlist");if(l.querySelector(".empty"))l.innerHTML="";
   const hits=(d.hits||[]).slice(0,5).map(h=>`<div class="hit"><b>${esc(h.ref||"")}</b> ${h.date?esc(h.date)+" · ":""}${esc(h.text)}</div>`).join("");
   l.insertAdjacentHTML("afterbegin",`<div class="mop"><div class="h"><span class="o ${d.op}">${d.op}</span><span>${esc(d.who||"")}</span><span>${(d.hits||[]).length} hit(s)</span><span>${d.ms||0} ms</span></div>
@@ -574,9 +713,9 @@ async function startRun(){
   if(es)es.close();counts={recall:0,reflect:0,retain:0};$$(".mcount b").forEach(b=>b.textContent="0");$("#mlist").innerHTML='<div class="empty">Waiting for the first recall…</div>';
   ["without","with"].forEach(p=>{$("#s-"+p).innerHTML='<div class="empty">Starting…</div>';$("#o-"+p).innerHTML="";agentStrip(p)});$("#cmp").innerHTML="";
   $("#run").disabled=true;$("#runinfo").textContent="Both paths are running…";$("#p-without").scrollIntoView({behavior:RM?"auto":"smooth",block:"start"});
-  try{const r=await api("/api/runs",{scenario_id:selSc});lastRun=r.run_id;
+  try{runChaos=DRILL;meshReset();try{modelBefore={...((await api("/api/status")).llm_used||{})}}catch{}const r=await api("/api/runs",{scenario_id:selSc,chaos:DRILL});lastRun=r.run_id;
     es=new EventSource(`/api/runs/${r.run_id}/stream`);es.onmessage=m=>onEvent(JSON.parse(m.data));
-    es.addEventListener("end",m=>{es.close();const d=JSON.parse(m.data);lastPlans=d.plans;finish(d.plans);$("#run").disabled=false;$("#runinfo").textContent="Done. Send the briefing to the technician's phone, or log the visit to retain it."});
+    es.addEventListener("end",m=>{es.close();const d=JSON.parse(m.data);lastPlans=d.plans;finish(d.plans);afterRun();$("#run").disabled=false;$("#runinfo").textContent="Done. Send the briefing to the technician's phone, or log the visit to retain it."});
     es.onerror=()=>{if(es.readyState===2)$("#run").disabled=false}}
   catch(e){$("#runinfo").innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`;$("#run").disabled=false}}
 $("#run").onclick=startRun;
@@ -697,12 +836,119 @@ async function loadEval(){clearInterval(evalTimer);let r;try{r=await api("/api/e
     <div class="foot" style="margin-top:12px">Memory ${esc(r.memory_backend)} · model ${esc(r.model)} · generated ${esc(r.generated)}. Full method and caveats: docs/EVALUATION.md.</div>`;
   if(ROI&&!ROI.derived){const b2=A.hindsight_verified||A.basic_verified,g=b2&&A.none&&b2.ftf.rate!=null&&A.none.ftf.rate!=null?Math.max(0,b2.ftf.rate-A.none.ftf.rate):null;if(g!=null){ROI.gain=Math.round(g*100);ROI.derived=true;$("#r-gain").value=ROI.gain;calcRoi()}}}
 
+
+/* ============ live demo: input, mesh, drills, learning, accuracy ============ */
+const ICONS={
+  feed:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M40 12c-12 0-18 9-18 20v12l-6 10h48l-6-10V32c0-11-6-20-18-20zM33 64a7 7 0 0 0 14 0"/></svg>',
+  dispatcher:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><circle cx="40" cy="42" r="6" fill="#e5533d"/><path d="M27 30c-7 7-7 19 0 26M53 30c7 7 7 19 0 26M17 20c-13 13-13 37 0 50M63 20c13 13 13 37 0 50"/></svg>',
+  diagnostician:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><circle cx="34" cy="34" r="19"/><path d="M48 48l21 21"/></svg>',
+  parts:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 27l28-14 28 14v31L40 72 12 58z"/><path d="M12 27l28 14 28-14M40 41v31"/></svg>',
+  verifier:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="40" r="27"/><path d="M26 41l10 10 20-23"/></svg>',
+  tech:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><rect x="23" y="8" width="34" height="64" rx="9"/><path d="M35 62h10"/></svg>',
+  bank:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><ellipse cx="40" cy="22" rx="24" ry="10"/><path d="M16 22v36c0 6 11 10 24 10s24-4 24-10V22M16 40c0 6 11 10 24 10s24-4 24-10"/></svg>'};
+const MX={feed:[14,26],dispatcher:[62,26],diagnostician:[105,26],parts:[148,26],verifier:[105,62],tech:[196,62],bank:[105,92]};
+const MLAB={feed:"Alarm feed",dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",tech:"Technician",bank:"Hindsight bank"};
+const MCOL={feed:"#ffd1c4",dispatcher:"#ffb23d",diagnostician:"#ffe14d",parts:"#cfe5d0",verifier:"#bcd0ff",tech:"#bcd9e6",bank:"#ffefb0"};
+const MEDGES={"feed-dispatcher":"M22 26L53 26","dispatcher-diagnostician":"M71 26L96 26","diagnostician-parts":"M114 26L139 26","parts-verifier":"M148 37Q144 57 116 61","verifier-parts":"M116 67Q152 68 153 37","verifier-diagnostician":"M105 53L105 37","verifier-tech":"M114 62L184 62",
+  "dispatcher-bank":"M62 35C64 62 80 82 98 90","diagnostician-bank":"M114 34C134 50 134 72 113 88","parts-bank":"M148 35C153 62 140 84 117 91","verifier-bank":"M105 69L105 84"};
+let DRILL="none",RES=[],modelBefore={},runChaos="none",bkBand=false,bkMem=false;
+const DRILLS=[["none","Everything up","Band, Hindsight and the model all answer.",""],["band","Band down","Switch the coordination layer off for this run.","bad"],["memory","Hindsight down","Switch the memory off for this run.","bad"],["llm","Main model down","Switch the primary model off for this run.","bad"]];
+const DNOTE={none:"",band:"Watch the room tag. The hand-offs carry on in-process.",memory:"Watch the bank. The agents will fall back to the local keyword memory and still solve it.",llm:"Watch the model chip. The chain moves to the next model."};
+function buildDrills(){$("#drills").innerHTML=DRILLS.map(d=>`<button class="drill ${d[3]} ${DRILL===d[0]?"on":""}" data-d="${d[0]}" data-cursor="${d[0]==="none"?"Normal":"Break it"}"><b>${d[1]}</b><small>${d[2]}</small></button>`).join("");
+  $$("#drills .drill").forEach(b=>b.onclick=()=>{DRILL=b.dataset.d;buildDrills();$("#drillnote").textContent=DNOTE[DRILL]})}
+function renderPacket(){const s=SC.find(x=>x.id===selSc);if(!s){$("#packet").innerHTML="";return}
+  $("#packet").innerHTML=`<div class="code">${esc(s.code)}</div><div><h4>${esc(s.headline)}</h4><div class="meta">${esc(s.machine.id)} · ${esc(s.machine.model)} · installed ${s.machine.installed} · ${esc(s.machine.location)}<br>${esc(s.site.name)}${s.holdout?" · held-out machine":""}</div></div>
+    <div class="rd">${Object.entries(s.readings||{}).map(([k,v])=>`<span>${esc(k.replace(/_/g," "))} ${esc(v)}</span>`).join("")||"<span>no readings</span>"}</div>`}
+function buildMesh(){const nodes=Object.keys(MX).map(k=>`<div class="mn ${k}" data-n="${k}" style="left:${MX[k][0]/2.1}%;top:${MX[k][1]}%"><div class="disc" style="--c:${MCOL[k]}">${ICONS[k]}</div><b>${MLAB[k]}</b><small class="cap"></small></div>`).join("");
+  $("#stage").innerHTML=`<svg viewBox="0 0 210 100" preserveAspectRatio="none"><rect class="roomrect" id="roomrect" x="38" y="7" width="136" height="73" rx="7"/>${Object.entries(MEDGES).map(([k,d])=>`<path id="me-${k}" class="eg ${k.endsWith("bank")?"bank":""}" d="${d}"/>`).join("")}<g id="pulses"></g></svg>
+    <div class="roomlab">Band room <em id="roomtag">in-process</em></div>${nodes}`;
+  $("#stage").classList.add("hint");setChips()}
+function setNode(n,st,cap){const el=$(`.mn[data-n="${n}"]`);if(!el)return;if(st){el.classList.remove("work","done","ok","veto");el.classList.add(st)}if(cap!=null)$(".cap",el).textContent=cap}
+const first=t=>String(t||"").split(/(?<=[.!?])\s/)[0].slice(0,92);
+function pulse(k,color){const p=$("#me-"+k);if(!p||RM)return;p.classList.add("used");const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("r","2.4");c.setAttribute("class","dot");c.style.fill=color||"var(--hot)";$("#pulses").appendChild(c);
+  const L=p.getTotalLength(),t0=performance.now(),dur=k.endsWith("bank")?650:850;(function f(n){const t=Math.min(1,(n-t0)/dur),pt=p.getPointAtLength(L*t);c.setAttribute("cx",pt.x);c.setAttribute("cy",pt.y);if(t<1)requestAnimationFrame(f);else c.remove()})(t0)}
+function setChips(){if(!STATUS)return;const tr=$("#mx-transport"),mm=$("#mx-memory");if(!tr)return;
+  const band=STATUS.band.startsWith("configured");
+  tr.className="chip "+(bkBand?"fb":band?"ok":"");tr.innerHTML=`<i></i>Coordination: ${bkBand?"in-process (backup)":band?"Band room":"in-process (Band keys not set)"}`;
+  const deg=STATUS.memory_degraded||bkMem;mm.className="chip "+(deg?"fb":"ok");mm.innerHTML=`<i></i>Memory: ${deg?"local memory (backup)":"Hindsight bank"}`;
+  const rt=$("#roomtag");if(rt){rt.textContent=bkBand?"backup: in-process":band?"live":"in-process";rt.classList.toggle("fb",bkBand);$("#roomrect")?.classList.toggle("down",bkBand)}}
+function meshReset(){bkBand=false;bkMem=false;RES=[];buildMesh();renderRes();$("#mx-model").className="chip";$("#mx-model").innerHTML="<i></i>Model: working…"}
+function meshEvent(e){
+  if(e.path!=="with")return;const st=$("#stage");if(!st)return;
+  if(e.kind==="alarm"){st.classList.remove("hint");setNode("feed","ok",first(e.text).slice(0,60));setNode("dispatcher","work","deciding…");pulse("feed-dispatcher","#e5533d")}
+  else if(e.kind==="handoff"){const to=e.data.to,k=`${e.agent}-${to}`;pulse(k,e.agent==="verifier"?"#e5533d":"#2b2622");if(e.agent==="verifier"&&$("#me-"+k))$("#me-"+k).classList.add("veto");setNode(e.agent,"done");setNode(to,"work","working…")}
+  else if(e.kind==="msg"){setNode(e.agent,"done",first(e.text))}
+  else if(e.kind==="veto"&&e.data&&e.data.target){setNode("verifier","veto",first(e.text).replace(/^VETO \([^)]*\):\s*/,""));setNode(e.data.target,"veto")}
+  else if(e.kind==="revise"){setNode(e.agent,"done","revised: "+first(e.text.replace(/^(Re-planned for the revised diagnosis\.|Revised\.)\s*/,"")))}
+  else if(e.kind==="approve"){setNode("verifier","ok",first(e.text))}
+  else if(e.kind==="plan"){["dispatcher","diagnostician","parts"].forEach(a=>setNode(a,"done"));setNode("verifier","ok");pulse("verifier-tech","#3d8456");setTimeout(()=>setNode("tech","ok","briefing ready"),700)}
+  else if(e.kind==="system"){RES.push(e);if(e.data&&e.data.fallback==="band"){bkBand=true;setChips()}if(e.data&&e.data.fallback==="memory"){bkMem=true;setChips()}renderRes()}
+  if(e.transport==="in-process"||e.transport==="band")setChips()}
+function meshMem(d){const who=d.who;if(MX[who]){pulse(`${who}-bank`,{recall:"#2f6f9f",reflect:"#d58a10",retain:"#3d8456"}[d.op])}
+  const b=$('.mn[data-n="bank"]');if(b){b.classList.add("lit");setTimeout(()=>b.classList.remove("lit"),500);$(".cap",b).textContent=`recall ${counts.recall||0} · reflect ${counts.reflect||0} · retain ${counts.retain||0}`}}
+function renderRes(){
+  const band=STATUS&&STATUS.band.startsWith("configured"),mdeg=STATUS&&STATUS.memory_degraded||bkMem;
+  const set=(id,on,bad)=>{const el=$("#"+id);if(!el)return;el.classList.toggle("on",!!on);el.classList.toggle("bad",!!bad)};
+  set("l-band",band&&!bkBand,bkBand);set("l-band-bk",bkBand||!band,false);set("l-mem",!mdeg,mdeg);set("l-mem-bk",mdeg,false);
+  const models=(STATUS&&STATUS.llm_models)||[],chaosLlm=runChaos==="llm";
+  $("#l-llm").innerHTML=(models.length?models:["primary model"]).slice(0,3).map((m,i)=>`<span class="link ${i===0&&chaosLlm?"bad":(!chaosLlm&&i===0)||(chaosLlm&&i===1)?"on":""}">${esc(m.split("/").pop())}</span>`).join('<span class="ar">then</span>');
+  const log=RES.filter(x=>x.data&&(x.data.fallback||x.data.chaos)||/unreachable|Drill|local keyword/.test(x.text));
+  $("#reslog").innerHTML=log.length?log.map(x=>`<div><b>${x.data&&x.data.chaos?"drill":"backup"}</b>${esc(x.text)}</div>`).join("")+(RES.length?"":""):"Nothing has failed yet. Choose a drill in step 1 and send an alarm."}
+async function afterRun(){try{const s=await api("/api/status");STATUS=s;const used=s.llm_used||{},d=Object.keys(used).filter(k=>(used[k]||0)>(modelBefore[k]||0));
+    const m=$("#mx-model");m.className="chip "+(runChaos==="llm"?"fb":"ok");m.innerHTML=`<i></i>Model: ${d.length?esc(d.map(x=>x.split("/").pop()).join(", ")):esc(s.llm_model||"offline")}${runChaos==="llm"?" (backup)":""}`;setChips();renderRes()}catch{}
+  $("#teachbtn").disabled=false;$("#rebrief").disabled=false;loadAcc()}
+function famOf(){const s=SC.find(x=>x.id===selSc);return s&&s.machine.model_family}
+function matchFix(list,text){const tk=t=>new Set(String(t).toLowerCase().match(/[a-z0-9]{4,}/g)||[]);const a=tk(text);let best=null,bs=0;list.forEach(f=>{const b=tk(f.fix);let i=0;a.forEach(x=>b.has(x)&&i++);const sc=i/Math.max(1,a.size+b.size-i);if(sc>bs){bs=sc;best=f}});return best}
+async function teach(){
+  const btn=$("#teachbtn");btn.disabled=true;const out=$("#l1out");out.innerHTML='<div class="pipe"><div class="st act"><i></i><span>Retaining the failed visit…</span></div></div>';
+  try{const top=lastPlans&&lastPlans.with&&lastPlans.with.diagnosis.causes[0];const fam=famOf();
+    const before=await api("/api/fix-outcomes?family="+encodeURIComponent(fam)),bf=top&&matchFix(before.fixes,top.fix);
+    const r=await api(`/api/runs/${lastRun}/sample-log?fail=true`,{});(r.ops||[]).forEach(o=>memOp({path:"with",data:o}));
+    const after=await api("/api/fix-outcomes?family="+encodeURIComponent(fam)),af=top&&matchFix(after.fixes,top.fix);
+    const cell=(k,a,b,bad)=>`<div><small>${k}</small><b>${a==null?"":`<s>${a}</s>`}${bad&&b!==a?`<i>${b}</i>`:b}</b></div>`;
+    out.innerHTML=`<p class="foot" style="margin-top:12px">Retained to ${esc(r.memory_backend)}:</p><div class="saved">${esc(r.memory_text.slice(0,420))}${r.memory_text.length>420?"…":""}</div>
+      ${af?`<div class="delta">${cell("attempts on record",bf&&bf.n,af.n,0)}${cell("failed",bf&&bf.failed,af.failed,1)}${cell("verified",bf&&bf.verified,af.verified,0)}</div><div class="foot">${esc(af.fix)}</div>`:""}
+      ${af&&af.belief?`<div class="belief"><span class="kick">Belief updated</span>${esc(af.belief.replace(/^Belief updated:\s*/,""))}</div>`:""}`;
+    loadStatus()}catch(e){out.innerHTML=`<div class="err">${esc(e.message)}</div>`;btn.disabled=false}}
+async function rebrief(){
+  const btn=$("#rebrief");btn.disabled=true;const out=$("#l2out");out.innerHTML='<div class="pipe"><div class="st act"><i></i><span>Briefing again from the updated memory…</span></div></div>';
+  try{const r=await api("/api/runs",{scenario_id:selSc,paths:"with"});let run;do{await new Promise(z=>setTimeout(z,2500));run=await api("/api/runs/"+r.run_id)}while(run.status==="running");
+    const nb=run.plans.with&&run.plans.with.briefing,ob=lastPlans&&lastPlans.with&&lastPlans.with.briefing;if(!nb)throw new Error("The second briefing did not finish.");
+    const newAvoid=(nb.avoid||[]).filter(x=>!(ob&&ob.avoid||[]).some(o=>o.slice(0,40)===x.slice(0,40)));
+    const changed=!ob||ob.headline!==nb.headline||newAvoid.length||ob.confidence!==nb.confidence;
+    out.innerHTML=`<div class="cmp2"><div><h5>First briefing</h5>${ob?briefCard(ob):""}</div><div><h5>After learning</h5>${briefCard(nb)}</div></div>
+      <div class="diffbox"><b>${changed?"What changed":"Same advice"}</b>${changed?[ob&&ob.headline!==nb.headline?`Headline: ${esc(nb.headline)}`:"",ob&&ob.confidence!==nb.confidence?`Confidence: ${esc(ob.confidence)} → ${esc(nb.confidence)}`:"",newAvoid.length?`Now warns against: ${esc(newAvoid.join(" · "))}`:""].filter(Boolean).join("<br>"):"The failed visit did not change the top recommendation for this alarm; the evidence counts above did change."}</div>`;
+  }catch(e){out.innerHTML=`<div class="err">${esc(e.message)}</div>`;btn.disabled=false}}
+let accDone="";
+async function loadAcc(){let r;try{r=await api("/api/eval/results")}catch{return}const box=$("#accpanel");if(!box)return;
+  const st=await api("/api/eval/status").catch(()=>({state:"idle"}));
+  if(!r.available||r.partial){box.innerHTML=`<p class="sub">${st.state==="running"?"The replay is running right now ("+st.done+"/"+(st.total||"?")+"). This page fills in when it finishes.":"No evaluation has been run yet."} Full method: docs/EVALUATION.md.</p><button class="btn pri mag" data-go="dash" data-cursor="Open">Open the dashboard</button>`;return}
+  const sig=r.generated+(r.test.n_incidents||0);if(accDone===sig)return;accDone=sig;
+  const A=r.test.arms,order=["none","basic","basic_verified","hindsight","hindsight_verified"],NAME={none:"No memory",basic:"Basic search",basic_verified:"Basic search + Verifier",hindsight:"Hindsight",hindsight_verified:"Hindsight + Verifier"},COL={none:"#d9cfb4",basic:"#bcd9e6",basic_verified:"#9bb98f",hindsight:"#f7c948",hindsight_verified:"#e5533d"};
+  const arms=order.filter(k=>A[k]);
+  const bars=arms.map(k=>{const f=A[k].ftf;return `<div class="bar"><div class="t">${NAME[k]}<span>${f.k}/${f.n} predicted first-time fix${f.ci?` · 95% ${pc(f.ci[0])}–${pc(f.ci[1])}`:""}</span></div><div class="tr"><div class="fill" data-w="${(f.rate||0)*100}" style="--c:${COL[k]}"></div>${f.ci?`<div class="ci" style="left:${f.ci[0]*100}%;width:${(f.ci[1]-f.ci[0])*100}%"></div>`:""}<div class="v">${pc(f.rate)}</div></div></div>`}).join("");
+  // learning curve: cumulative score as the replay moves through time (memory grows with every incident)
+  const rows=(r.incidents||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date))),W=640,H=250,pl=44,pb=34,pt=16,pr=14;
+  const series=arms.map(k=>{let ok=0,n=0;return {k,pts:rows.map((row,i)=>{const s=row.arms&&row.arms[k];if(s){n++;ok+=s.ftf?1:0}return n?[i,ok/n]:null}).filter(Boolean)}});
+  const X=i=>pl+(rows.length>1?i/(rows.length-1):0)*(W-pl-pr),Y=v=>pt+(1-v)*(H-pt-pb);
+  const paths=series.map(s=>{const d=s.pts.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join(" ");return `<path class="ln" d="${d}" stroke="${COL[s.k]==="#d9cfb4"?"#8f8a78":COL[s.k]}" style="--len:2200" ${s.k==="none"?'stroke-dasharray="2200"':""}/>`}).join("");
+  const grid=[0,.25,.5,.75,1].map(v=>`<line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="#dccfb0" stroke-dasharray="4 6"/><text x="${pl-8}" y="${Y(v)+4}" text-anchor="end">${Math.round(v*100)}%</text>`).join("");
+  const ver=A.basic&&A.basic_verified?`With vs without the Verifier on basic search: ${pc(A.basic.ftf.rate)} vs ${pc(A.basic_verified.ftf.rate)}. ${A.basic_verified.ftf.rate<A.basic.ftf.rate?"Here the Verifier made the score lower: when it vetoed the only candidate, the plan fell back to “escalate”, which is scored as no answer. It is reported, not hidden.":""}`:"";
+  box.innerHTML=`<div class="accgrid"><div><div class="kick" style="margin-bottom:14px">Predicted first-time fix · held-out machines · ${r.test.n_incidents} incidents · <span class="lbl sim">Simulated</span></div><div class="bars">${bars}</div>
+      ${r.skipped&&Object.keys(r.skipped).length?`<div class="err" style="margin-top:16px">Not run: ${Object.entries(r.skipped).map(([k,w])=>esc((NAME[k]||k)+": "+w)).join("; ")}. The bars above are not a Hindsight result.</div>`:""}</div>
+    <div><div class="kick" style="margin-bottom:8px">Learning curve · accuracy so far, as memory grows</div><svg class="curve" id="curve" viewBox="0 0 ${W} ${H}">${grid}<text x="${pl}" y="${H-8}">earliest incident</text><text x="${W-pr}" y="${H-8}" text-anchor="end">latest</text>${paths}</svg>
+      <div class="keyrow">${arms.map(k=>`<span><i style="background:${COL[k]==="#d9cfb4"?"#8f8a78":COL[k]}"></i>${NAME[k]}</span>`).join("")}</div></div></div>
+    <div class="accnote">${esc(ver)}<br>Each incident is planned using only records dated before it; the harness raises if a later record is present. The Verifier threshold was tuned on training machines only. ${r.test.n_incidents} incidents is a small sample, so read the direction, not the digits. Full method and every failure: docs/EVALUATION.md.</div>`;
+  requestAnimationFrame(()=>setTimeout(()=>{$$("#accpanel .fill").forEach(f=>f.style.width=f.dataset.w+"%");$("#curve")?.classList.add("go")},80))}
+$("#teachbtn").onclick=teach;$("#rebrief").onclick=rebrief;
+$("#resetbtn").onclick=async()=>{try{await api("/api/reset-demo",{});$("#l1out").innerHTML='<p class="foot" style="margin-top:10px">Demo memory reset to the original history.</p>';$("#l2out").innerHTML="";loadStatus()}catch(e){$("#l1out").innerHTML=`<div class="err">${esc(e.message)}</div>`}};
+
 (async()=>{
   words($("#h-room"),HEADS.room);movePill();addEventListener("resize",movePill);document.fonts?.ready.then(movePill);
   setTimeout(()=>{$("#curtain").classList.add("go");setTimeout(()=>$("#curtain").remove(),1000)},RM?0:1100);
-  try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=SC[0].id;renderScenarios();fillTicker();$("#runinfo").textContent=`${SC[0].machine.model} · ${SC[0].machine.location} · ${SC[0].site.name}`;["without","with"].forEach(agentStrip)}
+  try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=SC[0].id;renderScenarios();renderPacket();buildDrills();buildMesh();renderRes();fillTicker();$("#runinfo").textContent=`${SC[0].machine.model} · ${SC[0].machine.location} · ${SC[0].site.name}`;["without","with"].forEach(agentStrip)}
   catch(e){$("#scs").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
-  const h=location.hash.slice(1);if(["room","phone","dash"].includes(h))go(h);else loadHome()})();
+  const h=location.hash.slice(1);if(["room","phone","dash"].includes(h))go(h);else loadHome();if(h==="room")loadAcc()})();
 </script>
 </body>
 </html>

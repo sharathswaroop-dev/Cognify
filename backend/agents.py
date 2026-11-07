@@ -146,6 +146,34 @@ If there is no memory, say the cause is unknown and give generic checks.
 Return ONLY JSON: {"causes":[{"cause":string,"fix":string (the repair, as a short past-tense action),"evidence_jobs":[string],"why":string (<=25 words)}]}"""
 
 
+def rule_causes(case: Case, exclude: set | None = None, prefer: str | None = None) -> list[dict]:
+    """The no-model backup for the Diagnostician: rank this family's repairs for this kind of fault by their verified record in the raw visits.
+    It is plain frequency over the family, so it can propose a fix that has stopped working on newer units: the Verifier still checks it."""
+    m, exclude = case.machine, set(exclude or ())
+    fc = m.get("fault_class")
+    rel = [v for v in case.visits if v.get("fault_class") == fc and case.store.machine(v["machine_id"])["model_family"] == case.family] if fc else []
+    if not rel:
+        return []
+    att = ev.attempts(rel, case.store.machine, case.as_of).get(case.family, {})
+    by_job = {v["job_id"]: v for v in rel}
+    ranked = []
+    for fk, a in att.items():
+        if fk in exclude or not any(x["result"] in ("verified", "provisional") for x in a):
+            continue
+        st = ev.fix_stats(a)
+        ranked.append((fk == prefer, st["verified"], st["rate"] or 0, st["n"], fk, a))
+    ranked.sort(key=lambda r: r[:4], reverse=True)
+    out = []
+    for _, _, _, _, fk, a in ranked[:3]:
+        win = [x for x in a if x["result"] != "failed"]
+        last = win[-1]
+        v = by_job.get(last["job_id"], {})
+        out.append({"cause": (v.get("root_cause") or v.get("suspected_cause") or "Most common cause on record")[:200], "fix": last["label"][:200],
+                    "why": "Backup mode (no model reachable): ranked by verified record in this model family.",
+                    "evidence_jobs": [x["job_id"] for x in win[-4:]]})
+    return out
+
+
 class Diagnostician:
     name = "diagnostician"
 
@@ -183,6 +211,9 @@ class Diagnostician:
             if isinstance(c, dict) and c.get("fix"):
                 causes.append({"cause": str(c.get("cause", ""))[:200], "fix": str(c["fix"])[:200], "why": str(c.get("why", ""))[:200],
                                "evidence_jobs": [j for j in (c.get("evidence_jobs") or []) if isinstance(j, str)][:6]})
+        if not causes and case.use_memory:
+            fb = rule_causes(case, {ev.fix_key(prior["causes"][0]["fix"])} if (feedback and prior) else None, ev.fix_key(hint) if hint else None)
+            causes = fb
         if not causes:
             causes = [{"cause": "Unknown: no usable history", "fix": "Run the standard checks and log everything you try", "why": "", "evidence_jobs": []}]
         out = {"causes": causes, "reflection": reflection, "site_notes": site_notes, "_recalled": recalled}
@@ -209,6 +240,20 @@ If there is no memory, list generic tools only.
 Return ONLY JSON: {"carry":[{"part":string,"qty":number,"reason":string (<=15 words),"evidence_jobs":[string]}]} (max 5)"""
 
 
+def rule_parts(case: Case, top: dict) -> list[dict]:
+    """The no-model backup for the Parts agent: the parts most often used by visits that applied this repair, in this family."""
+    from collections import Counter
+    fk, cnt, jobs = ev.fix_key(top["fix"]), Counter(), {}
+    for v in case.visits:
+        if case.store.machine(v["machine_id"])["model_family"] != case.family:
+            continue
+        if any(ev.fix_key(a["action"]) == fk for a in v.get("actions", [])):
+            for pt in v.get("parts_used") or []:
+                cnt[pt] += 1
+                jobs.setdefault(pt, []).append(v["job_id"])
+    return [{"part": pt, "qty": 1, "reason": f"used in {n} visit(s) of this repair (backup mode)", "evidence_jobs": jobs[pt][-3:]} for pt, n in cnt.most_common(3)]
+
+
 class PartsAgent:
     name = "parts"
 
@@ -225,6 +270,8 @@ class PartsAgent:
                 + "\n\nSTOCK LIST:\n" + "\n".join(f"- {s['part']} (van {s['van']}, warehouse {s['warehouse']})" for s in case.store.stock)
                 + (f"\n\nVERIFIER FEEDBACK (address every point):\n{feedback}" if feedback else ""))
         d = case.llm.json_chat(PARTS_PROMPT, user, required=("carry",)) if case.llm else None
+        if d is None and case.use_memory:     # no model reachable: carry the parts that past fixes of this kind used
+            d = {"carry": rule_parts(case, top)}
         carry, flags = [], []
         for c in ((d or {}).get("carry") or [])[:5]:
             if not isinstance(c, dict) or not c.get("part"):

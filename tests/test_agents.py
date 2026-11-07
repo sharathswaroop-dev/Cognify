@@ -281,3 +281,13 @@ def test_drill_primary_model_down_fails_over_to_the_next(room):
 def test_with_only_run_skips_the_baseline(room):
     run = wait(room.start("LIVE-4", paths=("with",)))
     assert set(run.plans) == {"with"} and not any(e["path"] == "without" for e in run.events)
+
+
+def test_with_every_model_down_the_agents_still_solve_it_from_the_records(store, shared):
+    from conftest import FakeLLM
+    dead = ControlRoom(store, shared, FakeLLM({}), band_clients={})        # every call returns nothing, like a spent rate limit
+    run = wait(dead.start("LIVE-4", paths=("with",)))
+    w = run.plans["with"]
+    assert run.status == "done" and "inverter" in w["diagnosis"]["causes"][0]["fix"].lower()      # the rule-based backup + the Verifier's veto still get there
+    assert w["diagnosis"]["causes"][0]["why"].startswith("Backup mode") and w["parts"]["carry"]
+    assert run.plans["with"]["consequence"]["outcome"] == "fixed first time"
