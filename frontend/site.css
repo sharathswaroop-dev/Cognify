@@ -11,8 +11,7 @@ main,header,footer{position:relative;z-index:1}
 .nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(6,9,20,.7);border-bottom:1px solid rgba(31,42,82,.7)}
 .nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:700 18px "Sora",sans-serif;letter-spacing:-.02em}
-.brand i{width:28px;height:28px;border-radius:9px;background:conic-gradient(from 210deg,var(--pu),var(--cy),var(--pu));display:grid;place-items:center;box-shadow:0 0 24px rgba(139,92,246,.55)}
-.brand i:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--bg)}
+.brand img{border-radius:9px;box-shadow:0 0 24px rgba(139,92,246,.55)}
 .nav nav{display:flex;gap:4px;margin-left:12px}.nav nav a{color:var(--mu);text-decoration:none;font-size:14.5px;font-weight:500;padding:8px 14px;border-radius:99px;transition:.2s}
 .nav nav a:hover,.nav nav a.on{color:#fff;background:rgba(139,92,246,.16)}
 .nav .sp{flex:1}
