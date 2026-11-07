@@ -7,6 +7,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import sys
 import time
 import threading
@@ -314,6 +315,13 @@ def _ask(mem, q: str, deep: bool = False) -> dict:
     if not hits and not answer:
         return {"answer": "Nothing in the company memory covers that yet. If you know the answer, tell me and I will keep it for the next person.", "sources": [], "found": False,
                 "basis": provenance.basis([]), "backend": mem.name}
+    if not answer and hits and llm.available:
+        ctx_txt = "\n".join(f"[{i + 1}] {m.text[:420]}" for i, m in enumerate(hits[:6]))
+        answer = llm.text_chat(GROUND_SYS, f"Question: {q}\n\nRecords:\n{ctx_txt}", max_tokens=420)
+        if answer and answer.strip().upper().startswith("NO_MATCH"):      # the records are not about this question: treat as nothing found
+            answer, hits, sources = None, [], []
+            return {"answer": "Nothing in the company memory covers that yet. If you know the answer, tell me and I will keep it for the next person.", "sources": [], "found": False,
+                    "basis": provenance.basis([]), "backend": mem.name}
     if not answer:
         answer = "Here is what the records say: " + " ".join("(" + str(i + 1) + ") " + m.text[:200] for i, m in enumerate(hits[:3]))
     fixes = [s for s in sources if s["tier"] == "correction"]
@@ -384,9 +392,48 @@ def chat(req: ChatReq, ctx: dict = Depends(current)):
         about = f" about {mid}" if mid else ""
         return {"kind": "saved", "answer": f"Saved to the company memory under {author}{about}. The next person who asks will find it.", "memory_text": saved["memory_text"],
                 "machine_id": mid, "backend": saved["memory_backend"]}
+    if _GREET.match(msg) and len(msg.split()) <= 5:
+        g = llm.text_chat("You are SiteMemory, an assistant that remembers what a field-service organization has learned. Reply in one or two friendly plain sentences and invite a question about past incidents.", msg, 120)
+        return {"kind": "answer", "answer": g or "Hello. Ask me what your company already knows, or tell me something to remember.", "sources": [], "found": False, "basis": provenance.basis([]), "backend": ctx["memory"].name, "greeting": True}
     q = msg if len(msg.split()) >= 6 or not req.context else f"{req.context} {msg}"
     out = _ask(ctx["memory"], q[:400] if len(q) >= 3 else msg + "  ", req.deep)
+    if not out["found"]:
+        # Nothing in the memory. Say so, then give a clearly labelled general answer from the model rather than a dead end.
+        g = llm.text_chat(GENERAL_SYS, msg)
+        if g:
+            out = {**out, "answer": "I found nothing about this in your company memory, so this is general guidance, not your organization's experience.\n\n" + g, "general": True}
     return {"kind": "answer", **out}
+
+
+_GREET = re.compile(r"^\s*(hi|hii+|hello|hey|yo|thanks|thank you|good (morning|afternoon|evening)|who are you|what can you do)\b", re.I)
+GROUND_SYS = ("You answer a field-service question using ONLY the numbered company records given. Cite records as [1], [2]. "
+              "Say what was tried and failed, and what worked, if the records say so. Reply with exactly NO_MATCH only if NONE of the records relates to the equipment or symptom asked about (or the message is just a greeting); if some relate, answer from them and say what is not known. "
+              "Plain text only: no markdown, no tables. Under 140 words. Never add facts that are not in the records.")
+GENERAL_SYS = ("You are a helpful assistant for a field-service company. Answer concisely and practically in plain text: no markdown, no tables, under 150 words. "
+               "You have NO access to this company's records, so never claim to remember a past incident, and never invent machine ids, dates or people.")
+
+
+class CompareReq(BaseModel):
+    question: str = Field(min_length=3, max_length=400)
+
+
+@app.post("/api/compare")
+def compare(req: CompareReq, ctx: dict = Depends(current)):
+    """The same question twice, from two real execution paths. OFF: the language model alone. ON: Hindsight recall + reflect over this company's memory,
+    with the records it used. Nothing here is scripted; if a path fails the response says so instead of filling it in."""
+    q = req.question.strip()
+    t0 = time.time()
+    off_txt = llm.text_chat(GENERAL_SYS, q)
+    off = {"answer": off_txt, "label": "Normal AI response (no company memory)", "ms": int((time.time() - t0) * 1000),
+           "error": None if off_txt else "No language model answered (key missing or rate limited)."}
+    t1 = time.time()
+    try:
+        on = {**_ask(ctx["memory"], q), "label": "Answer with company memory", "error": None}
+    except HTTPException as exc:
+        on = {"answer": None, "sources": [], "found": False, "label": "Answer with company memory", "error": str(exc.detail)}
+    on["ms"] = int((time.time() - t1) * 1000)
+    on["operations"] = [{"op": "recall", "detail": f"{len(on.get('sources') or [])} records"}, {"op": "reflect", "detail": "answer written from those records" if on.get("found") else "nothing to reflect on"}]
+    return {"question": q, "off": off, "on": on, "backend": ctx["memory"].name}
 
 
 class Join(BaseModel):
@@ -694,8 +741,23 @@ app.mount("/demo", StaticFiles(directory=str(_DEMO)), name="demo")        # the 
 
 
 @app.get("/")
-def index():
+def landing():
+    return FileResponse(FRONTEND / "landing.html")
+
+
+@app.get("/chat")
+def chat_page():
     return FileResponse(FRONTEND / "index.html")
+
+
+@app.get("/architecture")
+def architecture_page():
+    return FileResponse(FRONTEND / "architecture.html")
+
+
+@app.get("/how-it-works")
+def how_page():
+    return FileResponse(FRONTEND / "how.html")
 
 
 app.mount("/static", StaticFiles(directory=FRONTEND), name="static")

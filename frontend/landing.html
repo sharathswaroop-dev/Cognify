@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SiteMemory — Your organization's experience, never lost</title>
+<meta name="description" content="Ask SiteMemory. It remembers what your organization has learned.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/site.css">
+<style>
+.hero{padding:96px 0 40px;text-align:center}
+.hero h1{font-size:clamp(40px,7vw,86px);font-weight:800;max-width:1000px;margin:22px auto 24px}
+.hero .lede{margin:0 auto 34px}
+.cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.pill{display:inline-flex;gap:10px;align-items:center;border:1px solid var(--line);background:rgba(14,21,48,.7);border-radius:99px;padding:7px 16px 7px 10px;font-size:13.5px;color:var(--mu)}
+.pill b{background:linear-gradient(135deg,var(--pu),var(--cy));color:#fff;border-radius:99px;padding:2px 9px;font-size:11.5px}
+.glow{position:absolute;left:50%;top:-80px;width:900px;height:520px;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(139,92,246,.35),transparent 70%);filter:blur(30px);z-index:-1;animation:drift 12s ease-in-out infinite alternate}
+.glow.c{background:radial-gradient(closest-side,rgba(34,211,238,.22),transparent 70%);left:70%;top:60px;width:600px;animation-delay:-5s}
+@keyframes drift{to{transform:translateX(-42%) translateY(30px) scale(1.1)}}
+/* product preview */
+.preview{max-width:1000px;margin:70px auto 0;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#0d1430,#080d20);box-shadow:0 60px 140px -40px rgba(139,92,246,.55),0 0 0 1px rgba(255,255,255,.03) inset;overflow:hidden;text-align:left;transform:perspective(1600px) rotateX(5deg);transition:transform .8s var(--ease)}
+.preview:hover{transform:perspective(1600px) rotateX(0)}
+.pbar{display:flex;align-items:center;gap:7px;padding:13px 18px;border-bottom:1px solid var(--line);color:var(--mu);font-size:12.5px}.pbar i{width:10px;height:10px;border-radius:50%;background:#26305c}.pbar span{margin-left:auto}
+.pbody{display:grid;grid-template-columns:200px 1fr;min-height:420px}
+.pside{border-right:1px solid var(--line);padding:16px 12px;font-size:13.5px;color:var(--mu);display:flex;flex-direction:column;gap:3px}
+.pside div{padding:8px 10px;border-radius:9px}.pside .a{background:rgba(139,92,246,.16);color:#fff}.pside small{padding:14px 10px 4px;font-size:11.5px;text-transform:uppercase;letter-spacing:.1em}
+.pmain{padding:26px 28px;display:flex;flex-direction:column;gap:16px}
+.bub{max-width:80%;padding:12px 16px;border-radius:16px;font-size:14.5px}.bub.u{align-self:flex-end;background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff;border-bottom-right-radius:5px}
+.bub.a{background:var(--card2);border:1px solid var(--line);border-bottom-left-radius:5px;max-width:92%}
+.inc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.inc div{border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:12.5px;background:rgba(6,9,20,.5)}.inc b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.inc .f b{color:var(--er)}.inc .s b{color:var(--ok)}
+.cur:after{content:"▍";color:var(--cy);animation:bl 1s steps(2) infinite}@keyframes bl{50%{opacity:0}}
+.src{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.src span{font:500 11.5px "JetBrains Mono";color:var(--cy);border:1px solid rgba(34,211,238,.3);border-radius:8px;padding:3px 8px;background:rgba(34,211,238,.06)}
+/* problem */
+.big{font:700 clamp(54px,8vw,104px)/1 "Sora";letter-spacing:-.05em}
+.stat{display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap;margin-bottom:56px}
+.card .n{font:700 13px "JetBrains Mono";color:var(--pu2);margin-bottom:18px;display:block}
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.step{padding:0 22px 0 0;position:relative}
+.step:before{content:"";position:absolute;left:0;right:0;top:19px;height:1px;background:linear-gradient(90deg,var(--pu),var(--line))}
+.step .dot{width:40px;height:40px;border-radius:50%;background:var(--bg);border:1px solid var(--pu);display:grid;place-items:center;font:700 14px "Sora";color:var(--pu2);position:relative;z-index:1;margin-bottom:22px;box-shadow:0 0 0 6px var(--bg),0 0 30px rgba(139,92,246,.35)}
+.step h3{font-size:19px;margin-bottom:8px}.step p{color:var(--mu);font-size:14.5px}
+/* hindsight */
+.ops{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.op{font:700 30px "Sora";letter-spacing:-.03em;margin:6px 0 10px}.op.r{color:var(--cy)}.op.c{color:var(--pu2)}.op.f{color:var(--ok)}
+.code{font:500 12.5px/1.7 "JetBrains Mono";color:#b7c1e6;background:#070b1b;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:16px;overflow:auto}
+.code b{color:var(--pu2);font-weight:500}.code i{color:var(--cy);font-style:normal}
+/* live compare */
+.cmpbox{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#0d1430,#080d20);padding:28px;box-shadow:0 40px 100px -50px rgba(139,92,246,.6)}
+.qrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.qrow input{flex:1;min-width:240px;background:#070b1b;border:1px solid var(--line);border-radius:99px;padding:14px 20px;color:var(--tx);font:500 15px "Inter";outline:none}.qrow input:focus{border-color:var(--pu)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}.chips button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--mu);border-radius:99px;padding:7px 14px;font:500 13px "Inter";cursor:pointer;transition:.2s}.chips button:hover{color:#fff;border-color:var(--pu2)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.col{border:1px solid var(--line);border-radius:16px;padding:20px;min-height:200px;background:rgba(6,9,20,.5)}
+.col.on{border-color:rgba(139,92,246,.6);box-shadow:0 0 50px -18px rgba(139,92,246,.7)}
+.col h4{font:600 13px "Inter";letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.col.off h4{color:var(--mu)}.col.on h4{color:var(--pu2)}
+.col .body{font-size:14.5px;white-space:pre-wrap;color:#cfd6f2}
+.col .meta{margin-top:14px;font:500 12px "JetBrains Mono";color:var(--mu)}
+.rec{border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:8px;font-size:12.5px;color:var(--mu);background:rgba(34,211,238,.04)}.rec b{color:var(--cy);font-family:"JetBrains Mono";font-weight:500}
+.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pu2);margin-right:5px;animation:dt 1s infinite}.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}@keyframes dt{50%{transform:translateY(-5px);opacity:.4}}
+.note{margin-top:14px;font-size:13px;color:var(--mu)}
+/* arch preview */
+.pipe{display:flex;gap:0;align-items:stretch;overflow-x:auto;padding:6px 2px 20px}
+.pn{flex:1;min-width:132px;padding:18px 14px;border:1px solid var(--line);background:var(--card);border-radius:14px;font:600 14px "Sora";text-align:center;position:relative;margin-right:30px}
+.pn small{display:block;color:var(--mu);font:400 12px "Inter";margin-top:5px}
+.pn:not(:last-child):after{content:"";position:absolute;right:-30px;top:50%;width:30px;height:2px;background:linear-gradient(90deg,var(--pu),var(--cy));background-size:200% 100%;animation:fl 1.6s linear infinite}
+@keyframes fl{to{background-position:-200% 0}}
+.pn.m{border-color:var(--pu);box-shadow:0 0 40px -12px var(--pu)}
+.final{text-align:center;padding:130px 0}.final h2{font-size:clamp(34px,5.4vw,66px);max-width:860px;margin:0 auto 28px}
+@media(max-width:900px){.pbody{grid-template-columns:1fr}.pside{display:none}.steps{grid-template-columns:1fr 1fr;gap:34px}.ops,.cols{grid-template-columns:1fr}.preview{transform:none}}
+@media(max-width:600px){.steps{grid-template-columns:1fr}.inc{grid-template-columns:1fr}}
+</style></head>
+<body>
+<div id="spot"></div><div id="grid"></div>
+<div id="navmount"></div>
+<main>
+<section class="hero"><div class="glow"></div><div class="glow c"></div>
+  <div class="wrap">
+    <div class="pill rv"><b>NEW</b>Memory that remembers fixes <em style="font-style:normal;color:#fff">and</em> failures</div>
+    <h1 class="rv" style="--d:1">Your Organization's Experience <span class="grad">Should Never Be Lost.</span></h1>
+    <p class="lede rv" style="--d:2">When a senior engineer retires or a team rotates, what they learned leaves with them. SiteMemory keeps every incident, every failed attempt and every fix that worked, and lets anyone ask for it in plain language.</p>
+    <div class="cta rv" style="--d:3"><a class="btn" href="/chat">Try the demo →</a><a class="btn ghost" href="/architecture">See the architecture</a></div>
+    <div class="preview rv" style="--d:4">
+      <div class="pbar"><i></i><i></i><i></i><span>Interface preview · sample HVAC data</span></div>
+      <div class="pbody">
+        <div class="pside"><div class="a">＋ New conversation</div><small>Today</small><div>Chiller trips on start</div><div>Rooftop unit short-cycling</div><small>Earlier</small><div>Compressor lockout</div><div>Sensor drift on AHU-3</div></div>
+        <div class="pmain">
+          <div class="bub u">The rooftop chiller keeps tripping on high head pressure. Has this happened before?</div>
+          <div class="bub a"><span id="typed" class="cur"></span>
+            <div class="inc" id="incs" style="opacity:0;transition:opacity .8s"><div class="f"><b>Tried, did not hold</b>Refrigerant top-up, twice. Tripped again within days.</div><div class="s"><b>Fixed it</b>Cleaned the condenser coil and replaced the fan capacitor. Stable since.</div></div>
+            <div class="src" id="srcs" style="opacity:0;transition:opacity .8s .3s"><span>REC-0412</span><span>REC-0388</span><span>REC-0295</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">The problem</span><h2>Documents store information. <span class="grad">They don't keep experience.</span></h2><p class="lede">Manuals say how things should work. They rarely say what actually failed, what was tried first, and why the second attempt was the one that held.</p></div>
+  <div class="grid3">
+    <div class="card rv"><span class="n">01</span><h3>People leave, knowledge leaves</h3><p>The engineer who knew why that unit trips every summer retires. The next person starts from zero and repeats a costly diagnosis.</p></div>
+    <div class="card rv" style="--d:1"><span class="n">02</span><h3>Storage is not recall</h3><p>A shared drive holds thousands of files. Finding the one incident that matches today's symptom takes the very experience you've lost.</p></div>
+    <div class="card rv" style="--d:2"><span class="n">03</span><h3>Failures vanish first</h3><p>Reports record what worked. The approaches that failed, which save the most time, are almost never written down.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">How it works</span><h2>From one incident to <span class="grad">everyone's knowledge.</span></h2></div>
+  <div class="steps">
+    <div class="step rv"><div class="dot">1</div><h3>Capture</h3><p>Technicians and engineers log incidents: cause, what was tried, what failed, what finally worked.</p></div>
+    <div class="step rv" style="--d:1"><div class="dot">2</div><h3>Retain</h3><p>Each experience is stored in long-term memory with its equipment, date and author, so its source is never lost.</p></div>
+    <div class="step rv" style="--d:2"><div class="dot">3</div><h3>Recall</h3><p>Ask a question in plain language. Related incidents come back, including the ones that failed.</p></div>
+    <div class="step rv" style="--d:3"><div class="dot">4</div><h3>Verify &amp; learn</h3><p>Answers are checked against the records, and feedback corrects the memory for the next person.</p></div>
+  </div>
+  <p style="margin-top:34px"><a class="btn ghost sm" href="/how-it-works">See every actor coordinate →</a></p>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">The memory layer</span><h2>Powered by <span class="grad">Hindsight.</span></h2><p class="lede">We don't rebuild memory. SiteMemory uses Hindsight's three operations, and each answer shows which records it drew on.</p></div>
+  <div class="ops">
+    <div class="card rv"><span class="tag cy">retain</span><div class="op c">Remember</div><p>Store an experience with its tags and source. It is processed in the background, so recall can lag by moments right after a save.</p><div class="code"><b>retain</b>(<i>"Condenser fan capacitor failed…"</i>, tags=[<i>"HVAC-22"</i>])</div></div>
+    <div class="card rv" style="--d:1"><span class="tag cy">recall</span><div class="op r">Find</div><p>Search the bank for the records that match the question, scoped by tag when a machine or site is known.</p><div class="code"><b>recall</b>(<i>"chiller trips on high head pressure"</i>)<br>→ records + sources</div></div>
+    <div class="card rv" style="--d:2"><span class="tag cy">reflect</span><div class="op f">Reason</div><p>Write an answer from what was recalled, so the reply cites real history rather than guessing.</p><div class="code"><b>reflect</b>(question)<br>→ answer grounded in the records</div></div>
+  </div>
+</div></section>
+
+<section id="live"><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Live demonstration · HVAC</span><h2>Same question. <span class="grad">Memory off, then on.</span></h2><p class="lede">This calls the real service. Left is a normal AI model. Right is the same question answered from this company's sample HVAC records.</p></div>
+  <div class="cmpbox rv">
+    <div class="chips" id="chips"></div>
+    <form class="qrow" id="qf"><input id="q" value="Why does a rooftop chiller keep tripping on high head pressure?" maxlength="300"><button class="btn" type="submit">Compare →</button></form>
+    <div class="cols">
+      <div class="col off"><h4>Memory off · normal AI</h4><div class="body" id="off">Press Compare to run both.</div><div class="meta" id="offm"></div></div>
+      <div class="col on"><h4>Memory on · company memory</h4><div class="body" id="on">Press Compare to run both.</div><div id="recs"></div><div class="meta" id="onm"></div></div>
+    </div>
+    <p class="note">The demo workspace holds sample data only. If a side can't answer (for example a rate limit), it says so instead of inventing text.</p>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Architecture</span><h2>One pipeline, <span class="grad">every step inspectable.</span></h2></div>
+  <div class="pipe rv">
+    <div class="pn">Knowledge<small>incidents, documents</small></div><div class="pn">Ingestion<small>chunk + tag</small></div><div class="pn m">Hindsight<small>retain · recall · reflect</small></div><div class="pn">Agents<small>diagnose, parts</small></div><div class="pn">Groq<small>inference</small></div><div class="pn">Verifier<small>checks the answer</small></div><div class="pn" style="margin-right:0">Answer<small>with sources</small></div>
+  </div>
+  <p style="margin-top:20px"><a class="btn ghost sm" href="/architecture">Explore the full architecture →</a></p>
+</div></section>
+
+<section class="final"><div class="wrap">
+  <h2 class="rv">Ask SiteMemory. <span class="grad">It remembers what your organization has learned.</span></h2>
+  <div class="cta rv" style="--d:1"><a class="btn" href="/chat">Open the demo →</a><a class="btn ghost" href="/how-it-works">How it works</a></div>
+</div></section>
+</main>
+<div id="footmount"></div>
+<script src="/static/site.js"></script>
+<script>
+$("#navmount").outerHTML=nav("");$("#footmount").outerHTML=foot();
+/* hero preview typing */
+const A="Yes. Three earlier incidents on rooftop chillers match: high head pressure, tripping within days of a start. Topping up refrigerant looked right but did not hold. The fix that lasted was a cleaned condenser coil and a new fan capacitor.";
+setTimeout(()=>type($("#typed"),A,{speed:18,done:()=>{$("#typed").classList.remove("cur");$("#incs").style.opacity=1;$("#srcs").style.opacity=1}}),1400);
+/* live compare */
+const QS=["Why does a rooftop chiller keep tripping on high head pressure?","Compressor keeps locking out after a restart. What was tried before?","AHU supply air temperature drifts high in the afternoon"];
+$("#chips").innerHTML=QS.map((q,i)=>`<button type="button" data-i="${i}">${esc(q.length>46?q.slice(0,44)+"…":q)}</button>`).join("");
+$$("#chips button").forEach(b=>b.onclick=()=>{$("#q").value=QS[b.dataset.i];$("#qf").requestSubmit()});
+$("#qf").onsubmit=async e=>{e.preventDefault();const q=$("#q").value.trim();if(q.length<3)return;
+  const dots='<span class="dots"><span></span><span></span><span></span></span>';$("#off").innerHTML=dots;$("#on").innerHTML=dots;$("#recs").innerHTML="";$("#offm").textContent=$("#onm").textContent="";
+  try{const r=await post("/api/compare",{question:q});
+    $("#off").textContent=r.off.answer?plain(r.off.answer):r.off.error;$("#offm").textContent=r.off.answer?`${r.off.ms} ms · general knowledge only`:"";
+    $("#on").textContent=r.on.answer?plain(r.on.answer):r.on.error;
+    $("#recs").innerHTML=(r.on.sources||[]).slice(0,4).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} ${esc((s.text||"").slice(0,150))}…</div>`).join("");
+    $("#onm").textContent=`${r.on.ms} ms · recall ${(r.on.sources||[]).length} records · reflect · ${r.backend}`}
+  catch(err){$("#off").textContent=$("#on").textContent="Could not run the comparison: "+err.message}};
+</script>
+</body></html>

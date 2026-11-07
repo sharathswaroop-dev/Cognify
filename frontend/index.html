@@ -813,6 +813,8 @@ body.chatmode main{padding:0;max-width:none}
 #view-chat .acts svg,#view-chat .attach svg,#view-chat .tobottom svg,#view-chat .plus svg,#view-chat .ibtn svg,#view-chat .send svg,#view-chat .icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #view-chat .acts button.on svg{fill:currentColor}
 body.chatmode header,body.chatmode #bar,body.chatmode #banner{display:none}
+.gen{display:inline-block;margin:0 0 8px;padding:3px 9px;border-radius:99px;background:#122a3a;color:#67e8f9;font:600 12px var(--body);border:1px solid #1d4a63}
+.xnav{display:none;position:fixed;top:10px;right:14px;z-index:30;display:flex;gap:6px}.xnav a{color:#8f9bc0;text-decoration:none;font:500 13px var(--body);padding:6px 11px;border-radius:99px;border:1px solid #1f2745;background:#0b1020cc;backdrop-filter:blur(6px)}.xnav a:hover{color:#fff;border-color:#8b5cf6}
 body.chatmode{overflow:hidden}
 #view-chat .cgpt{background:var(--bg);color:var(--tx);display:grid;grid-template-columns:268px minmax(0,1fr);height:100vh;background:var(--bg);color:var(--tx);transition:grid-template-columns .25s var(--ease)}
 #view-chat .cgpt.collapsed{grid-template-columns:0 minmax(0,1fr)}.cgpt.collapsed .cside{display:none}
@@ -845,7 +847,7 @@ body.chatmode{overflow:hidden}
 #view-chat .cthread{flex:1;overflow-y:auto;padding:8px 0 20px;scroll-behavior:smooth}
 #view-chat .cwrap{max-width:760px;margin:0 auto;padding:0 24px}
 .um{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin:22px 0 22px;animation:rv .35s var(--ease)}
-.ub{background:#c9432f;color:#fff8ea;border-radius:20px 20px 5px 20px;padding:11px 17px;max-width:80%;white-space:pre-wrap;line-height:1.5;font-size:15.5px}
+.ub{background:linear-gradient(135deg,#8b5cf6,#6d4ae0);color:#fff;border-radius:20px 20px 5px 20px;padding:11px 17px;max-width:80%;white-space:pre-wrap;line-height:1.5;font-size:15.5px}
 .attach{display:flex;align-items:center;gap:12px;background:var(--c1);border:1px solid var(--line);border-radius:14px;padding:11px 16px 11px 12px;min-width:240px;max-width:80%}
 .attach .aic{width:38px;height:38px;border-radius:10px;background:var(--c3);display:grid;place-items:center;color:var(--hi)}.attach b{display:block;font:600 14px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px}.attach small{color:var(--mu);font:400 12.5px var(--body)}
 .am{margin:6px 0 22px;animation:rv .35s var(--ease)}
@@ -891,7 +893,7 @@ body.chatmode{overflow:hidden}
 #view-chat .libitem{background:var(--c1);border-color:var(--line)}#view-chat .libitem small{color:var(--mu)}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--tx);color:var(--in);padding:9px 18px;border-radius:999px;font:600 13.5px var(--body);z-index:400}.toast[hidden]{display:none}
 @media (max-width:900px){#view-chat .cgpt{grid-template-columns:0 minmax(0,1fr)}.cside{display:none}.cards2{grid-template-columns:1fr}.ctitle{max-width:30%}}
-#view-chat{--bg:#1f1c19;--side:#171412;--c1:#2b2723;--c2:#24201d;--c3:#3a352f;--c4:#4a443d;--in:#1f1c19;--line:#3a352f;--tx:#f1ecdc;--mu:#a39d8c;--ac:#e5533d;--hi:#f9d6cb;--er:#ffb7a5;--nb:#5a2f26;--nbo:#7a3a2c}
+#view-chat{--bg:#0b1020;--side:#080c18;--c1:#151c33;--c2:#10162a;--c3:#1f2745;--c4:#2c3560;--in:#0f1528;--line:#1f2745;--tx:#e8ecf8;--mu:#8f9bc0;--ac:#8b5cf6;--hi:#c9b8ff;--er:#ffb7a5;--nb:#2a2160;--nbo:#4a3aa8}
 #view-chat.light{--bg:#fbf7ee;--side:#f3ecdd;--c1:#ece4d3;--c2:#f6f0e3;--c3:#e3d9c3;--c4:#cdbf9f;--in:#fffdf7;--line:#ddd3bd;--tx:#2b2622;--mu:#6c6254;--hi:#b83a26;--er:#a8321f;--nb:#fbe4dc;--nbo:#e5a99b}
 #view-chat .send{background:var(--tx)!important;color:var(--bg)!important}#view-chat .send:disabled{background:var(--c4)!important;color:var(--mu)!important}
 #view-chat .tier.verified{background:var(--tx)!important;color:var(--bg)!important}
@@ -928,6 +930,7 @@ body.chatmode{overflow:hidden}
 </style>
 </head>
 <body class="fx">
+<div class="xnav"><a href="/">Home</a><a href="/architecture">Architecture</a><a href="/how-it-works">How it works</a></div>
 <div id="cur"><span class="lab"></span></div><div id="cur-dot"></div>
 <div id="curtain"><div class="w"><span>SITE</span><span>MEMORY</span></div></div>
 
@@ -957,16 +960,15 @@ body.chatmode{overflow:hidden}
 <section class="view" id="view-chat">
   <div class="cgpt" id="cgpt">
     <aside class="cside" id="cside">
-      <div class="ctop"><a class="clogo" data-view="home" title="Home"><svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg><b>SiteMemory</b></a>
+      <div class="ctop"><a class="clogo" href="/" title="Home"><svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#8b5cf6" stroke="#e8ecf8" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#e8ecf8"/></svg><b>SiteMemory</b></a>
         <span class="grow"></span><button class="icon" id="csearchbtn" title="Search chats"><span data-i="search"></span></button><button class="icon" id="ctoggle" title="Hide sidebar"><span data-i="side"></span></button></div>
       <input id="csearch" class="csearch" placeholder="Search chats" hidden autocomplete="off">
       <div class="cnav">
         <button id="newchat"><span data-i="edit"></span>New chat</button>
         <button id="liblink"><span data-i="lib"></span>Library</button>
         <a data-view="company"><span data-i="building"></span>Company knowledge</a>
-        <a data-view="phone"><span data-i="phone"></span>Technician phone</a>
-        <a data-view="dash"><span data-i="chart"></span>Evaluation and ROI</a>
-        <a data-view="show"><span data-i="play"></span>Guided tour</a>
+        <a href="/how-it-works"><span data-i="play"></span>How it works</a>
+        <a href="/architecture"><span data-i="chart"></span>Architecture</a>
       </div>
       <div class="csec">Chats</div>
       <div class="sess" id="sess"></div>
@@ -1213,7 +1215,7 @@ const IC={
  check:'<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>'};
 const ic=n=>IC[n]||"";
 function hydrateIcons(root=document){$$("[data-i]",root).forEach(el=>{if(!el.firstChild)el.innerHTML=ic(el.dataset.i)})}
-const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg>`;
+const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#8b5cf6" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg>`;
 const STARTERS=[["ask","What usually goes wrong with the Daikin VRV IV?"],["ask","What should a new technician know about Brookfield Business Centre?"],["ask","When a compressor trips on a 2024 unit, what actually fixed it?"],["tell","Remember that on M-91 the trips are the inverter board, never the contactor. Check the DC bus first."]];
 let lastQ=null,chatBusy=false,SES=null,SESS={cur:null,items:[]},speaking=null,sessFilter="";
 const sesKey=()=>`sm_sess_${SES.workspace.id}_${SES.email}`;
@@ -1231,6 +1233,7 @@ function userHtml(m){return `<div class="um">${m.file?`<div class="attach"><span
 function aiHtml(m,k){
   let x=`<div class="txt">${esc(m.t)}</div>`;
   if(m.file)x=`<div class="filechip">${esc(m.file.name)} · ${m.file.sections} section${m.file.sections===1?"":"s"} learned</div><div class="txt" style="margin-top:8px">${esc(m.t)}</div>`;
+  if(m.general)x+=`<span class="gen">General guidance · not from your memory</span>`;
   if(m.basis)x+=`<div class="basis ${esc(m.basis.level)}"><b>${m.basis.level==="strong"?"Well supported":m.basis.level==="partial"?"Partly supported":"Not proven"}</b> · based on ${esc(m.basis.summary)}. ${esc(m.basis.note)}</div>`;
   if(m.sources&&m.sources.length)x+=`<details class="csrc"><summary>${m.sources.length} records retrieved</summary>${m.sources.map(s=>`<div><span class="tier ${esc(s.tier||"context")}">${esc(s.label||"Record")}</span><b>${esc(s.ref||"")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`;
   if(m.code)x+=`<div class="codebox">Your company code<b>${esc(m.code)}</b>Give this to your team so they can join.</div>`;
@@ -1286,7 +1289,7 @@ function wireChat(){
       case"fbskip":feedback(k,"down","");break;
       case"fbsave":{const box=$(`[data-fbt="${k}"]`),v=box?box.value.trim():"";if(v.length<15){box.placeholder="Please write a little more (at least a sentence).";box.focus();return}feedback(k,"down",v);break}}});
   $$(".gtabs button").forEach(b=>b.onclick=()=>{$$(".gtabs button").forEach(x=>x.classList.toggle("on",x===b));$("#gjoin").hidden=b.dataset.g!=="join";$("#gmake").hidden=b.dataset.g!=="make";$("#gerr").innerHTML=""});
-  $("#g-demo").onclick=()=>{$("#g-code").value="COOLCARE-DEMO";$("#g-email").focus();$("#gerr").innerHTML='<p class="foot">Demo company code filled in. Enter any email to continue.</p>'};
+  $("#g-demo").onclick=async()=>{const r=await authCall("/api/workspace/guest",{});if(r)startSession({...r,email:r.email||"guest@demo"})};
   $("#gjoin").onsubmit=async e=>{e.preventDefault();const r=await authCall("/api/workspace/join",{code:$("#g-code").value.trim(),email:$("#g-email").value.trim()});if(r)startSession(r)};
   $("#gmake").onsubmit=async e=>{e.preventDefault();const r=await authCall("/api/workspace/create",{name:$("#m-name").value.trim(),email:$("#m-email").value.trim()});if(!r)return;
     startSession(r);const t=curSess();t.msgs.push({r:"ai",t:`Your workspace "${r.workspace.name}" is ready. ${r.note}`,code:r.code});saveSess();drawThread()};
@@ -1319,7 +1322,7 @@ async function chatSend(msg){
     const box=document.getElementById(id),clean=String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"").slice(0,3600);
     box.innerHTML='<div class="txt"></div>';const tx=box.querySelector(".txt"),words=clean.split(/(\s+)/);let i=0;
     await new Promise(res=>{const step=()=>{i+=RM?words.length:3;tx.textContent=words.slice(0,i).join("");scrollChat();if(i<words.length)setTimeout(step,16);else res()};step()});
-    s.msgs.push({r:"ai",kind:r.kind,q:msg,t:clean,sources:r.kind==="answer"?r.sources:null,basis:r.kind==="answer"&&r.found?r.basis:null,refs:r.kind==="answer"?(r.sources||[]).map(x=>x.ref).filter(Boolean):[],saved:r.kind==="saved"?r.memory_text:null});
+    s.msgs.push({r:"ai",kind:r.kind,q:msg,t:clean,general:!!r.general,sources:r.kind==="answer"?r.sources:null,basis:r.kind==="answer"&&r.found?r.basis:null,refs:r.kind==="answer"?(r.sources||[]).map(x=>x.ref).filter(Boolean):[],saved:r.kind==="saved"?r.memory_text:null});
     saveSess();drawThread();if(r.kind==="saved")loadStatus()
   }catch(e){if(/join|session|not valid/i.test(e.message)){showGate(e.message)}else{const b=document.getElementById(id);if(b)b.innerHTML=`<div class="txt" style="color:var(--er)">${esc(e.message)}</div>`}}
   chatBusy=false;$("#csend").disabled=false;scrollChat();$("#cin").focus()}
@@ -1793,7 +1796,7 @@ $("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$(
   try{try{TOUR_TOKEN=(await api("/api/workspace/guest",{})).token}catch{}await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=(SC.find(s=>s.id==="LIVE-4")||SC[0]).id;fillSel();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes()}
   catch(e){$("#packet").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
   loadAcc();
-  const hh=location.hash.slice(1);if(["chat","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="app"||hh==="ask")go("chat");else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}})();
+  if(location.pathname==="/chat"){go("chat");}else{const hh=location.hash.slice(1);if(["chat","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="app"||hh==="ask")go("chat");else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}}})();
 </script>
 </body>
 </html>

@@ -62,6 +62,23 @@ class LLM:
         h, mi, sec = (float(m.group(1) or 0), float(m.group(2) or 0), float(m.group(3) or 0))
         return h * 3600 + mi * 60 + sec
 
+    def text_chat(self, system: str, user: str, max_tokens: int = 700) -> str | None:
+        """Plain Groq answer with no memory behind it. Used for the 'Memory OFF' side and for labelled general guidance. None if no model answers."""
+        if not self.client:
+            return None
+        for model in self.models:
+            try:
+                resp = self.client.chat.completions.create(
+                    model=model, temperature=0.3, max_tokens=max_tokens,
+                    messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
+                txt = (resp.choices[0].message.content or "").strip()
+                if txt:
+                    self.used[model] = self.used.get(model, 0) + 1
+                    return txt
+            except Exception as exc:
+                log.warning("LLM %s text_chat failed: %s", model, str(exc)[:120])
+        return None
+
     def json_chat(self, system: str, user: str, required: tuple[str, ...] = (), attempts: int = 2, passes: int = 3) -> dict | None:
         """Try each model in turn. A per-minute rate limit is waited out (up to ~25s) and the chain retried; a daily limit moves on."""
         if not self.client:

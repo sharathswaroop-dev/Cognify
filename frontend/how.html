@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How it works — SiteMemory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/site.css">
+<style>
+.top{padding:80px 0 20px}.top h1{font-size:clamp(38px,6vw,72px);font-weight:800;margin:16px 0 18px;max-width:900px}
+.stage{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;align-items:stretch}
+.map{position:relative;height:540px;border:1px solid var(--line);border-radius:24px;background:radial-gradient(circle at 50% 50%,rgba(139,92,246,.12),transparent 60%),var(--card);overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.map line{stroke:var(--line);stroke-width:1.5;stroke-dasharray:4 6}
+.map line.hot{stroke:var(--cy);stroke-dasharray:none;filter:drop-shadow(0 0 6px var(--cy))}
+.nb{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:7px;width:112px;text-align:center;z-index:2;transition:.3s var(--ease)}
+.nb .c{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;background:var(--card2);border:1px solid var(--line);font:700 14px "Sora";color:var(--pu2);transition:.3s var(--ease)}
+.nb small{font:600 12px "Inter";color:var(--mu)}
+.nb.user .c{border-radius:50%;color:var(--cy)}
+.nb.act .c{border-color:var(--cy);color:#fff;transform:scale(1.18);box-shadow:0 0 0 5px rgba(34,211,238,.15),0 0 36px rgba(34,211,238,.6)}.nb.act small{color:#fff}
+.nb.mem{width:150px}.nb.mem .c{width:104px;height:104px;border-radius:50%;border-color:var(--pu);color:#fff;background:radial-gradient(circle,#2a1f63,#140f35);box-shadow:0 0 70px -10px var(--pu);font-size:13px;animation:pulse 3.4s ease-in-out infinite}
+.nb.mem.act .c{box-shadow:0 0 90px 0 var(--pu),0 0 0 6px rgba(139,92,246,.25)}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.pk{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--cy);box-shadow:0 0 14px var(--cy);z-index:3;transform:translate(-50%,-50%);opacity:0}
+.zone{position:absolute;top:14px;font:600 11px "Inter";letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.log{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:24px;background:var(--card);overflow:hidden;height:540px}
+.log header{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;justify-content:space-between}
+.log header b{font:600 14px "Sora"}
+.ev{flex:1;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:9px;font-size:13.5px}
+.ev .e{border-left:2px solid var(--line);padding:2px 0 2px 12px;animation:pin .4s var(--ease)}@keyframes pin{from{opacity:0;transform:translateX(8px)}}
+.ev .e b{display:block;font:600 11px "Inter";letter-spacing:.08em;text-transform:uppercase;color:var(--pu2)}.ev .e p{color:#cfd6f2}
+.ev .e.veto{border-color:var(--er)}.ev .e.veto b{color:var(--er)}.ev .e.approve,.ev .e.plan{border-color:var(--ok)}.ev .e.approve b,.ev .e.plan b{color:var(--ok)}.ev .e.memory{border-color:var(--cy)}.ev .e.memory b{color:var(--cy)}
+.empty{color:var(--mu);padding:40px 10px;text-align:center}
+.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+select{background:#070b1b;color:var(--tx);border:1px solid var(--line);border-radius:99px;padding:11px 16px;font:500 14px "Inter";outline:none;max-width:380px}
+.drills{display:flex;gap:6px}.drills button{background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--mu);border-radius:99px;padding:8px 14px;font:500 13px "Inter";cursor:pointer}.drills button.on{border-color:var(--er);color:#fff;background:rgba(251,113,133,.12)}
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:40px}
+.roles .card b{display:block;font:600 11.5px "Inter";letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}.roles .card ul{list-style:none;color:var(--mu);font-size:14.5px;display:grid;gap:8px}.roles li:before{content:"→ ";color:var(--cy)}
+/* compare */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px;background:#070b1b}.seg button{border:0;background:none;color:var(--mu);padding:9px 18px;border-radius:99px;font:600 13.5px "Inter";cursor:pointer;transition:.2s}.seg button.on{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}
+.cmpbox{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#0d1430,#080d20);padding:28px}
+.qrow{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.qrow input{flex:1;min-width:240px;background:#070b1b;border:1px solid var(--line);border-radius:99px;padding:14px 20px;color:var(--tx);font:500 15px "Inter";outline:none}.qrow input:focus{border-color:var(--pu)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}.cols.one{grid-template-columns:1fr}.cols .hide{display:none}
+.col{border:1px solid var(--line);border-radius:16px;padding:20px;min-height:200px;background:rgba(6,9,20,.5)}.col.on{border-color:rgba(139,92,246,.6);box-shadow:0 0 50px -18px rgba(139,92,246,.7)}
+.col h4{font:600 13px "Inter";letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}.col.off h4{color:var(--mu)}.col.on h4{color:var(--pu2)}
+.col .body{font-size:14.5px;white-space:pre-wrap;color:#cfd6f2}.col .meta{margin-top:14px;font:500 12px "JetBrains Mono";color:var(--mu)}
+.rec{border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:8px;font-size:12.5px;color:var(--mu);background:rgba(34,211,238,.04)}.rec b{color:var(--cy);font-family:"JetBrains Mono";font-weight:500}
+.ops{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pu2);margin-right:5px;animation:dt 1s infinite}.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}@keyframes dt{50%{transform:translateY(-5px);opacity:.4}}
+/* form */
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form .full{grid-column:1/-1}
+label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
+.form input,.form textarea{width:100%;background:#070b1b;border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--tx);font:400 14.5px "Inter";outline:none;resize:vertical}.form input:focus,.form textarea:focus{border-color:var(--pu)}
+.msg{margin-top:14px;padding:14px 16px;border-radius:12px;font-size:14px;display:none}.msg.ok{display:block;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.35);color:#a7f3d0}.msg.er{display:block;background:rgba(251,113,133,.08);border:1px solid rgba(251,113,133,.35);color:#fecdd3}
+@media(max-width:900px){.stage,.cols,.roles,.form{grid-template-columns:1fr}.map{height:600px}.log{height:380px}}
+</style></head><body>
+<div id="spot"></div><div id="grid"></div><div id="navmount"></div>
+<main>
+<section class="top"><div class="wrap">
+  <span class="eyebrow">How it works</span>
+  <h1 class="rv">People and agents, <span class="grad">one shared memory.</span></h1>
+  <p class="lede rv" style="--d:1">Nobody passes notes to anybody. Technicians, managers and every agent write to and read from the same company memory, so what one learns, all can use. Run a real job below and watch it happen.</p>
+</div></section>
+
+<section style="padding-top:30px"><div class="wrap">
+  <div class="ctl rv"><select id="sc"></select><button class="btn" id="go">▶ Run a real job</button>
+    <div class="drills" id="drills"></div></div>
+  <div class="stage rv">
+    <div class="map" id="map"><span class="zone" style="left:5%">People</span><span class="zone" style="right:5%">Agents</span><svg id="svg"></svg></div>
+    <div class="log"><header><b>Live handoffs</b><span class="tag cy" id="stat">idle</span></header><div class="ev" id="ev"><div class="empty">Pick a job and press Run. Each line below is a real event from the running agents, not an animation.</div></div></div>
+  </div>
+  <div class="roles">
+    <div class="card rv"><b style="color:var(--cy)">Technicians</b><ul><li>Log what happened, by typing or voice</li><li>Get a briefing before they drive out</li><li>Report the real outcome afterwards</li></ul></div>
+    <div class="card rv" style="--d:1"><b style="color:var(--pu2)">Managers &amp; new hires</b><ul><li>Ask the memory in plain language</li><li>See sources and how well supported an answer is</li><li>Correct a wrong answer for everyone</li></ul></div>
+    <div class="card rv" style="--d:2"><b style="color:var(--ok)">Agents</b><ul><li>Dispatcher routes the alarm</li><li>Diagnostician recalls and reasons</li><li>Verifier checks raw records, can veto</li></ul></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Memory off vs on</span><h2>The same question, <span class="grad">two real paths.</span></h2><p class="lede">Off is a plain language model. On adds recall and reflect over this company's memory, with the records it used. Both are live calls.</p></div>
+  <div class="cmpbox rv">
+    <div class="seg" id="seg"><button data-m="both" class="on">Side by side</button><button data-m="off">Memory off</button><button data-m="on">Memory on</button></div>
+    <form class="qrow" id="qf"><input id="q" value="Why does a rooftop chiller keep tripping on high head pressure?" maxlength="300"><button class="btn" type="submit">Run both →</button></form>
+    <div class="cols" id="cols">
+      <div class="col off" id="coff"><h4>Memory off · normal AI response</h4><div class="body" id="off">Not run yet.</div><div class="meta" id="offm"></div></div>
+      <div class="col on" id="con"><h4>Memory on · company memory</h4><div class="body" id="on">Not run yet.</div><div id="recs"></div><div class="ops" id="opsb"></div><div class="meta" id="onm"></div></div>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Teach it</span><h2>Add an experience. <span class="grad">Ask for it straight away.</span></h2><p class="lede">Your entry is validated, saved under your name, retained in the memory, and then looked up again to prove it can be found.</p></div>
+  <div class="card rv" style="padding:30px">
+    <form class="form" id="ff">
+      <div class="full"><label>Title</label><input name="title" required minlength="5" maxlength="100" placeholder="Chiller 3 trips on start-up after the winter shutdown"></div>
+      <div><label>Equipment</label><input name="equipment" required maxlength="80" placeholder="e.g. Rooftop chiller RC-03"></div>
+      <div><label>Date</label><input name="date" type="date" required></div>
+      <div class="full"><label>Incident</label><textarea name="incident" required minlength="10" rows="2" placeholder="What happened?"></textarea></div>
+      <div class="full"><label>Root cause</label><textarea name="cause" required minlength="5" rows="2"></textarea></div>
+      <div><label>Actions attempted</label><textarea name="tried" required rows="3"></textarea></div>
+      <div><label>Failed approaches</label><textarea name="failed" rows="3" placeholder="What did not work? (this is the part most reports skip)"></textarea></div>
+      <div class="full"><label>Successful solution</label><textarea name="fix" required rows="2"></textarea></div>
+      <div><label>Outcome</label><input name="outcome" required maxlength="160" placeholder="e.g. Stable for 30 days"></div>
+      <div><label>Contributor</label><input name="who" required minlength="2" maxlength="60" placeholder="Your name"></div>
+      <div class="full"><button class="btn" type="submit" id="sub">Retain in memory →</button></div>
+    </form>
+    <div class="msg" id="fmsg"></div>
+    <div id="verify" style="margin-top:18px"></div>
+  </div>
+</div></section>
+</main>
+<div id="footmount"></div>
+<script src="/static/site.js"></script>
+<script>
+$("#navmount").outerHTML=nav("h");$("#footmount").outerHTML=foot();
+$("input[name=date]").value=new Date().toISOString().slice(0,10);
+/* ---------- the map ---------- */
+const NODES={tech:{x:12,y:25,l:"Technician",t:"user",c:"T"},mgr:{x:12,y:70,l:"Manager / new hire",t:"user",c:"M"},
+ mem:{x:50,y:48,l:"Shared memory · Hindsight",t:"mem",c:"MEMORY"},
+ feed:{x:50,y:10,l:"Alarm feed",c:"AF"},dispatcher:{x:84,y:24,l:"Dispatcher",c:"DS"},diagnostician:{x:86,y:56,l:"Diagnostician",c:"DG"},parts:{x:68,y:88,l:"Parts",c:"PT"},verifier:{x:32,y:88,l:"Verifier",c:"VF"},briefing:{x:50,y:70,l:"Briefing",c:"BR"}};
+const LINKS=[["feed","dispatcher"],["dispatcher","diagnostician"],["diagnostician","mem"],["diagnostician","parts"],["parts","verifier"],["verifier","diagnostician"],["verifier","briefing"],["briefing","tech"],["tech","mem"],["mgr","mem"],["mem","briefing"]];
+const map=$("#map");
+function pos(n){const r=map.getBoundingClientRect();return [NODES[n].x/100*r.width,NODES[n].y/100*r.height]}
+function draw(){const svg=$("#svg"),r=map.getBoundingClientRect();svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
+  svg.innerHTML=LINKS.map(([a,b])=>{const [x1,y1]=pos(a),[x2,y2]=pos(b);return `<line data-l="${a}-${b}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`}).join("")}
+for(const [k,n] of Object.entries(NODES)){const d=document.createElement("div");d.className="nb "+(n.t||"");d.dataset.n=k;d.style.left=n.x+"%";d.style.top=n.y+"%";d.innerHTML=`<div class="c">${n.c}</div><small>${n.l}</small>`;map.appendChild(d)}
+draw();addEventListener("resize",draw);
+function light(n,ms=1400){const el=$(`.nb[data-n="${n}"]`);if(!el)return;el.classList.add("act");setTimeout(()=>el.classList.remove("act"),ms)}
+function packet(a,b){if(!NODES[a]||!NODES[b])return;const p=document.createElement("div");p.className="pk";map.appendChild(p);const [x1,y1]=pos(a),[x2,y2]=pos(b);const t0=performance.now(),D=700;
+  const l=$(`line[data-l="${a}-${b}"]`)||$(`line[data-l="${b}-${a}"]`);if(l){l.classList.add("hot");setTimeout(()=>l.classList.remove("hot"),1200)}
+  (function f(n){const k=Math.min(1,(n-t0)/D);p.style.left=x1+(x2-x1)*k+"px";p.style.top=y1+(y2-y1)*k+"px";p.style.opacity=k<1?1:0;k<1?requestAnimationFrame(f):p.remove()})(t0)}
+/* ---------- real run ---------- */
+const AG={feed:"Alarm feed",dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",briefing:"Technician briefing",technician:"Technician",system:"System"};
+const FLOW={dispatcher:["feed","dispatcher"],diagnostician:["dispatcher","diagnostician"],parts:["diagnostician","parts"],verifier:["parts","verifier"],briefing:["verifier","briefing"]};
+let DRILL="none";
+$("#drills").innerHTML=[["none","Normal"],["memory","Break memory"],["llm","Break model"]].map(d=>`<button data-d="${d[0]}" class="${d[0]==="none"?"on":""}">${d[1]}</button>`).join("");
+$$("#drills button").forEach(b=>b.onclick=()=>{DRILL=b.dataset.d;$$("#drills button").forEach(x=>x.classList.toggle("on",x===b))});
+fetch("/api/scenarios").then(r=>r.json()).then(s=>{$("#sc").innerHTML=s.slice(0,12).map(x=>`<option value="${esc(x.id)}">${esc((x.machine&&x.machine.id)||"")} · ${esc(String(x.alarm_text||x.symptom||x.id).slice(0,64))}</option>`).join("")}).catch(()=>{$("#sc").innerHTML="<option>Backend not reachable</option>"});
+function addEv(cls,who,txt){const box=$("#ev");if(box.querySelector(".empty"))box.innerHTML="";box.insertAdjacentHTML("beforeend",`<div class="e ${cls}"><b>${esc(who)}</b><p>${esc(String(txt).replace(/\s+/g," ").slice(0,220))}</p></div>`);box.scrollTop=box.scrollHeight}
+let es=null,last="feed";
+function onEv(e){if(e.path&&e.path!=="with")return;const a=e.agent||"system";
+  if(FLOW[a]){packet(...FLOW[a]);light(a)}
+  if(e.kind==="memory"&&e.data&&!e.data.skipped){light("mem");const who=NODES[e.data.who]?e.data.who:"diagnostician";packet(who,"mem");addEv("memory",(AG[e.data.who]||e.data.who)+" · "+e.data.op,e.data.op==="retain"?"Saving this visit to the shared memory":`Searching the memory: “${String(e.data.query||"").slice(0,90)}”`);return}
+  if(e.kind==="alarm"){light("feed");addEv("","Alarm",e.text);return}
+  if(e.kind==="veto"){light("verifier");packet("verifier","diagnostician");addEv("veto","Verifier says no",(e.data&&e.data.item)?`“${e.data.item}” contradicts the raw records. The Diagnostician must search again.`:e.text);return}
+  if(e.kind==="approve"){light("verifier");addEv("approve","Verifier approves",e.text||"The plan matches the records.");return}
+  if(e.kind==="plan"){light("briefing");packet("briefing","tech");light("tech");addEv("plan","Plan sent to the technician",(e.data&&e.data.headline)||e.text);return}
+  if(e.kind==="msg"){addEv("",AG[a]||a,e.text);return}
+  if(e.kind==="system"&&e.data&&e.data.fallback){addEv("veto","Backup took over",e.text||"A dependency failed; the system carried on.");return}
+  if(e.kind==="consequence"&&e.data){addEv("plan","Result · simulated",`${e.data.outcome} · ${e.data.visits} visit(s) · $${e.data.cost_usd}`)}}
+$("#go").onclick=async()=>{const id=$("#sc").value;if(!id)return;$("#go").disabled=true;$("#ev").innerHTML='<div class="empty">Starting…</div>';$("#stat").textContent="running";
+  try{const r=await post("/api/runs",{scenario_id:id,paths:"with",chaos:DRILL});if(es)es.close();es=new EventSource(`/api/runs/${r.run_id}/stream`);es.onmessage=m=>onEv(JSON.parse(m.data));
+    es.addEventListener("end",()=>{es.close();$("#stat").textContent="finished";$("#go").disabled=false});es.onerror=()=>{if(es.readyState===2){$("#stat").textContent="stopped";$("#go").disabled=false}}}
+  catch(err){$("#ev").innerHTML=`<div class="empty" style="color:var(--er)">${esc(err.message)}</div>`;$("#stat").textContent="error";$("#go").disabled=false}};
+/* ---------- memory off / on ---------- */
+$$("#seg button").forEach(b=>b.onclick=()=>{$$("#seg button").forEach(x=>x.classList.toggle("on",x===b));const m=b.dataset.m;
+  $("#cols").classList.toggle("one",m!=="both");$("#coff").classList.toggle("hide",m==="on");$("#con").classList.toggle("hide",m==="off")});
+const dots='<span class="dots"><span></span><span></span><span></span></span>';
+async function compare(q){$("#off").innerHTML=dots;$("#on").innerHTML=dots;$("#recs").innerHTML="";$("#opsb").innerHTML="";$("#offm").textContent=$("#onm").textContent="";
+  const r=await post("/api/compare",{question:q});
+  $("#off").textContent=r.off.answer?plain(r.off.answer):r.off.error;$("#offm").textContent=r.off.answer?`${r.off.ms} ms · general knowledge, no company records`:"";
+  $("#on").textContent=r.on.answer?plain(r.on.answer):r.on.error;
+  $("#recs").innerHTML=(r.on.sources||[]).slice(0,5).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} · ${esc(s.label||"")} — ${esc((s.text||"").slice(0,170))}…</div>`).join("");
+  $("#opsb").innerHTML=(r.on.operations||[]).map(o=>`<span class="tag cy">${esc(o.op)} · ${esc(o.detail)}</span>`).join("")+(r.on.basis?`<span class="tag ${r.on.basis.level==="strong"?"ok":"part"}">${r.on.basis.level==="strong"?"Well supported":r.on.basis.level==="partial"?"Partly supported":"Not proven"}</span>`:"");
+  $("#onm").textContent=`${r.on.ms} ms · ${r.backend} memory`;return r}
+$("#qf").onsubmit=async e=>{e.preventDefault();const q=$("#q").value.trim();if(q.length<3)return;try{await compare(q)}catch(err){$("#off").textContent=$("#on").textContent="Could not run: "+err.message}};
+/* ---------- contribute -> retain -> recall ---------- */
+$("#ff").onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));const m=$("#fmsg");m.className="msg";m.textContent="";$("#verify").innerHTML="";
+  const text=`${f.title}. Equipment: ${f.equipment}. Incident: ${f.incident} Root cause: ${f.cause} Actions attempted: ${f.tried} Failed approaches: ${f.failed||"none recorded"}. Successful solution: ${f.fix} Outcome: ${f.outcome}. Date: ${f.date}.`;
+  $("#sub").disabled=true;
+  try{const r=await post("/api/knowledge",{author:f.who,text:text.slice(0,2000)});
+    m.className="msg ok";m.innerHTML=`<b>Retained.</b> Saved under ${esc(f.who)} in the ${esc(r.memory_backend)} memory. Now asking it about your entry…`;
+    $("#verify").innerHTML=`<div class="col on"><h4>Recall check · ${esc(f.equipment)}</h4><div class="body" id="vb">${dots}</div><div id="vr"></div></div>`;
+    const q=`${f.equipment}: ${f.incident}`.slice(0,300);
+    const a=await post("/api/ask",{question:q});
+    $("#vb").textContent=a.answer;$("#vr").innerHTML=(a.sources||[]).slice(0,3).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,170))}…</div>`).join("")+(a.sources&&a.sources.some(s=>(s.text||"").includes(f.title.slice(0,30)))?'<div class="rec" style="border-color:rgba(52,211,153,.4)"><b style="color:var(--ok)">✓ Your entry came back</b> in the recall results.</div>':'<div class="rec" style="border-color:rgba(251,191,36,.4)"><b style="color:var(--wa)">Not in the results yet.</b> Hindsight ingests in the background; ask again in a minute.</div>')}
+  catch(err){m.className="msg er";m.textContent="Could not save: "+err.message}
+  $("#sub").disabled=false};
+</script></body></html>

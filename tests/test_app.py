@@ -303,3 +303,24 @@ def test_the_thinking_option_asks_for_a_deeper_reflect(client):
         assert seen["budget"] == "low"
     finally:
         app_mod.ws_memory = real
+
+
+def test_the_four_pages_are_served(client):
+    c, _ = client
+    for path, marker in (("/", "Should Never Be Lost"), ("/chat", "view-chat"), ("/architecture", "Honest limit"), ("/how-it-works", "Run a real job")):
+        r = c.get(path)
+        assert r.status_code == 200 and marker in r.text, path
+
+
+def test_compare_runs_both_paths_and_never_invents_when_no_model(client):
+    """With no Groq key the OFF side says so instead of making text up; the ON side still answers from the stored records."""
+    c, _ = client
+    r = c.post("/api/compare", json={"question": "why does the outdoor unit keep tripping on high pressure"}).json()
+    assert r["off"]["answer"] is None and "No language model" in r["off"]["error"]
+    assert r["on"]["label"].startswith("Answer with company memory") and [o["op"] for o in r["on"]["operations"]] == ["recall", "reflect"]
+
+
+def test_a_greeting_is_not_treated_as_a_memory_question(client):
+    c, _ = client
+    r = c.post("/api/chat", json={"message": "hi"}).json()
+    assert r["kind"] == "answer" and r.get("greeting") and r["sources"] == []

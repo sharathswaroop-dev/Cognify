@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Architecture — SiteMemory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/site.css">
+<style>
+.top{padding:80px 0 30px}.top h1{font-size:clamp(38px,6vw,72px);font-weight:800;margin:16px 0 18px;max-width:900px}
+.legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px;align-items:center;color:var(--mu);font-size:13.5px}
+.flow{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin:46px 0 22px;position:relative}
+.flow:before{content:"";position:absolute;left:3%;right:3%;top:32px;height:2px;background:var(--line)}
+.flow .beam{position:absolute;left:3%;top:31px;height:4px;width:0;border-radius:4px;background:linear-gradient(90deg,var(--pu),var(--cy));box-shadow:0 0 18px var(--cy);transition:width .9s var(--ease)}
+.nd{background:none;border:0;color:var(--tx);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:12px;font:inherit;position:relative;z-index:1;padding:0 2px}
+.nd .ic{width:64px;height:64px;border-radius:20px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font:700 18px "Sora";color:var(--pu2);transition:.35s var(--ease)}
+.nd:hover .ic,.nd.on .ic{border-color:var(--pu);background:var(--card2);transform:translateY(-5px);box-shadow:0 18px 40px -12px rgba(139,92,246,.8);color:#fff}
+.nd.lit .ic{border-color:var(--cy);box-shadow:0 0 0 4px rgba(34,211,238,.15),0 0 30px rgba(34,211,238,.5);color:#fff}
+.nd span{font:600 13px "Inter";text-align:center;color:var(--mu);line-height:1.3}.nd.on span,.nd:hover span{color:#fff}
+.nd i{position:absolute;top:-4px;right:calc(50% - 38px);width:12px;height:12px;border-radius:50%;border:2px solid var(--bg)}
+.nd i.ok{background:var(--ok)}.nd i.part{background:var(--wa)}.nd i.plan{background:#556}
+.trace{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:34px}
+.panel{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
+.dp{min-height:360px}.dp h2{font-size:30px;margin:12px 0 10px}.dp .what{color:#cfd6f2;font-size:16.5px;margin-bottom:20px}
+.kv{display:grid;gap:12px}.kv div{border-top:1px solid var(--line);padding-top:12px}.kv b{display:block;font:600 11.5px "Inter";letter-spacing:.1em;text-transform:uppercase;color:var(--pu2);margin-bottom:4px}.kv p{color:var(--mu);font-size:14.5px}
+.kv .lim b{color:var(--wa)}
+.side .row{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}.side .row:last-child{border:0}.side .row span{color:var(--mu)}
+.mods{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.mods span{font:500 12px "JetBrains Mono";color:var(--cy);background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.25);padding:4px 9px;border-radius:8px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.dpanel{animation:pin .5s var(--ease)}@keyframes pin{from{opacity:0;transform:translateY(10px)}}
+@media(max-width:900px){.flow{grid-template-columns:repeat(4,1fr);row-gap:30px}.flow:before,.beam{display:none}.panel,.three{grid-template-columns:1fr}}
+</style></head><body>
+<div id="spot"></div><div id="grid"></div><div id="navmount"></div>
+<main>
+<section class="top"><div class="wrap">
+  <span class="eyebrow">Architecture</span>
+  <h1 class="rv">How a question becomes <span class="grad">an answer you can check.</span></h1>
+  <p class="lede rv" style="--d:1">Eight stages from raw company knowledge to a verified reply. Click any stage. Each one says what it does, where it lives in the code, and, honestly, how finished it is.</p>
+  <div class="legend rv" style="--d:2"><span class="tag ok">Working</span><span class="tag part">Partially implemented</span><span class="tag plan">Planned</span><span>Every status below was checked against the code and tests, not the roadmap.</span></div>
+</div></section>
+
+<section style="padding-top:20px"><div class="wrap">
+  <div class="trace rv"><button class="btn" id="run">▶ Trace a question through the system</button><span style="color:var(--mu);font-size:14px" id="tr">“Why does the rooftop chiller keep tripping?”</span></div>
+  <div class="flow rv" id="flow"><div class="beam" id="beam"></div></div>
+  <div class="panel">
+    <div class="card dp" id="dp"></div>
+    <div class="card side" id="side"></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Design decisions</span><h2>Why it is built <span class="grad">this way.</span></h2></div>
+  <div class="three">
+    <div class="card rv"><h3>One shared memory bank</h3><p>Every agent reads and writes the same Hindsight bank per company. No agent keeps a private copy, so what one learns, all can recall. We use Hindsight rather than building memory infrastructure ourselves.</p></div>
+    <div class="card rv" style="--d:1"><h3>Failures are first-class</h3><p>Records keep what was tried and failed, not just what worked. The Verifier reads raw records and can veto a diagnosis that contradicts them, up to three revision rounds.</p></div>
+    <div class="card rv" style="--d:2"><h3>Never invent a source</h3><p>If memory has nothing, the reply says so and offers clearly labelled general guidance. Answers carry a support level: well supported, partly supported, or not proven.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Honest roadmap</span><h2>What is <span class="grad">not built yet.</span></h2></div>
+  <div class="three">
+    <div class="card rv"><span class="tag plan">Planned</span><h3 style="margin-top:12px">Departments &amp; roles</h3><p>Today the first person to create a company is its admin; everyone else is a member. Fine-grained permissions are not built.</p></div>
+    <div class="card rv" style="--d:1"><span class="tag plan">Planned</span><h3 style="margin-top:12px">External search</h3><p>Answers come only from the company's own memory and the language model. Web search needs a search-service key and is not connected.</p></div>
+    <div class="card rv" style="--d:2"><span class="tag plan">Planned</span><h3 style="margin-top:12px">Real email verification</h3><p>Joining checks a company code and an email domain. It does not yet send a verification message.</p></div>
+  </div>
+</div></section>
+</main>
+<div id="footmount"></div>
+<script src="/static/site.js"></script>
+<script>
+$("#navmount").outerHTML=nav("a");$("#footmount").outerHTML=foot();
+const N=[
+ {k:"Knowledge sources",ic:"01",st:"ok",what:"Where experience enters: incident visits, written notes, uploaded documents, photos with a caption, and corrections made in chat.",
+  how:"Technicians log visits or tell the chat \"Remember…\"; managers drop in case studies. Every item keeps its author and date.",lim:"A picture cannot be read without a vision model, so the person describes it and that caption is what is learned. Scanned PDFs are refused with a clear message.",mods:["records.py","workspaces.py","documents.py"],facts:[["Formats","txt · md · csv · json · log · text PDF"],["Provenance","author + date kept"],["Demo data","Sample HVAC records, labelled"]]},
+ {k:"Document ingestion",ic:"02",st:"ok",what:"Turns a file into pieces a memory can hold, without losing where each piece came from.",
+  how:"Text is extracted, cut into paragraph-aware sections of about 1,200 characters with a little overlap, and each section is retained with its document name and section number.",lim:"Limit of 60 sections and 2 MB per file.",mods:["documents.py","records.py","app.py /api/docs"],facts:[["Chunk size","≈1,200 chars + overlap"],["Max","60 sections · 2 MB"],["Reference","kept per section"]]},
+ {k:"RAG retrieval + Hindsight memory",ic:"03",st:"ok",what:"The memory layer. Hindsight retains each record, recalls the ones that match a question, and reflects an answer from them.",
+  how:"Each company has its own bank. Recall is tag-scoped when a machine or site is known. If Hindsight is unreachable or returns nothing right after a save, a local keyword index fills the gap, and the status chip says which backend answered.",lim:"We rely on Hindsight's internal search; there is no vector database of our own. Hindsight needs account credit; without it the app runs on the local keyword fallback.",mods:["memory.py","HindsightMemory","FallbackMemory","LocalMemory"],facts:[["Operations","retain · recall · reflect"],["Isolation","one bank per company"],["Fallback","local BM25, flagged in UI"]]},
+ {k:"Agent orchestration",ic:"04",st:"part",what:"A mesh of agents that coordinate through the shared memory instead of passing private messages.",
+  how:"Alarm feed → Dispatcher (rules) → Diagnostician (recall + reflect + model) → Parts → Verifier → Technician briefing. Each handoff is an event you can watch. Chaos drills switch one dependency off to show graceful degradation.",lim:"The Band transport between agents is tested against a mock only; with no Band keys the same agents run in-process. We do not fake that a live Band run happened.",mods:["mesh/runner.py","agents.py","beliefs.py","evidence.py"],facts:[["Agents","6 + Feedback/Learning"],["Transport","in-process · Band ready"],["Drills","band · memory · llm off"]]},
+ {k:"Groq inference",ic:"05",st:"ok",what:"The language model that writes diagnoses, parts lists and general answers.",
+  how:"A chain of models (gpt-oss-120b → gpt-oss-20b → qwen) with retry-after handling. If no model answers, rule-based backups produce a plain answer and the UI says so.",lim:"The free tier has daily token limits, which can empty the model chain. A paid key lifts that.",mods:["llm.py"],facts:[["Primary","openai/gpt-oss-120b"],["Failover","2 further models"],["No model","rule-based backup"]]},
+ {k:"Verification",ic:"06",st:"part",what:"A check before anything reaches a technician: does the diagnosis contradict the raw records?",
+  how:"The Verifier is deterministic code reading the raw records. It can veto or revise a diagnosis (up to three rounds). Chat answers are labelled by evidence level using the same provenance rules.",lim:"Free-form chat answers are labelled and cited but not yet run through the Verifier agent.",mods:["agents.py Verifier","provenance.py"],facts:[["Agent runs","Verifier can veto"],["Chat","provenance label"],["Rounds","max 3"]]},
+ {k:"Final response",ic:"07",st:"ok",what:"What the person sees: the answer, the records behind it, how well supported it is, and what to do next.",
+  how:"Sources are listed with reference and date. Corrections made by colleagues are shown first. When memory has nothing, the reply says so and gives general guidance, labelled as such.",lim:"A numeric confidence score is shown only where a real scoring mechanism exists (Wilson intervals on repair outcomes), never invented for chat.",mods:["app.py /api/chat","provenance.py"],facts:[["Shows","answer · sources · basis"],["Empty memory","says so, labels guidance"],["Corrections","shown first"]]},
+ {k:"Feedback & learning",ic:"08",st:"ok",what:"Closes the loop so the memory improves from use.",
+  how:"A thumbs-down with a correction is retained and surfaced ahead of the next answer. Repair outcomes move an evidence ladder (suspected → fixed at visit → stable 30 → 90 days); a belief-drift engine flags when the history changes.",lim:"Evaluation numbers on the real memory need Hindsight credit and a paid model tier to run in full; the harness is built and leak-proof, results are not claimed.",mods:["evidence.py","beliefs.py","evaluation.py"],facts:[["Evidence","Wilson intervals"],["Weak signal","n < 5 flagged"],["Eval","held-out replay harness"]]}
+];
+const flow=$("#flow");N.forEach((n,i)=>{const b=document.createElement("button");b.className="nd";b.innerHTML=`<i class="${n.st}"></i><div class="ic">${n.ic}</div><span>${n.k}</span>`;b.onclick=()=>pick(i);flow.appendChild(b)});
+const SL={ok:["Working","ok"],part:["Partially implemented","part"],plan:["Planned","plan"]};
+function pick(i,keepBeam){const n=N[i];$$(".nd").forEach((b,j)=>b.classList.toggle("on",j===i));
+  const [lab,cls]=SL[n.st];
+  $("#dp").innerHTML=`<div class="dpanel"><span class="tag ${cls}">${lab}</span><h2>${esc(n.k)}</h2><p class="what">${esc(n.what)}</p><div class="kv"><div><b>How it works</b><p>${esc(n.how)}</p></div><div class="lim"><b>Honest limit</b><p>${esc(n.lim)}</p></div></div></div>`;
+  $("#side").innerHTML=`<div class="dpanel"><b style="font:600 11.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--pu2)">Where it lives</b><div class="mods" style="margin:10px 0 18px">${n.mods.map(m=>`<span>${esc(m)}</span>`).join("")}</div>${n.facts.map(f=>`<div class="row"><span>${esc(f[0])}</span><b>${esc(f[1])}</b></div>`).join("")}</div>`;
+  if(!keepBeam)$("#beam").style.width=(i/(N.length-1)*94)+"%"}
+let tracing=false;
+$("#run").onclick=async()=>{if(tracing)return;tracing=true;$("#run").textContent="Tracing…";
+  for(let i=0;i<N.length;i++){pick(i);$$(".nd")[i].classList.add("lit");await new Promise(r=>setTimeout(r,1100))}
+  $("#run").textContent="▶ Trace again";tracing=false;setTimeout(()=>$$(".nd").forEach(b=>b.classList.remove("lit")),1500)};
+pick(2);
+</script></body></html>
