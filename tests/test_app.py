@@ -210,3 +210,48 @@ def test_a_document_dropped_into_the_chat_is_learned_and_cited(client):
     assert any("orion-case-study.md" in x["text"] for x in found["sources"])
     assert c.post("/api/docs", files={"file": ("photo.png", b"\x89PNG", "image/png")}).status_code == 422
     assert c.post("/api/docs", files={"file": ("empty.txt", b"   ", "text/plain")}).status_code == 422
+
+
+def test_sources_are_labelled_by_kind_and_the_answer_says_how_well_supported_it_is(client):
+    import provenance as pv
+    c, _ = client
+    assert pv.classify(["kind:visit", "evidence:stable_90d"])["tier"] == "verified"
+    assert pv.classify(["kind:visit", "evidence:suspected"])["label"] == "Suspected cause"
+    assert pv.classify(["kind:note"])["label"] == "Colleague's note" and pv.classify(["kind:doc"])["tier"] == "doc"
+    assert pv.basis([])["level"] == "weak"
+    assert pv.basis([{"tier": "verified"}, {"tier": "verified"}])["level"] == "strong"
+    assert pv.basis([{"tier": "note"}])["level"] == "partial"
+    r = c.post("/api/chat", json={"message": "What usually goes wrong with the Daikin VRV IV compressor?"}).json()
+    assert r["basis"]["level"] in ("strong", "partial", "weak") and all("label" in s and "tier" in s for s in r["sources"])
+
+
+def test_a_correction_is_retained_shown_ahead_of_the_answer_and_logged(client):
+    c, app_mod = client
+    q = "Why does the Orion lobby unit short cycle?"
+    first = c.post("/api/chat", json={"message": q}).json()
+    fb = c.post("/api/feedback", json={"question": q, "answer": first["answer"], "rating": "down", "refs": ["J-1"],
+                                       "correction": "It short cycles because the thermostat sits in direct sun; move the sensor, do not replace the compressor."})
+    assert fb.status_code == 200 and fb.json()["correction_retained"] is True
+    again = c.post("/api/chat", json={"message": "Orion lobby unit short cycle thermostat direct sun?"}).json()
+    assert again["answer"].startswith("Heads up, a colleague corrected this:") and any(s["tier"] == "correction" for s in again["sources"])
+    up = c.post("/api/feedback", json={"question": q, "rating": "up"}).json()
+    assert up["saved"] and not up["correction_retained"]
+    short = c.post("/api/feedback", json={"question": q, "rating": "down", "correction": "wrong"}).json()
+    assert not short["correction_retained"]                                    # too short to be a usable correction
+
+
+def test_only_the_admin_can_reset_or_run_the_evaluation_and_the_tour_has_a_guest_session(client):
+    c, app_mod = client
+    assert c.get("/api/workspace/me").json()["admin"] is True                  # priya joined first, so she is the admin
+    other = _fresh(app_mod)
+    tok = other.post("/api/workspace/join", json={"code": "COOLCARE-DEMO", "email": "ravi@coolcare.example"}).json()
+    assert tok["admin"] is False
+    member = {"Authorization": "Bearer " + tok["token"]}
+    assert other.post("/api/reset-demo", headers=member).status_code == 403
+    assert other.post("/api/eval/run", headers=member).status_code == 403
+    guest = other.post("/api/workspace/guest").json()
+    assert guest["email"] == "guest@demo.local" and guest["admin"] is False
+    assert other.post("/api/reset-demo", headers={"Authorization": "Bearer " + guest["token"]}).status_code == 403
+    assert other.post("/api/runs", json={"scenario_id": "LIVE-4", "paths": "with"}).status_code == 401              # running agents needs a session
+    assert other.post("/api/runs", json={"scenario_id": "LIVE-4", "paths": "with"}, headers={"Authorization": "Bearer " + guest["token"]}).status_code == 200
+    assert c.post("/api/reset-demo").status_code == 200                         # the admin can

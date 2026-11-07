@@ -291,3 +291,33 @@ def test_with_every_model_down_the_agents_still_solve_it_from_the_records(store,
     assert run.status == "done" and "inverter" in w["diagnosis"]["causes"][0]["fix"].lower()      # the rule-based backup + the Verifier's veto still get there
     assert w["diagnosis"]["causes"][0]["why"].startswith("Backup mode") and w["parts"]["carry"]
     assert run.plans["with"]["consequence"]["outcome"] == "fixed first time"
+
+
+def test_fallback_memory_fills_the_gap_when_hindsight_answers_with_nothing(tmp_path):
+    """Hindsight ingests in the background (and not at all without credit), so right after a retain it can answer with an empty list and no error."""
+    from memory import FallbackMemory, LocalMemory
+
+    class Empty:
+        name, bank_id = "hindsight", "t"
+
+        def recall(self, *a, **k):
+            return []
+
+        def retain(self, *a, **k):
+            pass
+
+        def retain_many(self, *a, **k):
+            pass
+
+        def reflect(self, *a, **k):
+            return None
+
+        def count(self):
+            return 0
+
+    mem = FallbackMemory(Empty(), LocalMemory(tmp_path / "l.json"))
+    mem.retain("Case study: the Orion rooftop chiller tripped because of a failing condenser fan capacitor.", ["kind:doc"], "2026-11-07", "doc-1", {})
+    found = mem.recall("why did the Orion chiller trip", [], 5)
+    assert found and "capacitor" in found[0].text and mem.gap_fills == 1
+    assert mem.recall("completely unrelated quantum gravity", [], 5) == []          # no match, no made-up answer
+    assert not mem.degraded                                                           # this is not an outage, just ingestion lag

@@ -799,6 +799,98 @@ body.chatmode main{padding:0;max-width:none}
 .mcard{position:relative;width:min(640px,100%);max-height:80vh;overflow-y:auto;padding:26px;border:2.5px solid var(--text);border-radius:var(--wob);background:#fffaee}
 .mcard h3{margin:0 0 4px;font:800 26px var(--disp)}.mcard .vx{position:absolute;right:14px;top:14px;border:2px solid var(--text);background:#fffaee;width:32px;height:32px;border-radius:50%}
 .libitem{padding:12px 14px;border:2px solid var(--text);border-radius:14px;margin-top:10px;background:#fff}.libitem b{font:800 15px var(--body)}.libitem small{display:block;font:400 11.5px var(--mono);color:var(--mute);margin-top:2px}
+.tier{display:inline-block;font:600 10.5px var(--mono);padding:1px 9px;border-radius:999px;margin-right:6px;border:1.5px solid var(--text);background:#fff;color:var(--text)}
+.tier.verified{background:var(--text);color:#fff8ea}.tier.unproven{border-style:dashed}.tier.note{background:#fbe4dc}.tier.doc{background:#ece4d3}.tier.correction{background:var(--hot);color:#fff8ea;border-color:var(--hot)}
+.basis{margin-top:12px;padding:9px 13px;border:2px solid var(--text);border-radius:12px;font:400 12.5px/1.5 var(--mono);background:#fffaee}.basis b{font:800 13px var(--body)}
+.basis.strong{background:#ece4d3}.basis.weak{border-style:dashed;background:#fbe4dc}
+.fbrow{margin-top:10px;display:flex;gap:8px}.fbrow button{border:2px solid var(--text);border-radius:999px;background:#fffaee;padding:3px 12px;font:600 13px var(--body);color:var(--text)}.fbrow button:hover{background:#fbe4dc}
+.fbrow.done{font:500 12px var(--mono);color:var(--mute)}
+.fbbox{margin-top:12px;padding:12px 14px;border:2px solid var(--hot);border-radius:14px;background:#fff}.fbbox label{display:block;font:700 18px var(--hand);color:var(--hot);margin-bottom:4px}
+.fbbox textarea{width:100%;min-height:70px;border:2px solid var(--text);border-radius:10px;padding:8px 10px;font:500 14px var(--body);background:#fffaee;color:var(--text);margin-bottom:8px}
+.adm{font:700 10px var(--mono);background:var(--hot);color:#fff8ea;border-radius:999px;padding:1px 8px;vertical-align:middle}
+
+/* ============ the chat, dressed like a modern AI chat app: dark, quiet, text first ============ */
+#view-chat .acts svg,#view-chat .attach svg,#view-chat .tobottom svg,#view-chat .plus svg,#view-chat .ibtn svg,#view-chat .send svg,#view-chat .icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#view-chat .acts button.on svg{fill:currentColor}
+body.chatmode header,body.chatmode #bar,body.chatmode #banner{display:none}
+body.chatmode{overflow:hidden}
+#view-chat .cgpt{--bg:#1f1c19;--side:#171412;--card:#2b2723;--line:#3a352f;--tx:#f1ecdc;--mu:#a39d8c;--ac:#e5533d;display:grid;grid-template-columns:268px minmax(0,1fr);height:100vh;background:var(--bg);color:var(--tx);transition:grid-template-columns .25s var(--ease)}
+#view-chat .cgpt.collapsed{grid-template-columns:0 minmax(0,1fr)}.cgpt.collapsed .cside{display:none}
+.cside{background:var(--side);display:flex;flex-direction:column;padding:10px 10px 8px;min-height:0;border-right:1px solid var(--line)}
+.ctop{display:flex;align-items:center;gap:2px;padding:4px 4px 10px}.ctop .grow{flex:1}
+.clogo{display:flex;align-items:center;gap:9px;color:var(--tx);text-decoration:none;cursor:pointer}.clogo svg{width:30px;height:30px}.clogo b{font:800 17px var(--body);letter-spacing:-.02em}
+.icon,.ibtn{border:0;background:none;color:var(--mu);width:34px;height:34px;border-radius:9px;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.icon:hover,.ibtn:hover{background:#2b2723;color:var(--tx)}
+.ic svg,[data-i] svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+[data-i]{display:inline-grid;place-items:center}
+.csearch{margin:0 4px 8px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:#1f1c19;color:var(--tx);font:500 13.5px var(--body);outline:none}.csearch:focus{border-color:var(--ac)}
+.cnav{display:flex;flex-direction:column;gap:1px}
+.cnav>*{display:flex;align-items:center;gap:11px;border:0;background:none;color:var(--tx);padding:9px 10px;border-radius:10px;font:500 14.5px var(--body);text-align:left;cursor:pointer;text-decoration:none}.cnav>*:hover{background:#2b2723}
+.cnav [data-i]{color:var(--mu)}
+.csec{font:600 12px var(--body);color:var(--mu);padding:16px 12px 6px}
+.sess{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:1px;min-height:60px}
+.sess button{text-align:left;border:0;background:none;color:var(--tx);padding:8px 12px;border-radius:10px;font:500 14px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.sess button:hover{background:#2b2723}.sess button.on{background:#2f2a26}
+.sess .none2{padding:8px 12px;color:var(--mu);font:400 12.5px var(--body)}
+.cprofile{display:flex;align-items:center;gap:10px;padding:10px 8px 4px;border-top:1px solid var(--line);margin-top:6px}
+.cprofile .av2{flex:none;width:34px;height:34px;border-radius:50%;background:var(--ac);color:#fff8ea;display:grid;place-items:center;font:700 13px var(--body)}
+.cprofile .who2{min-width:0;font:600 13.5px/1.25 var(--body)}.cprofile .who2 small{display:block;font:400 11.5px var(--body);color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cprofile a{margin-left:auto;font:500 12px var(--body);color:var(--mu);cursor:pointer;border-bottom:1px dotted var(--mu)}.cprofile a:hover{color:var(--tx)}
+.adm{font:700 10px var(--body);background:var(--ac);color:#fff8ea;border-radius:999px;padding:1px 7px;margin-left:5px}
+#view-chat .cmain{position:relative;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg)}
+.chead{display:flex;align-items:center;gap:8px;padding:10px 16px;min-height:56px}
+.ctitle{font:600 16px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46%}
+.mempill{margin-left:auto;font:500 12px var(--body);color:var(--mu);border:1px solid var(--line);border-radius:999px;padding:3px 11px;white-space:nowrap}.mempill.warn{color:#ffb7a5;border-color:#7a3a2c}
+.cmenu{position:relative}.pop{position:absolute;right:0;top:calc(100% + 6px);background:#2b2723;border:1px solid var(--line);border-radius:12px;padding:5px;min-width:170px;z-index:30;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.pop button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;color:var(--tx);padding:9px 11px;border-radius:8px;font:500 14px var(--body);cursor:pointer}.pop button:hover{background:#3a352f}
+.shareb{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:none;color:var(--tx);border-radius:999px;padding:6px 14px;font:600 13.5px var(--body);cursor:pointer}.shareb:hover{background:#2b2723}
+#view-chat .cthread{flex:1;overflow-y:auto;padding:8px 0 20px;scroll-behavior:smooth}
+#view-chat .cwrap{max-width:760px;margin:0 auto;padding:0 24px}
+.um{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin:22px 0 22px;animation:rv .35s var(--ease)}
+.ub{background:#c9432f;color:#fff8ea;border-radius:20px 20px 5px 20px;padding:11px 17px;max-width:80%;white-space:pre-wrap;line-height:1.5;font-size:15.5px}
+.attach{display:flex;align-items:center;gap:12px;background:#2b2723;border:1px solid var(--line);border-radius:14px;padding:11px 16px 11px 12px;min-width:240px;max-width:80%}
+.attach .aic{width:38px;height:38px;border-radius:10px;background:#3a352f;display:grid;place-items:center;color:#f9d6cb}.attach b{display:block;font:600 14px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px}.attach small{color:var(--mu);font:400 12.5px var(--body)}
+.am{margin:6px 0 22px;animation:rv .35s var(--ease)}
+.am .txt{font-size:16px;line-height:1.7;white-space:pre-wrap;color:var(--tx)}
+.am .dots{display:inline-flex;gap:5px;padding:8px 0}.am .dots i{width:9px;height:9px;border-radius:50%;background:var(--mu);animation:bounce 1s ease-in-out infinite}.am .dots i:nth-child(2){animation-delay:.15s}.am .dots i:nth-child(3){animation-delay:.3s}
+.acts{display:flex;gap:2px;margin-top:8px;margin-left:-8px}
+.acts button{border:0;background:none;color:var(--mu);width:34px;height:32px;border-radius:8px;display:grid;place-items:center;cursor:pointer;transition:background .15s,color .15s}.acts button:hover{background:#2b2723;color:var(--tx)}
+.acts button.on{color:#f9d6cb}.acts button[data-act=down] svg{transform:rotate(180deg)}
+.am .basis{margin-top:12px;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#24201d;color:var(--mu);font:400 13px/1.55 var(--body)}.am .basis b{color:var(--tx);font-weight:700}
+.am .basis.weak{border-color:#7a3a2c}.am .basis.strong{border-color:#5a5148}
+.am .csrc summary{color:var(--mu)}.am .csrc div{background:#24201d;border:1px solid var(--line);color:var(--mu);border-radius:12px}.am .csrc b{background:#3a352f;border-color:#4a443d;color:var(--tx)}
+.am .tier{background:#3a352f;border-color:#4a443d;color:var(--tx)}.am .tier.verified{background:#f1ecdc;color:#1f1c19}.am .tier.correction{background:var(--ac);border-color:var(--ac);color:#fff8ea}.am .tier.note{background:#5a2f26;border-color:#7a3a2c}
+.am .filechip{background:#2b2723;border-color:var(--line);color:var(--tx)}
+.am .savedcard{background:#2b2723;border:1px solid var(--line);color:var(--mu);border-radius:12px}.am .savedcard b{color:var(--tx)}
+.am .codebox{background:#2b2723;border:1px solid var(--ac);color:var(--tx);border-radius:12px;margin-top:12px;padding:12px 14px}.am .codebox b{display:block;font:800 24px var(--mono);letter-spacing:.04em;margin:4px 0}
+.am .fbbox{background:#24201d;border:1px solid #7a3a2c;border-radius:12px;margin-top:10px;padding:12px 14px}.am .fbbox label{color:#f9d6cb;font:600 13.5px var(--body)}
+.am .fbbox textarea{background:#1f1c19;border:1px solid var(--line);color:var(--tx);border-radius:10px;width:100%;min-height:70px;padding:9px 11px;font:500 14px var(--body);margin:6px 0 8px}
+.am .fbbox .btn{box-shadow:none;border-radius:999px;border-color:var(--line);background:none;color:var(--tx);padding:7px 14px;font:600 13px var(--body)}.am .fbbox .btn.pri{background:var(--ac);border-color:var(--ac);color:#fff8ea}
+.am .fbrow.done,.am .fbnote{font:400 12.5px var(--body);color:var(--mu);margin-top:6px}
+.cempty{max-width:760px;margin:0 auto;padding:11vh 24px 0;text-align:center}
+.cempty svg{width:46px;height:46px;margin-bottom:12px}.cempty h2{margin:0 0 22px;font:700 clamp(26px,3vw,34px)/1.15 var(--body);letter-spacing:-.02em;color:var(--tx)}.cempty p{display:none}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
+.cards2 button{padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:#24201d;color:var(--tx);font:500 14.5px/1.45 var(--body);cursor:pointer;transition:background .15s}
+.cards2 button small{display:block;font:600 11px var(--body);color:#f4a393;margin-bottom:4px;letter-spacing:.04em}.cards2 button:hover{background:#2b2723;transform:none;box-shadow:none}
+#view-chat .composer{margin:0 auto;width:min(760px,calc(100% - 48px));display:flex;align-items:flex-end;gap:6px;padding:8px 8px 8px 10px;border:1px solid #4a443d;border-radius:28px;background:#2b2723;box-shadow:none}
+.plus{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;color:var(--tx);cursor:pointer}.plus:hover{background:#3a352f}
+#view-chat .composer textarea{flex:1;border:0;outline:none;resize:none;background:none;color:var(--tx);font:400 16px/1.5 var(--body);max-height:180px;padding:8px 4px}
+#view-chat .composer textarea::placeholder{color:#8d8677}
+.ibtn.live{color:var(--ac);animation:pulse 1.2s infinite}
+#view-chat .send{flex:none;width:38px;height:38px;border-radius:50%;border:0;background:#f1ecdc;color:#1f1c19;display:grid;place-items:center;cursor:pointer}.send:disabled{background:#4a443d;color:#8d8677}.send svg{width:18px;height:18px;stroke-width:2.4}
+#view-chat .chint{text-align:center;font:400 12px var(--body);color:#8d8677;padding:10px 20px 14px}
+.tobottom{position:absolute;left:50%;bottom:104px;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:#2b2723;color:var(--tx);display:grid;place-items:center;cursor:pointer;z-index:5}
+#view-chat .gate{position:absolute;inset:56px 0 0 0;z-index:20;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}#view-chat .gate.on{display:flex}
+#view-chat .gcard{width:min(480px,100%);padding:28px;border:1px solid var(--line);border-radius:20px;background:#24201d;box-shadow:none}
+#view-chat .gcard h2{color:var(--tx);font:700 26px/1.15 var(--body);letter-spacing:-.02em;margin:0 0 6px}#view-chat .gcard p{color:var(--mu);margin:0 0 14px}
+#view-chat .gtabs{border-color:var(--line)}#view-chat .gtabs button{color:var(--tx);background:none}#view-chat .gtabs button.on{background:#f1ecdc;color:#1f1c19}
+#view-chat label.f{color:var(--mu);font:600 12.5px var(--body);margin:12px 0 5px}
+#view-chat .fi{background:#1f1c19;border:1px solid var(--line);color:var(--tx);border-radius:10px;box-shadow:none}#view-chat .fi:focus{border-color:var(--ac);box-shadow:none}
+.grow2{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}.gbtn{border:1px solid var(--line);background:none;color:var(--tx);padding:10px 18px;border-radius:999px;font:600 14px var(--body);cursor:pointer}.gbtn.pri{background:var(--ac);border-color:var(--ac);color:#fff8ea}
+#view-chat .gfine{font:400 12px/1.55 var(--body)!important;color:#8d8677!important}
+#view-chat .err{background:#3a1f19;border-color:#7a3a2c;color:#ffb7a5}
+#view-chat .modal .mcard{background:#24201d;border:1px solid var(--line);color:var(--tx);border-radius:18px}#view-chat .mcard .vx{background:#2b2723;color:var(--tx);border-color:var(--line)}
+#view-chat .libitem{background:#2b2723;border-color:var(--line)}#view-chat .libitem small{color:var(--mu)}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#f1ecdc;color:#1f1c19;padding:9px 18px;border-radius:999px;font:600 13.5px var(--body);z-index:400}.toast[hidden]{display:none}
+@media (max-width:900px){#view-chat .cgpt{grid-template-columns:0 minmax(0,1fr)}.cside{display:none}.cards2{grid-template-columns:1fr}.ctitle{max-width:30%}}
 </style>
 </head>
 <body class="fx">
@@ -829,38 +921,55 @@ body.chatmode main{padding:0;max-width:none}
 </section>
 
 <section class="view" id="view-chat">
-  <div class="cgpt">
-    <aside class="cside">
-      <button class="newchat" id="newchat" data-cursor="New">＋ New chat</button>
-      <div class="wscard" id="wscard"></div>
-      <div class="slabel">Chats</div>
+  <div class="cgpt" id="cgpt">
+    <aside class="cside" id="cside">
+      <div class="ctop"><a class="clogo" data-view="home" title="Home"><svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg><b>SiteMemory</b></a>
+        <span class="grow"></span><button class="icon" id="csearchbtn" title="Search chats"><span data-i="search"></span></button><button class="icon" id="ctoggle" title="Hide sidebar"><span data-i="side"></span></button></div>
+      <input id="csearch" class="csearch" placeholder="Search chats" hidden autocomplete="off">
+      <div class="cnav">
+        <button id="newchat"><span data-i="edit"></span>New chat</button>
+        <button id="liblink"><span data-i="lib"></span>Library</button>
+        <a data-view="company"><span data-i="building"></span>Company knowledge</a>
+        <a data-view="phone"><span data-i="phone"></span>Technician phone</a>
+        <a data-view="dash"><span data-i="chart"></span>Evaluation and ROI</a>
+        <a data-view="show"><span data-i="play"></span>Guided tour</a>
+      </div>
+      <div class="csec">Chats</div>
       <div class="sess" id="sess"></div>
-      <div class="slinks"><a id="liblink">Library of documents</a><a data-view="company">Company knowledge</a><a data-view="phone">Technician phone</a><a data-view="dash">Evaluation and ROI</a><a data-view="show">Guided tour</a><a data-view="home">Home</a></div>
-      <div class="sfoot">Answers come from your company's own memory: its repair history, the notes people share and the documents you add. Other companies cannot see it.</div>
+      <div class="cprofile" id="wscard"></div>
     </aside>
     <section class="cmain" id="cmain">
+      <div class="chead">
+        <button class="icon" id="copen" title="Show sidebar" hidden><span data-i="side"></span></button>
+        <div class="ctitle" id="ctitle">New chat</div>
+        <span class="mempill" id="cmem"></span>
+        <div class="cmenu"><button class="icon" id="cmore" title="More"><span data-i="more"></span></button><div class="pop" id="cmenu" hidden><button id="c-rename"><span data-i="edit"></span>Rename</button><button id="c-delete"><span data-i="trash"></span>Delete chat</button></div></div>
+        <button class="shareb" id="cshare"><span data-i="share"></span>Share</button>
+      </div>
       <div class="gate" id="gate">
         <div class="gcard">
           <h2>Join your company's workspace</h2>
           <p>Your company's knowledge is private to the people in it. Join with the company code and your work email.</p>
           <div class="gtabs"><button class="on" data-g="join" type="button">Join with a code</button><button data-g="make" type="button">Create a company</button></div>
           <form id="gjoin"><label class="f">Company code</label><input class="fi" id="g-code" placeholder="e.g. COOLCARE-DEMO" autocomplete="off"><label class="f">Work email</label><input class="fi" id="g-email" type="email" placeholder="you@company.com" autocomplete="email">
-            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn pri mag" data-cursor="Join">Join</button><button class="btn" type="button" id="g-demo">Try the demo company</button></div></form>
+            <div class="grow2"><button class="gbtn pri">Join</button><button class="gbtn" type="button" id="g-demo">Try the demo company</button></div></form>
           <form id="gmake" hidden><label class="f">Company name</label><input class="fi" id="m-name" placeholder="e.g. Acme Cooling" maxlength="60"><label class="f">Your work email</label><input class="fi" id="m-email" type="email" placeholder="you@acme.com">
-            <div style="margin-top:14px"><button class="btn pri mag" data-cursor="Create">Create the workspace</button></div></form>
+            <div class="grow2"><button class="gbtn pri">Create the workspace</button></div></form>
           <div id="gerr"></div>
           <p class="gfine">This demo checks the company code, and the email domain if the company limits it. It does not verify that the email is really yours: that needs a sign-in provider such as Google, set up by whoever deploys it.</p>
         </div>
       </div>
       <div class="cthread" id="cthread"></div>
-      <form class="composer" id="composer"><label class="clip" for="cfile" title="Add a document or case study">📎</label><input type="file" id="cfile" hidden multiple accept=".txt,.md,.markdown,.csv,.json,.log,.pdf"><textarea id="cin" rows="1" placeholder="Ask a question, tell me what you know, or drop in a document…" maxlength="2000"></textarea><button class="send" id="csend" type="submit" aria-label="Send">↑</button></form>
-      <div class="chint">Ask what your company knows, start with “Remember…” to save something, or attach a document or case study (.txt .md .csv .json .pdf) and I will learn it for the next person.</div>
+      <button class="tobottom" id="tobottom" hidden title="Scroll to the latest"><span data-i="down"></span></button>
+      <form class="composer" id="composer"><label class="plus" for="cfile" title="Add a document or case study"><span data-i="plus"></span></label><input type="file" id="cfile" hidden multiple accept=".txt,.md,.markdown,.csv,.json,.log,.pdf"><textarea id="cin" rows="1" placeholder="Ask SiteMemory" maxlength="2000"></textarea><button type="button" class="ibtn" id="cmic" title="Dictate" hidden><span data-i="mic"></span></button><button class="send" id="csend" type="submit" aria-label="Send"><span data-i="send"></span></button></form>
+      <div class="chint">SiteMemory answers from your company's own memory and can be wrong. Check the sources, and tell it when it is.</div>
     </section>
   </div>
-  <div class="modal" id="libmodal" hidden><div class="mcard"><button class="vx" id="libx" type="button">×</button><h3>Library of documents</h3><p class="sub">Everything your company has added to the chat. Ask about any of it.</p><div id="liblist"></div></div></div>
+  <div class="modal" id="libmodal" hidden><div class="mcard"><button class="vx" id="libx" type="button">×</button><h3>Library</h3><p class="sub">Everything your company has added to the chat. Ask about any of it.</p><div id="liblist"></div></div></div>
+  <div class="toast" id="toast" hidden></div>
 </section>
 
-<section class="view" id="view-company"><section class="view" id="view-company">
+<section class="view" id="view-company"><section class="view" id="view-company"><section class="view" id="view-company">
   <button class="back" data-view="chat">← back to the chat</button>
   <div class="title"><div><div class="kick">for managers</div><h1 id="h-company"></h1></div><p>What the company knows, and who it lives with. Mark someone as leaving to see what would walk out with them.</p></div>
   <div class="ckpis" id="ck"></div>
@@ -969,7 +1078,7 @@ body.chatmode main{padding:0;max-width:none}
 const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
-let TOKEN=null;const api=async(p,b)=>{const r=await fetch(p,b?{method:"POST",headers:{"Content-Type":"application/json",...(TOKEN?{Authorization:"Bearer "+TOKEN}:{})},body:JSON.stringify(b)}:{headers:TOKEN?{Authorization:"Bearer "+TOKEN}:{}});
+let TOKEN=null,TOUR_TOKEN=null;const api=async(p,b)=>{const r=await fetch(p,b?{method:"POST",headers:{"Content-Type":"application/json",...((TOKEN||TOUR_TOKEN)?{Authorization:"Bearer "+(TOKEN||TOUR_TOKEN)}:{})},body:JSON.stringify(b)}:{headers:(TOKEN||TOUR_TOKEN)?{Authorization:"Bearer "+(TOKEN||TOUR_TOKEN)}:{}});
   if(!r.ok){let m=r.statusText;try{m=(await r.json()).detail||m}catch{}throw new Error(typeof m==="string"?m:(m&&m.message)||JSON.stringify(m))}return r.json()};
 const pc=x=>x==null?"n/a":Math.round(x*100)+"%";
 let SC=[],JOBS=[],STATUS=null,selSc=null,es=null,lastRun=null,lastPlans=null,counts={recall:0,reflect:0,retain:0};
@@ -1015,58 +1124,120 @@ function watchScenes(){const io=new IntersectionObserver(es=>es.forEach(en=>{if(
     $$("#steps button").forEach((b,j)=>{b.classList.toggle("on",j===i);b.classList.toggle("done",j<i)})}),{rootMargin:"-45% 0px -50% 0px",threshold:0});
   SCENES.forEach(n=>io.observe($("#s-"+n)));
   addEventListener("scroll",()=>{const m=document.documentElement.scrollHeight-innerHeight;$("#barfill").style.width=(m>0?scrollY/m*100:0)+"%"},{passive:true})}
-const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#2b2622"/></svg>`;
+const IC={
+ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ send:'<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+ mic:'<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+ copy:'<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>',
+ up:'<svg viewBox="0 0 24 24"><path d="M7 11v9H4v-9zM7 11l4-8a2 2 0 0 1 2 2v4h6a2 2 0 0 1 2 2l-1 7a2 2 0 0 1-2 2H7"/></svg>',
+ speak:'<svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 8a5 5 0 0 1 0 8M19 5a9 9 0 0 1 0 14"/></svg>',
+ redo:'<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-3-6.2M20 4v5h-5"/></svg>',
+ edit:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></svg>',
+ search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+ side:'<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/></svg>',
+ lib:'<svg viewBox="0 0 24 24"><path d="M5 4v16M10 4v16M15 5l4 15"/></svg>',
+ building:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg>',
+ phone:'<svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>',
+ chart:'<svg viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16l4-5 3 3 5-7"/></svg>',
+ play:'<svg viewBox="0 0 24 24"><path d="M7 4l13 8-13 8z"/></svg>',
+ doc:'<svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h7"/></svg>',
+ share:'<svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>',
+ more:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/></svg>',
+ trash:'<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+ down:'<svg viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6"/></svg>'};
+const ic=n=>IC[n]||"";
+function hydrateIcons(root=document){$$("[data-i]",root).forEach(el=>{if(!el.firstChild)el.innerHTML=ic(el.dataset.i)})}
+const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg>`;
 const STARTERS=[["ask","What usually goes wrong with the Daikin VRV IV?"],["ask","What should a new technician know about Brookfield Business Centre?"],["ask","When a compressor trips on a 2024 unit, what actually fixed it?"],["tell","Remember that on M-91 the trips are the inverter board, never the contactor. Check the DC bus first."]];
-let lastQ=null,chatBusy=false,SES=null,SESS={cur:null,items:[]};
+let lastQ=null,chatBusy=false,SES=null,SESS={cur:null,items:[]},speaking=null,sessFilter="";
 const sesKey=()=>`sm_sess_${SES.workspace.id}_${SES.email}`;
 function saveSess(){try{localStorage.setItem(sesKey(),JSON.stringify(SESS))}catch{}}
 function loadSess(){try{SESS=JSON.parse(localStorage.getItem(sesKey())||"null")||{cur:null,items:[]}}catch{SESS={cur:null,items:[]}}if(!SESS.items.length)newSession(false)}
-function newSession(render=true){const s={id:"s"+Date.now(),title:"New chat",msgs:[]};SESS.items.unshift(s);SESS.cur=s.id;lastQ=null;saveSess();if(render){drawSess();drawThread()}}
+function newSession(render=true){const s={id:"s"+Date.now(),title:"New chat",msgs:[]};SESS.items.unshift(s);SESS.cur=s.id;lastQ=null;saveSess();if(render){drawSess();drawThread();drawHead()}}
 const curSess=()=>SESS.items.find(x=>x.id===SESS.cur)||SESS.items[0];
-function drawSess(){$("#sess").innerHTML=SESS.items.slice(0,40).map(s=>`<button data-s="${s.id}" class="${s.id===SESS.cur?"on":""}" title="${esc(s.title)}">${esc(s.title)}</button>`).join("");
-  $$("#sess button").forEach(b=>b.onclick=()=>{SESS.cur=b.dataset.s;lastQ=null;saveSess();drawSess();drawThread()})}
-function msgHtml(m){
-  if(m.r==="user")return `<div class="cmsg user"><div class="cb">${esc(m.t)}</div></div>`;
+function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,1800)}
+function drawSess(){const q=sessFilter.trim().toLowerCase(),list=SESS.items.filter(s=>!q||s.title.toLowerCase().includes(q)||s.msgs.some(m=>(m.t||"").toLowerCase().includes(q)));
+  $("#sess").innerHTML=list.length?list.slice(0,60).map(s=>`<button data-s="${s.id}" class="${s.id===SESS.cur?"on":""}" title="${esc(s.title)}">${esc(s.title)}</button>`).join(""):'<div class="none2">No chats found.</div>';
+  $$("#sess button").forEach(b=>b.onclick=()=>{SESS.cur=b.dataset.s;lastQ=null;saveSess();drawSess();drawThread();drawHead()})}
+function drawHead(){const s=curSess();$("#ctitle").textContent=s?s.title:"New chat";const m=$("#cmem");
+  if(STATUS){const deg=STATUS.memory_degraded;m.textContent=deg?"Local memory (Hindsight unavailable)":"Memory: Hindsight";m.classList.toggle("warn",!!deg)}}
+function userHtml(m){return `<div class="um">${m.file?`<div class="attach"><span class="aic">${ic("doc")}</span><div><b>${esc(m.file.name)}</b><small>Document</small></div></div>`:""}${m.t?`<div class="ub">${esc(m.t)}</div>`:""}</div>`}
+function aiHtml(m,k){
   let x=`<div class="txt">${esc(m.t)}</div>`;
-  if(m.file)x=`<div class="filechip">📄 ${esc(m.file.name)} · ${m.file.sections} section${m.file.sections===1?"":"s"}</div><div class="txt" style="margin-top:8px">${esc(m.t)}</div>`;
-  if(m.sources&&m.sources.length)x+=`<details class="csrc"><summary>${m.sources.length} records it used</summary>${m.sources.map(s=>`<div><b>${esc(s.ref||"note")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`;
-  if(m.code)x+=`<div class="codebox">Your company code<b>${esc(m.code)}</b>Give this to your team so they can join. It is not shown again once you clear this chat.</div>`;
-  if(m.saved)x+=`<div class="savedcard"><b>✓ Saved to your company memory</b>${esc(m.saved)}</div>`;
-  return `<div class="cmsg ai"><div class="cav">${CHAT_LOGO}</div><div class="cb">${x}</div></div>`}
-function chatEmpty(){return `<div class="cempty">${CHAT_LOGO}<h2>What do you want to know?</h2><p>Ask what your company already knows, tell me what you know, or drop in a document or case study. I keep it for the next person.</p>
-  <div class="cards2">${STARTERS.map(s=>`<button type="button"><small>${s[0]==="tell"?"TEACH IT":"ASK"}</small>${esc(s[1])}</button>`).join("")}</div></div>`}
-function drawThread(){const t=$("#cthread"),s=curSess();
+  if(m.file)x=`<div class="filechip">${esc(m.file.name)} · ${m.file.sections} section${m.file.sections===1?"":"s"} learned</div><div class="txt" style="margin-top:8px">${esc(m.t)}</div>`;
+  if(m.basis)x+=`<div class="basis ${esc(m.basis.level)}"><b>${m.basis.level==="strong"?"Well supported":m.basis.level==="partial"?"Partly supported":"Not proven"}</b> · based on ${esc(m.basis.summary)}. ${esc(m.basis.note)}</div>`;
+  if(m.sources&&m.sources.length)x+=`<details class="csrc"><summary>${m.sources.length} records retrieved</summary>${m.sources.map(s=>`<div><span class="tier ${esc(s.tier||"context")}">${esc(s.label||"Record")}</span><b>${esc(s.ref||"")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`;
+  if(m.code)x+=`<div class="codebox">Your company code<b>${esc(m.code)}</b>Give this to your team so they can join.</div>`;
+  if(m.saved)x+=`<div class="savedcard"><b>Saved to your company memory</b>${esc(m.saved)}</div>`;
+  const ans=m.kind==="answer";
+  x+=`<div class="acts"><button data-act="copy" data-k="${k}" title="Copy">${ic("copy")}</button>${ans?`<button data-act="up" data-k="${k}" class="${m.fb==="up"?"on":""}" title="Helpful">${ic("up")}</button><button data-act="down" data-k="${k}" class="${m.fb==="down"?"on":""}" title="Wrong or incomplete">${ic("up")}</button>`:""}<button data-act="speak" data-k="${k}" title="Read aloud">${ic("speak")}</button>${ans?`<button data-act="redo" data-k="${k}" title="Ask again">${ic("redo")}</button>`:""}</div>`;
+  if(ans){if(m.open)x+=`<div class="fbbox"><label>What is wrong, and what is right?</label><textarea data-fbt="${k}" placeholder="e.g. On this unit it is the thermostat position, not the compressor…"></textarea><div><button class="btn sm pri" data-act="fbsave" data-k="${k}" type="button">Save correction</button> <button class="btn sm" data-act="fbskip" data-k="${k}" type="button">Just mark unhelpful</button></div></div>`;
+    else if(m.fb==="down")x+=`<div class="fbnote">${m.fixed?"Saved as a correction. The next answer on this will show it first.":"Marked unhelpful. Thanks."}</div>`;
+    else if(m.fb==="up")x+=`<div class="fbnote">Thanks. Marked helpful.</div>`}
+  return `<div class="am">${x}</div>`}
+function chatEmpty(){return `<div class="cempty">${CHAT_LOGO}<h2>What do you want to know?</h2><div class="cards2">${STARTERS.map(s=>`<button type="button"><small>${s[0]==="tell"?"TEACH IT":"ASK"}</small>${esc(s[1])}</button>`).join("")}</div></div>`}
+function drawThread(keepScroll){const t=$("#cthread"),s=curSess(),y=t.scrollTop;
   if(!s.msgs.length){t.innerHTML=chatEmpty();$$("#cthread .cards2 button").forEach((b,i)=>b.onclick=()=>chatSend(STARTERS[i][1]));return}
-  t.innerHTML='<div class="cwrap">'+s.msgs.map(msgHtml).join("")+"</div>";scrollChat()}
+  t.innerHTML='<div class="cwrap">'+s.msgs.map((m,k)=>m.r==="user"?userHtml(m):aiHtml(m,k)).join("")+"</div>";
+  if(keepScroll)t.scrollTop=y;else scrollChat()}
 function scrollChat(){const t=$("#cthread");t.scrollTop=t.scrollHeight}
-function showGate(msg){SES=null;TOKEN=null;try{localStorage.removeItem("sm_session")}catch{}$("#gate").classList.add("on");$("#wscard").innerHTML='<b>Not signed in</b>Join to see your company\'s knowledge.';$("#sess").innerHTML="";if(msg)$("#gerr").innerHTML=`<div class="err">${esc(msg)}</div>`}
+async function feedback(k,rating,text){const m=curSess().msgs[k];if(!m)return;
+  try{const r=await api("/api/feedback",{question:m.q||"",answer:m.t||"",rating,correction:text||"",refs:m.refs||[]});m.fb=rating;m.fixed=!!r.correction_retained;m.open=false;if(r.correction_retained)loadStatus()}
+  catch(e){toast(e.message);m.open=true}saveSess();drawThread(true)}
+function regenerate(k){const s=curSess(),u=s.msgs[k-1];if(!u||u.r!=="user"||chatBusy)return;const text=u.t;s.msgs.splice(k-1);saveSess();drawThread();chatSend(text)}
+function speak(k){const m=curSess().msgs[k];if(!m||!window.speechSynthesis)return toast("This browser can't read aloud.");
+  if(speaking===k){speechSynthesis.cancel();speaking=null;return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(m.t);u.onend=()=>{speaking=null};speaking=k;speechSynthesis.speak(u)}
+function showGate(msg){SES=null;TOKEN=null;try{localStorage.removeItem("sm_session")}catch{}$("#gate").classList.add("on");$("#wscard").innerHTML='<div class="who2"><b>Not signed in</b><small>Join your company</small></div>';$("#sess").innerHTML="";$("#ctitle").textContent="SiteMemory";if(msg)$("#gerr").innerHTML=`<div class="err">${esc(msg)}</div>`}
 function startSession(r){SES=r;TOKEN=r.token;try{localStorage.setItem("sm_session",JSON.stringify(r))}catch{}$("#gate").classList.remove("on");$("#gerr").innerHTML="";
-  $("#wscard").innerHTML=`<b>${esc(r.workspace.name)}</b>${esc(r.email)}${r.workspace.demo?" · demo company":""}<br><a id="signout">Sign out</a>`;
-  $("#signout").onclick=()=>showGate();loadSess();drawSess();drawThread();$("#cin").focus()}
+  const nm=r.email.split("@")[0].replace(/[._-]+/g," "),ini=nm.split(" ").map(x=>x[0]||"").join("").slice(0,2).toUpperCase()||"U";
+  $("#wscard").innerHTML=`<div class="av2">${esc(ini)}</div><div class="who2">${esc(nm)}${r.admin?'<span class="adm">admin</span>':""}<small>${esc(r.workspace.name)}</small></div><a id="signout">Sign out</a>`;
+  $("#signout").onclick=()=>showGate();loadSess();drawSess();drawThread();drawHead();$("#cin").focus()}
 async function authCall(path,body){$("#gerr").innerHTML="";try{return await api(path,body)}catch(e){$("#gerr").innerHTML=`<div class="err">${esc(e.message)}</div>`;return null}}
 async function openLibrary(){$("#libmodal").hidden=false;$("#liblist").innerHTML='<div class="empty">Loading…</div>';
-  try{const d=await api("/api/docs");$("#liblist").innerHTML=d.length?d.slice().reverse().map(x=>`<div class="libitem"><b>📄 ${esc(x.name)}</b><small>added by ${esc(x.author)} · ${esc(x.date)} · ${x.sections} section${x.sections===1?"":"s"}</small></div>`).join(""):'<div class="empty">No documents yet. Drop one into the chat.</div>'}catch(e){$("#liblist").innerHTML=`<div class="err">${esc(e.message)}</div>`}}
+  try{const d=await api("/api/docs");$("#liblist").innerHTML=d.length?d.slice().reverse().map(x=>`<div class="libitem"><b>${esc(x.name)}</b><small>added by ${esc(x.author)} · ${esc(x.date)} · ${x.sections} section${x.sections===1?"":"s"}</small></div>`).join(""):'<div class="empty">No documents yet. Use + to add one.</div>'}catch(e){$("#liblist").innerHTML=`<div class="err">${esc(e.message)}</div>`}}
 function wireChat(){
+  hydrateIcons();
   const ta=$("#cin"),grow=()=>{ta.style.height="auto";ta.style.height=Math.min(180,ta.scrollHeight)+"px"};
   ta.addEventListener("input",grow);
   ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("#composer").requestSubmit()}});
   $("#composer").onsubmit=e=>{e.preventDefault();const v=ta.value.trim();if(v&&!chatBusy&&SES){ta.value="";grow();chatSend(v)}};
   $("#newchat").onclick=()=>{if(SES){newSession();ta.focus()}};
   $("#liblink").onclick=()=>SES?openLibrary():null;$("#libx").onclick=()=>$("#libmodal").hidden=true;
+  $("#ctoggle").onclick=()=>{$("#cgpt").classList.add("collapsed");$("#copen").hidden=false};$("#copen").onclick=()=>{$("#cgpt").classList.remove("collapsed");$("#copen").hidden=true};
+  $("#csearchbtn").onclick=()=>{const s=$("#csearch");s.hidden=!s.hidden;if(!s.hidden)s.focus();else{s.value="";sessFilter="";drawSess()}};
+  $("#csearch").oninput=e=>{sessFilter=e.target.value;if(SES)drawSess()};
+  $("#cmore").onclick=e=>{e.stopPropagation();$("#cmenu").hidden=!$("#cmenu").hidden};document.addEventListener("click",()=>{const m=$("#cmenu");if(m)m.hidden=true});
+  $("#c-rename").onclick=()=>{const s=curSess(),v=prompt("Rename this chat",s.title);if(v&&v.trim()){s.title=v.trim().slice(0,60);saveSess();drawSess();drawHead()}};
+  $("#c-delete").onclick=()=>{if(!confirm("Delete this chat?"))return;SESS.items=SESS.items.filter(x=>x.id!==SESS.cur);if(!SESS.items.length)newSession(false);SESS.cur=SESS.items[0].id;saveSess();drawSess();drawThread();drawHead()};
+  $("#cshare").onclick=()=>{const s=curSess();if(!s||!s.msgs.length)return toast("Nothing to share yet.");const t=s.title+"\n\n"+s.msgs.map(m=>(m.r==="user"?"You: ":"SiteMemory: ")+(m.t||(m.file?m.file.name:""))).join("\n\n");
+    navigator.clipboard.writeText(t).then(()=>toast("Conversation copied")).catch(()=>toast("Could not copy"))};
+  const th=$("#cthread"),tb=$("#tobottom");th.addEventListener("scroll",()=>{tb.hidden=th.scrollHeight-th.scrollTop-th.clientHeight<240});tb.onclick=()=>th.scrollTo({top:th.scrollHeight});
+  th.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const k=+b.dataset.k,m=curSess().msgs[k];if(!m)return;
+    switch(b.dataset.act){
+      case"copy":navigator.clipboard.writeText(m.t||"").then(()=>toast("Copied")).catch(()=>toast("Could not copy"));break;
+      case"up":feedback(k,"up");break;
+      case"down":m.open=true;saveSess();drawThread(true);break;
+      case"speak":speak(k);break;
+      case"redo":regenerate(k);break;
+      case"fbskip":feedback(k,"down","");break;
+      case"fbsave":{const box=$(`[data-fbt="${k}"]`),v=box?box.value.trim():"";if(v.length<15){box.placeholder="Please write a little more (at least a sentence).";box.focus();return}feedback(k,"down",v);break}}});
   $$(".gtabs button").forEach(b=>b.onclick=()=>{$$(".gtabs button").forEach(x=>x.classList.toggle("on",x===b));$("#gjoin").hidden=b.dataset.g!=="join";$("#gmake").hidden=b.dataset.g!=="make";$("#gerr").innerHTML=""});
   $("#g-demo").onclick=()=>{$("#g-code").value="COOLCARE-DEMO";$("#g-email").focus();$("#gerr").innerHTML='<p class="foot">Demo company code filled in. Enter any email to continue.</p>'};
   $("#gjoin").onsubmit=async e=>{e.preventDefault();const r=await authCall("/api/workspace/join",{code:$("#g-code").value.trim(),email:$("#g-email").value.trim()});if(r)startSession(r)};
   $("#gmake").onsubmit=async e=>{e.preventDefault();const r=await authCall("/api/workspace/create",{name:$("#m-name").value.trim(),email:$("#m-email").value.trim()});if(!r)return;
     startSession(r);const t=curSess();t.msgs.push({r:"ai",t:`Your workspace "${r.workspace.name}" is ready. ${r.note}`,code:r.code});saveSess();drawThread()};
   $("#cfile").onchange=e=>{uploadFiles([...e.target.files]);e.target.value=""};
-  const th=$("#cthread");["dragenter","dragover"].forEach(ev=>th.addEventListener(ev,e=>{e.preventDefault();th.classList.add("drop")}));
+  ["dragenter","dragover"].forEach(ev=>th.addEventListener(ev,e=>{e.preventDefault();th.classList.add("drop")}));
   ["dragleave","drop"].forEach(ev=>th.addEventListener(ev,e=>{e.preventDefault();th.classList.remove("drop")}));
   th.addEventListener("drop",e=>uploadFiles([...e.dataTransfer.files]));
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=$("#cmic");
+  if(SR){mic.hidden=false;let rec=null;mic.onclick=()=>{if(rec){rec.stop();return}rec=new SR();rec.lang="en-IN";rec.interimResults=true;const base=ta.value;
+      rec.onresult=ev=>{ta.value=(base+" "+[...ev.results].map(r=>r[0].transcript).join("")).trim();grow()};rec.onend=()=>{mic.classList.remove("live");rec=null};rec.onerror=()=>{toast("Could not hear that. Check the microphone permission.")};mic.classList.add("live");rec.start()}}
   let saved=null;try{saved=JSON.parse(localStorage.getItem("sm_session")||"null")}catch{}
-  if(saved){TOKEN=saved.token;api("/api/workspace/me").then(()=>startSession(saved)).catch(()=>showGate())}else showGate()}
+  if(saved){TOKEN=saved.token;api("/api/workspace/me").then(m=>startSession({...saved,admin:m.admin})).catch(()=>showGate())}else showGate()}
 async function uploadFiles(files){if(!SES||!files.length)return;
-  for(const f of files){const s=curSess();s.msgs.push({r:"user",t:"📎 "+f.name});if(s.title==="New chat")s.title=f.name.slice(0,40);saveSess();drawThread();drawSess();
-    const wrap=$("#cthread .cwrap");const id="u"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="cmsg ai" id="${id}"><div class="cav">${CHAT_LOGO}</div><div class="cb"><div class="dots"><i></i><i></i><i></i></div><div class="foot">Reading ${esc(f.name)}…</div></div></div>`);scrollChat();
+  for(const f of files){const s=curSess();s.msgs.push({r:"user",t:"",file:{name:f.name}});if(s.title==="New chat")s.title=f.name.slice(0,40);saveSess();drawThread();drawSess();drawHead();
+    const wrap=$("#cthread .cwrap");const id="u"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="am" id="${id}"><div class="dots"><i></i><i></i><i></i></div><div class="fbnote">Reading ${esc(f.name)}…</div></div>`);scrollChat();
     try{const fd=new FormData();fd.append("file",f);const r=await fetch("/api/docs",{method:"POST",headers:{Authorization:"Bearer "+TOKEN},body:fd});
       if(r.status===401){showGate("Your session ended. Join again.");return}
       const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"That file could not be read.");
@@ -1074,16 +1245,17 @@ async function uploadFiles(files){if(!SES||!files.length)return;
     catch(e){s.msgs.push({r:"ai",t:"I could not add that file. "+e.message})}
     saveSess();drawThread()}}
 async function chatSend(msg){
-  chatBusy=true;$("#csend").disabled=true;const s=curSess();s.msgs.push({r:"user",t:msg});if(s.title==="New chat")s.title=msg.slice(0,40);saveSess();drawThread();drawSess();
-  const wrap=$("#cthread .cwrap"),id="c"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="cmsg ai" id="${id}"><div class="cav">${CHAT_LOGO}</div><div class="cb"><div class="dots"><i></i><i></i><i></i></div></div></div>`);scrollChat();
+  chatBusy=true;$("#csend").disabled=true;const s=curSess();s.msgs.push({r:"user",t:msg});if(s.title==="New chat")s.title=msg.slice(0,40);saveSess();drawThread();drawSess();drawHead();
+  const wrap=$("#cthread .cwrap"),id="c"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="am" id="${id}"><div class="dots"><i></i><i></i><i></i></div></div>`);scrollChat();
   try{
     const r=await api("/api/chat",{message:msg,context:lastQ});
     if(r.kind==="answer")lastQ=msg;
-    const cb=document.querySelector("#"+id+" .cb"),clean=String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"").slice(0,3600);
-    cb.innerHTML='<div class="txt"></div>';const tx=cb.querySelector(".txt"),words=clean.split(/(\s+)/);let i=0;
+    const box=document.getElementById(id),clean=String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"").slice(0,3600);
+    box.innerHTML='<div class="txt"></div>';const tx=box.querySelector(".txt"),words=clean.split(/(\s+)/);let i=0;
     await new Promise(res=>{const step=()=>{i+=RM?words.length:3;tx.textContent=words.slice(0,i).join("");scrollChat();if(i<words.length)setTimeout(step,16);else res()};step()});
-    s.msgs.push({r:"ai",t:clean,sources:r.kind==="answer"?r.sources:null,saved:r.kind==="saved"?r.memory_text:null});saveSess();drawThread();if(r.kind==="saved")loadStatus()
-  }catch(e){if(/join|session|not valid/i.test(e.message)){showGate(e.message)}else{const cb=document.querySelector("#"+id+" .cb");if(cb)cb.innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`}}
+    s.msgs.push({r:"ai",kind:r.kind,q:msg,t:clean,sources:r.kind==="answer"?r.sources:null,basis:r.kind==="answer"&&r.found?r.basis:null,refs:r.kind==="answer"?(r.sources||[]).map(x=>x.ref).filter(Boolean):[],saved:r.kind==="saved"?r.memory_text:null});
+    saveSess();drawThread();if(r.kind==="saved")loadStatus()
+  }catch(e){if(/join|session|not valid/i.test(e.message)){showGate(e.message)}else{const b=document.getElementById(id);if(b)b.innerHTML=`<div class="txt" style="color:#ffb7a5">${esc(e.message)}</div>`}}
   chatBusy=false;$("#csend").disabled=false;scrollChat();$("#cin").focus()}
 let LEAVING=new Set();try{LEAVING=new Set(JSON.parse(localStorage.getItem("sm_leaving")||"[]"))}catch{}
 async function loadCompany(){let o;try{o=await api("/api/company")}catch(e){$("#cpeople").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
@@ -1500,13 +1672,13 @@ async function rebrief(){
       <div class="diffbox"><b>${changed?"What changed":"Same advice"}</b>${changed?[ob&&ob.headline!==nb.headline?`Headline: ${esc(nb.headline)}`:"",ob&&ob.confidence!==nb.confidence?`Confidence: ${esc(ob.confidence)} → ${esc(nb.confidence)}`:"",newAvoid.length?`Now warns against: ${esc(newAvoid.join(" · "))}`:""].filter(Boolean).join("<br>"):"The failed visit did not change the top recommendation for this alarm; the evidence counts above did change."}</div>`;
   }catch(e){out.innerHTML=`<div class="err">${esc(e.message)}</div>`;btn.disabled=false}}
 $("#teachbtn").onclick=teach;$("#rebrief").onclick=rebrief;
-$("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$("#l1out").innerHTML=`<p class="foot" style="margin-top:10px">${esc(rr.note)}</p>`;$("#l2out").innerHTML="";loadStatus()}catch(e){$("#l1out").innerHTML=`<div class="err">${esc(e.message)}</div>`}};
+$("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$("#l1out").innerHTML=`<p class="foot" style="margin-top:10px">${esc(rr.note)}</p>`;$("#l2out").innerHTML="";loadStatus()}catch(e){$("#l1out").innerHTML=`<div class="err">${esc(/admin/i.test(e.message)?"Only the workspace admin can reset the demo memory. Join the demo company first and you become its admin if nobody has yet.":e.message)}</div>`}};
 
 
 (async()=>{
   setTimeout(()=>{$("#curtain").classList.add("go");setTimeout(()=>$("#curtain").remove(),1000)},RM?0:1100);
   wireTalk();watchScenes();$("#steps").style.visibility="hidden";$("#bar").style.visibility="hidden";
-  try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=(SC.find(s=>s.id==="LIVE-4")||SC[0]).id;fillSel();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes()}
+  try{try{TOUR_TOKEN=(await api("/api/workspace/guest",{})).token}catch{}await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=(SC.find(s=>s.id==="LIVE-4")||SC[0]).id;fillSel();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes()}
   catch(e){$("#packet").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
   loadAcc();
   const hh=location.hash.slice(1);if(["chat","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="app"||hh==="ask")go("chat");else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}})();

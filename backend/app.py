@@ -33,6 +33,7 @@ import evidence as ev  # noqa: E402
 import chatintent  # noqa: E402
 import documents  # noqa: E402
 import knowledge  # noqa: E402
+import provenance  # noqa: E402
 import records  # noqa: E402
 import simulate  # noqa: E402
 import voice  # noqa: E402
@@ -110,7 +111,14 @@ def current(authorization: str | None = Header(None)) -> dict:
         ws, email = workspaces.verify(tok)
     except workspaces.AuthError as exc:
         raise HTTPException(exc.status, exc.message) from exc
-    return {"ws": ws, "email": email, "memory": ws_memory(ws), "name": email.split("@", 1)[0].replace(".", " ").title()}
+    return {"ws": ws, "email": email, "memory": ws_memory(ws), "name": email.split("@", 1)[0].replace(".", " ").title(),
+            "admin": workspaces.is_admin(ws, email), "guest": email == workspaces.GUEST_EMAIL}
+
+
+def admin_only(ctx: dict = Depends(current)) -> dict:
+    if not ctx["admin"]:
+        raise HTTPException(403, "Only the workspace admin (the first person who joined) can do that.")
+    return ctx
 
 
 beliefs_engine = beliefs_mod.BeliefEngine(store, memory, _state, _set_state)
@@ -166,7 +174,7 @@ class RunReq(BaseModel):
 
 
 @app.post("/api/runs")
-def start_run(req: RunReq):
+def start_run(req: RunReq, ctx: dict = Depends(current)):
     run = room.start(req.scenario_id, chaos=req.chaos, paths={"both": ("without", "with"), "with": ("with",), "without": ("without",)}[req.paths])
     return {"run_id": run.id, "alarm": run.alarm, "chaos": run.chaos}
 
@@ -252,7 +260,7 @@ def _log_visit(job: dict, body: VisitLog) -> dict:
 
 
 @app.post("/api/jobs/{job_id}/log")
-def log_visit(job_id: str, body: VisitLog):
+def log_visit(job_id: str, body: VisitLog, ctx: dict = Depends(current)):
     return _log_visit(store.job(job_id), body)
 
 
@@ -267,7 +275,7 @@ def open_jobs():
 
 
 @app.post("/api/runs/{run_id}/sample-log")
-def sample_log(run_id: str, fail: bool = False):
+def sample_log(run_id: str, fail: bool = False, ctx: dict = Depends(current)):
     """The technician follows the WITH-memory plan; what happened (per the simulation) is logged and retained. Demonstrates retain."""
     run = room.get(run_id)
     if not run or "with" not in run.plans:
@@ -302,12 +310,16 @@ def _ask(mem, q: str) -> dict:
         answer = mem.reflect(q, [])
     except Exception:
         log.exception("reflect failed for ask")
-    sources = [{"ref": m.ref(), "date": m.date, "text": m.text[:280], "tags": m.tags[:5]} for m in hits]
+    sources = [{"ref": m.ref(), "date": m.date, "text": m.text[:280], "tags": m.tags[:6], **provenance.classify(m.tags)} for m in hits]
     if not hits and not answer:
-        return {"answer": "Nothing in the company memory covers that yet. If you know the answer, add it on the right so the next person finds it.", "sources": [], "found": False, "backend": mem.name}
+        return {"answer": "Nothing in the company memory covers that yet. If you know the answer, tell me and I will keep it for the next person.", "sources": [], "found": False,
+                "basis": provenance.basis([]), "backend": mem.name}
     if not answer:
         answer = "Here is what the records say: " + " ".join("(" + str(i + 1) + ") " + m.text[:200] for i, m in enumerate(hits[:3]))
-    return {"answer": answer, "sources": sources, "found": True, "backend": mem.name}
+    fixes = [s for s in sources if s["tier"] == "correction"]
+    if fixes:                              # a correction someone made is shown ahead of the answer it corrects
+        answer = "Heads up, a colleague corrected this: " + fixes[0]["text"][:260] + "\n\n" + answer
+    return {"answer": answer, "sources": sources, "found": True, "basis": provenance.basis(sources), "backend": mem.name}
 
 
 @app.post("/api/ask")
@@ -387,7 +399,8 @@ class NewCompany(BaseModel):
 
 
 def _session(ws: dict, email: str) -> dict:
-    return {"token": workspaces.token(ws["id"], email), "workspace": {"id": ws["id"], "name": ws["name"], "demo": bool(ws.get("demo")), "domain": ws.get("domain")}, "email": email}
+    return {"token": workspaces.token(ws["id"], email), "workspace": {"id": ws["id"], "name": ws["name"], "demo": bool(ws.get("demo")), "domain": ws.get("domain")}, "email": email,
+            "admin": workspaces.is_admin(ws, email)}
 
 
 @app.post("/api/workspace/join")
@@ -412,7 +425,8 @@ def workspace_create(c: NewCompany):
 @app.get("/api/workspace/me")
 def workspace_me(ctx: dict = Depends(current)):
     w = ctx["ws"]
-    return {"workspace": {"id": w["id"], "name": w["name"], "demo": bool(w.get("demo")), "domain": w.get("domain")}, "email": ctx["email"], "documents": len(workspaces.library(w["id"]))}
+    return {"workspace": {"id": w["id"], "name": w["name"], "demo": bool(w.get("demo")), "domain": w.get("domain")}, "email": ctx["email"], "admin": ctx["admin"],
+            "documents": len(workspaces.library(w["id"]))}
 
 
 @app.post("/api/docs")
@@ -444,6 +458,40 @@ def list_documents(ctx: dict = Depends(current)):
     return workspaces.library(ctx["ws"]["id"])
 
 
+class Feedback(BaseModel):
+    question: str = Field(min_length=3, max_length=400)
+    answer: str = Field("", max_length=4000)
+    rating: Literal["up", "down"]
+    correction: str = Field("", max_length=2000)
+    refs: list[str] = Field(default_factory=list, max_length=12)       # the records the answer was drawn from
+
+
+@app.post("/api/feedback")
+def feedback(f: Feedback, ctx: dict = Depends(current)):
+    """Thumbs on an answer. A thumbs-down with a correction is retained as a correction record, so the next answer carries it."""
+    saved = False
+    text = f.correction.strip()
+    if f.rating == "down" and len(text) >= 15:
+        stamp = int(time.time() * 1000)
+        body = (f"Correction by {ctx['name']} on {ev.NOW}: the earlier answer to \u201c{f.question.strip()}\u201d was wrong or incomplete. "
+                f"What is correct: {text}")
+        try:
+            ctx["memory"].retain(body, ["kind:correction", f"author:{workspaces.slug(ctx['name'])}"] + [f"corrects:{workspaces.slug(r)}" for r in f.refs[:6]],
+                                 ev.NOW, f"correction-{stamp}", {"author": ctx["name"], "kind": "correction", "question": f.question[:200]})
+        except Exception as exc:
+            log.exception("retain of a correction failed")
+            raise HTTPException(502, f"Could not save to memory: {exc}") from exc
+        saved = True
+    workspaces.add_feedback(ctx["ws"]["id"], {"date": ev.NOW, "who": ctx["email"], "question": f.question[:200], "rating": f.rating, "corrected": saved, "refs": f.refs[:6]})
+    return {"saved": True, "correction_retained": saved}
+
+
+@app.post("/api/workspace/guest")
+def workspace_guest():
+    ws, tok = workspaces.guest()
+    return {"token": tok, "workspace": {"id": ws["id"], "name": ws["name"], "demo": True, "domain": None}, "email": workspaces.GUEST_EMAIL, "admin": False}
+
+
 @app.get("/api/company")
 def company_overview():
     """The company dashboard: who holds which fixes, where knowledge is thin, what has been written down."""
@@ -452,7 +500,7 @@ def company_overview():
 
 # ------------------------------------------------------------------ voice
 @app.post("/api/voice/report")
-async def voice_report(job_id: str = Form(...), audio: UploadFile = File(...)):
+async def voice_report(job_id: str = Form(...), audio: UploadFile = File(...), ctx: dict = Depends(current)):
     job = store.job(job_id)
     data = await audio.read(voice.MAX_BYTES + 1)
     try:
@@ -464,7 +512,7 @@ async def voice_report(job_id: str = Form(...), audio: UploadFile = File(...)):
 
 
 @app.post("/api/voice/extract")
-async def voice_extract(body: dict):
+async def voice_extract(body: dict, ctx: dict = Depends(current)):
     text = str(body.get("transcript", "")).strip()
     if len(text.split()) < 3:
         raise HTTPException(422, {"code": "empty", "message": "Write at least a short sentence about the visit."})
@@ -534,7 +582,7 @@ def machine_history(machine_id: str):
 
 # ------------------------------------------------------------------ evaluation
 @app.post("/api/eval/run")
-def eval_run(limit: int | None = None):
+def eval_run(limit: int | None = None, ctx: dict = Depends(admin_only)):
     import evaluation
     if evaluation.PROGRESS.state == "running":
         raise HTTPException(409, "An evaluation is already running")
@@ -557,7 +605,7 @@ def eval_results():
 
 
 @app.post("/api/reset-demo")
-def reset_demo():
+def reset_demo(ctx: dict = Depends(admin_only)):
     """Back to the original history. Hindsight cannot delete memories, so this moves the agents to a fresh bank and re-seeds it
     in the background (Hindsight takes a minute or two to finish ingesting); the local copy is rebuilt straight away."""
     import threading

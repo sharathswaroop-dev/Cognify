@@ -17,6 +17,7 @@ from pathlib import Path
 
 DATA = Path(__file__).resolve().parent / "data"
 DEMO_ID, DEMO_CODE = "coolcare", "COOLCARE-DEMO"
+GUEST_EMAIL = "guest@demo.local"        # the public tour runs as this; it can never become an admin
 PERSONAL = {"gmail.com", "googlemail.com", "outlook.com", "hotmail.com", "yahoo.com", "icloud.com", "proton.me", "protonmail.com"}
 EMAIL = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 TTL = 60 * 60 * 24 * 30
@@ -103,7 +104,24 @@ def join(code: str, email: str) -> dict:
         raise AuthError("That company code is not right. Ask your manager for it.", 403)
     if ws.get("domain") and e.split("@", 1)[1] != ws["domain"]:
         raise AuthError(f"{ws['name']} only lets people with an @{ws['domain']} email in.", 403)
+    if not ws.get("owner") and e != GUEST_EMAIL:          # the first person into a workspace is its admin
+        d = _load()
+        d[ws["id"]]["owner"] = e
+        _save(d)
+        ws = d[ws["id"]]
     return ws
+
+
+def is_admin(ws: dict, email: str) -> bool:
+    return bool(ws.get("owner")) and ws["owner"].lower() == email.lower()
+
+
+def guest() -> tuple[dict, str]:
+    """A session on the demo company for the guided tour, with no company code. Read and demo-write only; never an admin."""
+    ws = get(DEMO_ID)
+    if not ws:
+        raise AuthError("The demo company is not set up.", 500)
+    return ws, token(DEMO_ID, GUEST_EMAIL)
 
 
 def token(ws_id: str, email: str) -> str:
@@ -140,6 +158,21 @@ def library_path(ws_id: str) -> Path:
 def library(ws_id: str) -> list[dict]:
     p = library_path(ws_id)
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+
+
+def feedback_path(ws_id: str) -> Path:
+    return DATA / "ws" / f"{ws_id}_feedback.json"
+
+
+def feedback_log(ws_id: str) -> list[dict]:
+    p = feedback_path(ws_id)
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+
+
+def add_feedback(ws_id: str, item: dict) -> None:
+    p = feedback_path(ws_id)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(feedback_log(ws_id) + [item], indent=1, ensure_ascii=False), encoding="utf-8")
 
 
 def add_to_library(ws_id: str, item: dict) -> None:

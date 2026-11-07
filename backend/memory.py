@@ -339,7 +339,15 @@ class FallbackMemory:
     def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
         if not self.degraded:
             try:
-                return self.primary.recall(query, tags, limit=limit, match=match)
+                res = self.primary.recall(query, tags, limit=limit, match=match)
+                if res:
+                    return res
+                # Hindsight answered, but with nothing. Right after a retain it may still be processing (it ingests in the background, and not at all
+                # without credit), so a record we hold locally would be missed. Use the local copy, but only for a real keyword match.
+                near = [m for m in self.secondary.recall(query, tags, limit=limit, match=match) if m.score > 0]
+                if near:
+                    self.gap_fills = getattr(self, "gap_fills", 0) + 1
+                return near
             except Exception as exc:
                 self._trip("recall", exc)
         return self.secondary.recall(query, tags, limit=limit, match=match)
