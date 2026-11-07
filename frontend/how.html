@@ -70,6 +70,24 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 .flout{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:rgba(6,9,20,.5);font-size:14.5px;white-space:pre-wrap;min-height:72px;color:#cfd6f2}
 .flout h5{font:600 11.5px "Inter";letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
 @media(max-width:900px){.canvas{height:420px}.fn{width:104px;padding:8px}}
+
+.sx{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+.sx .col{border:1px solid var(--line);border-radius:20px;padding:22px 22px 8px;background:linear-gradient(180deg,var(--card2),var(--card))}
+.sx .col.on{border-color:rgba(139,92,246,.55);box-shadow:0 0 60px -26px rgba(139,92,246,.8)}
+.sx h3{font-size:22px;margin-bottom:4px}.sx .tagl{color:var(--mu);font-size:14px;margin-bottom:18px}
+.st{display:grid;grid-template-columns:34px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.st .n{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:700 13px "Sora";background:#1a2250;color:var(--pu2);border:1px solid #2c3870}
+.col.on .st .n{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff;border:0}
+.st b{display:block;font:600 15px "Inter";margin-bottom:3px}.st p{color:#b9c2e4;font-size:14px;line-height:1.55}
+.st code{display:inline-block;margin-top:6px;font:500 11.5px "JetBrains Mono";color:var(--cy);background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.25);padding:2px 8px;border-radius:7px}
+.cmpt{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;display:table}
+.cmpt th,.cmpt td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.cmpt th{font:600 12px "Inter";letter-spacing:.1em;text-transform:uppercase;color:var(--mu);background:#0c1330}
+.cmpt td:first-child{color:#fff;font-weight:600;width:24%}.cmpt td:nth-child(2){color:#aab3d6}.cmpt td:nth-child(3){color:#d9dffa}.cmpt tr:last-child td{border-bottom:0}
+.live{margin-top:18px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.live input{flex:1;min-width:240px;background:#070b1b;border:1px solid var(--line);border-radius:99px;padding:13px 18px;color:var(--tx);font:500 14.5px "Inter";outline:none}
+.lv{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}.lv .box{border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:rgba(6,9,20,.5);font-size:14px;white-space:pre-wrap;color:#cfd6f2;min-height:90px}
+.lv .box h5{font:600 11px "Inter";letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;color:var(--pu2)}.lv .box.o h5{color:var(--mu)}
+@media(max-width:900px){.sx,.lv{grid-template-columns:1fr}}
 @media(max-width:900px){.stage,.cols,.roles,.form{grid-template-columns:1fr}.map{height:600px}.log{height:380px}}
 </style></head><body>
 <div id="spot"></div><div id="grid"></div><div id="navmount"></div>
@@ -102,6 +120,18 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
   </div>
 </div></section>
 
+<section id="steps"><div class="wrap">
+  <div class="sec-h rv"><span class="eyebrow">Step by step</span><h2>How an answer is made, <span class="grad">without and with memory.</span></h2><p class="lede">The same question, two real paths through the code. Each step names the file that does it.</p></div>
+  <div class="sx"><div class="col off rv"><h3>Memory OFF</h3><p class="tagl">A normal AI model. No company knowledge.</p><div id="offsteps"></div></div>
+  <div class="col on rv" style="--d:1"><h3>Memory ON</h3><p class="tagl">Cognify: the company's own experience.</p><div id="onsteps"></div></div></div>
+  <div class="sec-h rv" style="margin:50px 0 0"><h2 style="font-size:30px">Side by side</h2></div>
+  <table class="cmpt rv" id="cmpt"></table>
+  <div class="sec-h rv" style="margin:54px 0 0"><h2 style="font-size:30px">When you upload a file</h2><p class="lede">PDF, text, spreadsheet export or a photo with a caption: it becomes memory and is analysed straight away.</p></div>
+  <div class="sx" style="grid-template-columns:1fr"><div class="col on rv"><div id="upsteps"></div></div></div>
+  <div class="sec-h rv" style="margin:54px 0 0"><h2 style="font-size:30px">Try it live</h2><p class="lede">This calls the real service with both paths.</p></div>
+  <form class="live rv" id="lvf"><input id="lvq" value="Why does a Daikin VRV unit keep tripping with an E3 error?" maxlength="300"><button class="btn" type="submit">Run both →</button></form>
+  <div class="lv rv"><div class="box o"><h5>Memory OFF · normal AI response</h5><span id="lvo">Not run yet.</span></div><div class="box"><h5>Memory ON · company memory</h5><span id="lvn">Not run yet.</span></div></div>
+</div></section>
 <section><div class="wrap">
   <div class="sec-h rv"><span class="eyebrow">Teach it</span><h2>Add an experience. <span class="grad">Ask for it straight away.</span></h2></div>
   <div class="card rv" style="padding:30px">
@@ -129,6 +159,48 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 $("#navmount").outerHTML=nav("h");$("#footmount").outerHTML=foot();
 $("input[name=date]").value=new Date().toISOString().slice(0,10);
 
+
+/* ---------- step by step ---------- */
+const OFF_STEPS=[
+ ["Question arrives","You type a question. The browser sends it with your signed token to the server, which checks the token and finds your company.","app.py chat() · workspaces.py"],
+ ["Query processing","The message is sorted into a question, something to remember, or small talk. Small talk gets a short friendly reply and stops here.","chatintent.py"],
+ ["No memory is searched","Nothing is sent to Hindsight. The model never sees your incidents, documents, notes or corrections.","memory switched off"],
+ ["The model gets only the question","Groq receives the question and one rule: you have no access to this company's records, so never invent incidents, machines, dates or people.","llm.py text_chat()"],
+ ["General knowledge answers","The model answers from what it learned in training. If one model is rate-limited the chain moves to the next (gpt-oss-120b → gpt-oss-20b → qwen).","Groq"],
+ ["A plain, uncited reply","You get a sensible but generic answer, labelled normal AI response (in the chat: General guidance, not from your memory). It cites nothing and nothing is learned from it. It cannot know what failed on this fleet before.","app.py compare()"]];
+const ON_STEPS=[
+ ["Question arrives, company selected","Same token check, then your company's own Hindsight bank is chosen. Every company has a separate bank, so knowledge never crosses over.","workspaces.py ws_memory()"],
+ ["Query processing","Intent is read, machine ids such as M-07 are pulled out, and a short follow-up like \"and the parts?\" is joined to your previous question so it still makes sense.","chatintent.py"],
+ ["Recall: search the memory store","The question goes out to the store. Hindsight returns the best-matching records (up to 8), each with reference, date and tags: visits, alarms, colleague notes, document sections, corrections. If something was only just saved and Hindsight is still ingesting it, a real keyword match from the local copy fills the gap and is flagged.","memory.py recall()"],
+ ["Reflect: reason over what was found","Hindsight reasons across the records and drafts an answer (the Thinking option uses a larger budget). If it says \"nothing\" although records were recalled, that is not trusted and the answer is written from the records instead.","memory.py reflect()"],
+ ["Context builder","The top records are numbered [1], [2]…, trimmed, with any colleague correction first. The model is told: use only these, cite them, say what failed and what worked, and answer NO_MATCH if none relate.","app.py _ask() · GROUND_SYS"],
+ ["Groq writes a grounded answer","Because the records are in the prompt, the answer can say things no generic model knows, such as \"the relay board was replaced in 5 visits and fixed none; the contactor fixed 20\", with citations.","llm.py"],
+ ["Evidence label","Each record has a type: verified repair, note, document, correction or background. The answer is labelled Well supported (two or more proven repairs) or Partly supported (notes, documents or one repair). Weak support shows no label rather than a confident-looking one.","provenance.py"],
+ ["Reply with receipts","The answer comes with the records it used (expand \"records retrieved\") and its label. A colleague's correction, if any, is shown first.","app.py _ask()"],
+ ["The loop closes","A thumbs-down with the right answer is retained as a correction. \"Remember …\", uploaded files and logged visits are retained too, so the next answer can use them.","app.py feedback() · retain()"]];
+const UP_STEPS=[
+ ["Choose a file","PDF, text, markdown, csv, json or log. For a photo you write one sentence on what it shows, because the memory learns the description.","index.html uploadFiles()"],
+ ["Read it","Text is extracted (PDFs with pypdf). A scanned PDF with no text is refused with a clear message instead of storing nothing.","documents.py extract()"],
+ ["Cut it into sections","Paragraph-aware pieces of about 1,200 characters with a little overlap, up to 60 per file, so a long manual is searchable by section.","documents.py chunks()"],
+ ["Retain every section","Each section is saved with the file name, \"section 2 of 5\", the author and the date, so an answer can point back to it.","records.py document_record() · memory.py retain()"],
+ ["Analyse straight away","A summary request is sent automatically: recall finds the new sections, the context builder hands them to Groq, and you get key points, what failed, what worked and what to check first.","app.py chat() · _ask()"],
+ ["It stays in the Library","The file appears in the Library and every later question can cite it, for you and for colleagues.","workspaces.py library()"]];
+function renderSteps(id,arr){$(id).innerHTML=arr.map((x,i)=>`<div class="st"><div class="n">${i+1}</div><div><b>${esc(x[0])}</b><p>${esc(x[1])}</p><code>${esc(x[2])}</code></div></div>`).join("")}
+renderSteps("#offsteps",OFF_STEPS);renderSteps("#onsteps",ON_STEPS);renderSteps("#upsteps",UP_STEPS);
+const CMP=[["Where the knowledge comes from","The model's training only","The company's own incidents, notes, documents and corrections, plus the model"],
+ ["Knows this machine's history","No","Yes: recalls visits on this machine, same model and same site"],
+ ["Knows what already failed","No. It may suggest a fix that never worked here","Yes. It lists failed attempts so they are not repeated"],
+ ["Shows its sources","No","Yes: every answer lists the records it used, with date and reference"],
+ ["Says how well supported it is","No","Yes: Well supported / Partly supported from the type of records"],
+ ["Uploaded PDF, files and photos","Cannot see them","Read, retained and analysed; later questions can cite them"],
+ ["Learns from feedback","No","Yes: corrections are retained and shown first next time"],
+ ["When it has nothing","Answers anyway, with no warning","Says nothing was found, then gives clearly labelled general guidance"],
+ ["Speed","About a second","A few seconds more, because it searches and reasons first"],
+ ["Risk","A confident but generic answer","Depends on what was written down; weak support is shown, not hidden"]];
+$("#cmpt").innerHTML="<tr><th></th><th>Memory OFF</th><th>Memory ON</th></tr>"+CMP.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join("");
+$("#lvf").onsubmit=async e=>{e.preventDefault();const q=$("#lvq").value.trim();if(q.length<3)return;$("#lvo").textContent=$("#lvn").textContent="Running…";
+  try{const r=await post("/api/compare",{question:q});$("#lvo").textContent=r.off.answer?plain(r.off.answer):r.off.error;$("#lvn").textContent=r.on.answer?plain(r.on.answer):r.on.error}
+  catch(err){$("#lvo").textContent=$("#lvn").textContent="Could not run: "+err.message}};
 /* ---------- the map ---------- */
 const NODES={tech:{x:12,y:25,l:"Technician",t:"user",c:"T"},mgr:{x:12,y:70,l:"Manager / new hire",t:"user",c:"M"},
  mem:{x:50,y:48,l:"Shared memory · Hindsight",t:"mem",c:"MEMORY"},

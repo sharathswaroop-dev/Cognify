@@ -31,6 +31,8 @@ Cognify does not retrain a model. It learns by **retaining** what your organizat
 - **A whole folder or a cloned repository of runbooks and reports:** `python scripts/ingest_folder.py path/to/folder` (optionally with a company code and email) sends every readable file through the same path.
 - **Corrections:** a thumbs-down with the right answer is retained and shown first next time.
 
+> **How an answer is made, without and with memory, step by step:** [docs/HOW_IT_WORKS.md](docs/HOW_IT_WORKS.md) (also live at `/how-it-works#steps`).
+
 ## The problem
 
 A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. What prevents it (what failed on this unit last time, what finally fixed it, which part to carry, the gate code) lives in job cards, chat threads and the heads of people who leave. And plain "memory" is not enough: a log is full of wrong diagnoses, parts that were replaced on a hunch, fixes that held for three weeks, and fixes that quietly stop working on a newer generation of units. Cognify is built for that mess.
