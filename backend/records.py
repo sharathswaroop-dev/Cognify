@@ -97,6 +97,14 @@ def site_record(s: dict) -> dict:
             "tags": [f"site:{s['id']}", "kind:site"], "date": None, "meta": {"site_id": s["id"]}}
 
 
+def knowledge_record(author: str, role: str, years: int | None, text: str, machine: dict | None, site: dict | None, doc_id: str, date: str) -> dict:
+    """What an experienced person knows, in their own words, kept with who said it and about what. This is the knowledge that otherwise leaves with them."""
+    who = f"{author}" + (f" ({role}{', ' + str(years) + ' years in the job' if years else ''})" if role or years else "")
+    about = f" about {machine['model']} {machine['id']} at {site['name']}" if machine and site else (f" about {site['name']}" if site else "")
+    tags = ["kind:note", f"author:{slug(author)}"] + ([f"machine:{machine['id']}", f"family:{slug(machine['model_family'])}"] if machine else []) + ([f"site:{site['id']}"] if site else [])
+    return {"doc_id": doc_id, "text": f"Knowledge shared by {who}{about}: {text}", "tags": tags, "date": date, "meta": {"author": author, "kind": "note"}}
+
+
 def validate(rec: dict, store: Store) -> dict:
     """Refuse a record that names a machine we do not have. Memory with invented machine ids is worse than no memory."""
     for t in rec["tags"]:

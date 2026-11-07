@@ -92,3 +92,24 @@ def test_reset_demo_clears_logged_visits_and_rebuilds_the_memory(client):
     r = c.post("/api/reset-demo")
     assert r.status_code == 200 and r.json()["reset"] and not app_mod.store.logged
     assert not any("J-1204-V1" == i["doc_id"] for i in app_mod.memory.items)
+
+
+def test_a_new_hire_can_ask_the_memory_and_gets_sources(client):
+    c, app_mod = client
+    r = c.post("/api/ask", json={"question": "What usually goes wrong with the Daikin VRV IV compressor?"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["found"] and body["answer"] and body["sources"]
+    assert c.post("/api/ask", json={"question": "hi"}).status_code == 422
+
+
+def test_knowledge_shared_by_a_senior_person_is_retained_and_found_later(client):
+    c, app_mod = client
+    note = {"author": "Raghu Murthy", "role": "senior technician", "years": 15, "machine_id": "M-91",
+            "text": "On this rooftop unit the breaker trips are caused by the inverter board, never the contactor. Check the DC bus first."}
+    r = c.post("/api/knowledge", json=note)
+    assert r.status_code == 200 and "Raghu Murthy" in r.json()["memory_text"] and "kind:note" in r.json()["tags"]
+    found = c.post("/api/ask", json={"question": "Raghu Murthy rooftop unit breaker trips inverter board DC bus"}).json()
+    assert any("Raghu Murthy" in s["text"] for s in found["sources"])
+    bad = c.post("/api/knowledge", json={**note, "machine_id": "M-999"})
+    assert bad.status_code == 422

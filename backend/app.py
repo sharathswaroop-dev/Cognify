@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import sys
+import time
 import threading
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -251,6 +252,58 @@ def sample_log(run_id: str, fail: bool = False):
     job = next((j for j in store.open_jobs if j["job_id"] == run.scenario.get("job_id")),
                {"job_id": f"AL-{run.alarm['id']}", "machine_id": run.alarm["machine_id"], "symptom": run.scenario["description"], "technician_id": "T-06"})
     return _log_visit(job, body)
+
+
+# ------------------------------------------------------------------ the company's knowledge: ask it, and add to it
+class AskReq(BaseModel):
+    question: str = Field(min_length=3, max_length=400)
+
+
+@app.post("/api/ask")
+def ask_the_memory(req: AskReq):
+    """A new hire asks what the company already knows. Hindsight's reflect writes the answer from the stored visits and notes, and the
+    records it drew on are returned so the answer can be checked. Nothing here needs a language model of ours."""
+    q = req.question.strip()
+    try:
+        hits = memory.recall(q, [], 8)
+    except Exception as exc:
+        raise HTTPException(502, f"The memory could not be searched: {exc}") from exc
+    answer = None
+    try:
+        answer = memory.reflect(q, [])
+    except Exception:
+        log.exception("reflect failed for ask")
+    sources = [{"ref": m.ref(), "date": m.date, "text": m.text[:280], "tags": m.tags[:5]} for m in hits]
+    if not hits and not answer:
+        return {"answer": "Nothing in the company memory covers that yet. If you know the answer, add it on the right so the next person finds it.", "sources": [], "found": False, "backend": memory.name}
+    if not answer:
+        answer = "Here is what the records say: " + " ".join("(" + str(i + 1) + ") " + m.text[:200] for i, m in enumerate(hits[:3]))
+    return {"answer": answer, "sources": sources, "found": True, "backend": memory.name}
+
+
+class Note(BaseModel):
+    author: str = Field(min_length=2, max_length=60)
+    role: str = Field("", max_length=60)
+    years: int | None = Field(None, ge=0, le=60)
+    machine_id: str | None = None
+    site_id: str | None = None
+    text: str = Field(min_length=15, max_length=2000)
+
+
+@app.post("/api/knowledge")
+def share_knowledge(n: Note):
+    """Someone who knows (a retiring technician, a senior) writes down what they know. It is retained with their name and the machine or site it is about."""
+    m = store.machine(n.machine_id) if n.machine_id else None
+    sid = (m or {}).get("site_id") or n.site_id
+    site = store.site(sid) if sid else None
+    doc_id = f"note-{int(time.time() * 1000)}"
+    rec = records.validate(records.knowledge_record(n.author.strip(), n.role.strip(), n.years, n.text.strip(), m, site, doc_id, ev.NOW), store)
+    try:
+        memory.retain(rec["text"], rec["tags"], rec["date"], rec["doc_id"], rec["meta"])
+    except Exception as exc:
+        log.exception("retain of a note failed")
+        raise HTTPException(502, f"Could not save to memory: {exc}") from exc
+    return {"saved": True, "memory_text": rec["text"], "tags": rec["tags"], "memory_backend": memory.name}
 
 
 # ------------------------------------------------------------------ voice

@@ -697,7 +697,18 @@ main{max-width:1500px}
 .wlinks a{text-decoration:none}
 @media (max-width:1100px){.intro,.probgrid,.wrapgrid,.under,.demo2,.learn{grid-template-columns:1fr}.outcome.on{grid-template-columns:1fr}#steps button span{display:none}.constel{max-width:320px}}
 @media (max-width:760px){#steps button{padding:5px 8px 5px 5px}.chips{display:none}header{height:auto}}
-.wcard .accgrid{grid-template-columns:1fr}.wcard .accnote{margin-top:12px}</style>
+.wcard .accgrid{grid-template-columns:1fr}.wcard .accnote{margin-top:12px}.askgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:26px;align-items:start}
+.chat{display:flex;flex-direction:column;gap:14px;max-height:520px;overflow-y:auto;padding:4px 2px 12px}
+.cm{padding:12px 16px;border:2.5px solid var(--text);border-radius:var(--wob2);animation:rv .5s var(--ease);line-height:1.5}
+.cm.q{align-self:flex-end;background:var(--text);color:#fff8ea;max-width:80%}
+.cm.a{background:#fffaee;white-space:pre-line}.cm.a .src{margin-top:10px;white-space:normal}
+.cm .src summary{font:500 11.5px var(--mono);color:var(--hot);cursor:pointer}
+.cm .src div{padding:7px 0;border-top:1px dashed var(--line);font:400 12px/1.5 var(--mono);color:var(--mute)}
+.cm .src b{font-weight:500;color:var(--text);border:1.5px solid var(--text);border-radius:999px;padding:0 8px;margin-right:6px;background:#fbe4dc}
+.sugg{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.sugg button{border:2px solid var(--text);border-radius:999px;background:#fffaee;padding:6px 13px;font:600 13px var(--body);color:var(--text)}.sugg button:hover{background:#fbe4dc}
+.askf{display:flex;gap:10px;margin-top:6px}.askf .fi{flex:1}
+@media (max-width:1100px){.askgrid{grid-template-columns:1fr}}
+</style>
 </head>
 <body class="fx">
 <div id="cur"><span class="lab"></span></div><div id="cur-dot"></div>
@@ -708,7 +719,7 @@ main{max-width:1500px}
     <div><b>SiteMemory</b><small id="company">Field service that remembers</small></div></a>
   <nav id="steps"><button data-scene="intro" class="on"><i>1</i><span>Intro</span></button><button data-scene="problem"><i>2</i><span>Problem</span></button><button data-scene="demo"><i>3</i><span>Demo</span></button><button data-scene="wrap"><i>4</i><span>Wrap-up</span></button></nav>
   <div class="chips" id="status"></div>
-  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
+  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="ask">Ask the memory</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
 </header>
 <div id="bar"><i id="barfill"></i></div>
 <div id="banner"></div>
@@ -781,8 +792,27 @@ main{max-width:1500px}
       <div class="wcard"><h4>What surprised me</h4><p class="surp edit" id="surp" contenteditable spellcheck="false">Remembering more made it worse until something checked it: the old fix was still the top suggestion for newer units, and only the Verifier reading the raw records caught it.</p></div>
       <div class="wcard"><h4>Does it actually help?</h4><div id="accpanel"><div class="empty">Loading…</div></div></div>
     </div>
-    <div class="wlinks"><button class="btn mag" data-view="phone" data-cursor="Open">Technician phone</button><button class="btn mag" data-view="dash" data-cursor="Open">Dashboard</button><a class="btn" href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div>
+    <div class="wlinks"><button class="btn pri mag" data-view="ask" data-cursor="Ask">Ask the memory</button><button class="btn mag" data-view="phone" data-cursor="Open">Technician phone</button><button class="btn mag" data-view="dash" data-cursor="Open">Dashboard</button><a class="btn" href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div>
   </section>
+</section>
+
+<section class="view" id="view-ask">
+  <button class="back" data-view="show">← back to the talk</button>
+  <div class="title"><div><div class="kick">for the new hire</div><h1 id="h-ask"></h1></div>
+    <p>When someone with fifteen years in the job retires, what they know used to leave with them. Here a new technician asks, and the company memory answers from every visit and every note, with the records it used.</p></div>
+  <div class="askgrid">
+    <div class="panel"><h3>Ask what the company already knows</h3><p class="sub">Answers come from Hindsight's reflect over the stored visits and notes. Every source is listed so you can check it.</p>
+      <div class="chat" id="chat"><div class="empty">Try one of these, or type your own.</div></div>
+      <div class="sugg" id="sugg"></div>
+      <form id="askf" class="askf"><input id="askq" class="fi" placeholder="e.g. What usually goes wrong with the Daikin VRV IV?" autocomplete="off"><button class="btn pri mag" data-cursor="Ask">Ask</button></form></div>
+    <div class="panel"><h3>Share what you know</h3><p class="sub">Retiring, or handing over? Write down what you would tell your replacement. It is kept with your name and what it is about.</p>
+      <form id="notef">
+        <label class="f">Your name</label><input class="fi" id="n-author" placeholder="e.g. Raghu Murthy" maxlength="60" required>
+        <label class="f">Your role and years in the job</label><div style="display:grid;grid-template-columns:1fr 90px;gap:8px"><input class="fi" id="n-role" placeholder="senior technician" maxlength="60"><input class="fi" id="n-years" type="number" min="0" max="60" placeholder="years"></div>
+        <label class="f">About which machine (optional)</label><select class="fi" id="n-machine"><option value="">The company in general</option></select>
+        <label class="f">What would you tell your replacement?</label><textarea class="fi" id="n-text" style="min-height:130px" placeholder="On this unit the trips are the inverter board, never the contactor. Check the DC bus first. The key is at the security desk…" required></textarea>
+        <div style="margin-top:14px"><button class="btn pri mag" data-cursor="Save">Save to the company memory</button></div><div id="noteout"></div></form></div>
+  </div>
 </section>
 
 <section class="view" id="view-phone">
@@ -825,7 +855,7 @@ addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;const sp=e.target.c
 (function loop(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loop)})();
 $("#clock").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
-const HEADS={room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
+const HEADS={ask:"Ask the company memory",room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
 function setHead(v){words($("#h-"+v),HEADS[v])}
 async function loadStatus(){
   STATUS=await api("/api/status");$("#company").textContent=`${STATUS.company.name} · ${STATUS.company.city}`;const deg=STATUS.memory_degraded;
@@ -858,7 +888,22 @@ function watchScenes(){const io=new IntersectionObserver(es=>es.forEach(en=>{if(
     $$("#steps button").forEach((b,j)=>{b.classList.toggle("on",j===i);b.classList.toggle("done",j<i)})}),{rootMargin:"-45% 0px -50% 0px",threshold:0});
   SCENES.forEach(n=>io.observe($("#s-"+n)));
   addEventListener("scroll",()=>{const m=document.documentElement.scrollHeight-innerHeight;$("#barfill").style.width=(m>0?scrollY/m*100:0)+"%"},{passive:true})}
-function wireTalk(){
+const SUGG=["What usually goes wrong with the Daikin VRV IV?","What should a new technician know about Brookfield Business Centre?","When a compressor trips on a 2024 unit, what actually fixed it?","Which fixes should I not repeat?"];
+function wireAsk(){
+  $("#sugg").innerHTML=SUGG.map(q=>`<button type="button">${esc(q)}</button>`).join("");
+  $$("#sugg button").forEach(b=>b.onclick=()=>askQ(b.textContent));
+  $("#askf").onsubmit=e=>{e.preventDefault();const q=$("#askq").value.trim();if(q){$("#askq").value="";askQ(q)}};
+  api("/api/reference").then(r=>{$("#n-machine").insertAdjacentHTML("beforeend",r.machines.map(m=>`<option value="${esc(m.id)}">${esc(m.id)} · ${esc(m.model)}</option>`).join(""))}).catch(()=>{});
+  $("#notef").onsubmit=async e=>{e.preventDefault();const out=$("#noteout"),btn=$("#notef button");btn.disabled=true;out.innerHTML='<div class="pipe"><div class="st act"><i></i><span>Saving to the company memory…</span></div></div>';
+    try{const r=await api("/api/knowledge",{author:$("#n-author").value.trim(),role:$("#n-role").value.trim(),years:$("#n-years").value?+$("#n-years").value:null,machine_id:$("#n-machine").value||null,text:$("#n-text").value.trim()});
+      out.innerHTML=`<p class="foot" style="margin-top:12px">Saved to ${esc(r.memory_backend)}. The next person who asks will find it:</p><div class="saved">${esc(r.memory_text)}</div>`;$("#n-text").value="";loadStatus()}
+    catch(err){out.innerHTML=`<div class="err">${esc(err.message)}</div>`}btn.disabled=false}}
+async function askQ(q){const chat=$("#chat");if(chat.querySelector(".empty"))chat.innerHTML="";
+  chat.insertAdjacentHTML("beforeend",`<div class="cm q">${esc(q)}</div>`);const id="a"+Date.now();chat.insertAdjacentHTML("beforeend",`<div class="cm a" id="${id}"><div class="pipe"><div class="st act"><i></i><span>Searching the company memory…</span></div></div></div>`);chat.scrollTop=chat.scrollHeight;
+  try{const r=await api("/api/ask",{question:q});const el=document.getElementById(id);
+    el.innerHTML=esc(String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"")).slice(0,3200)+(r.sources.length?`<details class="src"><summary>${r.sources.length} records it drew on</summary>${r.sources.map(s=>`<div><b>${esc(s.ref||"note")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`:"")}
+  catch(e){document.getElementById(id).innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`}chat.scrollTop=chat.scrollHeight}
+function wireTalk(){wireAsk();
   fetch("/demo/walkthrough.webm",{method:"HEAD"}).then(r=>{if(r.ok)$("#vidlink").style.display=""}).catch(()=>{});
   document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
     const sg=t.closest("[data-scene-go]");if(sg){goScene(sg.dataset.sceneGo);return}
