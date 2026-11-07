@@ -46,10 +46,12 @@ EVAL_PATH = DATA / "eval_results.json"
 
 store = Store()
 llm = LLM()
-_primary = build_memory("shared", bank_id=os.getenv("HINDSIGHT_BANK_ID", "sitememory-v3-coolcare"), mission=records.MISSION)
+state_path = DATA / "state.json"
+_BASE_BANK = os.getenv("HINDSIGHT_BANK_ID", "sitememory-v3-coolcare")
+_bank = (json.loads(state_path.read_text(encoding="utf-8")).get("bank_id") if state_path.exists() else None) or _BASE_BANK   # a reset moves to a fresh bank
+_primary = build_memory("shared", bank_id=_bank, mission=records.MISSION)
 # Hindsight when it works; the local keyword memory (kept in step) when it does not, with the reason shown in the UI
 memory = FallbackMemory(_primary, LocalMemory(DATA / "local_memory_shared.json")) if _primary.name == "hindsight" else _primary
-state_path = DATA / "state.json"
 
 
 def _state() -> dict:
@@ -359,11 +361,39 @@ def eval_results():
 
 @app.post("/api/reset-demo")
 def reset_demo():
+    """Back to the original history. Hindsight cannot delete memories, so this moves the agents to a fresh bank and re-seeds it
+    in the background (Hindsight takes a minute or two to finish ingesting); the local copy is rebuilt straight away."""
+    import threading
+    import time as _t
+    global memory
     store.clear_logged()
-    return {"reset": True, "note": "Visits logged during the demo are cleared from the app. Hindsight keeps its memories (that is the point)."}
+    recs = records.build_all(store, visits=store.history)
+    local = LocalMemory(DATA / "local_memory_shared.json")
+    local.items = []
+    local.retain_many(recs)
+    new = local
+    if _primary.name == "hindsight":
+        bank = f"{_BASE_BANK}-{int(_t.time())}"
+        prim = build_memory("shared", bank_id=bank, mission=records.MISSION)
+        new = FallbackMemory(prim, local)
+        threading.Thread(target=lambda: prim.retain_many(recs), daemon=True, name="reseed").start()
+        _set_state(bank_id=bank, beliefs_retained={}, **{f"seeded_{bank}": len(recs)})
+    memory = new
+    room.memory = new
+    beliefs_engine.memory = new
+    try:
+        beliefs_engine.sync()
+    except Exception:
+        log.exception("belief sync after reset failed")
+    return {"reset": True, "bank": getattr(new, "bank_id", "local"), "note": "Fresh memory bank created and re-seeded with the original history. Hindsight needs a minute or two to finish ingesting it."}
 
 
 # ------------------------------------------------------------------ frontend
+_DEMO = ROOT.parent / "docs" / "demo"
+_DEMO.mkdir(parents=True, exist_ok=True)
+app.mount("/demo", StaticFiles(directory=str(_DEMO)), name="demo")        # the recorded walkthrough video
+
+
 @app.get("/")
 def index():
     return FileResponse(FRONTEND / "index.html")

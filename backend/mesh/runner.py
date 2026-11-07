@@ -93,8 +93,11 @@ class Ctx:
         self.ops: list[dict] = []
         self.lock = threading.Lock()
         self.watch, self.announced = None, False
+        self.current = "system"             # the agent whose turn it is: searches are attributed to it
 
     def on_op(self, e: dict) -> None:
+        if not e.get("who"):
+            e["who"] = self.current
         with self.lock:
             self.ops.append(e)
         self.run.emit(self.path, e.get("who") or "system", "memory", f"{e['op']} {len(e['hits'])} hit(s)" if not e.get("skipped") else f"{e['op']} skipped (memory off)", e)
@@ -235,6 +238,7 @@ class ControlRoom:
     def execute(self, ctx: Ctx) -> dict:
         case = ctx.case
         i = ctx.mark()
+        ctx.current = "dispatcher"
         d = self.dispatcher.decide(case)
         led = d.get("ledger")
         text = f"{'REMOTE FIX' if d['decision'] == 'REMOTE_FIX' else 'SEND A TECHNICIAN'}. {d['rationale']}" + (f" Action: {d['remote_action']}." if d["remote_action"] else "")
@@ -242,11 +246,13 @@ class ControlRoom:
         ctx.hand("dispatcher", "diagnostician", "Alarm needs a diagnosis" + (" (remote step queued first)" if d["decision"] == "REMOTE_FIX" else ""), {"alarm": case.alarm})
 
         i = ctx.mark()
+        ctx.current = "diagnostician"
         diag = self.diagnostician.diagnose(case)
         ctx.say("diagnostician", self._diag_text(diag), "msg", diag, i)
         ctx.hand("diagnostician", "parts", f"Diagnosis: {diag['causes'][0]['fix']}", {"top": diag["causes"][0]})
 
         i = ctx.mark()
+        ctx.current = "parts"
         parts = self.parts.plan(case, diag)
         ctx.say("parts", self._parts_text(parts), "msg", parts, i)
         ctx.hand("parts", "verifier", "Plan ready for verification", {"carry": [p["part"] for p in parts["carry"]]})
@@ -254,6 +260,9 @@ class ControlRoom:
         rounds = []
         for rnd in range(3):
             i = ctx.mark()
+            ctx.current = "verifier"
+            ctx.run.emit(ctx.path, "verifier", "scan", f"Round {rnd + 1}: reading {len(case.visits)} raw visit records and {len(case.alarms)} alarm records dated before this alarm. No model, no summaries.",
+                         {"visits": len(case.visits), "alarms": len(case.alarms), "round": rnd + 1, "as_of": case.as_of or "today"})
             v = self.verifier.review(case, d, diag, parts)
             rounds.append(v)
             if not case.use_memory:
@@ -274,15 +283,18 @@ class ControlRoom:
             if any(x["target"] == "diagnostician" for x in v["vetoes"]):
                 ctx.hand("verifier", "diagnostician", "Vetoed: please revise", {"vetoes": v["vetoes"]})
                 i = ctx.mark()
+                ctx.current = "diagnostician"
                 hint = next((x.get("alternative") for x in v["vetoes"] if x.get("alternative")), None)
                 diag = self.diagnostician.diagnose(case, feedback_text(v["vetoes"], "diagnostician"), prior=diag, hint=hint)
                 ctx.say("diagnostician", "Revised. " + self._diag_text(diag), "revise", diag, i)
                 i = ctx.mark()
+                ctx.current = "parts"
                 parts = self.parts.plan(case, diag, feedback_text(v["vetoes"], "parts"))
                 ctx.say("parts", "Re-planned for the revised diagnosis. " + self._parts_text(parts), "revise", parts, i)
             elif any(x["target"] == "parts" for x in v["vetoes"]):
                 ctx.hand("verifier", "parts", "Vetoed: please revise", {"vetoes": v["vetoes"]})
                 i = ctx.mark()
+                ctx.current = "parts"
                 parts = self.parts.plan(case, diag, feedback_text(v["vetoes"], "parts"))
                 ctx.say("parts", "Revised. " + self._parts_text(parts), "revise", parts, i)
             else:
@@ -290,6 +302,7 @@ class ControlRoom:
         plan = {"dispatch": d, "diagnosis": diag, "parts": parts, "verifier": {"rounds": [{"vetoes": r["vetoes"], "approvals": r["approvals"]} for r in rounds],
                 "vetoes": [x for r in rounds for x in r["vetoes"]], "revised": len(rounds) > 1}}
         i = ctx.mark()
+        ctx.current = "technician"
         plan["briefing"] = self._brief(case, plan)
         b = plan["briefing"]
         ctx.say("briefing", f"{b['headline']} Do first: {'; '.join(b['do_first'][:2])}. Bring: {', '.join(b['bring'][:3])}.", "plan", b, i)

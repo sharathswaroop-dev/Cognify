@@ -10,7 +10,7 @@ from store import Store, UnknownMachine
 
 
 def _brief(m: Memory) -> dict:
-    return {"ref": m.ref(), "date": m.date, "text": m.text[:240], "tags": m.tags[:5]}
+    return {"ref": m.ref(), "date": m.date, "text": m.text[:240], "tags": m.tags[:6], "score": round(m.score, 2) if m.score else None}
 
 
 class TracedMemory:
@@ -34,8 +34,9 @@ class TracedMemory:
         self._check(tags)
         t0 = time.time()
         res = self.inner.recall(query, tags, limit=limit, match=match)
+        pool = getattr(self.inner, "pool", None)
         self.emit({"op": "recall", "who": self.who, "bank": self.bank_id, "query": query, "tags": tags, "hits": [_brief(m) for m in res],
-                   "ms": int((time.time() - t0) * 1000)})
+                   "ms": int((time.time() - t0) * 1000), "match": match, "limit": limit, "pool": pool(tags, match) if pool else None})
         return res
 
     def reflect(self, query: str, tags: list[str]):
@@ -69,7 +70,7 @@ class NullMemory:
         return NullMemory(self.emit, who)
 
     def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
-        self.emit({"op": "recall", "who": self.who, "bank": self.bank_id, "query": query, "tags": tags, "hits": [], "ms": 0, "skipped": True})
+        self.emit({"op": "recall", "who": self.who, "bank": self.bank_id, "query": query, "tags": tags, "hits": [], "ms": 0, "skipped": True, "match": match, "limit": limit, "pool": 0})
         return []
 
     def reflect(self, query: str, tags: list[str]):

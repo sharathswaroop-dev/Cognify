@@ -11,3 +11,5 @@ docs/*.pdf
 backend/data/local_memory_*.json
 backend/data/mesh_runs.json
 agent_config.yaml
+
+docs/demo/_raw/

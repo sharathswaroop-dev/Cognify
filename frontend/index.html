@@ -482,6 +482,128 @@ details summary{cursor:pointer}
 .keyrow i{display:inline-block;width:20px;height:5px;border-radius:3px;margin-right:6px;vertical-align:middle}
 .accnote{margin-top:16px;font:400 12px/1.65 var(--mono);color:var(--mute)}
 @media (max-width:1100px){.lanes,.learn,.accgrid{grid-template-columns:1fr}.packet{grid-template-columns:1fr}.packet .rd{justify-content:flex-start}}
+
+/* ---------------- n8n-style flow canvas + node inspector ---------------- */
+.flow{border:2.5px solid var(--text);border-radius:var(--wob);background:var(--s1);box-shadow:var(--soft);overflow:hidden}
+.flowbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px;border-bottom:2px dashed var(--line);background:var(--s2)}
+.flowbar .grow{flex:1}
+.livestats{display:flex;gap:14px;font:500 11.5px var(--mono);color:var(--mute);flex-wrap:wrap}
+.livestats b{font:900 17px var(--disp);color:var(--text);margin-right:3px;letter-spacing:-.02em}
+.seg{display:inline-flex;border:2px solid var(--text);border-radius:999px;overflow:hidden;background:#fff}
+.seg button{border:0;background:none;padding:5px 13px;font:600 12.5px var(--body);color:var(--text)}
+.seg button.on{background:var(--text);color:#fff8ea}
+.flowbar .tgl{border:2px solid var(--text);border-radius:999px;background:#fff;padding:5px 13px;font:600 12.5px var(--body)}
+.flowbar .tgl.on{background:var(--hl)}
+.canvasWrap{position:relative;overflow:hidden;background-image:radial-gradient(rgba(43,38,34,.2) 1.2px,transparent 1.6px);background-size:20px 20px;background-color:#fffdf3}
+.canvas{position:absolute;left:0;top:0;width:1330px;height:650px;transform-origin:0 0}
+.canvas svg.wires{position:absolute;inset:0;width:1330px;height:650px;overflow:visible;pointer-events:none}
+.wires .ed{fill:none;stroke:var(--text);stroke-width:3;stroke-linecap:round;transition:stroke .3s}
+.wires .ed.mem{stroke:#c9b985;stroke-width:2.5;stroke-dasharray:3 7}
+.wires .ed.sub{stroke:#b7a7d9;stroke-width:2.5;stroke-dasharray:3 7}
+.wires .ed.loop{stroke:#e5533d;stroke-dasharray:9 7;opacity:.35;stroke-width:3}
+.wires .ed.loop.hot{opacity:1;animation:march .8s linear infinite}
+.wires .ed.live{stroke-dasharray:9 7;animation:march .7s linear infinite}
+.wires .ed.dim{opacity:.25}
+.wires .ed.fb{stroke:#e5533d}
+@keyframes march{to{stroke-dashoffset:-32}}
+.wires .pd{stroke:var(--text);stroke-width:1.5;vector-effect:non-scaling-stroke}
+.elab{position:absolute;transform:translate(-50%,-50%);padding:2px 10px;border:2px solid var(--text);border-radius:999px;background:#fff;font:500 10.5px var(--mono);white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .4s;max-width:210px;overflow:hidden;text-overflow:ellipsis}
+.elab.on{opacity:1}.elab.veto{background:#ffd1c4;border-color:var(--hot);color:#8f2a17}
+.bandroom{position:absolute;left:225px;top:138px;width:905px;height:236px;border:2.5px dashed var(--text);border-radius:26px;background:rgba(247,201,72,.1);transition:all .4s;pointer-events:none}
+.bandroom.down{border-color:var(--hot);background:rgba(229,83,61,.07)}
+.bandroom .roomlab{position:absolute;left:18px;top:-17px;background:#fffdf3;padding:0 10px;display:flex;gap:8px;align-items:center;font:700 22px/1 var(--hand);transform:rotate(-1.5deg)}
+.bandroom .roomlab em{font-style:normal;font:500 10.5px var(--mono);padding:2px 9px;border-radius:999px;background:var(--text);color:#fff8ea}
+.bandroom .roomlab em.fb{background:var(--hot)}
+.nd{position:absolute;border:2.5px solid var(--text);border-radius:var(--wob2);background:#fff;box-shadow:3px 4px 0 rgba(43,38,34,.9);cursor:grab;user-select:none;touch-action:none;transition:box-shadow .25s,transform .25s var(--ease),border-color .25s}
+.nd:hover{transform:translateY(-3px);box-shadow:3px 8px 0 rgba(43,38,34,.9)}
+.nd.drag{cursor:grabbing;transition:none;box-shadow:6px 12px 0 rgba(43,38,34,.9);z-index:9}
+.nd.sel{outline:4px solid rgba(229,83,61,.55);outline-offset:3px}
+.ndh{display:flex;align-items:center;gap:9px;padding:8px 10px;border-bottom:2px solid var(--text);border-radius:14px 18px 0 0;background:var(--c,#eee)}
+.ndh .ico{width:30px;height:30px;border-radius:9px;border:2px solid var(--text);background:#fffdf3;display:grid;place-items:center;flex:none}
+.ndh .ico svg{width:20px;height:20px}
+.ndh b{font:800 14.5px/1.1 var(--body);flex:1;min-width:0}
+.ndh .st{width:20px;height:20px;border-radius:50%;border:2px solid var(--text);flex:none;display:grid;place-items:center;font:700 11px var(--mono);background:#fff}
+.ndb{padding:8px 11px 9px}
+.ndb .sum{font:500 11.5px/1.35 var(--mono);color:var(--text);min-height:3.0em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.ndb .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.ndb .meta span{font:500 10px var(--mono);padding:1px 7px;border:1.5px solid var(--line);border-radius:999px;color:var(--mute);background:#fffaf0}
+.ndb .meta span.s{border-color:var(--blue);color:var(--blue)}
+.nd .pt{position:absolute;width:13px;height:13px;border-radius:50%;border:2.5px solid var(--text);background:#fff;z-index:2}
+.nd .pt.l{left:-8px;top:50%;margin-top:-6.5px}.nd .pt.r{right:-8px;top:50%;margin-top:-6.5px}
+.nd .pt.t{top:-8px;left:50%;margin-left:-6.5px}.nd .pt.b{bottom:-8px;left:50%;margin-left:-6.5px;border-radius:3px;transform:rotate(45deg)}
+.nd.idle{opacity:.75}
+.nd.run{box-shadow:0 0 0 5px rgba(213,138,16,.3),3px 4px 0 rgba(43,38,34,.9);animation:nbreath 1.1s ease-in-out infinite}
+@keyframes nbreath{50%{box-shadow:0 0 0 9px rgba(213,138,16,.12),3px 4px 0 rgba(43,38,34,.9)}}
+.nd.run .st{border-color:var(--amber);border-top-color:transparent;animation:spin .7s linear infinite}
+.nd.ok .st{background:var(--acid);color:#fff8ea}.nd.ok .st::after{content:"✓"}
+.nd.veto{border-color:var(--hot);animation:shake .5s}.nd.veto .st{background:var(--hot);color:#fff8ea}.nd.veto .st::after{content:"✕"}
+.nd.err .st{background:var(--hot);color:#fff8ea}.nd.err .st::after{content:"!"}
+.nd.err{border-color:var(--hot);border-style:dashed}
+.nd.sub .ndh{padding:6px 10px}.nd.sub .ndb .sum{min-height:2.2em;-webkit-line-clamp:2}
+.nd.ghost{opacity:.4;border-style:dashed}.nd.ghost.ok{opacity:1;border-style:solid}
+@keyframes shake{20%{transform:translateX(-7px) rotate(-1deg)}40%{transform:translateX(7px) rotate(1deg)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.hintbar{padding:9px 16px;border-top:2px dashed var(--line);font:700 19px var(--hand);color:var(--hot);background:var(--s2)}
+
+.ndv{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.7fr) minmax(0,1fr);border-top:2.5px solid var(--text);background:var(--s2);min-height:340px}
+.ndv>div{padding:16px 18px 18px;border-right:2px dashed var(--line);min-width:0}.ndv>div:last-child{border-right:0}
+.ndv h5{margin:0 0 4px;font:700 22px var(--hand);color:var(--hot)}
+.ndv .who{font:800 17px var(--body);margin:0 0 10px}.ndv .who small{font:400 11.5px var(--mono);color:var(--mute);margin-left:8px}
+.ndv .none{font:400 12.5px/1.5 var(--mono);color:var(--mute);padding:6px 0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font:400 12px/1.5 var(--mono);margin:6px 0}.kv dt{color:var(--mute)}.kv dd{margin:0;word-break:break-word}
+.inp{padding:9px 11px;border:2px solid var(--text);border-radius:12px;background:#fff;margin-bottom:9px;font-size:13.5px;line-height:1.45}
+.inp small{display:block;font:500 10.5px var(--mono);color:var(--mute);margin-bottom:3px}
+.srch{border:2px solid var(--text);border-radius:14px;background:#fff;padding:10px 12px 8px;margin-bottom:11px}
+.srch .sh{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px}
+.srch .o{font:700 17px var(--hand);padding:0 9px;border-radius:7px;color:#fff8ea;line-height:1.2}
+.srch .o.recall{background:var(--blue)}.srch .o.reflect{background:var(--amber)}.srch .o.retain{background:var(--acid)}
+.srch .ms{margin-left:auto;font:500 10.5px var(--mono);color:var(--mute)}
+.srch .q{font:500 12.5px/1.45 var(--mono);padding:6px 9px;background:#fff8e1;border-radius:9px;border:1.5px dashed var(--line)}
+.srch .q:before{content:"asked: “"}.srch .q:after{content:"”"}
+.flt{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin:8px 0 2px;font:500 10.5px var(--mono);color:var(--mute)}
+.flt .tg{padding:1px 8px;border:1.5px solid var(--text);border-radius:999px;background:#bcd9e6;color:var(--text)}
+.flt i{font-style:normal;font-weight:700;color:var(--hot)}
+.fun{margin:8px 0 6px;font:400 11px var(--mono);color:var(--mute)}
+.fun .bar2{height:14px;border:1.5px solid var(--text);border-radius:999px;background:#fff;position:relative;overflow:hidden;margin-top:3px}
+.fun .bar2 i{position:absolute;left:0;top:0;bottom:0;background:var(--sage);border-right:1.5px solid var(--text);transition:width .8s var(--ease)}
+.fun b{color:var(--text)}
+.hit2{display:grid;grid-template-columns:20px 1fr;gap:8px;padding:7px 0;border-top:1px dashed var(--line);font-size:12.5px;line-height:1.4}
+.hit2 .rk{font:900 15px var(--disp);color:var(--dim)}
+.hit2 .hd{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-bottom:2px;font:500 10.5px var(--mono);color:var(--mute)}
+.hit2 .ref{padding:0 8px;border-radius:999px;border:1.5px solid var(--text);background:#fff1c9;color:var(--text);font-weight:500}
+.hit2 .cite{padding:0 8px;border-radius:999px;background:var(--acid);color:#fff8ea;font:700 10px var(--mono)}
+.hit2.cited{background:rgba(155,185,143,.25);margin:0 -8px;padding-left:8px;padding-right:8px}
+.refl{white-space:pre-line;padding:10px 12px;border:2px dashed var(--amber);border-radius:12px;background:#fff7e0;font-size:13px;line-height:1.5;margin-bottom:11px}
+.refl b{display:block;font:700 18px var(--hand);color:var(--amber)}
+.rule{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.rule .tick{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--text);display:grid;place-items:center;font:700 12px var(--mono);background:#fff}
+.rule.ok .tick{background:var(--acid);color:#fff8ea}.rule.no .tick{background:var(--hot);color:#fff8ea}
+.rule small{display:block;font:400 11px var(--mono);color:var(--mute)}
+.cz{padding:10px 12px;border:2px solid var(--text);border-radius:13px;background:#fff;margin-bottom:9px}
+.cz b{font:800 14px var(--body)}.cz p{margin:3px 0 0;font:400 11.5px/1.5 var(--mono);color:var(--mute)}
+.cz .jb{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.cz .jb span{font:500 10px var(--mono);padding:0 7px;border:1.5px solid var(--text);border-radius:999px;background:#fff1c9}
+.cz.top{border-width:2.5px;background:#fff8e1}
+.cz.bad{border-color:var(--hot);background:#ffe9e2}.cz.good{border-color:var(--acid);background:#eaf5e6}
+.cz .tagc{float:right;font:700 17px var(--hand);color:var(--hot)}
+.ndv pre{margin:8px 0 0;padding:10px;border:2px solid var(--text);border-radius:12px;background:#2b2622;color:#f7f0dc;font:400 11px/1.5 var(--mono);max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.ndv details summary{font:500 11.5px var(--mono);color:var(--blue);margin-top:8px}
+.opl{font:400 11.5px/1.5 var(--mono);padding:5px 0;border-bottom:1px dashed var(--line)}.opl b{font-weight:500;color:var(--text)}
+
+.execlog{max-height:150px;overflow-y:auto;border-top:2.5px solid var(--text);background:#2b2622;color:#f1ecdc;font:400 11.5px/1.65 var(--mono);padding:9px 16px}
+.execlog div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.execlog i{font-style:normal;color:#a39a82;margin-right:10px}
+.execlog b{font-weight:500;color:var(--hl);margin-right:8px}.execlog .v{color:#ff9d82}.execlog .g{color:#a8dba8}.execlog .lm{color:#8ec4ff}
+
+.corr{margin-top:28px}
+.corr .tl{position:relative;padding-left:46px;display:flex;flex-direction:column;gap:14px}
+.corr .tl::before{content:"";position:absolute;left:17px;top:6px;bottom:6px;width:3px;background:repeating-linear-gradient(var(--text) 0 6px,transparent 6px 12px)}
+.cs{position:relative;padding:14px 16px;border:2.5px solid var(--text);border-radius:var(--wob);background:var(--s1);box-shadow:var(--soft);animation:rv .5s var(--ease)}
+.cs::before{content:attr(data-n);position:absolute;left:-46px;top:12px;width:36px;height:36px;border-radius:50%;border:2.5px solid var(--text);background:var(--c,#fff);display:grid;place-items:center;font:900 16px var(--disp)}
+.cs h4{margin:0 0 4px;font:800 18px/1.15 var(--disp);letter-spacing:-.02em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.cs p{margin:4px 0 0;font-size:14px;color:var(--text)}.cs .mono{font:400 12px/1.55 var(--mono);color:var(--mute)}
+.cs.veto{background:#ffe9e2;--c:#ffb5a2}.cs.revise{background:#fff6dc;--c:var(--hl)}.cs.okc{background:#eaf5e6;--c:var(--sage)}.cs.scan{--c:#bcd0ff}.cs.prop{--c:#ffe14d}.cs.none{--c:var(--sage)}
+.cs .jb{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.cs .jb span{font:500 10.5px var(--mono);padding:1px 8px;border:1.5px solid var(--text);border-radius:999px;background:#fff1c9}
+.cs .sq{margin-top:8px;padding:8px 10px;border:1.5px dashed var(--text);border-radius:10px;background:#fff;font:400 11.5px/1.5 var(--mono)}
+.cs .sq i{font-style:normal;color:var(--blue);font-weight:500}
+@media (max-width:1100px){.ndv{grid-template-columns:1fr}.ndv>div{border-right:0;border-bottom:2px dashed var(--line)}}
 </style>
 </head>
 <body class="fx">
@@ -563,6 +685,11 @@ details summary{cursor:pointer}
     </div>
   </div>
 
+  <div class="sec" id="vidsec" style="display:none"><span class="hand">watch it work</span>
+    <h2>One alarm, start to finish.</h2>
+    <p class="intro">A screen recording of the live demo: the alarm goes in, the agents search the memory, the Verifier checks, a failure is taught back, and the numbers at the end. No edits.</p>
+    <video id="walk" controls preload="metadata" style="width:100%;border:2.5px solid var(--text);border-radius:var(--wob);box-shadow:var(--soft);background:#2b2622" src="/demo/walkthrough.webm"></video></div>
+
   <div class="cta2 rvl"><h2>See it say <em>no</em> to the wrong fix.</h2><p>Pick an alarm. Watch both paths run side by side, with every memory the agents touch lighting up.</p><button class="btn mag" data-go="room" data-cursor="Go">Open the live demo</button></div>
   <p class="honest">Honest numbers: the history is synthetic, anything labelled simulated is a replay and not a field result, and the evaluation page says what was and was not run. Nothing is tuned on the held-out machines.</p>
 </section>
@@ -578,10 +705,17 @@ details summary{cursor:pointer}
   <div class="drillnote" id="drillnote"></div>
   <div class="runbar"><button class="btn pri mag" id="run" data-cursor="Run">Send the alarm into the mesh</button><span class="info" id="runinfo">Pick an alarm.</span></div>
 
-  <div class="act"><div class="n">2</div><div><span class="hand">the mesh</span><h2>Four agents hand the work on</h2><p>Dispatcher decides remote fix or technician. Diagnostician finds the cause. Parts decides the van. The Verifier reads only the raw job records and can say no. Every memory they touch lights up the bank.</p></div></div>
-  <div class="mesh"><div class="meshtop"><span class="chip" id="mx-transport"><i></i>Coordination: Band room</span><span class="chip" id="mx-memory"><i></i>Memory: Hindsight bank</span><span class="chip" id="mx-model"><i></i>Model: waiting</span></div>
-    <div class="meshscroll"><div class="stage hint" id="stage"></div></div>
-    <div class="legend"><span><i style="background:var(--text)"></i>hand-off</span><span><i style="background:var(--hot)"></i>veto</span><span><i style="background:#2f6f9f"></i>recall</span><span><i style="background:#d58a10"></i>reflect</span><span><i style="background:#3d8456"></i>retain</span></div></div>
+  <div class="act"><div class="n">2</div><div><span class="hand">the mesh</span><h2>Watch the agents work</h2><p>This is the agent workflow, drawn like a node graph. Each node is an agent. Click one to see what it received, exactly how it searched the memory (the question, the tags, how many records passed, which came back and which it used) and what it concluded. The dashed line from the Verifier shows it sending work back.</p></div></div>
+  <div class="flow" id="flow">
+    <div class="flowbar"><span class="chip" id="mx-transport"><i></i>Coordination: Band room</span><span class="chip" id="mx-memory"><i></i>Memory: Hindsight bank</span><span class="chip" id="mx-model"><i></i>Model: waiting</span><span class="grow"></span>
+      <div class="livestats"><span><b id="ls-runs">0</b>runs</span><span><b id="ls-ops">0</b>memory operations</span><span><b id="ls-veto">0</b>vetoes</span><span><b id="ls-fb">0</b>backups used</span></div>
+      <div class="seg" id="pathseg"><button class="on" data-p="with">With memory</button><button data-p="without">No memory</button></div>
+      <button class="tgl on" id="follow">Follow: on</button><button class="tgl" id="relayout">Reset layout</button></div>
+    <div class="canvasWrap" id="canvasWrap"><div class="canvas" id="canvas"></div></div>
+    <div class="hintbar" id="hintbar">Click any node to open it: what it received, how it searched the memory, which records it read, and what it produced. Drag nodes to rearrange.</div>
+    <div class="ndv" id="ndv"></div>
+    <div class="execlog" id="execlog"></div></div>
+  <div class="corr"><span class="hand" style="font-size:26px;display:block;margin-bottom:4px">self-correction, step by step</span><div class="tl" id="corrtl"></div></div>
 
   <div class="act"><div class="n">3</div><div><span class="hand">with and without</span><h2>Same alarm, two outcomes</h2><p>Left: the same agents with no records. Right: the shared Hindsight memory, checked by the Verifier. The cost below each is a simulation from a synthetic history.</p></div></div>
   <div class="board">
@@ -658,6 +792,7 @@ $$("#nav button").forEach(b=>b.onclick=()=>go(b.dataset.view));
 document.addEventListener("click",e=>{const g=e.target.closest&&e.target.closest("[data-go]");if(g)go(g.dataset.go)});
 addEventListener("pointermove",e=>{const c=$("#collage");if(!c||RM)return;const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);$$("[data-depth]",c).forEach(el=>{const d=+el.dataset.depth;el.style.translate=`${-x*d*2}px ${-y*d*2}px`})},{passive:true});
 let rvo=null;function reveal(){if(rvo)rvo.disconnect();rvo=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add("in");rvo.unobserve(en.target)}}),{threshold:.15});$$(".rvl:not(.in)").forEach(el=>rvo.observe(el))}
+fetch("/demo/walkthrough.webm",{method:"HEAD"}).then(r=>{if(r.ok&&$("#vidsec"))$("#vidsec").style.display=""}).catch(()=>{});
 let homeDone=false;
 async function loadHome(){reveal();if(homeDone)return;homeDone=true;
   try{const s=await api("/api/stats");$("#h-inc").textContent=s.incidents;$("#h-fix").textContent=Math.round(s.first_time_fix_rate*100)+"%"}catch{}
@@ -703,7 +838,7 @@ function onEvent(e){
   if(e.kind==="plan")AGN.forEach(a=>{const c=$(`#p-${e.path} .agc[data-a="${a}"]`);if(c&&c.classList.contains("work"))chip(e.path,a,"done")})}
 function memOp(e){
   const d=e.data;if(e.path==="without"||d.skipped)return;
-  counts[d.op]=(counts[d.op]||0)+1;meshMem(d);const c=$("#c-"+d.op);if(c){c.querySelector("b").textContent=counts[d.op];c.classList.add("lit");setTimeout(()=>c.classList.remove("lit"),900)}
+  counts[d.op]=(counts[d.op]||0)+1;const c=$("#c-"+d.op);if(c){c.querySelector("b").textContent=counts[d.op];c.classList.add("lit");setTimeout(()=>c.classList.remove("lit"),900)}
   const l=$("#mlist");if(l.querySelector(".empty"))l.innerHTML="";
   const hits=(d.hits||[]).slice(0,5).map(h=>`<div class="hit"><b>${esc(h.ref||"")}</b> ${h.date?esc(h.date)+" · ":""}${esc(h.text)}</div>`).join("");
   l.insertAdjacentHTML("afterbegin",`<div class="mop"><div class="h"><span class="o ${d.op}">${d.op}</span><span>${esc(d.who||"")}</span><span>${(d.hits||[]).length} hit(s)</span><span>${d.ms||0} ms</span></div>
@@ -838,19 +973,6 @@ async function loadEval(){clearInterval(evalTimer);let r;try{r=await api("/api/e
 
 
 /* ============ live demo: input, mesh, drills, learning, accuracy ============ */
-const ICONS={
-  feed:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M40 12c-12 0-18 9-18 20v12l-6 10h48l-6-10V32c0-11-6-20-18-20zM33 64a7 7 0 0 0 14 0"/></svg>',
-  dispatcher:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><circle cx="40" cy="42" r="6" fill="#e5533d"/><path d="M27 30c-7 7-7 19 0 26M53 30c7 7 7 19 0 26M17 20c-13 13-13 37 0 50M63 20c13 13 13 37 0 50"/></svg>',
-  diagnostician:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><circle cx="34" cy="34" r="19"/><path d="M48 48l21 21"/></svg>',
-  parts:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 27l28-14 28 14v31L40 72 12 58z"/><path d="M12 27l28 14 28-14M40 41v31"/></svg>',
-  verifier:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="40" r="27"/><path d="M26 41l10 10 20-23"/></svg>',
-  tech:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><rect x="23" y="8" width="34" height="64" rx="9"/><path d="M35 62h10"/></svg>',
-  bank:'<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="5" stroke-linecap="round"><ellipse cx="40" cy="22" rx="24" ry="10"/><path d="M16 22v36c0 6 11 10 24 10s24-4 24-10V22M16 40c0 6 11 10 24 10s24-4 24-10"/></svg>'};
-const MX={feed:[14,26],dispatcher:[62,26],diagnostician:[105,26],parts:[148,26],verifier:[105,62],tech:[196,62],bank:[105,92]};
-const MLAB={feed:"Alarm feed",dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",tech:"Technician",bank:"Hindsight bank"};
-const MCOL={feed:"#ffd1c4",dispatcher:"#ffb23d",diagnostician:"#ffe14d",parts:"#cfe5d0",verifier:"#bcd0ff",tech:"#bcd9e6",bank:"#ffefb0"};
-const MEDGES={"feed-dispatcher":"M22 26L53 26","dispatcher-diagnostician":"M71 26L96 26","diagnostician-parts":"M114 26L139 26","parts-verifier":"M148 37Q144 57 116 61","verifier-parts":"M116 67Q152 68 153 37","verifier-diagnostician":"M105 53L105 37","verifier-tech":"M114 62L184 62",
-  "dispatcher-bank":"M62 35C64 62 80 82 98 90","diagnostician-bank":"M114 34C134 50 134 72 113 88","parts-bank":"M148 35C153 62 140 84 117 91","verifier-bank":"M105 69L105 84"};
 let DRILL="none",RES=[],modelBefore={},runChaos="none",bkBand=false,bkMem=false;
 const DRILLS=[["none","Everything up","Band, Hindsight and the model all answer.",""],["band","Band down","Switch the coordination layer off for this run.","bad"],["memory","Hindsight down","Switch the memory off for this run.","bad"],["llm","Main model down","Switch the primary model off for this run.","bad"]];
 const DNOTE={none:"",band:"Watch the room tag. The hand-offs carry on in-process.",memory:"Watch the bank. The agents will fall back to the local keyword memory and still solve it.",llm:"Watch the model chip. The chain moves to the next model."};
@@ -859,33 +981,199 @@ function buildDrills(){$("#drills").innerHTML=DRILLS.map(d=>`<button class="dril
 function renderPacket(){const s=SC.find(x=>x.id===selSc);if(!s){$("#packet").innerHTML="";return}
   $("#packet").innerHTML=`<div class="code">${esc(s.code)}</div><div><h4>${esc(s.headline)}</h4><div class="meta">${esc(s.machine.id)} · ${esc(s.machine.model)} · installed ${s.machine.installed} · ${esc(s.machine.location)}<br>${esc(s.site.name)}${s.holdout?" · held-out machine":""}</div></div>
     <div class="rd">${Object.entries(s.readings||{}).map(([k,v])=>`<span>${esc(k.replace(/_/g," "))} ${esc(v)}</span>`).join("")||"<span>no readings</span>"}</div>`}
-function buildMesh(){const nodes=Object.keys(MX).map(k=>`<div class="mn ${k}" data-n="${k}" style="left:${MX[k][0]/2.1}%;top:${MX[k][1]}%"><div class="disc" style="--c:${MCOL[k]}">${ICONS[k]}</div><b>${MLAB[k]}</b><small class="cap"></small></div>`).join("");
-  $("#stage").innerHTML=`<svg viewBox="0 0 210 100" preserveAspectRatio="none"><rect class="roomrect" id="roomrect" x="38" y="7" width="136" height="73" rx="7"/>${Object.entries(MEDGES).map(([k,d])=>`<path id="me-${k}" class="eg ${k.endsWith("bank")?"bank":""}" d="${d}"/>`).join("")}<g id="pulses"></g></svg>
-    <div class="roomlab">Band room <em id="roomtag">in-process</em></div>${nodes}`;
-  $("#stage").classList.add("hint");setChips()}
-function setNode(n,st,cap){const el=$(`.mn[data-n="${n}"]`);if(!el)return;if(st){el.classList.remove("work","done","ok","veto");el.classList.add(st)}if(cap!=null)$(".cap",el).textContent=cap}
-const first=t=>String(t||"").split(/(?<=[.!?])\s/)[0].slice(0,92);
-function pulse(k,color){const p=$("#me-"+k);if(!p||RM)return;p.classList.add("used");const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("r","2.4");c.setAttribute("class","dot");c.style.fill=color||"var(--hot)";$("#pulses").appendChild(c);
-  const L=p.getTotalLength(),t0=performance.now(),dur=k.endsWith("bank")?650:850;(function f(n){const t=Math.min(1,(n-t0)/dur),pt=p.getPointAtLength(L*t);c.setAttribute("cx",pt.x);c.setAttribute("cy",pt.y);if(t<1)requestAnimationFrame(f);else c.remove()})(t0)}
+/* ============ flow canvas (n8n style): nodes, edges, inspector, self-correction trail, execution log ============ */
+const SV=(p,w=5)=>`<svg viewBox="0 0 80 80" fill="none" stroke="#2b2622" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICO={
+  trigger:SV('<path d="M40 12c-12 0-18 9-18 20v12l-6 10h48l-6-10V32c0-11-6-20-18-20zM33 64a7 7 0 0 0 14 0"/>'),
+  dispatcher:SV('<circle cx="40" cy="42" r="6" fill="#e5533d"/><path d="M27 30c-7 7-7 19 0 26M53 30c7 7 7 19 0 26M17 20c-13 13-13 37 0 50M63 20c13 13 13 37 0 50"/>'),
+  diagnostician:SV('<circle cx="34" cy="34" r="19"/><path d="M48 48l21 21"/>'),
+  parts:SV('<path d="M12 27l28-14 28 14v31L40 72 12 58z"/><path d="M12 27l28 14 28-14M40 41v31"/>'),
+  verifier:SV('<circle cx="40" cy="40" r="27"/><path d="M26 41l10 10 20-23"/>'),
+  technician:SV('<rect x="23" y="8" width="34" height="64" rx="9"/><path d="M35 62h10"/>'),
+  bank:SV('<ellipse cx="40" cy="22" rx="24" ry="10"/><path d="M16 22v36c0 6 11 10 24 10s24-4 24-10V22M16 40c0 6 11 10 24 10s24-4 24-10"/>'),
+  local:SV('<rect x="10" y="22" width="60" height="38" rx="8"/><path d="M22 41h8M52 41h6"/>'),
+  model:SV('<rect x="20" y="20" width="40" height="40" rx="8"/><path d="M32 8v12M48 8v12M32 60v12M48 60v12M8 32h12M8 48h12M60 32h12M60 48h12"/>'),
+  records:SV('<path d="M20 8h32l12 12v52H20z"/><path d="M52 8v14h12M30 38h26M30 50h26M30 62h18"/>')};
+const DEF={
+  trigger:{p:"r",x:20,y:190,w:176,h:128,t:"Alarm feed",s:"trigger",c:"#ffd1c4"},
+  dispatcher:{p:"lrb",x:245,y:190,w:176,h:128,t:"Dispatcher",s:"remote fix or technician?",c:"#ffb23d"},
+  diagnostician:{p:"lrbt",x:470,y:190,w:176,h:128,t:"Diagnostician",s:"root cause + evidence",c:"#ffe14d"},
+  parts:{p:"lrbt",x:695,y:190,w:176,h:128,t:"Parts agent",s:"what goes in the van",c:"#cfe5d0"},
+  verifier:{p:"lrbt",x:920,y:190,w:176,h:128,t:"Verifier",s:"can say no",c:"#bcd0ff"},
+  technician:{p:"l",x:1145,y:190,w:165,h:128,t:"Technician",s:"phone briefing",c:"#bcd9e6"},
+  model:{p:"b",x:520,y:12,w:210,h:100,t:"Model chain",s:"language model",c:"#e8dcf8",sub:1},
+  bank:{p:"tr",x:290,y:476,w:420,h:118,t:"Hindsight memory bank",s:"one shared bank",c:"#ffefb0",sub:1},
+  local:{p:"l",x:760,y:476,w:170,h:118,t:"Local memory",s:"backup",c:"#e9dfc4",sub:1,ghost:1},
+  records:{p:"t",x:960,y:476,w:190,h:118,t:"Raw job records",s:"what the Verifier reads",c:"#d6ebd0",sub:1}};
+const EDGES=[
+  {id:"e1",a:["trigger","r"],b:["dispatcher","l"],k:"main"},{id:"e2",a:["dispatcher","r"],b:["diagnostician","l"],k:"main"},
+  {id:"e3",a:["diagnostician","r"],b:["parts","l"],k:"main"},{id:"e4",a:["parts","r"],b:["verifier","l"],k:"main"},{id:"e5",a:["verifier","r"],b:["technician","l"],k:"main"},
+  {id:"loop",a:["verifier","t"],b:["diagnostician","t"],k:"loop"},
+  {id:"m-dispatcher",a:["dispatcher","b"],b:["bank","t",-120],k:"mem"},{id:"m-diagnostician",a:["diagnostician","b"],b:["bank","t",0],k:"mem"},
+  {id:"m-parts",a:["parts","b"],b:["bank","t",120],k:"mem"},{id:"m-verifier",a:["verifier","b"],b:["records","t"],k:"mem"},
+  {id:"s-d",a:["model","b",-40],b:["diagnostician","t"],k:"sub"},{id:"s-p",a:["model","b",40],b:["parts","t"],k:"sub"},{id:"s-local",a:["bank","r"],b:["local","l"],k:"sub"}];
+let ND={with:{},without:{}},POS={},curPath="with",SEL=null,FOLLOW=true,LOOPS={with:0,without:0},LOGS={with:[],without:[]},LAB={with:{},without:{}},CORR=[],LIVE={runs:0,ops:0,veto:0,fb:0},SCALE=1,T0=null;
+const freshND=()=>Object.fromEntries(Object.keys(DEF).map(k=>[k,{status:DEF[k].ghost?"idle":"idle",sum:"",t0:null,t1:null,ops:[],inputs:[],out:null,msgs:[],log:[],extra:{}}]));
+const resetPOS=()=>{POS=Object.fromEntries(Object.entries(DEF).map(([k,d])=>[k,{x:d.x,y:d.y,w:d.w,h:d.h}]))};
+resetPOS();ND.with=freshND();ND.without=freshND();
+const f1=t=>String(t||"").replace(/\s+/g," ").split(/(?<=[.!?])\s/)[0].slice(0,110);
+const pt=(n,port,dx=0)=>{const d=POS[n];return {l:[d.x,d.y+d.h/2],r:[d.x+d.w,d.y+d.h/2],t:[d.x+d.w/2+dx,d.y],b:[d.x+d.w/2+dx,d.y+d.h]}[port]};
+function dOf(e){const A=pt(e.a[0],e.a[1],e.a[2]||0),B=pt(e.b[0],e.b[1],e.b[2]||0);
+  if(e.a[1]==="r"){const k=Math.max(40,Math.abs(B[0]-A[0])*.45);return `M${A} C${A[0]+k},${A[1]} ${B[0]-k},${B[1]} ${B}`}
+  if(e.k==="loop")return `M${A} C${A[0]},${A[1]-130} ${B[0]},${B[1]-130} ${B}`;
+  const dn=B[1]>A[1];return `M${A} C${A[0]},${A[1]+(dn?80:-80)} ${B[0]},${B[1]+(dn?-80:80)} ${B}`}
+function wires(){EDGES.forEach(e=>{const p=$("#w-"+e.id);if(!p)return;p.setAttribute("d",dOf(e));const l=$("#el-"+e.id);if(l){const L=p.getTotalLength(),m=p.getPointAtLength(L*(e.k==="loop"?.5:.5));l.style.left=m.x+"px";l.style.top=(e.k==="loop"?m.y-4:POS[e.a[0]].y-24)+"px"}})}
+function statLine(c){const s=c&&c.stats;if(!s||s.n==null||c.confidence==="none")return"no records to count";if(!s.n)return"no attempts on record";const r=s.rate!=null?Math.round(s.rate*100)+"%":"n/a";
+  return `n=${s.n}: ${s.verified} verified, ${s.provisional} not yet stable, ${s.failed} failed; verified rate ${r}${s.ci?` (95% ${Math.round(s.ci[0]*100)}-${Math.round(s.ci[1]*100)}%)`:""}; ${s.weak?"weak signal":c.confidence+" confidence"}`}
+function buildMesh(){
+  const cv=$("#canvas");if(!cv)return;
+  const nodes=Object.entries(DEF).map(([k,d])=>`<div class="nd idle ${d.sub?"sub":""} ${d.ghost?"ghost":""}" data-n="${k}" style="left:${POS[k].x}px;top:${POS[k].y}px;width:${d.w}px;height:${d.h}px"><div class="ndh" style="--c:${d.c}"><span class="ico">${ICO[k]}</span><b>${d.t}</b><span class="st"></span></div><div class="ndb"><div class="sum"></div><div class="meta"></div></div>${[...d.p].map(c=>`<i class="pt ${c}"></i>`).join("")}</div>`).join("");
+  cv.innerHTML=`<div class="bandroom" id="roomrect"><span class="roomlab">Band room <em id="roomtag">in-process</em></span></div>
+    <svg class="wires" id="wires"><defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1L9 5L1 9z" fill="#2b2622"/></marker></defs>${EDGES.map(e=>`<path class="ed ${e.k}" id="w-${e.id}" ${e.k==="main"?'marker-end="url(#ah)"':""}/>`).join("")}<g id="pulses"></g></svg>
+    ${EDGES.filter(e=>e.k==="main"||e.k==="loop").map(e=>`<div class="elab" id="el-${e.id}"></div>`).join("")}${nodes}`;
+  wires();fit();paintAll();renderNDV()}
+function fit(){const w=$("#canvasWrap"),cv=$("#canvas");if(!w||!cv)return;SCALE=Math.min(1,w.clientWidth/1330);cv.style.transform=`scale(${SCALE})`;w.style.height=Math.round(650*SCALE)+"px"}
+function paint(n){const el=$(`.nd[data-n="${n}"]`);if(!el)return;const d=ND[curPath][n];el.classList.remove("idle","run","ok","veto","err");el.classList.add(d.status);el.classList.toggle("sel",SEL===n);
+  $(".sum",el).textContent=d.sum||DEF[n].s;
+  const s=d.ops.filter(o=>o.op!=="retain"&&!o.skipped).length,read=d.ops.filter(o=>o.op!=="retain"&&!o.skipped).reduce((a,o)=>a+(o.hits||[]).length,0),m=[];
+  if(n==="verifier"&&d.extra.records)m.push(`<span class="s">${d.extra.records} records</span>`);
+  else if(["dispatcher","diagnostician","parts"].includes(n))m.push(`<span class="s">${s} search${s===1?"":"es"}</span><span>${read} read</span>`);
+  if(n==="bank"){m.push(`<span>recall ${d.extra.recall||0}</span><span>reflect ${d.extra.reflect||0}</span><span>retain ${d.extra.retain||0}</span>`)}
+  if(d.t0&&d.t1&&d.t1>=d.t0)m.push(`<span>${(d.t1-d.t0).toFixed(1)} s</span>`);
+  $(".meta",el).innerHTML=m.join("")}
+const paintAll=()=>Object.keys(DEF).forEach(paint);
+function setEdge(id,cls,on){const p=$("#w-"+id);if(p)p.classList.toggle(cls,on)}
+function setLab(path,id,text,cls){LAB[path][id]={text,cls};if(path===curPath)paintLab(id)}
+function paintLab(id){const l=$("#el-"+id),v=LAB[curPath][id];if(!l)return;if(v){l.textContent=v.text;l.className="elab on "+(v.cls||"")}else{l.className="elab"}}
+const paintLabs=()=>EDGES.filter(e=>e.k==="main"||e.k==="loop").forEach(e=>paintLab(e.id));
+function pulse(id,color){const p=$("#w-"+id),g=$("#pulses");if(!p||!g||RM)return;const c=document.createElementNS("http://www.w3.org/2000/svg","circle");c.setAttribute("r","6");c.setAttribute("class","pd");c.style.fill=color||"#e5533d";g.appendChild(c);
+  const L=p.getTotalLength(),t0=performance.now(),dur=id.startsWith("m-")?700:950;(function f(n){const t=Math.min(1,(n-t0)/dur),q=p.getPointAtLength(L*t);c.setAttribute("cx",q.x);c.setAttribute("cy",q.y);if(t<1)requestAnimationFrame(f);else c.remove()})(t0)}
 function setChips(){if(!STATUS)return;const tr=$("#mx-transport"),mm=$("#mx-memory");if(!tr)return;
   const band=STATUS.band.startsWith("configured");
   tr.className="chip "+(bkBand?"fb":band?"ok":"");tr.innerHTML=`<i></i>Coordination: ${bkBand?"in-process (backup)":band?"Band room":"in-process (Band keys not set)"}`;
   const deg=STATUS.memory_degraded||bkMem;mm.className="chip "+(deg?"fb":"ok");mm.innerHTML=`<i></i>Memory: ${deg?"local memory (backup)":"Hindsight bank"}`;
   const rt=$("#roomtag");if(rt){rt.textContent=bkBand?"backup: in-process":band?"live":"in-process";rt.classList.toggle("fb",bkBand);$("#roomrect")?.classList.toggle("down",bkBand)}}
-function meshReset(){bkBand=false;bkMem=false;RES=[];buildMesh();renderRes();$("#mx-model").className="chip";$("#mx-model").innerHTML="<i></i>Model: working…"}
+function renderLive(){const set=(i,v)=>{const e=$("#"+i);if(e)e.textContent=v};set("ls-runs",LIVE.runs);set("ls-ops",LIVE.ops);set("ls-veto",LIVE.veto);set("ls-fb",LIVE.fb)}
+function meshReset(){bkBand=false;bkMem=false;RES=[];ND={with:freshND(),without:freshND()};LOOPS={with:0,without:0};LOGS={with:[],without:[]};LAB={with:{},without:{}};CORR=[];T0=null;SEL=null;
+  buildMesh();renderLog();renderCorr();renderRes();$("#mx-model").className="chip";$("#mx-model").innerHTML="<i></i>Model: working…";$("#hintbar")&&($("#hintbar").style.display="none")}
+function logAdd(path,e,html,cls){if(T0==null)T0=e.t;LOGS[path].push(`<div class="${cls||""}"><i>+${(e.t-T0).toFixed(1)}s</i>${html}</div>`);if(path===curPath)renderLog()}
+function renderLog(){const l=$("#execlog");if(!l)return;l.innerHTML=LOGS[curPath].join("")||'<div><i>idle</i>Waiting for an alarm. Every step of the run is logged here.</div>';l.scrollTop=l.scrollHeight}
+function status(path,n,st,e){const d=ND[path][n];if(!d)return;if(st==="run"&&!d.t0)d.t0=e.t;if(st!=="run"&&e)d.t1=e.t;d.status=st;if(path===curPath){paint(n);if(st==="run"&&FOLLOW&&!["bank","local","records","model"].includes(n)){SEL=n;paintAll();renderNDV()}}}
 function meshEvent(e){
-  if(e.path!=="with")return;const st=$("#stage");if(!st)return;
-  if(e.kind==="alarm"){st.classList.remove("hint");setNode("feed","ok",first(e.text).slice(0,60));setNode("dispatcher","work","deciding…");pulse("feed-dispatcher","#e5533d")}
-  else if(e.kind==="handoff"){const to=e.data.to,k=`${e.agent}-${to}`;pulse(k,e.agent==="verifier"?"#e5533d":"#2b2622");if(e.agent==="verifier"&&$("#me-"+k))$("#me-"+k).classList.add("veto");setNode(e.agent,"done");setNode(to,"work","working…")}
-  else if(e.kind==="msg"){setNode(e.agent,"done",first(e.text))}
-  else if(e.kind==="veto"&&e.data&&e.data.target){setNode("verifier","veto",first(e.text).replace(/^VETO \([^)]*\):\s*/,""));setNode(e.data.target,"veto")}
-  else if(e.kind==="revise"){setNode(e.agent,"done","revised: "+first(e.text.replace(/^(Re-planned for the revised diagnosis\.|Revised\.)\s*/,"")))}
-  else if(e.kind==="approve"){setNode("verifier","ok",first(e.text))}
-  else if(e.kind==="plan"){["dispatcher","diagnostician","parts"].forEach(a=>setNode(a,"done"));setNode("verifier","ok");pulse("verifier-tech","#3d8456");setTimeout(()=>setNode("tech","ok","briefing ready"),700)}
-  else if(e.kind==="system"){RES.push(e);if(e.data&&e.data.fallback==="band"){bkBand=true;setChips()}if(e.data&&e.data.fallback==="memory"){bkMem=true;setChips()}renderRes()}
-  if(e.transport==="in-process"||e.transport==="band")setChips()}
-function meshMem(d){const who=d.who;if(MX[who]){pulse(`${who}-bank`,{recall:"#2f6f9f",reflect:"#d58a10",retain:"#3d8456"}[d.op])}
-  const b=$('.mn[data-n="bank"]');if(b){b.classList.add("lit");setTimeout(()=>b.classList.remove("lit"),500);$(".cap",b).textContent=`recall ${counts.recall||0} · reflect ${counts.reflect||0} · retain ${counts.retain||0}`}}
+  const P=e.path,N=ND[P];if(!N)return;
+  if(e.kind==="memory"){const d=e.data,who=d.who,tgt=N[who];if(d.skipped){if(tgt)tgt.ops.push(d);N.bank.log.push(d);if(P===curPath)paint(who);return}
+    if(tgt)tgt.ops.push(d);N.bank.ops.push(d);N.bank.extra[d.op]=(N.bank.extra[d.op]||0)+1;N.bank.status="ok";N.bank.sum=`${N.bank.ops.length} operations so far`;
+    if(P==="with"){LIVE.ops++;renderLive()}
+    logAdd(P,e,`<b>${esc(who)}</b><span class="lm">${d.op}</span> “${esc(String(d.query).slice(0,70))}” → ${d.op==="retain"?"saved":(d.hits||[]).length+" hits"}${d.pool!=null?` of ${d.pool} that pass the filter`:""} (${d.ms} ms)`);
+    if(P===curPath){const col={recall:"#2f6f9f",reflect:"#d58a10",retain:"#3d8456"}[d.op];if(["dispatcher","diagnostician","parts"].includes(who))pulse("m-"+who,col);paint("bank");if(tgt)paint(who);if(SEL===who||SEL==="bank")renderNDV()}return}
+  if(e.kind==="alarm"){const a=e.data.alarm||{};N.trigger.out=a;N.trigger.sum=`${a.code||""} on ${a.machine_id||""}: ${f1(a.description)}`;status(P,"trigger","ok",e);N.trigger.t0=e.t;N.trigger.t1=e.t;
+    N.dispatcher.inputs.push({from:"Alarm feed",text:e.text,data:a});setLab(P,"e1",`${a.code||"alarm"} · ${a.machine_id||""}`);status(P,"dispatcher","run",e);if(P==="with"){LIVE.runs++;renderLive();}
+    if(P===curPath){setEdge("e1","live",true);pulse("e1","#e5533d")}logAdd(P,e,`<b>alarm</b>${esc(e.text)}`);return}
+  if(e.kind==="handoff"){const from=e.agent,to=e.data.to,id={dispatcher:"e2",diagnostician:"e3",parts:"e4",verifier:"e5"}[from];const text=e.text.replace(/^→ [^:]+:\s*/,"");
+    if(from==="verifier"&&to!=="technician"){LOOPS[P]++;setLab(P,"loop",`veto ×${LOOPS[P]} → revise`,"veto");if(P===curPath){setEdge("loop","hot",true);pulse("loop","#e5533d")}status(P,"verifier","veto",e)}
+    else if(id){if(P===curPath){setEdge(id,"live",true);pulse(id,"#2b2622")}}
+    if(N[to]){N[to].inputs.push({from:DEF[from]?.t||from,text,via:e.data.via});status(P,to,"run",e)}
+    if(from!=="verifier")status(P,from,"ok",e);
+    logAdd(P,e,`<b>${esc(DEF[from]?.t||from)}</b>hands to ${esc(DEF[to]?.t||to)} via ${esc(e.data.via||"in-process")}`);return}
+  if(e.kind==="scan"){N.verifier.log.push({t:"scan",e});N.verifier.extra.records=e.data.visits;N.records.status="ok";N.records.sum=`${e.data.visits} visits · ${e.data.alarms} alarms`;N.records.out=e.data;
+    status(P,"verifier","run",e);if(P===curPath){pulse("m-verifier","#3d8456");paint("records")}logAdd(P,e,`<b>verifier</b><span class="lm">reads</span> ${e.data.visits} raw visits, ${e.data.alarms} alarms`);
+    if(P==="with"){CORR.push({k:"scan",text:e.text});renderCorr()}return}
+  if(e.kind==="msg"){const n=e.agent,d=N[n];if(!d)return;d.msgs.push(e);d.out=e.data;d.sum=f1(e.text);d.t1=e.t;
+    if(n==="dispatcher"){setLab(P,"e2",e.data.decision==="REMOTE_FIX"?"remote fix":"send technician")}
+    if(n==="diagnostician"){const c=(e.data.causes||[])[0]||{};setLab(P,"e3",String(c.fix||"diagnosis").slice(0,34));if(P==="with"){CORR.push({k:"prop",fix:c.fix,cause:c.cause,line:statLine(c),jobs:c.evidence_jobs||[]});renderCorr()}}
+    if(n==="parts"){setLab(P,"e4",`${(e.data.carry||[]).length} part(s)`)}
+    if(n==="diagnostician"&&N.model.status!=="err"){const bk=String(((e.data.causes||[])[0]||{}).why||"").startsWith("Backup mode");N.model.status=bk?"err":"ok";N.model.sum=bk?"no model reachable: rule-based backup used":"answered with structured JSON";if(bk){setChips()}if(P===curPath)paint("model")}
+    status(P,n,"ok",e);if(P===curPath){setEdge({dispatcher:"e1",diagnostician:"e2",parts:"e3"}[n]||"x","live",false)}
+    logAdd(P,e,`<b>${esc(DEF[n]?.t||n)}</b>${esc(e.text.slice(0,140))}`,"g");if(SEL===n&&P===curPath)renderNDV();return}
+  if(e.kind==="veto"){const v=N.verifier;v.log.push({t:"veto",e});if(e.data&&e.data.item){const tgt=N[e.data.target];if(tgt){tgt.extra.vetoed=true}status(P,e.data.target,"veto",e);v.status="veto";v.sum=f1(e.text.replace(/^VETO \([^)]*\):\s*/,""));if(P===curPath)paint("verifier");
+      if(P==="with"){LIVE.veto++;renderLive();CORR.push({k:"veto",item:e.data.item,target:e.data.target,reasons:e.data.reasons||[],jobs:e.data.jobs||[],alt:e.data.alternative});renderCorr()}}
+    logAdd(P,e,`<b>verifier</b>${esc(e.text.slice(0,150))}`,"v");if(SEL==="verifier"&&P===curPath)renderNDV();return}
+  if(e.kind==="revise"){const d=N[e.agent];if(!d)return;d.msgs.push(e);d.out=e.data;d.sum="revised: "+f1(e.text.replace(/^(Re-planned for the revised diagnosis\.|Revised\.)\s*/,""));d.extra.vetoed=false;status(P,e.agent,"ok",e);
+    if(e.agent==="diagnostician"&&P==="with"){const c=(e.data.causes||[])[0]||{};CORR.push({k:"rev",fix:c.fix,line:statLine(c),ops:(e.ops||[]).filter(o=>o.op==="recall"&&!o.skipped)});renderCorr()}
+    logAdd(P,e,`<b>${esc(DEF[e.agent]?.t||e.agent)}</b>revises: ${esc(e.text.slice(0,120))}`,"g");if(SEL===e.agent&&P===curPath)renderNDV();return}
+  if(e.kind==="approve"){const v=N.verifier;v.log.push({t:"approve",e});v.out=e.data;v.sum=f1(e.text);status(P,"verifier","ok",e);setEdge("loop","hot",false);if(P==="with"){CORR.push({k:"ok",text:e.text});renderCorr()}
+    logAdd(P,e,`<b>verifier</b>${esc(e.text.slice(0,140))}`,"g");if(SEL==="verifier"&&P===curPath)renderNDV();return}
+  if(e.kind==="plan"){const t=N.technician;t.out=e.data;t.sum=f1(e.data.headline||e.text);t.inputs.push({from:"Verifier",text:"The verified plan",data:null});["dispatcher","diagnostician","parts","verifier"].forEach(a=>{if(N[a].status==="run")status(P,a,"ok",e)});
+    setLab(P,"e5","briefing ready");status(P,"technician","ok",e);if(P===curPath){pulse("e5","#3d8456");["e1","e2","e3","e4","e5"].forEach(x=>setEdge(x,"live",false))}
+    if(P==="with"&&!CORR.some(c=>c.k==="veto")){CORR.push({k:"none"});renderCorr()}logAdd(P,e,`<b>technician</b>${esc(String(e.data.headline||"").slice(0,120))}`,"g");if(P===curPath)renderNDV();return}
+  if(e.kind==="system"){logAdd(P,e,`<b>system</b>${esc(e.text.slice(0,170))}`,e.data&&(e.data.fallback||e.data.chaos)?"v":"");
+    if(e.data&&e.data.fallback){if(P==="with"){LIVE.fb++;renderLive()}
+      if(e.data.fallback==="memory"){bkMem=true;N.bank.status="err";N.bank.sum="did not answer";N.local.status="ok";N.local.sum="serving the searches";if(P===curPath){setEdge("s-local","fb",true);setEdge("s-local","live",true);paint("bank");paint("local")}}
+      if(e.data.fallback==="band"){bkBand=true;if(P===curPath){$("#roomrect")?.classList.add("down")}}
+      if(e.data.fallback==="llm"){N.model.status="err";N.model.sum="primary model off → next in chain";if(P===curPath)paint("model")}setChips();renderRes()}
+    else if(e.text.startsWith("Band room created")){N.model.status="ok";setChips()}
+    if(e.data&&e.data.chaos)RES.push(e),renderRes();return}
+}
+/* ---- inspector ---- */
+const J=o=>esc(JSON.stringify(o,null,1)).slice(0,6000);
+const tagChips=(tags,m)=>tags.map(t=>`<span class="tg">${esc(t)}</span>`).join(` <i>${m==="all"?"AND":"OR"}</i> `);
+function citedOf(n){const o=ND[curPath][n].out||{},s=new Set();(o.causes||[]).forEach(c=>(c.evidence_jobs||[]).forEach(j=>s.add(j)));(o.carry||[]).forEach(c=>(c.evidence_jobs||[]).forEach(j=>s.add(j)));(o.citations||[]).forEach(j=>s.add(j));return s}
+function funnel(op){const h=(op.hits||[]).length;if(op.skipped)return'<div class="fun"><b>memory is off</b>: nothing to search, nothing returned</div>';
+  return op.pool!=null?`<div class="fun"><b>${op.pool}</b> records in the bank carry these tags → ranked by relevance to the question → <b>${h}</b> returned<div class="bar2"><i style="width:${op.pool?Math.max(3,h/op.pool*100):0}%"></i></div></div>`:`<div class="fun">Hindsight ranks the tagged records on the server → <b>${h}</b> returned</div>`}
+function opCard(op,cited){const hits=op.hits||[];
+  const body=op.op==="reflect"?(hits[0]?`<div class="refl" style="margin:8px 0 0"><b>lesson Hindsight wrote from these memories</b>${esc(hits[0].text)}</div>`:'<div class="none">no lesson returned</div>')
+    :op.op==="retain"?`<div class="none">saved to the bank: ${esc((hits[0]||{}).text||"")}</div>`
+    :hits.map((h,i)=>{const c=h.ref&&cited.has(h.ref);return `<div class="hit2 ${c?"cited":""}"><div class="rk">${i+1}</div><div><div class="hd">${h.ref?`<span class="ref">${esc(h.ref)}</span>`:""}${h.date?esc(h.date):""}${h.score?` · score ${h.score}`:""}${c?'<span class="cite">USED IN ANSWER</span>':""}</div>${esc(h.text.slice(0,210))}${h.text.length>210?"…":""}</div></div>`}).join("")||'<div class="none">nothing matched</div>';
+  return `<div class="srch"><div class="sh"><span class="o ${op.op}">${op.op}</span>${op.op==="recall"?`<span class="tag">${op.match==="all"?"every tag must match":"any tag may match"}</span>`:""}<span class="ms">${op.ms||0} ms</span></div><div class="q">${esc(op.query)}</div>${op.tags&&op.tags.length?`<div class="flt">tags: ${tagChips(op.tags,op.match)}</div>`:""}${op.op==="recall"?funnel(op):""}${body}</div>`}
+const stockLine=p=>`${p.qty}× ${esc(p.part)} <small style="display:block;font:400 11px var(--mono);color:var(--mute)">${esc(p.stock||"")} · ${esc(p.reason||"")}</small>`;
+function centre(n,d){
+  const o=d.out||{},ops=d.ops.filter(x=>x.op!=="retain"),cited=citedOf(n),cards=ops.map(x=>opCard(x,cited)).join("");
+  if(n==="trigger")return`<div class="none">The alarm feed turns a machine's error code and readings into the first item that enters the mesh.</div>${o.code?`<dl class="kv"><dt>machine</dt><dd>${esc(o.machine_id)}</dd><dt>code</dt><dd>${esc(o.code)}</dd><dt>description</dt><dd>${esc(o.description)}</dd><dt>readings</dt><dd>${esc(JSON.stringify(o.readings||{}))}</dd><dt>severity</dt><dd>${esc(o.severity)}</dd></dl>`:""}`;
+  if(n==="dispatcher"){let r="";const L=o.ledger;
+    if(L){r=`<h5>Decision rules, with this alarm's numbers</h5>`+[[L.attempts>=3,"At least 3 similar alarms on record",`${L.attempts} found`],[(L.rate||0)>=.5,"The remote fix cleared at least half of them",`${L.cleared} of ${L.attempts} cleared`],[!o.blocked,"No recent failure of that remote fix on this machine",o.blocked?`failed on ${o.blocked.date} (${esc(o.blocked.alarm)})`:"none in the last 30 days"]].map(x=>`<div class="rule ${x[0]?"ok":"no"}"><span class="tick">${x[0]?"✓":"✕"}</span><div>${x[1]}<small>${x[2]}</small></div></div>`).join("")}
+    else if(o.decision)r=`<div class="none">No alarm history to count: the generic first step is chosen because nothing says it will not work.</div>`;
+    return (cards||'<div class="none">No searches yet.</div>')+r+(o.decision?`<div class="cz top"><span class="tagc">${o.decision==="REMOTE_FIX"?"remote fix":"send technician"}</span><b>${esc(o.decision.replace("_"," "))}</b><p>${esc(o.rationale)}</p></div>`:"")}
+  if(n==="diagnostician"){const refl=o.reflection?`<div class="refl"><b>Hindsight reflect: the lesson it wrote</b>${esc(String(o.reflection).replace(/\*\*/g,"").replace(/#{2,4}\s*/g," "))}</div>`:"";
+    const cz=(o.causes||[]).map((c,i)=>`<div class="cz ${i===0?"top":""}"><span class="tagc">${i===0?"top pick":"#"+(i+1)}</span><b>${esc(c.fix)}</b><p>${esc(c.cause)}${c.why?" · "+esc(c.why):""}</p><p>${esc(statLine(c))}${c.stats_scope?" · counted on: "+esc(c.stats_scope):""}</p><div class="jb">${(c.evidence_jobs||[]).map(j=>`<span>${esc(j)}</span>`).join("")||'<span style="border-style:dashed;background:#fff">no visits cited</span>'}</div></div>`).join("");
+    const hist=d.msgs.length>1?`<h5>Revision history</h5>${d.msgs.map((m,i)=>`<div class="opl"><b>${i?"revision "+i:"first answer"}:</b> ${esc(((m.data.causes||[])[0]||{}).fix||"")}</div>`).join("")}`:"";
+    return (cards||'<div class="none">No searches yet.</div>')+refl+(cz?`<h5>What it concluded, and how sure it is</h5>${cz}`:"")+hist}
+  if(n==="parts")return (cards||'<div class="none">No searches yet.</div>')+(o.carry?`<h5>What goes in the van</h5>${o.carry.map(p=>`<div class="cz"><b>${stockLine(p)}</b><div class="jb">${(p.evidence_jobs||[]).map(j=>`<span>${esc(j)}</span>`).join("")}</div></div>`).join("")||'<div class="none">no specific parts</div>'}${(o.flags||[]).map(f=>`<div class="cz bad"><p>${esc(f)}</p></div>`).join("")}`:"");
+  if(n==="verifier"){if(!d.log.length)return'<div class="none">The Verifier opens the raw job records after the Parts agent hands over. It never sees the other agents\' reasoning and uses no model, so it cannot be talked into anything.</div>';
+    let rd=0;return d.log.map(x=>{if(x.t==="scan"){rd++;return`<div class="opl" style="margin-top:6px"><b>Round ${rd}</b> · ${esc(x.e.text.replace(/^Round \d+: /,""))}</div>`}
+      if(x.t==="veto"){const v=x.e.data||{};if(!v.item)return`<div class="cz bad"><b>Still unverified after two revisions</b><p>The vetoed items are removed from the plan.</p></div>`;return`<div class="cz bad"><span class="tagc">VETO · ${esc(DEF[v.target]?.t||v.target)}</span><b>${esc(v.item)}</b>${(v.reasons||[]).map(r=>`<p>${esc(r)}</p>`).join("")}<div class="jb">${(v.jobs||[]).map(j=>`<span>${esc(j)}</span>`).join("")}</div>${v.alternative?`<p><b>The records point to a different repair that held:</b> ${esc(v.alternative)}</p>`:""}</div>`}
+      return(x.e.data.approvals||[]).map(a=>`<div class="cz good"><span class="tagc">approved</span><b>${esc(a.item)}</b><p>${esc(a.note)}</p></div>`).join("")}).join("")}
+  if(n==="technician")return o.headline?`<div class="none">No search here. The briefing is written only from the verified plan: nothing is added.</div><div class="cz top"><b>${esc(o.headline)}</b><p>${esc(o.likely_cause||"")}</p></div>${(o.avoid||[]).map(a=>`<div class="cz bad"><p>Don't repeat: ${esc(a)}</p></div>`).join("")}<div class="cz"><b>Do first</b>${(o.do_first||[]).map(x=>`<p>• ${esc(x)}</p>`).join("")}</div><div class="cz"><b>Bring</b><p>${esc((o.bring||[]).join(", ")||"nothing specific")}</p></div><div class="cz"><b>Confidence</b><p>${esc(o.confidence||"")} · ${esc(o.evidence||"")}</p></div>`:'<div class="none">Waiting for the verified plan.</div>';
+  if(n==="bank"){const all=d.ops;return`<div class="none">One bank for the company. A search first narrows it to the right records by tag (this machine, this model family, this kind of record), then Hindsight ranks those by relevance to the question. Every answer cites the visits it used.</div>`+(all.length?all.slice(-14).reverse().map(x=>`<div class="opl"><span class="tag">${esc(x.who)}</span> <b>${x.op}</b> “${esc(String(x.query).slice(0,60))}” → ${x.op==="retain"?"saved":(x.hits||[]).length+" hits"}${x.pool!=null?` / ${x.pool} pass filter`:""}</div>`).join(""):'<div class="none">No operations yet.</div>')}
+  if(n==="local")return`<div class="none">Backup memory: a keyword index kept in step with the bank. If Hindsight stops answering, the agents are switched to it automatically and the page says so. It ranks by plain keyword overlap (BM25), so it is weaker, and the Verifier still checks every claim.</div>${d.status==="ok"?`<div class="cz good"><b>Active in this run</b><p>Serving the agents' searches after Hindsight did not answer.</p></div>`:""}`;
+  if(n==="records")return`<div class="none">The Verifier reads these directly: the raw visit and alarm records dated before the alarm, not summaries and not memories.</div>${o.visits!=null?`<dl class="kv"><dt>visits</dt><dd>${o.visits}</dd><dt>alarms</dt><dd>${o.alarms}</dd><dt>as of</dt><dd>${esc(o.as_of)}</dd></dl>`:""}`;
+  if(n==="model"){const ms=(STATUS&&STATUS.llm_models)||[];return`<div class="none">The Diagnostician, Parts agent and briefing writer ask a language model for structured JSON. Models are tried in order; rate limits are waited out. If every model fails, the Diagnostician and Parts agent fall back to ranking by the verified record.</div>${ms.map((m,i)=>`<div class="opl">${i+1}. <b>${esc(m)}</b>${STATUS.llm_used&&STATUS.llm_used[m]?` · ${STATUS.llm_used[m]} calls this session`:""}</div>`).join("")}`}
+  return""}
+function inputCol(n,d){const L=d.inputs;if(n==="bank")return`<div class="none">Requests arrive from the Dispatcher, Diagnostician and Parts agent.</div><dl class="kv"><dt>recalls</dt><dd>${d.extra.recall||0}</dd><dt>reflects</dt><dd>${d.extra.reflect||0}</dd><dt>retains</dt><dd>${d.extra.retain||0}</dd></dl>`;
+  if(n==="verifier"&&!L.length)return'<div class="none">Waiting for the Parts agent.</div>';
+  if(!L.length)return`<div class="none">${["local","records","model"].includes(n)?"Used by other nodes.":"Nothing received yet."}</div>`;
+  return L.map(x=>`<div class="inp"><small>from ${esc(x.from)}${x.via?" · via "+esc(x.via):""}</small>${esc(x.text)}</div>`).join("")}
+function outputCol(n,d){const o=d.out;if(!o)return'<div class="none">No output yet.</div>';let s="";
+  if(n==="dispatcher")s=`<div class="cz top"><b>${esc(String(o.decision||"").replace("_"," "))}</b>${o.remote_action?`<p>${esc(o.remote_action)}</p>`:""}</div>`;
+  if(n==="diagnostician")s=`<div class="cz top"><b>${esc(((o.causes||[])[0]||{}).fix||"")}</b><p>${esc(statLine((o.causes||[])[0]||{}))}</p></div>`;
+  if(n==="parts")s=`<div class="cz"><b>${(o.carry||[]).length} part(s)</b><p>${esc((o.carry||[]).map(p=>p.part).join("; ")||"no specific parts")}</p></div>`;
+  if(n==="verifier"){const v=d.log.filter(x=>x.t==="veto"&&x.e.data&&x.e.data.item).length,a=d.log.filter(x=>x.t==="approve").reduce((s2,x)=>s2+(x.e.data.approvals||[]).length,0);s=`<div class="cz ${v?"bad":"good"}"><b>${a} approved · ${v} vetoed</b></div>`}
+  if(n==="technician")s=`<div class="cz top"><b>${esc(o.headline||"")}</b></div>`;
+  return s+`<details><summary>full output (JSON)</summary><pre>${J(o)}</pre></details>`}
+function renderNDV(){const box=$("#ndv");if(!box)return;if(!SEL){box.innerHTML=`<div><h5>Input</h5><div class="none">Click a node on the canvas.</div></div><div><h5>How it worked</h5><div class="none">Click any node to see what it received, how it searched the memory, which records it read and why, and what it produced. Follow mode opens each node as it starts running.</div></div><div><h5>Output</h5><div class="none">Nothing selected.</div></div>`;return}
+  const d=ND[curPath][SEL],def=DEF[SEL],dur=d.t0&&d.t1&&d.t1>=d.t0?` · ${(d.t1-d.t0).toFixed(1)} s`:"";
+  box.innerHTML=`<div><h5>Input</h5><p class="who">${esc(def.t)}<small>${d.status}${dur}</small></p>${inputCol(SEL,d)}</div><div><h5>${["dispatcher","diagnostician","parts"].includes(SEL)?"How it searched and decided":SEL==="verifier"?"What it checked":"What it does"}</h5><p class="who">&nbsp;</p>${centre(SEL,d)}</div><div><h5>Output</h5><p class="who">&nbsp;</p>${outputCol(SEL,d)}</div>`}
+function select(n){SEL=n;FOLLOW=false;$("#follow")?.classList.remove("on");$("#follow")&&($("#follow").textContent="Follow: off");paintAll();renderNDV()}
+/* ---- self-correction trail ---- */
+function renderCorr(){const box=$("#corrtl");if(!box)return;if(!CORR.length){box.innerHTML='<div class="empty" style="padding:24px">Send an alarm and the trail of how the agents checked and corrected themselves is drawn here.</div>';return}
+  box.innerHTML=CORR.map((c,i)=>{const n=i+1;
+    if(c.k==="prop")return`<div class="cs prop" data-n="${n}"><h4>Diagnostician proposes: ${esc(c.fix||"")}</h4><p class="mono">${esc(c.cause||"")}<br>${esc(c.line)}</p><div class="jb">${(c.jobs||[]).map(j=>`<span>cites ${esc(j)}</span>`).join("")}</div></div>`;
+    if(c.k==="scan")return`<div class="cs scan" data-n="${n}"><h4>The Verifier opens the raw job records</h4><p class="mono">${esc(c.text)}</p></div>`;
+    if(c.k==="veto")return`<div class="cs veto" data-n="${n}"><h4>Verifier says no to: ${esc(c.item)}</h4>${(c.reasons||[]).map(r=>`<p>${esc(r)}</p>`).join("")}<div class="jb">${(c.jobs||[]).map(j=>`<span>evidence ${esc(j)}</span>`).join("")}</div>${c.alt?`<p class="mono" style="margin-top:8px">It also names what did work on those units: <b style="color:var(--text)">${esc(c.alt)}</b></p>`:""}</div>`;
+    if(c.k==="rev")return`<div class="cs revise" data-n="${n}"><h4>The agent searches again and revises: ${esc(c.fix||"")}</h4><p class="mono">${esc(c.line)}</p>${(c.ops||[]).length?`<div class="sq">${c.ops.map(o=>`<div><i>recall</i> “${esc(String(o.query).slice(0,90))}” → ${(o.hits||[]).length} hits</div>`).join("")}</div>`:""}</div>`;
+    if(c.k==="ok")return`<div class="cs okc" data-n="${n}"><h4>Verifier approves the revised plan</h4><p class="mono">${esc(c.text)}</p></div>`;
+    return`<div class="cs none" data-n="${n}"><h4>No correction was needed on this alarm</h4><p>The first proposal passed every check against the raw records. When the records contradict a lesson (for example a fix that stopped working on newer units), the Verifier vetoes it here, the agent searches again for what did work, and the trail shows each step.</p></div>`}).join("")}
+function initFlow(){const cv=$("#canvas");if(!cv)return;let drag=null;
+  cv.addEventListener("pointerdown",ev=>{const n=ev.target.closest(".nd");if(!n)return;const k=n.dataset.n;drag={k,n,sx:ev.clientX,sy:ev.clientY,ox:POS[k].x,oy:POS[k].y,moved:false};n.setPointerCapture(ev.pointerId)});
+  cv.addEventListener("pointermove",ev=>{if(!drag)return;const dx=(ev.clientX-drag.sx)/SCALE,dy=(ev.clientY-drag.sy)/SCALE;if(Math.abs(dx)+Math.abs(dy)>3){drag.moved=true;drag.n.classList.add("drag")}if(!drag.moved)return;
+    POS[drag.k].x=Math.round(drag.ox+dx);POS[drag.k].y=Math.round(drag.oy+dy);drag.n.style.left=POS[drag.k].x+"px";drag.n.style.top=POS[drag.k].y+"px";wires()});
+  const up=()=>{if(!drag)return;drag.n.classList.remove("drag");if(!drag.moved)select(drag.k);drag=null};cv.addEventListener("pointerup",up);cv.addEventListener("pointercancel",up);
+  addEventListener("resize",fit);
+  $("#follow").onclick=()=>{FOLLOW=!FOLLOW;$("#follow").classList.toggle("on",FOLLOW);$("#follow").textContent="Follow: "+(FOLLOW?"on":"off")};
+  $("#relayout").onclick=()=>{resetPOS();$$(".nd",cv).forEach(el=>{const k=el.dataset.n;el.style.left=POS[k].x+"px";el.style.top=POS[k].y+"px"});wires()};
+  $$("#pathseg button").forEach(b=>b.onclick=()=>{curPath=b.dataset.p;$$("#pathseg button").forEach(x=>x.classList.toggle("on",x===b));paintAll();paintLabs();renderNDV();renderLog();
+    const loopOn=LOOPS[curPath]>0;setEdge("loop","hot",loopOn)});
+  $("#follow").classList.add("on")}
+
 function renderRes(){
   const band=STATUS&&STATUS.band.startsWith("configured"),mdeg=STATUS&&STATUS.memory_degraded||bkMem;
   const set=(id,on,bad)=>{const el=$("#"+id);if(!el)return;el.classList.toggle("on",!!on);el.classList.toggle("bad",!!bad)};
@@ -941,12 +1229,12 @@ async function loadAcc(){let r;try{r=await api("/api/eval/results")}catch{return
     <div class="accnote">${esc(ver)}<br>Each incident is planned using only records dated before it; the harness raises if a later record is present. The Verifier threshold was tuned on training machines only. ${r.test.n_incidents} incidents is a small sample, so read the direction, not the digits. Full method and every failure: docs/EVALUATION.md.</div>`;
   requestAnimationFrame(()=>setTimeout(()=>{$$("#accpanel .fill").forEach(f=>f.style.width=f.dataset.w+"%");$("#curve")?.classList.add("go")},80))}
 $("#teachbtn").onclick=teach;$("#rebrief").onclick=rebrief;
-$("#resetbtn").onclick=async()=>{try{await api("/api/reset-demo",{});$("#l1out").innerHTML='<p class="foot" style="margin-top:10px">Demo memory reset to the original history.</p>';$("#l2out").innerHTML="";loadStatus()}catch(e){$("#l1out").innerHTML=`<div class="err">${esc(e.message)}</div>`}};
+$("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$("#l1out").innerHTML=`<p class="foot" style="margin-top:10px">${esc(rr.note)}</p>`;$("#l2out").innerHTML="";loadStatus()}catch(e){$("#l1out").innerHTML=`<div class="err">${esc(e.message)}</div>`}};
 
 (async()=>{
   words($("#h-room"),HEADS.room);movePill();addEventListener("resize",movePill);document.fonts?.ready.then(movePill);
   setTimeout(()=>{$("#curtain").classList.add("go");setTimeout(()=>$("#curtain").remove(),1000)},RM?0:1100);
-  try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=SC[0].id;renderScenarios();renderPacket();buildDrills();buildMesh();renderRes();fillTicker();$("#runinfo").textContent=`${SC[0].machine.model} · ${SC[0].machine.location} · ${SC[0].site.name}`;["without","with"].forEach(agentStrip)}
+  try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=SC[0].id;renderScenarios();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes();fillTicker();$("#runinfo").textContent=`${SC[0].machine.model} · ${SC[0].machine.location} · ${SC[0].site.name}`;["without","with"].forEach(agentStrip)}
   catch(e){$("#scs").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
   const h=location.hash.slice(1);if(["room","phone","dash"].includes(h))go(h);else loadHome();if(h==="room")loadAcc()})();
 </script>

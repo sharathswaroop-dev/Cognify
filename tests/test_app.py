@@ -82,3 +82,13 @@ def test_the_voice_endpoint_refuses_empty_audio_politely(client):
     c, _ = client
     r = c.post("/api/voice/report", data={"job_id": "J-1201"}, files={"audio": ("x.webm", b"", "audio/webm")})
     assert r.status_code == 422 and r.json()["detail"]["code"] in ("no_stt", "empty")
+
+
+def test_reset_demo_clears_logged_visits_and_rebuilds_the_memory(client):
+    c, app_mod = client
+    body = {"actions": [{"action": "Replaced compressor contactor", "result": "failed"}], "outcome": "revisit_needed"}
+    assert c.post("/api/jobs/J-1204/log", json=body).status_code == 200
+    assert app_mod.store.logged
+    r = c.post("/api/reset-demo")
+    assert r.status_code == 200 and r.json()["reset"] and not app_mod.store.logged
+    assert not any("J-1204-V1" == i["doc_id"] for i in app_mod.memory.items)

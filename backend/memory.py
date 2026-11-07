@@ -161,6 +161,12 @@ class LocalMemory:
         out.sort(key=lambda m: (m.score, m.date or ""), reverse=True)
         return out[:limit]
 
+    def pool(self, tags: list[str], match: str = "any") -> int:
+        """How many stored records the tag filter lets through (the candidate pool a search ranks)."""
+        if not tags:
+            return len(self.items)
+        return sum(1 for i in self.items if (set(tags) <= set(i["tags"]) if match == "all" else set(tags) & set(i["tags"])))
+
     def reflect(self, query: str, tags: list[str]) -> str | None:
         """Heuristic 'reflect': tally what failed and what worked across matching visits."""
         rel = [i for i in self.items if set(tags) & set(i["tags"]) and "kind:visit" in i["tags"]]
@@ -325,6 +331,10 @@ class FallbackMemory:
             self.degraded = True
             self.reason = f"{op} failed: {str(exc)[:200]}"
             log.error("Hindsight unavailable, switching to the local memory. %s", self.reason)
+
+    def pool(self, tags: list[str], match: str = "any") -> int:
+        # Only the local index can say how many records pass a tag filter; Hindsight ranks server-side, so while it is the primary we do not claim a number.
+        return self.secondary.pool(tags, match) if self.degraded else None
 
     def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:
         if not self.degraded:
