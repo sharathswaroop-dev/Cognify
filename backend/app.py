@@ -1,4 +1,4 @@
-"""SiteMemory API + web UI.
+"""Cognify API + web UI.
 
 Run from the project root:   python backend/app.py      then open http://localhost:8000
 """
@@ -131,7 +131,7 @@ except Exception as exc:
     log.error("Could not retain belief corrections: %s", exc)
 
 room = ControlRoom(store, memory, llm)
-app = FastAPI(title="SiteMemory", version="1.0.0")
+app = FastAPI(title="Cognify", version="1.0.0")
 
 
 @app.exception_handler(UnknownMachine)
@@ -395,7 +395,7 @@ def chat(req: ChatReq, ctx: dict = Depends(current)):
         return {"kind": "saved", "answer": f"Saved to the company memory under {author}{about}. The next person who asks will find it.", "memory_text": saved["memory_text"],
                 "machine_id": mid, "backend": saved["memory_backend"]}
     if _GREET.match(msg) and len(msg.split()) <= 5:
-        g = llm.text_chat("You are SiteMemory, an assistant that remembers what a field-service organization has learned. Reply in one or two friendly plain sentences and invite a question about past incidents.", msg, 120)
+        g = llm.text_chat("You are Cognify, an assistant that remembers what a field-service organization has learned. Reply in one or two friendly plain sentences and invite a question about past incidents.", msg, 120)
         return {"kind": "answer", "answer": g or "Hello. Ask me what your company already knows, or tell me something to remember.", "sources": [], "found": False, "basis": provenance.basis([]), "backend": ctx["memory"].name, "greeting": True}
     q = msg if len(msg.split()) >= 6 or not req.context else f"{req.context} {msg}"
     out = _ask(ctx["memory"], q[:400] if len(q) >= 3 else msg + "  ", req.deep)

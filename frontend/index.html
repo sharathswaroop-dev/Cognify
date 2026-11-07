@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>SiteMemory — Agent Control Room</title>
+<title>Cognify — Chat</title>
 <link rel="icon" type="image/svg+xml" href="/static/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -968,7 +968,7 @@ body.chatmode{overflow:hidden}
 
 <header>
   <a class="logo" href="#" data-view="home"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#2b2622"/></svg>
-    <div><b>SiteMemory</b><small id="company">Field service that remembers</small></div></a>
+    <div><b>Cognify</b><small id="company">Field service that remembers</small></div></a>
   <nav id="steps"><button data-scene="intro" class="on"><i>1</i><span>Intro</span></button><button data-scene="problem"><i>2</i><span>Problem</span></button><button data-scene="demo"><i>3</i><span>Demo</span></button><button data-scene="wrap"><i>4</i><span>Wrap-up</span></button></nav>
   <div class="chips" id="status"></div>
   <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="home">Home</a><a data-view="show">Guided tour</a><a data-view="chat">Chat with the memory</a><a data-view="company">Company knowledge</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
@@ -979,7 +979,7 @@ body.chatmode{overflow:hidden}
 <main>
 <section class="view on" id="view-home">
   <div class="homehero">
-    <span class="hand top">SiteMemory</span>
+    <span class="hand top">Cognify</span>
     <h1><span class="ln"><span>When the expert retires,</span></span><span class="ln"><span>the knowledge stays.</span></span></h1>
     <p class="lede">Fifteen years of fixes used to walk out the door with one person. Here every repair, every failure and every hard-won tip is kept in one shared memory, so a new hire can ask, and the agents check themselves before a technician drives out.</p>
     <div class="doors">
@@ -992,7 +992,7 @@ body.chatmode{overflow:hidden}
 <section class="view" id="view-chat">
   <div class="cgpt" id="cgpt">
     <aside class="cside" id="cside">
-      <div class="ctop"><a class="clogo" href="/" title="Home"><span class="lmark"></span><b>SiteMemory</b></a>
+      <div class="ctop"><a class="clogo" href="/" title="Home"><span class="lmark"></span><b>Cognify</b></a>
         <span class="grow"></span><button class="icon" id="csearchbtn" title="Search chats"><span data-i="search"></span></button><button class="icon" id="ctoggle" title="Hide sidebar"><span data-i="side"></span></button></div>
       <input id="csearch" class="csearch" placeholder="Search chats" hidden autocomplete="off">
       <div class="cnav">
@@ -1043,8 +1043,8 @@ body.chatmode{overflow:hidden}
         <button class="off" disabled><span data-i="search"></span><b>Deep research</b><small>Needs a search service key</small></button>
         <button class="off" disabled><span data-i="slides"></span><b>Presentations</b><small>Not built yet</small></button>
       </div>
-      <form class="composer" id="composer"><button type="button" class="plus" id="plusbtn" title="Add files and more"><span data-i="plus"></span></button><input type="file" id="cfile" hidden multiple accept=".txt,.md,.markdown,.csv,.json,.log,.pdf,.png,.jpg,.jpeg,.webp,.gif"><span class="deepchip" id="deepchip" hidden><span data-i="brain"></span>Thinking<button type="button" id="deepx" title="Turn off">×</button></span><textarea id="cin" rows="1" placeholder="Ask SiteMemory" maxlength="2000"></textarea><button type="button" class="ibtn" id="cmic" title="Dictate" hidden><span data-i="mic"></span></button><button class="send" id="csend" type="submit" aria-label="Send"><span data-i="send"></span></button></form>
-      <div class="chint">SiteMemory answers from your company's own memory and can be wrong. Check the sources, and tell it when it is.</div>
+      <form class="composer" id="composer"><button type="button" class="plus" id="plusbtn" title="Add files and more"><span data-i="plus"></span></button><input type="file" id="cfile" hidden multiple accept=".txt,.md,.markdown,.csv,.json,.log,.pdf,.png,.jpg,.jpeg,.webp,.gif"><span class="deepchip" id="deepchip" hidden><span data-i="brain"></span>Thinking<button type="button" id="deepx" title="Turn off">×</button></span><textarea id="cin" rows="1" placeholder="Ask Cognify" maxlength="2000"></textarea><button type="button" class="ibtn" id="cmic" title="Dictate" hidden><span data-i="mic"></span></button><button class="send" id="csend" type="submit" aria-label="Send"><span data-i="send"></span></button></form>
+      <div class="chint">Cognify answers from your company's own memory and can be wrong. Check the sources, and tell it when it is.</div>
     </section>
   </div>
   <div class="modal" id="libmodal" hidden><div class="mcard"><button class="vx" id="libx" type="button">×</button><h3>Library</h3><p class="sub">Everything your company has added to the chat. Ask about any of it.</p><div id="liblist"></div></div></div>
@@ -1076,7 +1076,7 @@ body.chatmode{overflow:hidden}
     <div>
       <span class="hand top">Hi, I'm <span class="edit" id="me" contenteditable spellcheck="false">your name</span></span>
       <h1><span class="ln"><span>Agents that</span></span><span class="ln"><span>remember what failed.</span></span></h1>
-      <p class="lede"><b>SiteMemory</b> is a crew of four AI agents for HVAC field service. They share one <b>Hindsight</b> memory of every repair, including the ones that failed, and a Verifier checks them before a technician drives out.</p>
+      <p class="lede"><b>Cognify</b> is a crew of four AI agents for HVAC field service. They share one <b>Hindsight</b> memory of every repair, including the ones that failed, and a Verifier checks them before a technician drives out.</p>
       <span class="hand why">Why: the person who knew has left.</span>
       <button class="btn pri mag" data-scene-go="problem" data-cursor="Go">Show me the problem →</button>
     </div>
@@ -1146,7 +1146,7 @@ body.chatmode{overflow:hidden}
   <div class="title"><div><div class="kick"><b>02</b> — The technician</div><h1 id="h-phone"></h1></div>
     <p>The briefing Ravi reads before the job, from the memory-backed plan. Log the visit by voice: it is transcribed, structured, confirmed, then retained.</p></div>
   <div class="pgrid">
-    <div><div class="phone"><div class="pscr" id="pscr"><div class="island"></div><div class="sbar"><span id="clock">9:41</span><span>SiteMemory</span></div><div class="pbody" id="phone"><div class="empty">Run an alarm in the Control Room and send the briefing here,<br>or pick a job on the right.</div></div></div></div></div>
+    <div><div class="phone"><div class="pscr" id="pscr"><div class="island"></div><div class="sbar"><span id="clock">9:41</span><span>Cognify</span></div><div class="pbody" id="phone"><div class="empty">Run an alarm in the Control Room and send the briefing here,<br>or pick a job on the right.</div></div></div></div></div>
     <div><div class="panel"><h3>Jobs</h3><p class="sub">Pick a job to brief. It runs the with-memory path only.</p><div id="jobs"></div></div></div>
   </div>
 </section>
@@ -1288,7 +1288,7 @@ async function feedback(k,rating,text){const m=curSess().msgs[k];if(!m)return;
 function regenerate(k){const s=curSess(),u=s.msgs[k-1];if(!u||u.r!=="user"||chatBusy)return;const text=u.t;s.msgs.splice(k-1);saveSess();drawThread();chatSend(text)}
 function speak(k){const m=curSess().msgs[k];if(!m||!window.speechSynthesis)return toast("This browser can't read aloud.");
   if(speaking===k){speechSynthesis.cancel();speaking=null;return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(m.t);u.onend=()=>{speaking=null};speaking=k;speechSynthesis.speak(u)}
-function showGate(msg){SES=null;TOKEN=null;try{localStorage.removeItem("sm_session")}catch{}$("#gate").classList.add("on");$("#wscard").innerHTML='<div class="who2"><b>Not signed in</b><small>Join your company</small></div>';$("#sess").innerHTML="";$("#ctitle").textContent="SiteMemory";if(msg)$("#gerr").innerHTML=`<div class="err">${esc(msg)}</div>`}
+function showGate(msg){SES=null;TOKEN=null;try{localStorage.removeItem("sm_session")}catch{}$("#gate").classList.add("on");$("#wscard").innerHTML='<div class="who2"><b>Not signed in</b><small>Join your company</small></div>';$("#sess").innerHTML="";$("#ctitle").textContent="Cognify";if(msg)$("#gerr").innerHTML=`<div class="err">${esc(msg)}</div>`}
 function startSession(r){SES=r;TOKEN=r.token;try{localStorage.setItem("sm_session",JSON.stringify(r))}catch{}$("#gate").classList.remove("on");$("#gerr").innerHTML="";
   const nm=r.email.split("@")[0].replace(/[._-]+/g," "),ini=nm.split(" ").map(x=>x[0]||"").join("").slice(0,2).toUpperCase()||"U";
   $("#wscard").innerHTML=`<div class="av2">${esc(ini)}</div><div class="who2">${esc(nm)}${r.admin?'<span class="adm">admin</span>':""}<small>${esc(r.workspace.name)}</small></div><a id="signout">Sign out</a>`;
@@ -1308,7 +1308,7 @@ function wireChat(){
   $("#cmore").onclick=e=>{e.stopPropagation();$("#cmenu").hidden=!$("#cmenu").hidden};document.addEventListener("click",()=>{const m=$("#cmenu");if(m)m.hidden=true});
   $("#c-rename").onclick=()=>{const s=curSess(),v=prompt("Rename this chat",s.title);if(v&&v.trim()){s.title=v.trim().slice(0,60);saveSess();drawSess();drawHead()}};
   $("#c-delete").onclick=()=>{if(!confirm("Delete this chat?"))return;SESS.items=SESS.items.filter(x=>x.id!==SESS.cur);if(!SESS.items.length)newSession(false);SESS.cur=SESS.items[0].id;saveSess();drawSess();drawThread();drawHead()};
-  $("#cshare").onclick=()=>{const s=curSess();if(!s||!s.msgs.length)return toast("Nothing to share yet.");const t=s.title+"\n\n"+s.msgs.map(m=>(m.r==="user"?"You: ":"SiteMemory: ")+(m.t||(m.file?m.file.name:""))).join("\n\n");
+  $("#cshare").onclick=()=>{const s=curSess();if(!s||!s.msgs.length)return toast("Nothing to share yet.");const t=s.title+"\n\n"+s.msgs.map(m=>(m.r==="user"?"You: ":"Cognify: ")+(m.t||(m.file?m.file.name:""))).join("\n\n");
     navigator.clipboard.writeText(t).then(()=>toast("Conversation copied")).catch(()=>toast("Could not copy"))};
   const th=$("#cthread"),tb=$("#tobottom");th.addEventListener("scroll",()=>{tb.hidden=th.scrollHeight-th.scrollTop-th.clientHeight<240});tb.onclick=()=>th.scrollTo({top:th.scrollHeight});
   th.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const k=+b.dataset.k,m=curSess().msgs[k];if(!m)return;

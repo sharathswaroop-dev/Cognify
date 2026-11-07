@@ -12,10 +12,10 @@ async function guest(){if(TOKEN)return TOKEN;try{TOKEN=sessionStorage.getItem("s
   return TOKEN}
 async function post(path,body){const t=await guest();const r=await fetch(path,{method:"POST",headers:{"Content-Type":"application/json",Authorization:"Bearer "+t},body:JSON.stringify(body)});
   if(!r.ok){let m=r.statusText;try{const j=await r.json();m=j.detail||m}catch{}throw new Error(typeof m==="string"?m:JSON.stringify(m))}return r.json()}
-function nav(active){return `<div class="nav"><div class="wrap"><a class="brand" href="/"><img src="/static/logo.svg" alt="" width="30" height="30">SiteMemory</a><nav>
+function nav(active){return `<div class="nav"><div class="wrap"><a class="brand" href="/"><img src="/static/logo.svg" alt="" width="30" height="30">Cognify</a><nav>
   <a href="/architecture" class="${active==="a"?"on":""}">Architecture</a><a href="/how-it-works" class="${active==="h"?"on":""}">How it works</a><a href="/memory" class="${active==="m"?"on":""}">Memory ON/OFF</a><a href="/chat">Demo</a></nav><span class="sp"></span>
-  <a class="btn sm" href="/chat">Ask SiteMemory →</a></div></div>`}
-function foot(){return `<footer><div class="wrap"><span><b style="color:#fff">SiteMemory</b> · Ask SiteMemory. It remembers what your organization has learned.</span><span>All records in the demo are sample data, clearly labelled.</span></div></footer>`}
+  <a class="btn sm" href="/chat">Ask Cognify →</a></div></div>`}
+function foot(){return `<footer><div class="wrap"><span><b style="color:#fff">Cognify</b> · Ask Cognify. It remembers what your organization has learned.</span><span>All records in the demo are sample data, clearly labelled.</span></div></footer>`}
 /* model output may still contain markdown; show it as readable plain text */
 function plain(t){return String(t||"").replace(/<br\s*\/?>/gi,"\n").replace(/\*\*/g,"").replace(/^\s*[*-]\s+/gm,"• ").replace(/^#{1,4}\s*/gm,"").replace(/^\s*\|?[-:| ]{3,}\|?\s*$/gm,"").replace(/^\|\s*/gm,"").replace(/\s*\|\s*/g," · ").replace(/\n{3,}/g,"\n\n").trim()}
 /* typewriter */
