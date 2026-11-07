@@ -87,7 +87,15 @@ def main():
         ask(pg, "hi", 8)
         ask(pg, "why does M-07 keep tripping on high pressure", 18)
         ask(pg, "how do I reset a router password", 18)
+        time.sleep(2)
+        pg.click("#liblink")                                        # the library: uploads and sample incident records
+        time.sleep(5)
+        pg.mouse.wheel(0, 500)
         time.sleep(3)
+        pg.click("#libx")
+        time.sleep(1)
+        pg.click("#cside a[data-view='company']")                   # company knowledge
+        time.sleep(6)
         vid = pg.video.path()
         ctx.close()
         b.close()
