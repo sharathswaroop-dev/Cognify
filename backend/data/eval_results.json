@@ -1,5 +1,513 @@
 {
- "partial": true,
+ "generated": "2026-11-07T07:33:31",
+ "model": "qwen/qwen3.8-27b (87), openai/gpt-oss-20b (11), openai/gpt-oss-120b (6)",
+ "memory_backend": "basic search (BM25)",
+ "skipped": {
+  "hindsight": "Hindsight was not used for this run"
+ },
+ "tuning": "The Verifier's parts threshold (fixes needed on comparable units) was tuned on 8 training incidents: K=1: F1 0.67, K=2: F1 0.67, K=3: F1 0.33. K=1 chosen. The held-out machines were not looked at.",
+ "chosen_min_wins": 1,
+ "llm_calls": 179,
+ "llm_failures": 94,
+ "split": {
+  "holdout_machines": 8,
+  "train_machines": 43
+ },
+ "train": {
+  "n_incidents": 8,
+  "arms": {
+   "basic": {
+    "ftf": {
+     "k": 3,
+     "n": 6,
+     "rate": 0.5,
+     "ci": [
+      0.188,
+      0.812
+     ]
+    },
+    "fix": {
+     "k": 3,
+     "n": 6,
+     "rate": 0.5,
+     "ci": [
+      0.188,
+      0.812
+     ]
+    }
+   }
+  }
+ },
+ "test": {
+  "n_incidents": 24,
+  "arms": {
+   "none": {
+    "fix": {
+     "k": 0,
+     "n": 13,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.228
+     ]
+    },
+    "parts": {
+     "k": 8,
+     "n": 13,
+     "rate": 0.615,
+     "ci": [
+      0.355,
+      0.823
+     ]
+    },
+    "ftf": {
+     "k": 0,
+     "n": 13,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.228
+     ]
+    },
+    "warn": {
+     "k": 7,
+     "n": 7,
+     "rate": 1.0,
+     "ci": [
+      0.646,
+      1.0
+     ]
+    }
+   },
+   "basic": {
+    "fix": {
+     "k": 7,
+     "n": 11,
+     "rate": 0.636,
+     "ci": [
+      0.354,
+      0.848
+     ]
+    },
+    "parts": {
+     "k": 9,
+     "n": 11,
+     "rate": 0.818,
+     "ci": [
+      0.523,
+      0.949
+     ]
+    },
+    "ftf": {
+     "k": 7,
+     "n": 11,
+     "rate": 0.636,
+     "ci": [
+      0.354,
+      0.848
+     ]
+    },
+    "warn": {
+     "k": 6,
+     "n": 6,
+     "rate": 1.0,
+     "ci": [
+      0.61,
+      1.0
+     ]
+    }
+   },
+   "basic_verified": {
+    "fix": {
+     "k": 7,
+     "n": 11,
+     "rate": 0.636,
+     "ci": [
+      0.354,
+      0.848
+     ]
+    },
+    "parts": {
+     "k": 7,
+     "n": 11,
+     "rate": 0.636,
+     "ci": [
+      0.354,
+      0.848
+     ]
+    },
+    "ftf": {
+     "k": 7,
+     "n": 11,
+     "rate": 0.636,
+     "ci": [
+      0.354,
+      0.848
+     ]
+    },
+    "warn": {
+     "k": 6,
+     "n": 6,
+     "rate": 1.0,
+     "ci": [
+      0.61,
+      1.0
+     ]
+    }
+   }
+  }
+ },
+ "failures": [
+  {
+   "job": "J-1045",
+   "machine": "M-22",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Performed generic checks; real: Chemical descaling of condenser tubes and cooling-tower wate)"
+  },
+  {
+   "job": "J-1045",
+   "machine": "M-22",
+   "arm": "basic",
+   "why": "it did not name the repair that really fixed it (proposed: Performed generic checks for condenser water flow and refrigerant char; real: Chemical descaling of condenser tubes and cooling-tower wate)"
+  },
+  {
+   "job": "J-1045",
+   "machine": "M-22",
+   "arm": "basic_verified",
+   "why": "it did not name the repair that really fixed it (proposed: Escalate to a senior technician; real: Chemical descaling of condenser tubes and cooling-tower wate)"
+  },
+  {
+   "job": "J-1020",
+   "machine": "M-12",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Check drain line, condensate pump, and drain pan for clogs; inspect wa; real: Flushed drain line with nitrogen, re-laid drain pipe with pr)"
+  },
+  {
+   "job": "J-1020",
+   "machine": "M-12",
+   "arm": "basic",
+   "why": "it did not name the repair that really fixed it (proposed: Cleared the condensate drain line; real: Flushed drain line with nitrogen, re-laid drain pipe with pr)"
+  },
+  {
+   "job": "J-1020",
+   "machine": "M-12",
+   "arm": "basic_verified",
+   "why": "it did not name the repair that really fixed it (proposed: Escalate to a senior technician; real: Flushed drain line with nitrogen, re-laid drain pipe with pr)"
+  },
+  {
+   "job": "J-1039",
+   "machine": "M-21",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Performed generic checks; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1039",
+   "machine": "M-21",
+   "arm": "basic",
+   "why": "it did not name the repair that really fixed it (proposed: Performed generic checks including refrigerant pressure, filter cleani; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1039",
+   "machine": "M-21",
+   "arm": "basic_verified",
+   "why": "it did not name the repair that really fixed it (proposed: Escalate to a senior technician; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1040",
+   "machine": "M-21",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Check system for common low cooling capacity issues; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1040",
+   "machine": "M-21",
+   "arm": "basic",
+   "why": "it did not name the repair that really fixed it (proposed: Topped up refrigerant; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1040",
+   "machine": "M-21",
+   "arm": "basic_verified",
+   "why": "it did not name the repair that really fixed it (proposed: Topped up refrigerant; real: Nitrogen pressure test, brazed the joint instead of flare, v)"
+  },
+  {
+   "job": "J-1062",
+   "machine": "M-31",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Cleaned or replaced the filter; real: Replaced EC fan module on fan 2 and recalibrated airflow sen)"
+  },
+  {
+   "job": "J-1021",
+   "machine": "M-12",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Cleared the condensate drain line; real: Flushed drain line with nitrogen, re-laid drain pipe with pr)"
+  },
+  {
+   "job": "J-0901",
+   "machine": "M-07",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Conducted generic checks for high-pressure trip; real: Replaced compressor contactor (DK-CTR-24V))"
+  },
+  {
+   "job": "J-1064",
+   "machine": "M-31",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Conducted generic checks for airflow, filter condition, and thermostat; real: Replaced EC fan module on fan 2 and recalibrated airflow sen)"
+  },
+  {
+   "job": "J-1050",
+   "machine": "M-23",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Rebalanced the fan and secured the impeller; real: Replaced both blower bearings and realigned pulley.)"
+  },
+  {
+   "job": "J-1047",
+   "machine": "M-22",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: performed generic checks; real: Chemical descaling of condenser tubes and cooling-tower wate)"
+  },
+  {
+   "job": "J-1047",
+   "machine": "M-22",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1047",
+   "machine": "M-22",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1052",
+   "machine": "M-23",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Rebalanced the fan rotor; real: Replaced both blower bearings and realigned pulley.)"
+  },
+  {
+   "job": "J-1023",
+   "machine": "M-12",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Cleared the condensate drain line; real: Flushed drain line with nitrogen, re-laid drain pipe with pr)"
+  },
+  {
+   "job": "J-1065",
+   "machine": "M-31",
+   "arm": "none",
+   "why": "it did not name the repair that really fixed it (proposed: Performed generic checks on fan motor, power supply, and control board; real: Replaced EC fan module on fan 2 and recalibrated airflow sen)"
+  },
+  {
+   "job": "J-1065",
+   "machine": "M-31",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1065",
+   "machine": "M-31",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1041",
+   "machine": "M-21",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1041",
+   "machine": "M-21",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1041",
+   "machine": "M-21",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1177",
+   "machine": "M-113",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1177",
+   "machine": "M-113",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1177",
+   "machine": "M-113",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1067",
+   "machine": "M-31",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1067",
+   "machine": "M-31",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1067",
+   "machine": "M-31",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-0947",
+   "machine": "M-07",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-0947",
+   "machine": "M-07",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-0947",
+   "machine": "M-07",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1043",
+   "machine": "M-21",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1043",
+   "machine": "M-21",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1043",
+   "machine": "M-21",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1179",
+   "machine": "M-113",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1179",
+   "machine": "M-113",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1179",
+   "machine": "M-113",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1044",
+   "machine": "M-21",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1044",
+   "machine": "M-21",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1044",
+   "machine": "M-21",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1053",
+   "machine": "M-23",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1053",
+   "machine": "M-23",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1053",
+   "machine": "M-23",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1025",
+   "machine": "M-12",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1025",
+   "machine": "M-12",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1025",
+   "machine": "M-12",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1048",
+   "machine": "M-22",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1048",
+   "machine": "M-22",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1048",
+   "machine": "M-22",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1027",
+   "machine": "M-12",
+   "arm": "none",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1027",
+   "machine": "M-12",
+   "arm": "basic",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  },
+  {
+   "job": "J-1027",
+   "machine": "M-12",
+   "arm": "basic_verified",
+   "why": "the LLM was unavailable for this run (excluded from the rates)"
+  }
+ ],
+ "partial": false,
  "incidents": [
   {
    "job": "J-1045",
@@ -593,6 +1101,325 @@
     }
    },
    "basic_vetoes": []
+  },
+  {
+   "job": "J-1065",
+   "date": "2026-06-28",
+   "machine": "M-31",
+   "symptom": "PAC unit showing 'Fan Fail' intermittently",
+   "truth": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": true,
+     "ftf": false,
+     "warn": true,
+     "top": "Performed generic checks on fan motor, power supply, and control board.",
+     "missing": []
+    },
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1041",
+   "date": "2026-07-01",
+   "machine": "M-21",
+   "symptom": "Conference room not cooling below 27C",
+   "truth": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1177",
+   "date": "2026-07-19",
+   "machine": "M-113",
+   "symptom": "Indoor unit not responding, error U4 on remote",
+   "truth": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1067",
+   "date": "2026-07-24",
+   "machine": "M-31",
+   "symptom": "High return-air temperature alarm on precision AC",
+   "truth": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-0947",
+   "date": "2026-08-19",
+   "machine": "M-07",
+   "symptom": "Outdoor unit trips within minutes of start",
+   "truth": "Replaced compressor contactor (DK-CTR-24V)",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1043",
+   "date": "2026-08-29",
+   "machine": "M-21",
+   "symptom": "Conference room not cooling below 27C",
+   "truth": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1179",
+   "date": "2026-09-02",
+   "machine": "M-113",
+   "symptom": "Cassette unit showing U4 error",
+   "truth": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1044",
+   "date": "2026-09-16",
+   "machine": "M-21",
+   "symptom": "Conference room not cooling below 27C",
+   "truth": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1053",
+   "date": "2026-09-16",
+   "machine": "M-23",
+   "symptom": "AHU noise complaint from tenants",
+   "truth": "Replaced both blower bearings and realigned pulley.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1025",
+   "date": "2026-09-17",
+   "machine": "M-12",
+   "symptom": "Water dripping from indoor unit",
+   "truth": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1048",
+   "date": "2026-09-27",
+   "machine": "M-22",
+   "symptom": "Chiller tripping on HP during afternoon",
+   "truth": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1027",
+   "date": "2026-10-12",
+   "machine": "M-12",
+   "symptom": "Indoor unit leaking water onto false ceiling",
+   "truth": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+   "arms": {
+    "none": null,
+    "basic": null,
+    "basic_verified": null
+   },
+   "basic_vetoes": [
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Run the standard checks and log everything you try",
+     "target": "diagnostician"
+    }
+   ]
   }
  ]
 }
