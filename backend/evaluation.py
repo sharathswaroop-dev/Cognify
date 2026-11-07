@@ -74,19 +74,45 @@ def rate(vals) -> dict:
 
 
 def truth_for(inc_visits: list[dict], all_levels: dict, by_job: dict) -> dict:
-    """What really fixed it. A fix that came back within 30 days is not the fix: the later repair is."""
+    """What really fixed it. A fix that came back within 30 days is not the fix: follow the chain of
+    returns until a repair that held (or, failing that, the last repair that worked)."""
     failed, fix, parts = [], "", []
     for v in sorted(inc_visits, key=lambda x: x["visit_no"]):
         for a in v["actions"]:
             if a["result"] == "failed":
                 failed.append(a["action"])
-        if not fix and ev.is_fix(v):
-            info = all_levels.get(v["job_id"], {})
-            src = by_job.get(info.get("recurrence_job")) if info.get("recurred") else v
-            if info.get("recurred"):
-                failed.append(next(a["action"] for a in v["actions"] if a["result"] == "worked"))
-            w = next(a for a in src["actions"] if a["result"] == "worked")
-            fix, parts = w["action"], list(src.get("parts_used") or [])
+    by_inc: dict[str, list[dict]] = {}
+    for x in by_job.values():
+        by_inc.setdefault(x["incident_id"], []).append(x)
+
+    def worked(v):
+        return next((a for a in v["actions"] if a["result"] == "worked"), None)
+
+    cur, seen, last = next((v for v in sorted(inc_visits, key=lambda x: x["visit_no"]) if ev.is_fix(v)), None), set(), None
+    while cur is not None and cur["job_id"] not in seen:
+        seen.add(cur["job_id"])
+        info, w = all_levels.get(cur["job_id"], {}), worked(cur)
+        if w:
+            last = (w, cur)
+        if not info.get("recurred"):
+            if w:
+                fix, parts = w["action"], list(cur.get("parts_used") or [])
+            break
+        if w:
+            failed.append(w["action"])
+        nxt = by_job.get(info.get("recurrence_job"))
+        if nxt is None:
+            break
+        chain = sorted(by_inc.get(nxt["incident_id"], [nxt]), key=lambda x: x["visit_no"])
+        cur = next((x for x in chain if x["job_id"] == nxt["job_id"] or ev.is_fix(x)), nxt)
+        if worked(cur) is None and cur is nxt:
+            cur = next((x for x in chain if x["visit_no"] > nxt["visit_no"] and ev.is_fix(x)), None)
+    if not fix:
+        w, v = next(((worked(x), x) for x in sorted(inc_visits, key=lambda x: x["visit_no"], reverse=True) if worked(x)), (None, None))
+        if last:
+            w, v = last
+        if w:
+            fix, parts = w["action"], list(v.get("parts_used") or [])
     return {"fix_key": fix, "parts": parts, "failed": failed, "first_time": len(inc_visits) == 1 and ev.is_fix(inc_visits[0]) and not all_levels.get(inc_visits[0]["job_id"], {}).get("recurred")}
 
 

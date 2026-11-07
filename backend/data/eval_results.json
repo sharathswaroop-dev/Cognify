@@ -2,732 +2,524 @@
  "partial": true,
  "incidents": [
   {
-   "n": 1,
-   "incident": "I-023",
-   "job_id": "J-1032",
-   "date": "2025-11-02",
-   "machine_id": "M-51",
-   "symptom": "AHU noise complaint from tenants",
-   "truth": {
-    "failed": [],
-    "fix": "Replaced both blower bearings and realigned pulley.",
-    "parts": [
-     "Bearing 6206-2RS (x2)",
-     "V-belt B-48"
-    ],
-    "first_time": true
-   },
-   "memory_visits": 0,
+   "job": "J-1045",
+   "date": "2025-11-27",
+   "machine": "M-22",
+   "symptom": "Chiller high head pressure alarm",
+   "truth": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
+    "none": {
+     "fix": false,
+     "parts": false,
      "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       true
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "Inspect AHU for noise sources and vibration",
-      "likely_cause": "Loose fan belt, motor mounts, or dirty blower causing vibration",
-      "confidence": "low",
-      "do_first": [
-       "Visually inspect fan and motor mounting bolts",
-       "Listen for bearing or motor whine while running",
-       "Check blower wheel for debris or imbalance",
-       "Verify duct and panel connections are secure"
-      ],
-      "avoid": [
-       "Replace motor before confirming bearing wear",
-       "Tighten all electrical connections without checking mechanical parts"
-      ],
-      "bring": [
-       "Screwdriver set",
-       "Adjustable wrench set",
-       "Vibration isolation pads",
-       "Replacement fan belt"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": true,
+     "top": "performed generic checks: inspected condenser for fouling, verified refrigerant charge, ensured proper water flow and ambient conditions",
+     "missing": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+     ]
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
+    "basic": {
+     "fix": false,
+     "parts": false,
      "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       true,
-       false
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "Noise complaint on Zeco AHU clean‑room unit",
-      "likely_cause": "Worn blower motor bearings or misaligned fan causing vibration",
-      "confidence": "low",
-      "do_first": [
-       "Inspect blower motor bearings for wear",
-       "Check fan blade alignment and clearance",
-       "Examine mounting vibration isolators for damage",
-       "Listen for noise source while unit runs"
-      ],
-      "avoid": [],
-      "bring": [
-       "bearing grease",
-       "vibration isolation pads",
-       "multimeter",
-       "screwdriver set"
-      ],
-      "site_notes": [
-       "Utilities contact: Lakshmi Prasad"
-      ]
-     },
-     "memories_used": 1,
-     "beliefs": []
+     "warn": true,
+     "top": "Check condenser pressure, refrigerant charge, airflow, and blockages",
+     "missing": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+     ]
+    },
+    "basic_verified": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": true,
+     "top": "Escalate to a senior technician",
+     "missing": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+     ]
     }
-   }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Check condenser pressure, refrigerant charge, airflow, and blockages",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Performed generic diagnostic checks: verify condenser pressure, refrigerant charge, airflow, and blockages",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Further investigation required",
+     "target": "diagnostician"
+    }
+   ]
   },
   {
-   "n": 2,
-   "incident": "I-021",
-   "job_id": "J-1029",
-   "date": "2025-11-06",
-   "machine_id": "M-42",
-   "symptom": "Several cassettes in one zone stopped with communication error",
-   "truth": {
-    "failed": [],
-    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
-    "parts": [
-     "Ring lugs and heat-shrink set",
-     "IP65 junction box"
-    ],
-    "first_time": true
-   },
-   "memory_visits": 1,
+   "job": "J-1020",
+   "date": "2026-01-02",
+   "machine": "M-12",
+   "symptom": "Water leakage from wall-mounted split",
+   "truth": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
+    "none": {
+     "fix": false,
+     "parts": true,
      "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "Check communication bus and power for Mitsubishi cassette zone",
-      "likely_cause": "Faulty communication bus or loss of power to the zone controller",
-      "confidence": "low",
-      "do_first": [
-       "Verify power to all cassettes",
-       "Inspect communication wiring for loose connections or damage",
-       "Check zone controller status lights",
-       "Reset the system via main controller"
-      ],
-      "avoid": [],
-      "bring": [
-       "Multimeter",
-       "Insulation tester",
-       "Spare communication cable",
-       "Replacement zone controller"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": null,
+     "top": "checked and cleaned drain line",
+     "missing": []
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
+    "basic": {
+     "fix": false,
+     "parts": true,
      "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "Check power and communication bus for cassette units",
-      "likely_cause": "Faulty bus wiring or controller issue causing loss of communication between cassettes",
-      "confidence": "low",
-      "do_first": [
-       "Verify that all cassette units have proper power and fuse status",
-       "Inspect and reseat the communication bus connectors in the zone",
-       "Read error codes on the main controller and note any bus‑fault messages",
-       "Reset the communication bus via the controller menu if available"
-      ],
-      "avoid": [
-       "Do not replace individual cassette control boards before confirming a bus or wiring fault"
-      ],
-      "bring": [
-       "Multimeter or voltage tester",
-       "Spare communication bus cable or connector set",
-       "Wire nuts/crimp tools",
-       "Replacement zone controller (if bus reset fails)"
-      ],
-      "site_notes": [
-       "Guest‑room service restricted to 11:00‑16:00",
-       "Coordinate banquet‑hall access with front desk",
-       "Use provided keycard for service entrance",
-       "Notify reception of estimated arrival time"
-      ]
-     },
-     "memories_used": 1,
-     "beliefs": []
+     "warn": null,
+     "top": "Check drain line, clean filter, inspect condensate pump, ensure proper slope",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Escalate to a senior technician",
+     "missing": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+     ]
     }
-   }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Check drain line, clean filter, inspect condensate pump, ensure proper slope",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Performed generic checks: inspected drain line, filter, condensate pump, slope",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Checked drain line, filter, condensate pump, slope for blockages or misalignment.",
+     "target": "diagnostician"
+    }
+   ]
   },
   {
-   "n": 3,
-   "incident": "I-001",
-   "job_id": "J-1001",
-   "date": "2025-11-13",
-   "machine_id": "M-08",
+   "job": "J-1039",
+   "date": "2026-01-07",
+   "machine": "M-21",
+   "symptom": "Conference room not cooling below 27C",
+   "truth": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": true,
+     "top": "checked filter, inspected refrigerant, verified compressor operation, cleaned condenser, ensured proper airflow",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+     ]
+    },
+    "basic": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": true,
+     "top": "Check refrigerant charge, airflow, and thermostat settings; inspect condenser coils and filter; verify compressor operation.",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+     ]
+    },
+    "basic_verified": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": true,
+     "top": "Escalate to a senior technician",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+     ]
+    }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Check refrigerant charge, airflow, and thermostat settings; inspect condenser coils and filter; verify compressor operation.",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Performed standard low cooling capacity diagnostics",
+     "target": "diagnostician"
+    },
+    {
+     "item": "Checked refrigerant charge, condenser coil, compressor, airflow, filter, etc.",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1040",
+   "date": "2026-01-26",
+   "machine": "M-21",
+   "symptom": "Conference room not cooling below 27C",
+   "truth": "Nitrogen pressure test, brazed the joint instead of flare, vacuumed and recharged.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Recharged refrigerant",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods"
+     ]
+    },
+    "basic": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Topped up refrigerant (R22/R410A)",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods"
+     ]
+    },
+    "basic_verified": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Topped up refrigerant (R22/R410A)",
+     "missing": [
+      "Copper coupler 3/8\"",
+      "Brazing rods",
+      "Refrigerant R410A (3kg)"
+     ]
+    }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Refrigerant R410A (3kg)",
+     "target": "parts"
+    }
+   ]
+  },
+  {
+   "job": "J-1062",
+   "date": "2026-01-30",
+   "machine": "M-31",
+   "symptom": "Precision AC airflow low; hall temperature rising",
+   "truth": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": true,
+     "ftf": false,
+     "warn": true,
+     "top": "Check airflow, filter, fan operation, and duct integrity; verify return air temperature sensors and ensure proper cooling loop flow.",
+     "missing": []
+    },
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "missing": []
+    }
+   },
+   "basic_vetoes": []
+  },
+  {
+   "job": "J-1021",
+   "date": "2026-02-26",
+   "machine": "M-12",
+   "symptom": "Indoor unit leaking water onto false ceiling",
+   "truth": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": true,
+     "top": "Check condensate drain line, clean filter, inspect drain pan, ensure proper slope",
+     "missing": [
+      "PVC drain pipe 20mm (3m)",
+      "Drain trap"
+     ]
+    },
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap",
+     "missing": []
+    }
+   },
+   "basic_vetoes": []
+  },
+  {
+   "job": "J-0901",
+   "date": "2026-03-12",
+   "machine": "M-07",
    "symptom": "Not cooling; outdoor unit tripping",
-   "truth": {
-    "failed": [
-     "Reset outdoor unit breaker"
-    ],
-    "fix": "Replaced compressor contactor and checked phase voltages.",
-    "parts": [
-     "Compressor contactor 24V coil (DK-CTR-24V)"
-    ],
-    "first_time": false
-   },
-   "memory_visits": 2,
+   "truth": "Replaced compressor contactor (DK-CTR-24V)",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": true,
-     "part_hit": true,
+    "none": {
+     "fix": false,
+     "parts": false,
      "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [
-       true
-      ],
-      "parts": [
-       true
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "Daikin VRV IV Outdoor Unit – No Cooling, Tripping",
-      "likely_cause": "High head pressure causing compressor overload and unit trip",
-      "confidence": "low",
-      "do_first": [
-       "Read and note the unit error code",
-       "Verify correct line voltage and phase sequence",
-       "Clear debris from condenser and ensure adequate airflow",
-       "Check high‑side refrigerant pressure with gauge set"
-      ],
-      "avoid": [
-       "Do not repeatedly reset the unit without identifying the fault"
-      ],
-      "bring": [
-       "Multimeter",
-       "Manifold gauge set",
-       "Thermometer",
-       "Spare contactor"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": true,
+     "top": "Checked refrigerant charge, filters, coils, compressor, pressure lines",
+     "missing": [
+      "Compressor contactor 24V coil (DK-CTR-24V)"
+     ]
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": false,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "No history on this unit, but the same model has a known pattern",
-      "likely_cause": "The available service records and internal knowledge base do not contain any specific documentation, case histories, or service logs for the Daikin VRV IV RXYQ12 outdoor unit regarding the symptoms of 'not cooling' and 'tripping.' Consequently, there is no recorded information regarding previous troubleshooting attempts, failed repairs, successful fixes, or established root causes for this specific model and symptom combination in our database. Because no data exists to support a diagnosis, it is not possible to provide a recommended list of parts to carry for this specific issue.",
-      "confidence": "low",
-      "do_first": [
-       "Check the error code on the outdoor PCB",
-       "Measure supply voltage on all three phases",
-       "Check refrigerant pressures",
-       "Reset and observe the unit"
-      ],
-      "avoid": [],
-      "bring": [
-       "Multimeter and clamp meter",
-       "Manifold gauge set"
-      ],
-      "site_notes": [
-       "Priya Nair prefers phone calls before 10am and does not respond to WhatsApp messages during the day."
-      ]
-     },
-     "memories_used": 1,
-     "beliefs": []
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced the compressor contactor 24V coil (DK-CTR-24V)",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced compressor contactor 24V coil (DK-CTR-24V)",
+     "missing": []
     }
-   }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Replaced the compressor contactor 24V coil (DK-CTR-24V)",
+     "target": "diagnostician"
+    }
+   ]
   },
   {
-   "n": 4,
-   "incident": "I-002",
-   "job_id": "J-1003",
-   "date": "2025-11-16",
-   "machine_id": "M-09",
-   "symptom": "Cassette unit showing U4 error",
-   "truth": {
-    "failed": [
-     "Power reset of indoor and outdoor units"
-    ],
-    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
-    "parts": [
-     "Ring lugs and heat-shrink set",
-     "IP65 junction box"
-    ],
-    "first_time": false
-   },
-   "memory_visits": 4,
+   "job": "J-1064",
+   "date": "2026-04-16",
+   "machine": "M-31",
+   "symptom": "High return-air temperature alarm on precision AC",
+   "truth": "Replaced EC fan module on fan 2 and recalibrated airflow sensor.",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": false,
-     "part_hit": false,
+    "none": {
+     "fix": false,
+     "parts": false,
      "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "Cassette indoor unit fault: run standard checks",
-      "likely_cause": "Communication errors are often caused by a remote or PCB fault.",
-      "confidence": "low",
-      "do_first": [
-       "Power reset the indoor and outdoor units",
-       "Check the remote controller",
-       "Inspect the PCB"
-      ],
-      "avoid": [],
-      "bring": [
-       "Spare remote controller",
-       "Multimeter"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": null,
+     "top": "Check return air temperature sensors, airflow, filter, coil, and refrigerant levels; verify proper airflow and clean components.",
+     "missing": [
+      "EC fan module 500mm (EBM-R3G500)"
+     ]
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": false,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "No history on this unit, but the same model has a known pattern",
-      "likely_cause": "The available service records do not contain any information regarding the Daikin FXFQ cassette indoor unit or the U4 error code. Consequently, I cannot provide details on previous repair attempts, failed fixes, successful resolutions, root causes, or recommended parts to carry. Because the search of both observations and raw memory facts yielded no results, this information is currently unrecorded in the system.",
-      "confidence": "low",
-      "do_first": [
-       "Power reset the indoor and outdoor units",
-       "Check the remote controller",
-       "Inspect the PCB"
-      ],
-      "avoid": [],
-      "bring": [
-       "Spare remote controller",
-       "Multimeter"
-      ],
-      "site_notes": [
-       "Priya Nair prefers phone calls before 10am and does not respond to WhatsApp messages during the day."
-      ]
-     },
-     "memories_used": 1,
-     "beliefs": []
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "missing": []
     }
-   }
+   },
+   "basic_vetoes": []
   },
   {
-   "n": 5,
-   "incident": "I-003",
-   "job_id": "J-1005",
-   "date": "2025-11-17",
-   "machine_id": "M-09",
-   "symptom": "Cassette unit showing U4 error",
-   "truth": {
-    "failed": [
-     "Replaced remote controller"
-    ],
-    "fix": "Re-terminated F1-F2 transmission wiring with new lugs and sealed the junction box.",
-    "parts": [
-     "Ring lugs and heat-shrink set",
-     "IP65 junction box"
-    ],
-    "first_time": false
-   },
-   "memory_visits": 5,
+   "job": "J-1050",
+   "date": "2026-04-22",
+   "machine": "M-23",
+   "symptom": "AHU making loud grinding noise",
+   "truth": "Replaced both blower bearings and realigned pulley.",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": false,
-     "part_hit": false,
+    "none": {
+     "fix": false,
+     "parts": false,
      "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "Cassette indoor unit fault: run standard checks",
-      "likely_cause": "Communication errors are often caused by a remote or PCB fault.",
-      "confidence": "low",
-      "do_first": [
-       "Power reset the indoor and outdoor units",
-       "Check the remote controller",
-       "Inspect the PCB"
-      ],
-      "avoid": [],
-      "bring": [
-       "Spare remote controller",
-       "Multimeter"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": true,
+     "top": "performed generic vibration inspection and corrective actions (tightened mounts, balanced fan, inspected bearings)",
+     "missing": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+     ]
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": false,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [
-       false
-      ],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "Seen before: 1 past visit on this unit",
-      "likely_cause": "### Service History for Daikin FXFQ Cassette (U4 Error)\n\nBased on the service records for the Daikin FXFQ unit (machine M-09) located at the Orion Tech Park, Tower B (6th floor cafeteria), the following information is available regarding the U4 error:\n\n*   **What was tried:** A power reset of both the indoor and outdoor units was performed.\n*   **What did NOT fix it:** The power reset was unsuccessful. While the unit appeared to function for a few hours, the U4 error code returned the following morning.\n*   **What fixed it:** The record indicates that the root cause was not confirmed during the initial visit on 2025-11-16, and the issue remained unresolved, necessitating a second service visit.\n*   **Root Cause:** The root cause is currently **unconfirmed**. Since the U4 error typically relates to a transmission fault between the indoor and outdoor units (or between multiple indoor units), the failure of a simple power reset suggests a deeper physical issue that was not diagnosed during the first attempt.\n*   **Recommended Parts to Carry:** As no specific component was identified as faulty, a technician should be prepared to troubleshoot transmission line connectivity. Recommended items include:\n    *   Multimeter for testing communication line voltage (usually DC).\n    *   Replacement communication cables or connectors, as faulty wiring or loose connections are common culprits for U4 errors.\n    *   Indoor/Outdoor unit PCB (Printed Circuit Board) test equipment, as a failure in the communication circuit of either board can trigger this code.\n\n**Note:** Because the initial repair attempt failed and the issue is persistent, it is highly recommended to perform a thorough continuity check on the communication wiring between the indoor and outdoor units before replacing major control boards.",
-      "confidence": "medium",
-      "do_first": [
-       "Power reset the indoor and outdoor units",
-       "Check the remote controller",
-       "Inspect the PCB"
-      ],
-      "avoid": [],
-      "bring": [
-       "Spare remote controller",
-       "Multimeter"
-      ],
-      "site_notes": [
-       "Priya Nair prefers phone calls before 10am and does not respond to WhatsApp messages during the day."
-      ]
-     },
-     "memories_used": 5,
-     "beliefs": []
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced both blower bearings and realigned pulley",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": true,
+     "top": "Replaced both blower bearings and realigned pulley",
+     "missing": []
     }
-   }
+   },
+   "basic_vetoes": []
   },
   {
-   "n": 6,
-   "incident": "I-006",
-   "job_id": "J-1010",
-   "date": "2025-11-23",
-   "machine_id": "M-12",
+   "job": "J-1047",
+   "date": "2026-04-27",
+   "machine": "M-22",
+   "symptom": "Chiller tripping on HP during afternoon",
+   "truth": "Chemical descaling of condenser tubes and cooling-tower water treatment dosing corrected.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Check condenser water flow, ambient temperature, refrigerant charge",
+     "missing": [
+      "Descaling chemical (40L)",
+      "Condenser end-cover gasket set"
+     ]
+    },
+    "basic": {
+     "fix": false,
+     "parts": true,
+     "ftf": false,
+     "warn": null,
+     "top": "Performed chemical descaling of condenser tubes and corrected cooling-tower water treatment dosing",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Chemical descaling of condenser tubes and corrected cooling‑tower water treatment dosing",
+     "missing": []
+    }
+   },
+   "basic_vetoes": [
+    {
+     "item": "Performed chemical descaling of condenser tubes and corrected cooling-tower water treatment dosing",
+     "target": "diagnostician"
+    },
+    {
+     "item": "HP pressure transducer (CAR-HPT-30)",
+     "target": "parts"
+    },
+    {
+     "item": "Performed chemical descaling of condenser tubes and corrected cooling‑tower water treatment dosing",
+     "target": "diagnostician"
+    }
+   ]
+  },
+  {
+   "job": "J-1052",
+   "date": "2026-06-11",
+   "machine": "M-23",
+   "symptom": "AHU noise complaint from tenants",
+   "truth": "Replaced both blower bearings and realigned pulley.",
+   "arms": {
+    "none": {
+     "fix": false,
+     "parts": false,
+     "ftf": false,
+     "warn": null,
+     "top": "Checked and balanced fan blades, tightened mounting bolts, inspected bearings",
+     "missing": [
+      "Bearing 6206-2RS (x2)",
+      "V-belt B-48"
+     ]
+    },
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Replaced both blower bearings and realigned pulley",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Replaced both blower bearings and realigned pulley",
+     "missing": []
+    }
+   },
+   "basic_vetoes": []
+  },
+  {
+   "job": "J-1023",
+   "date": "2026-06-22",
+   "machine": "M-12",
    "symptom": "Water dripping from indoor unit",
-   "truth": {
-    "failed": [],
-    "fix": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
-    "parts": [
-     "PVC drain pipe 20mm (3m)",
-     "Drain trap"
-    ],
-    "first_time": true
-   },
-   "memory_visits": 8,
+   "truth": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap.",
    "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
+    "none": {
+     "fix": false,
+     "parts": true,
      "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "Split AC fault: run standard checks",
-      "likely_cause": "Commonly a dirty filter, blocked drain or low refrigerant.",
-      "confidence": "low",
-      "do_first": [
-       "Clean the air filters",
-       "Check the drain tray",
-       "Check refrigerant pressure"
-      ],
-      "avoid": [],
-      "bring": [
-       "Filter cleaning kit",
-       "Gauge set"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
+     "warn": null,
+     "top": "Cleared the condensate drain line",
+     "missing": []
     },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false,
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "No history on this unit, but the same model has a known pattern",
-      "likely_cause": "The available service records do not contain specific information regarding a 'Blue Star split 2T' unit experiencing 'water dripping from the indoor unit'. Because no previous service visits or historical data were found in the database, I cannot provide details on what has been tried, what failed, what fixed it, the root cause, or recommended parts for this specific model and symptom. To resolve this issue, you should proceed with standard diagnostic procedures for condensate drainage, such as inspecting the drain pipe for blockages, checking for improper unit leveling, or verifying the integrity of the condensate pump if applicable.",
-      "confidence": "low",
-      "do_first": [
-       "Clean the air filters",
-       "Check the drain tray",
-       "Check refrigerant pressure"
-      ],
-      "avoid": [],
-      "bring": [
-       "Filter cleaning kit",
-       "Gauge set"
-      ],
-      "site_notes": [
-       "Service personnel must use the service lift behind the pharmacy instead of main lifts."
-      ]
-     },
-     "memories_used": 1,
-     "beliefs": []
+    "basic": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap",
+     "missing": []
+    },
+    "basic_verified": {
+     "fix": true,
+     "parts": true,
+     "ftf": true,
+     "warn": null,
+     "top": "Flushed drain line with nitrogen, re-laid drain pipe with proper slope and added a trap",
+     "missing": []
     }
-   }
-  },
-  {
-   "n": 7,
-   "incident": "I-033",
-   "job_id": "J-1048",
-   "date": "2025-12-07",
-   "machine_id": "M-71",
-   "symptom": "Outdoor unit trips within minutes of start",
-   "truth": {
-    "failed": [],
-    "fix": "Replaced compressor contactor and checked phase voltages.",
-    "parts": [
-     "Compressor contactor 24V coil (DK-CTR-24V)"
-    ],
-    "first_time": true
    },
-   "memory_visits": 9,
-   "arms": {
-    "without": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "error": true
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false
-      ]
-     },
-     "judge_error": true,
-     "briefing": {
-      "headline": "VRV outdoor unit fault: run standard checks",
-      "likely_cause": "Could be a power supply issue, refrigerant problem, sensor fault or compressor protection trip.",
-      "confidence": "low",
-      "do_first": [
-       "Check the error code on the outdoor PCB",
-       "Measure supply voltage on all three phases",
-       "Check refrigerant pressures",
-       "Reset and observe the unit"
-      ],
-      "avoid": [],
-      "bring": [
-       "Multimeter and clamp meter",
-       "Manifold gauge set"
-      ],
-      "site_notes": []
-     },
-     "memories_used": 0,
-     "beliefs": []
-    },
-    "with": {
-     "fix_hit": false,
-     "warn_hit": null,
-     "part_hit": false,
-     "ftf": false,
-     "judge": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false
-      ]
-     },
-     "keyword": {
-      "fix": false,
-      "warned": [],
-      "parts": [
-       false
-      ]
-     },
-     "judge_error": false,
-     "briefing": {
-      "headline": "No history on this unit, but the same model has a known pattern",
-      "likely_cause": "Could be a power supply issue, refrigerant problem, sensor fault or compressor protection trip.",
-      "confidence": "medium",
-      "do_first": [
-       "Check the error code on the outdoor PCB",
-       "Measure supply voltage on all three phases",
-       "Check refrigerant pressures",
-       "Reset and observe the unit"
-      ],
-      "avoid": [],
-      "bring": [
-       "Multimeter and clamp meter",
-       "Manifold gauge set"
-      ],
-      "site_notes": [
-       "Mr. Venkatesh is the contact person for Lakeview Apartments, Block C."
-      ]
-     },
-     "memories_used": 5,
-     "beliefs": []
-    }
-   }
+   "basic_vetoes": []
   }
  ]
 }
