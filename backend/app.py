@@ -14,7 +14,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Literal
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -31,10 +31,12 @@ except ImportError:
 import beliefs as beliefs_mod  # noqa: E402
 import evidence as ev  # noqa: E402
 import chatintent  # noqa: E402
+import documents  # noqa: E402
 import knowledge  # noqa: E402
 import records  # noqa: E402
 import simulate  # noqa: E402
 import voice  # noqa: E402
+import workspaces  # noqa: E402
 from llm import LLM  # noqa: E402
 from memory import FallbackMemory, LocalMemory, build_memory  # noqa: E402
 from mesh.runner import ControlRoom  # noqa: E402
@@ -84,6 +86,32 @@ if not _state().get(_key) and (memory.name == "hindsight" or memory.count() == 0
         log.info("seeded the shared bank %s with %d records (Hindsight processes them in the background)", getattr(memory, "bank_id", "local"), _n)
     except Exception as exc:
         log.error("Could not seed memory: %s", exc)
+
+_demo_ws = workspaces.ensure_demo(store.company["name"], getattr(memory, "bank_id", "local"))
+_ws_mem: dict = {}
+
+
+def ws_memory(ws: dict):
+    """The memory bank that belongs to one company. The demo company uses the app's own bank; every other company has a bank of its own,
+    so knowledge never crosses from one company to another."""
+    if ws.get("demo"):
+        return memory
+    if ws["id"] not in _ws_mem:
+        local = LocalMemory(workspaces.local_memory_path(ws["id"]))
+        prim = build_memory("shared", bank_id=ws["bank"], mission=records.MISSION)
+        _ws_mem[ws["id"]] = FallbackMemory(prim, local) if prim.name == "hindsight" else local
+    return _ws_mem[ws["id"]]
+
+
+def current(authorization: str | None = Header(None)) -> dict:
+    """Who is asking: the workspace and email behind the bearer token."""
+    tok = authorization.split(" ", 1)[1] if authorization and authorization.lower().startswith("bearer ") else None
+    try:
+        ws, email = workspaces.verify(tok)
+    except workspaces.AuthError as exc:
+        raise HTTPException(exc.status, exc.message) from exc
+    return {"ws": ws, "email": email, "memory": ws_memory(ws), "name": email.split("@", 1)[0].replace(".", " ").title()}
+
 
 beliefs_engine = beliefs_mod.BeliefEngine(store, memory, _state, _set_state)
 try:
@@ -261,26 +289,30 @@ class AskReq(BaseModel):
     question: str = Field(min_length=3, max_length=400)
 
 
-@app.post("/api/ask")
-def ask_the_memory(req: AskReq):
+def _ask(mem, q: str) -> dict:
     """A new hire asks what the company already knows. Hindsight's reflect writes the answer from the stored visits and notes, and the
     records it drew on are returned so the answer can be checked. Nothing here needs a language model of ours."""
-    q = req.question.strip()
+    q = q.strip()
     try:
-        hits = memory.recall(q, [], 8)
+        hits = mem.recall(q, [], 8)
     except Exception as exc:
         raise HTTPException(502, f"The memory could not be searched: {exc}") from exc
     answer = None
     try:
-        answer = memory.reflect(q, [])
+        answer = mem.reflect(q, [])
     except Exception:
         log.exception("reflect failed for ask")
     sources = [{"ref": m.ref(), "date": m.date, "text": m.text[:280], "tags": m.tags[:5]} for m in hits]
     if not hits and not answer:
-        return {"answer": "Nothing in the company memory covers that yet. If you know the answer, add it on the right so the next person finds it.", "sources": [], "found": False, "backend": memory.name}
+        return {"answer": "Nothing in the company memory covers that yet. If you know the answer, add it on the right so the next person finds it.", "sources": [], "found": False, "backend": mem.name}
     if not answer:
         answer = "Here is what the records say: " + " ".join("(" + str(i + 1) + ") " + m.text[:200] for i, m in enumerate(hits[:3]))
-    return {"answer": answer, "sources": sources, "found": True, "backend": memory.name}
+    return {"answer": answer, "sources": sources, "found": True, "backend": mem.name}
+
+
+@app.post("/api/ask")
+def ask_the_memory(req: AskReq, ctx: dict = Depends(current)):
+    return _ask(ctx["memory"], req.question)
 
 
 class Note(BaseModel):
@@ -292,50 +324,124 @@ class Note(BaseModel):
     text: str = Field(min_length=15, max_length=2000)
 
 
-@app.post("/api/knowledge")
-def share_knowledge(n: Note):
+def _save_note(ctx: dict, n: Note) -> dict:
     """Someone who knows (a retiring technician, a senior) writes down what they know. It is retained with their name and the machine or site it is about."""
-    m = store.machine(n.machine_id) if n.machine_id else None
-    sid = (m or {}).get("site_id") or n.site_id
+    mem, demo = ctx["memory"], bool(ctx["ws"].get("demo"))
+    m = store.machine(n.machine_id) if (n.machine_id and demo) else None          # the machine list belongs to the demo company only
+    sid = (m or {}).get("site_id") or (n.site_id if demo else None)
     site = store.site(sid) if sid else None
     doc_id = f"note-{int(time.time() * 1000)}"
     rec = records.validate(records.knowledge_record(n.author.strip(), n.role.strip(), n.years, n.text.strip(), m, site, doc_id, ev.NOW), store)
     try:
-        memory.retain(rec["text"], rec["tags"], rec["date"], rec["doc_id"], rec["meta"])
+        mem.retain(rec["text"], rec["tags"], rec["date"], rec["doc_id"], rec["meta"])
     except Exception as exc:
         log.exception("retain of a note failed")
         raise HTTPException(502, f"Could not save to memory: {exc}") from exc
-    store.add_note({"id": doc_id, "author": n.author.strip(), "role": n.role.strip(), "years": n.years, "machine_id": n.machine_id, "family": (m or {}).get("model_family"),
-                    "site_id": sid, "text": n.text.strip(), "date": ev.NOW})
-    return {"saved": True, "memory_text": rec["text"], "tags": rec["tags"], "memory_backend": memory.name}
+    if demo:
+        store.add_note({"id": doc_id, "author": n.author.strip(), "role": n.role.strip(), "years": n.years, "machine_id": n.machine_id, "family": (m or {}).get("model_family"),
+                        "site_id": sid, "text": n.text.strip(), "date": ev.NOW})
+    return {"saved": True, "memory_text": rec["text"], "tags": rec["tags"], "memory_backend": mem.name}
+
+
+@app.post("/api/knowledge")
+def share_knowledge(n: Note, ctx: dict = Depends(current)):
+    return _save_note(ctx, n)
 
 
 class ChatReq(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
-    author: str = Field("A colleague", max_length=60)
+    author: str = Field("", max_length=60)
     context: str | None = Field(None, max_length=400)      # the person's previous question, so a short follow-up makes sense
 
 
 @app.post("/api/chat")
-def chat(req: ChatReq):
+def chat(req: ChatReq, ctx: dict = Depends(current)):
     """One conversation box. A question is answered from the company memory (Hindsight reflect, with the records it used); something the person
     tells the chat to remember is saved under their name for the next person. The reply says which of the two it did."""
     msg = req.message.strip()
-    author = req.author.strip() if len(req.author.strip()) >= 2 else "A colleague"
+    author = req.author.strip() if len(req.author.strip()) >= 2 else ctx["name"]
     if chatintent.intent(msg) == "share":
         text = chatintent.strip_cue(msg)
         if len(text) < 15:
             return {"kind": "clarify", "answer": "Tell me a bit more so the next person can use it: what happened, on which machine, and what fixed it?"}
         mid = chatintent.machine_in(text)
-        if mid and not store.has_machine(mid):
+        if mid and not (ctx["ws"].get("demo") and store.has_machine(mid)):
             mid = None
-        saved = share_knowledge(Note(author=author, machine_id=mid, text=text))
+        saved = _save_note(ctx, Note(author=author, machine_id=mid, text=text))
         about = f" about {mid}" if mid else ""
         return {"kind": "saved", "answer": f"Saved to the company memory under {author}{about}. The next person who asks will find it.", "memory_text": saved["memory_text"],
                 "machine_id": mid, "backend": saved["memory_backend"]}
     q = msg if len(msg.split()) >= 6 or not req.context else f"{req.context} {msg}"
-    out = ask_the_memory(AskReq(question=q[:400] if len(q) >= 3 else msg + "  "))
+    out = _ask(ctx["memory"], q[:400] if len(q) >= 3 else msg + "  ")
     return {"kind": "answer", **out}
+
+
+class Join(BaseModel):
+    code: str = Field(min_length=3, max_length=60)
+    email: str = Field(min_length=5, max_length=120)
+
+
+class NewCompany(BaseModel):
+    name: str = Field(min_length=2, max_length=60)
+    email: str = Field(min_length=5, max_length=120)
+
+
+def _session(ws: dict, email: str) -> dict:
+    return {"token": workspaces.token(ws["id"], email), "workspace": {"id": ws["id"], "name": ws["name"], "demo": bool(ws.get("demo")), "domain": ws.get("domain")}, "email": email}
+
+
+@app.post("/api/workspace/join")
+def workspace_join(j: Join):
+    try:
+        ws = workspaces.join(j.code, j.email)
+    except workspaces.AuthError as exc:
+        raise HTTPException(exc.status, exc.message) from exc
+    return _session(ws, workspaces.clean_email(j.email))
+
+
+@app.post("/api/workspace/create")
+def workspace_create(c: NewCompany):
+    try:
+        ws, code = workspaces.create(c.name, c.email, _BASE_BANK)
+    except workspaces.AuthError as exc:
+        raise HTTPException(exc.status, exc.message) from exc
+    return {**_session(ws, workspaces.clean_email(c.email)), "code": code,
+            "note": "Share this code with your team. It is shown once. " + (f"Only @{ws['domain']} emails can join." if ws.get("domain") else "Anyone with the code can join, because a personal email domain was used.")}
+
+
+@app.get("/api/workspace/me")
+def workspace_me(ctx: dict = Depends(current)):
+    w = ctx["ws"]
+    return {"workspace": {"id": w["id"], "name": w["name"], "demo": bool(w.get("demo")), "domain": w.get("domain")}, "email": ctx["email"], "documents": len(workspaces.library(w["id"]))}
+
+
+@app.post("/api/docs")
+async def add_document(file: UploadFile = File(...), author: str = Form(""), ctx: dict = Depends(current)):
+    """A document or case study dropped into the chat. It is read, cut into sections, and retained in THIS company's memory under the person's name."""
+    data = await file.read(documents.MAX_BYTES + 1)
+    name = (file.filename or "document").strip()
+    try:
+        text = documents.extract(name, data)
+        parts = documents.chunks(text)
+    except documents.DocError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    who = author.strip() if len(author.strip()) >= 2 else ctx["name"]
+    stamp = int(time.time() * 1000)
+    ds = workspaces.slug(name)
+    recs = [records.document_record(name, who, i + 1, len(parts), p, ds, f"doc-{ds}-{stamp}-{i + 1}", ev.NOW) for i, p in enumerate(parts)]
+    try:
+        ctx["memory"].retain_many(recs)
+    except Exception as exc:
+        log.exception("retain of a document failed")
+        raise HTTPException(502, f"Could not save to memory: {exc}") from exc
+    item = {"id": f"{ds}-{stamp}", "name": name, "author": who, "email": ctx["email"], "sections": len(parts), "chars": len(text), "date": ev.NOW}
+    workspaces.add_to_library(ctx["ws"]["id"], item)
+    return {"saved": True, **item, "memory_backend": ctx["memory"].name}
+
+
+@app.get("/api/docs")
+def list_documents(ctx: dict = Depends(current)):
+    return workspaces.library(ctx["ws"]["id"])
 
 
 @app.get("/api/company")

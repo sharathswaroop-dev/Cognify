@@ -13,3 +13,8 @@ backend/data/mesh_runs.json
 agent_config.yaml
 
 docs/demo/_raw/
+
+backend/data/workspaces.json
+backend/data/workspace_secret.txt
+backend/data/ws/
+backend/data/knowledge_notes.json

@@ -23,7 +23,14 @@ def client(tmp_path, monkeypatch):
     app_mod.store.notes_path = tmp_path / "notes.json"
     app_mod.store.notes = []
     app_mod.state_path = tmp_path / "state.json"
-    return TestClient(app_mod.app), app_mod
+    import workspaces
+    workspaces.DATA = tmp_path                                     # companies, secrets and libraries live in the test's own folder
+    workspaces.ensure_demo("CoolCare Facility Services", "test-bank")
+    app_mod._ws_mem.clear()
+    tc = TestClient(app_mod.app)
+    tok = tc.post("/api/workspace/join", json={"code": workspaces.DEMO_CODE, "email": "priya@coolcare.example"}).json()["token"]
+    tc.headers.update({"Authorization": "Bearer " + tok})           # signed in to the demo company, as the browser is
+    return tc, app_mod
 
 
 def test_status_says_which_memory_is_in_use(client):
@@ -155,3 +162,51 @@ def test_chat_answers_questions_and_remembers_what_it_is_told(client):
     assert short["kind"] == "clarify"
     follow = c.post("/api/chat", json={"message": "and for 2024 units?", "author": "Priya", "context": "What usually goes wrong with the Daikin VRV IV compressor?"}).json()
     assert follow["kind"] == "answer"
+
+
+def _fresh(app_mod):
+    from fastapi.testclient import TestClient
+    return TestClient(app_mod.app)
+
+
+def test_the_company_chat_needs_a_workspace_and_rejects_a_wrong_code(client):
+    _, app_mod = client
+    anon = _fresh(app_mod)
+    assert anon.post("/api/chat", json={"message": "What goes wrong with the Daikin VRV IV?"}).status_code == 401
+    assert anon.get("/api/docs").status_code == 401
+    assert anon.post("/api/workspace/join", json={"code": "NOT-A-CODE", "email": "a@b.co"}).status_code == 403
+    assert anon.post("/api/workspace/join", json={"code": "COOLCARE-DEMO", "email": "not-an-email"}).status_code == 422
+    assert anon.post("/api/chat", json={"message": "hello there friend"}, headers={"Authorization": "Bearer garbage"}).status_code == 401
+
+
+def test_a_company_keeps_its_knowledge_to_itself_and_can_limit_by_email_domain(client):
+    _, app_mod = client
+    anon = _fresh(app_mod)
+    made = anon.post("/api/workspace/create", json={"name": "Acme Cooling", "email": "boss@acme-cooling.example"}).json()
+    code, tok = made["code"], made["token"]
+    assert made["workspace"]["domain"] == "acme-cooling.example" and "Only @acme-cooling.example" in made["note"]
+    assert anon.post("/api/workspace/join", json={"code": code, "email": "x@other.example"}).status_code == 403          # wrong email domain
+    ok = anon.post("/api/workspace/join", json={"code": code, "email": "tech@acme-cooling.example"})
+    assert ok.status_code == 200
+    acme = {"Authorization": "Bearer " + tok}
+    note = "Remember that our chillers at the east plant always trip on low water flow, so clean the strainer before anything else."
+    assert anon.post("/api/chat", json={"message": note, "author": "Boss"}, headers=acme).json()["kind"] == "saved"
+    mine = anon.post("/api/chat", json={"message": "chillers east plant low water flow strainer?"}, headers=acme).json()
+    assert any("strainer" in x["text"] for x in mine["sources"])
+    other = _fresh(app_mod)
+    demo_tok = other.post("/api/workspace/join", json={"code": "COOLCARE-DEMO", "email": "p@x.co"}).json()["token"]
+    theirs = other.post("/api/chat", json={"message": "chillers east plant low water flow strainer?"}, headers={"Authorization": "Bearer " + demo_tok}).json()
+    assert not any("strainer" in x["text"] and "east plant" in x["text"] for x in theirs["sources"])                         # Acme's note never reaches CoolCare
+
+
+def test_a_document_dropped_into_the_chat_is_learned_and_cited(client):
+    c, app_mod = client
+    body = ("Case study: the Orion rooftop chiller kept tripping every afternoon.\n\n" + "The cause was a failing condenser fan capacitor, not the compressor. " * 12 +
+            "\n\nLesson: always measure the fan capacitor before ordering a compressor.")
+    r = c.post("/api/docs", files={"file": ("orion-case-study.md", body.encode(), "text/markdown")}, data={"author": "Meena Iyer"})
+    assert r.status_code == 200 and r.json()["sections"] >= 1 and r.json()["name"] == "orion-case-study.md"
+    assert [d["name"] for d in c.get("/api/docs").json()] == ["orion-case-study.md"]
+    found = c.post("/api/chat", json={"message": "Orion rooftop chiller tripping condenser fan capacitor?"}).json()
+    assert any("orion-case-study.md" in x["text"] for x in found["sources"])
+    assert c.post("/api/docs", files={"file": ("photo.png", b"\x89PNG", "image/png")}).status_code == 422
+    assert c.post("/api/docs", files={"file": ("empty.txt", b"   ", "text/plain")}).status_code == 422
