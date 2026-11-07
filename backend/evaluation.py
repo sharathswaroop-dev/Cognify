@@ -217,6 +217,7 @@ class Evaluator:
         rp_b = Replay(self.store, self.recs, LocalMemory(tmp / "test_basic.json"))
         rp_h = Replay(self.store, self.recs, self.hindsight) if self.hindsight is not None else None
         rows, failures = [], []
+        h_stopped = ""                       # why the Hindsight arms stopped early, if they did
         ver = Verifier(min_wins=best_k)
         for n, v in enumerate(test, 1):
             truth = truth_for(self.by_inc[v["incident_id"]], self.levels, self.by_job)
@@ -228,12 +229,17 @@ class Evaluator:
             row["arms"]["basic"] = score(out_b["raw"], truth) if ok_b else None
             row["arms"]["basic_verified"] = score(out_b["final"], truth) if ok_b else None
             row["basic_vetoes"] = [{"item": x["item"], "target": x["target"]} for x in out_b["vetoes"]]
-            if rp_h is not None:
-                rp_h.advance(v["date"])
-                out_h, ok_h = self.run_arm(v, rp_h.mem, True, ver, truth)
-                row["arms"]["hindsight"] = score(out_h["raw"], truth) if ok_h else None
-                row["arms"]["hindsight_verified"] = score(out_h["final"], truth) if ok_h else None
+            if rp_h is not None and not h_stopped:
+                try:
+                    rp_h.advance(v["date"])
+                    out_h, ok_h = self.run_arm(v, rp_h.mem, True, ver, truth)
+                    row["arms"]["hindsight"] = score(out_h["raw"], truth) if ok_h else None
+                    row["arms"]["hindsight_verified"] = score(out_h["final"], truth) if ok_h else None
+                except Exception as exc:     # Hindsight became unavailable mid-run: keep the arms that still work
+                    h_stopped = f"stopped before held-out incident {n} of {len(test)}: {str(exc).splitlines()[0][:120]}"
             for k in arms:
+                if h_stopped and k.startswith("hindsight") and k not in row["arms"]:
+                    continue                 # not run for this incident: neither a hit nor an LLM failure
                 s = row["arms"].get(k)
                 arms[k].append(s)
                 if s is None:
@@ -247,7 +253,7 @@ class Evaluator:
             self._save(rows, None)
         res = {"generated": datetime.now().isoformat(timespec="seconds"), "model": ", ".join(f"{m} ({n})" for m, n in getattr(self.llm.llm, "used", {}).items()) or self.llm.model,
                "memory_backend": "basic search (BM25)" + (" + Hindsight" if self.hindsight is not None else ""),
-               "skipped": {} if self.hindsight is not None else {"hindsight": self.hindsight_reason or "Hindsight was not available"},
+               "skipped": ({"hindsight": h_stopped} if h_stopped else {}) if self.hindsight is not None else {"hindsight": self.hindsight_reason or "Hindsight was not available"},
                "tuning": tuning, "chosen_min_wins": best_k, "llm_calls": self.llm.calls, "llm_failures": self.llm.fail,
                "split": {"holdout_machines": len(self.store.holdout_ids()), "train_machines": len(self.store.machines) - len(self.store.holdout_ids())},
                "train": {"n_incidents": len(train), "arms": {"basic": {"ftf": rate([r["basic"]["ftf"] if r["basic"] else None for r in train_rows]),
@@ -279,7 +285,8 @@ class Evaluator:
         return best, f1s
 
     def _save(self, rows, res):
-        self.out.write_text(json.dumps({"partial": True, "incidents": rows}, indent=1, ensure_ascii=False), encoding="utf-8")
+        # progress goes to its own file: a run that dies half-way must not overwrite the last finished results
+        self.out.with_name("eval_partial.json").write_text(json.dumps({"partial": True, "incidents": rows}, indent=1, ensure_ascii=False), encoding="utf-8")
 
 
 def run_in_process(store, llm, limit: int | None = None, out: Path | None = None, hindsight=None, reason: str = "") -> dict:

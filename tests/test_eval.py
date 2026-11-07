@@ -78,3 +78,51 @@ def test_an_llm_outage_is_excluded_not_scored_as_a_wrong_answer(store, tmp_path)
     assert res["llm_failures"] == res["llm_calls"] > 0
     assert all(a["ftf"]["n"] == 0 for a in res["test"]["arms"].values())      # nothing scored
     assert all("unavailable" in f["why"] for f in res["failures"])
+
+
+class _DiesAfter:
+    """A Hindsight stand-in that works for a while and then fails the way a real outage or an empty credit balance does."""
+    name, bank_id = "hindsight", "test"
+
+    def __init__(self, tmp_path, ok_calls):
+        self.inner, self.ok, self.n = LocalMemory(tmp_path / "h.json"), ok_calls, 0
+
+    def _gate(self):
+        self.n += 1
+        if self.n > self.ok:
+            raise RuntimeError("(402) Payment Required")
+
+    def retain_many(self, recs, wait=False):
+        self._gate()
+        self.inner.retain_many(recs)
+
+    def recall(self, *a, **k):
+        return self.inner.recall(*a, **k)
+
+    def reflect(self, *a, **k):
+        return self.inner.reflect(*a, **k)
+
+    def retain(self, *a, **k):
+        self._gate()
+        self.inner.retain(*a, **k)
+
+    def count(self):
+        return self.inner.count()
+
+
+def test_if_hindsight_dies_mid_run_the_other_arms_finish_and_the_report_says_where_it_stopped(store, tmp_path):
+    e = E.Evaluator(store, make_llm(), tmp_path / "res.json", progress=E.Progress(), train_n=2, hindsight=_DiesAfter(tmp_path, ok_calls=2))
+    res = e.run(limit_test=4)
+    assert res["partial"] is False and res["test"]["n_incidents"] == 4
+    assert {"none", "basic", "basic_verified"} <= set(res["test"]["arms"])
+    assert "(402)" in res["skipped"]["hindsight"] and "stopped before held-out incident" in res["skipped"]["hindsight"]
+    assert res["test"]["arms"]["basic"]["ftf"]["n"] == 4                       # the working arms scored every incident
+    assert (tmp_path / "eval_partial.json").exists()                            # progress is kept apart from the finished file
+
+
+def test_a_partial_run_never_overwrites_a_finished_results_file(store, tmp_path):
+    finished = tmp_path / "res.json"
+    finished.write_text('{"partial": false, "marker": "finished"}', encoding="utf-8")
+    e = E.Evaluator(store, make_llm(), finished, progress=E.Progress(), train_n=2)
+    e._save([{"job": "J-1"}], None)
+    assert '"marker": "finished"' in finished.read_text(encoding="utf-8")
