@@ -77,7 +77,7 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 <section class="top"><div class="wrap">
   <span class="eyebrow">How it works</span>
   <h1 class="rv">People and agents, <span class="grad">one shared memory.</span></h1>
-  <p class="lede rv" style="--d:1">Nobody passes notes to anybody. Technicians, managers and every agent write to and read from the same company memory, so what one learns, all can use. Run a real job below and watch it happen.</p>
+  <p class="lede rv" style="--d:1">Everyone writes to one memory and reads from it. Run a real job and watch.</p>
 </div></section>
 
 <section style="padding:10px 0 30px"><div class="wrap">
@@ -88,14 +88,6 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
     <div class="card rv" style="--d:2"><h3>Files are not recall</h3><p>A shared drive holds the documents but cannot answer "has this happened before, and what did we try?"</p></div>
   </div>
 </div></section>
-<section style="padding:20px 0 0"><div class="wrap">
-  <div class="sec-h rv" style="margin-bottom:26px"><span class="eyebrow">The flow</span><h2>One question, <span class="grad">two paths.</span></h2><p class="lede">Switch memory on or off and run it. ON goes out to the memory store and comes back with what it found before the LLM writes. OFF skips the store entirely. Each node shows its real result.</p></div>
-  <div class="fl rv">
-    <div class="bar"><div class="seg" id="fseg"><button data-m="on" class="on">Memory ON</button><button data-m="off">Memory OFF</button></div>
-      <input id="fq" value="Why does M-07 keep tripping on high pressure?" maxlength="300"><button class="btn" id="frun">Run flow →</button></div>
-    <div class="canvas" id="cv"><svg id="fsvg"></svg></div>
-    <div class="flout" id="flout"><h5>Output</h5>Press Run flow.</div>
-  </div></div></section>
 <section style="padding-top:30px"><div class="wrap">
   <div class="ctl rv"><select id="sc"></select><button class="btn" id="go">▶ Run a real job</button>
     <div class="drills" id="drills"></div></div>
@@ -111,19 +103,7 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 </div></section>
 
 <section><div class="wrap">
-  <div class="sec-h rv"><span class="eyebrow">Memory off vs on</span><h2>The same question, <span class="grad">two real paths.</span></h2><p class="lede">Off is a plain language model. On adds recall and reflect over this company's memory, with the records it used. Both are live calls.</p></div>
-  <div class="cmpbox rv">
-    <div class="seg" id="seg"><button data-m="both" class="on">Side by side</button><button data-m="off">Memory off</button><button data-m="on">Memory on</button></div>
-    <form class="qrow" id="qf"><input id="q" value="Why does a rooftop chiller keep tripping on high head pressure?" maxlength="300"><button class="btn" type="submit">Run both →</button></form>
-    <div class="cols" id="cols">
-      <div class="col off" id="coff"><h4>Memory off · normal AI response</h4><div class="body" id="off">Not run yet.</div><div class="meta" id="offm"></div></div>
-      <div class="col on" id="con"><h4>Memory on · company memory</h4><div class="body" id="on">Not run yet.</div><div id="recs"></div><div class="ops" id="opsb"></div><div class="meta" id="onm"></div></div>
-    </div>
-  </div>
-</div></section>
-
-<section><div class="wrap">
-  <div class="sec-h rv"><span class="eyebrow">Teach it</span><h2>Add an experience. <span class="grad">Ask for it straight away.</span></h2><p class="lede">Your entry is validated, saved under your name, retained in the memory, and then looked up again to prove it can be found.</p></div>
+  <div class="sec-h rv"><span class="eyebrow">Teach it</span><h2>Add an experience. <span class="grad">Ask for it straight away.</span></h2></div>
   <div class="card rv" style="padding:30px">
     <form class="form" id="ff">
       <div class="full"><label>Title</label><input name="title" required minlength="5" maxlength="100" placeholder="Chiller 3 trips on start-up after the winter shutdown"></div>
@@ -148,42 +128,6 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 <script>
 $("#navmount").outerHTML=nav("h");$("#footmount").outerHTML=foot();
 $("input[name=date]").value=new Date().toISOString().slice(0,10);
-
-/* ---------- n8n-style flow: chat input -> search -> memory store (and back) -> LLM -> answer ---------- */
-const FN={q:[6,50,"Chat input"],router:[21,50,"Router"],search:[38,20,"Search memory",1],store:[60,20,"Memory store",1],llm:[60,72,"Groq LLM"],label:[78,72,"Evidence label",1],answer:[94,50,"Answer"]};
-const SUB={store:"incidents · documents · files · corrections"};
-const FE={on:[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["llm","label"],["label","answer"]],off:[["q","router"],["router","llm"],["llm","answer"]]};
-const ALLE=[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["router","llm"],["llm","label"],["label","answer"],["llm","answer"]];
-const DY={"search-store":-13,"store-search":13};
-let FM="on";const cv=$("#cv");
-for(const [k,v] of Object.entries(FN)){const d=document.createElement("div");d.className="fn"+(v[3]?" mem":"");d.dataset.f=k;d.style.left=v[0]+"%";d.style.top=v[1]+"%";d.innerHTML=`<b><i></i>${v[2]}</b><small></small>`;cv.appendChild(d)}
-function fpos(k){const r=cv.getBoundingClientRect();return [FN[k][0]/100*r.width,FN[k][1]/100*r.height]}
-function fdraw(){const r=cv.getBoundingClientRect();const svg=$("#fsvg");svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
-  svg.innerHTML=ALLE.map(([a,b])=>{const dy=DY[a+"-"+b]||0;let [x1,y1]=fpos(a),[x2,y2]=fpos(b);y1+=dy;y2+=dy;const fwd=x2>=x1;const x1b=x1+(fwd?60:-60),x2b=x2+(fwd?-60:60),m=(x1b+x2b)/2;return `<path data-e="${a}-${b}" d="M${x1b},${y1} C${m},${y1} ${m},${y2} ${x2b},${y2}"/>`}).join("");fmode()}
-function fmode(){const act=FE[FM].map(e=>e.join("-"));$$("#fsvg path").forEach(p=>{p.classList.remove("run");const on=act.includes(p.dataset.e);p.classList.toggle("on",on);p.classList.toggle("skip",!on)});
-  $$(".fn").forEach(n=>{const used=FE[FM].some(e=>e.includes(n.dataset.f));n.classList.toggle("off",!used);n.classList.remove("run","done","err");n.querySelector("small").textContent=FM==="on"?(SUB[n.dataset.f]||""):""})}
-fdraw();addEventListener("resize",fdraw);
-$$("#fseg button").forEach(b=>b.onclick=()=>{FM=b.dataset.m;$$("#fseg button").forEach(x=>x.classList.toggle("on",x===b));fmode();$("#flout").innerHTML="<h5>Output</h5>Press Run flow."});
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function fstep(a,b,info,bad){const e=$(`#fsvg path[data-e="${a}-${b}"]`);if(e)e.classList.add("run");const n=$(`.fn[data-f="${b}"]`);n.classList.add("run");await sleep(700);
-  if(e)e.classList.remove("run");n.classList.remove("run");n.classList.add(bad?"err":"done");if(info)n.querySelector("small").textContent=info}
-$("#frun").onclick=async()=>{const q=$("#fq").value.trim();if(q.length<3)return;const btn=$("#frun");btn.disabled=true;fmode();$("#flout").innerHTML="<h5>Output</h5>Running…";
-  $(`.fn[data-f="q"]`).classList.add("done");$(`.fn[data-f="q"] small`).textContent=q.slice(0,18)+"…";
-  let r;try{r=await post("/api/compare",{question:q})}catch(err){$("#flout").innerHTML="<h5>Output</h5>Could not run: "+esc(err.message);btn.disabled=false;return}
-  const path=FE[FM],on=r.on,off=r.off,n=(on.sources||[]).length;
-  for(const [a,b] of path){let info="",bad=false;
-    if(b==="router")info=FM==="on"?"needs history → memory":"skips memory";
-    else if(b==="search"&&a==="router")info="query sent";
-    else if(b==="store")info=`${n} record${n===1?"":"s"} found · ${r.backend}`;
-    else if(b==="search")info=`${n} back from store`;
-    else if(b==="llm")info=FM==="on"?(on.found?"writes from the records":"no records, general"):(off.answer?off.ms+" ms · no memory":"no model answered");
-    else if(b==="label")info=on.basis?({strong:"well supported",partial:"partly supported"}[on.basis.level]||"not proven"):"no sources";
-    else if(b==="answer")info=FM==="on"?(on.found?"cited":"says: none"):"uncited";
-    bad=(b==="llm"&&FM==="off"&&!off.answer);
-    await fstep(a,b,info,bad)}
-  const o=FM==="on"?on:off;const txt=o.answer?plain(o.answer):(o.error||"No answer.");
-  $("#flout").innerHTML=`<h5>${FM==="on"?"Memory ON · answered from this company's records":"Memory OFF · normal AI response, no company records"}</h5>`+esc(txt)+(FM==="on"&&n?`<div style="margin-top:12px">${on.sources.slice(0,3).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,140))}…</div>`).join("")}</div>`:"");
-  btn.disabled=false};
 
 /* ---------- the map ---------- */
 const NODES={tech:{x:12,y:25,l:"Technician",t:"user",c:"T"},mgr:{x:12,y:70,l:"Manager / new hire",t:"user",c:"M"},
@@ -223,18 +167,7 @@ $("#go").onclick=async()=>{const id=$("#sc").value;if(!id)return;$("#go").disabl
   try{const r=await post("/api/runs",{scenario_id:id,paths:"with",chaos:DRILL});if(es)es.close();es=new EventSource(`/api/runs/${r.run_id}/stream`);es.onmessage=m=>onEv(JSON.parse(m.data));
     es.addEventListener("end",()=>{es.close();$("#stat").textContent="finished";$("#go").disabled=false});es.onerror=()=>{if(es.readyState===2){$("#stat").textContent="stopped";$("#go").disabled=false}}}
   catch(err){$("#ev").innerHTML=`<div class="empty" style="color:var(--er)">${esc(err.message)}</div>`;$("#stat").textContent="error";$("#go").disabled=false}};
-/* ---------- memory off / on ---------- */
-$$("#seg button").forEach(b=>b.onclick=()=>{$$("#seg button").forEach(x=>x.classList.toggle("on",x===b));const m=b.dataset.m;
-  $("#cols").classList.toggle("one",m!=="both");$("#coff").classList.toggle("hide",m==="on");$("#con").classList.toggle("hide",m==="off")});
 const dots='<span class="dots"><span></span><span></span><span></span></span>';
-async function compare(q){$("#off").innerHTML=dots;$("#on").innerHTML=dots;$("#recs").innerHTML="";$("#opsb").innerHTML="";$("#offm").textContent=$("#onm").textContent="";
-  const r=await post("/api/compare",{question:q});
-  $("#off").textContent=r.off.answer?plain(r.off.answer):r.off.error;$("#offm").textContent=r.off.answer?`${r.off.ms} ms · general knowledge, no company records`:"";
-  $("#on").textContent=r.on.answer?plain(r.on.answer):r.on.error;
-  $("#recs").innerHTML=(r.on.sources||[]).slice(0,5).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} · ${esc(s.label||"")} — ${esc((s.text||"").slice(0,170))}…</div>`).join("");
-  $("#opsb").innerHTML=(r.on.operations||[]).map(o=>`<span class="tag cy">${esc(o.op)} · ${esc(o.detail)}</span>`).join("")+(r.on.basis?`<span class="tag ${r.on.basis.level==="strong"?"ok":"part"}">${r.on.basis.level==="strong"?"Well supported":r.on.basis.level==="partial"?"Partly supported":"Not proven"}</span>`:"");
-  $("#onm").textContent=`${r.on.ms} ms · ${r.backend} memory`;return r}
-$("#qf").onsubmit=async e=>{e.preventDefault();const q=$("#q").value.trim();if(q.length<3)return;try{await compare(q)}catch(err){$("#off").textContent=$("#on").textContent="Could not run: "+err.message}};
 /* ---------- contribute -> retain -> recall ---------- */
 $("#ff").onsubmit=async e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));const m=$("#fmsg");m.className="msg";m.textContent="";$("#verify").innerHTML="";
   const text=`${f.title}. Equipment: ${f.equipment}. Incident: ${f.incident} Root cause: ${f.cause} Actions attempted: ${f.tried} Failed approaches: ${f.failed||"none recorded"}. Successful solution: ${f.fix} Outcome: ${f.outcome}. Date: ${f.date}.`;

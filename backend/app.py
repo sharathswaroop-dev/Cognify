@@ -557,6 +557,20 @@ def delete_skill(skill_id: str, ctx: dict = Depends(current)):
     return {"deleted": True}
 
 
+@app.get("/api/records")
+def sample_records(limit: int = 36, ctx: dict = Depends(current)):
+    """The demo company's sample incident history, newest first, for the Library. Only the demo company has it; other companies see their own uploads."""
+    if not ctx["ws"].get("demo"):
+        return []
+    out = []
+    for v in reversed(store.all_visits()[-max(1, min(limit, 80)):]):
+        m = store.machine(v["machine_id"]) or {}
+        out.append({"id": v["job_id"], "date": v["date"], "machine": v["machine_id"], "model": m.get("model_family", ""), "site": (store.site(v["site_id"]) or {}).get("name", ""),
+                    "symptom": v.get("symptom", ""), "root_cause": v.get("root_cause", ""), "fix": v.get("fix", ""),
+                    "failed": [a["action"] for a in v.get("actions", []) if a.get("result") == "failed"][:3], "outcome": v.get("outcome", "")})
+    return out
+
+
 @app.get("/api/docs")
 def list_documents(ctx: dict = Depends(current)):
     return workspaces.library(ctx["ws"]["id"])
@@ -756,6 +770,11 @@ def chat_page():
 @app.get("/architecture")
 def architecture_page():
     return FileResponse(FRONTEND / "architecture.html")
+
+
+@app.get("/memory")
+def memory_page():
+    return FileResponse(FRONTEND / "memory.html")
 
 
 @app.get("/how-it-works")

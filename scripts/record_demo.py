@@ -3,8 +3,8 @@
     python backend/app.py            # in one terminal (real Hindsight + Groq keys in .env)
     python scripts/record_demo.py    # in another
 
-It drives the real pages: the landing page, the how-it-works flow run once with memory ON and once with memory OFF (each node shows its real
-result), then a conversation in the chat: a greeting, a question the memory can answer, and one it cannot (labelled general guidance).
+It drives the real pages: the landing page, the architecture traced, the memory ON / OFF flow (each node shows its real
+result), a live agent run, then a conversation in the chat: a greeting, a question the memory can answer, and one it cannot (labelled general guidance).
 Whatever the services return on the day is what the video shows, so record it while the model budget is available. Add your voice-over after.
 Needs: pip install playwright && playwright install chromium
 """
@@ -53,10 +53,15 @@ def main():
         glide(pg, ".preview", 1.5, "center")
         time.sleep(6)
         glide(pg, "#live", 1.0)
-        # 2. how it works: one question, two paths
-        pg.goto(BASE + "/how-it-works")
+        # 2. the architecture, traced
+        pg.goto(BASE + "/architecture")
+        time.sleep(2.5)
+        point(pg, "#run")
+        pg.click("#run")
+        time.sleep(12)
+        # 3. memory ON / OFF: one question, two paths
+        pg.goto(BASE + "/memory")
         time.sleep(2)
-        glide(pg, ".fl", 1.0, "center")
         point(pg, "#frun")
         pg.click("#frun")                                           # memory ON
         pg.wait_for_function("document.querySelector('#flout h5') && document.querySelector('#flout h5').textContent.includes('Memory ON')", timeout=90000)
@@ -67,7 +72,9 @@ def main():
         pg.click("#frun")
         pg.wait_for_function("document.querySelector('#flout h5') && document.querySelector('#flout h5').textContent.includes('Memory OFF')", timeout=90000)
         time.sleep(5)
-        # 3. the agents and users on one map
+        # 3b. people and agents on one map: a real job
+        pg.goto(BASE + "/how-it-works")
+        time.sleep(2)
         glide(pg, ".stage", 1.0, "center")
         point(pg, "#go")
         pg.click("#go")

@@ -307,7 +307,7 @@ def test_the_thinking_option_asks_for_a_deeper_reflect(client):
 
 def test_the_four_pages_are_served(client):
     c, _ = client
-    for path, marker in (("/", "Should Never Be Lost"), ("/chat", "view-chat"), ("/architecture", "Honest limit"), ("/how-it-works", "Run a real job")):
+    for path, marker in (("/", "Should Never Be Lost"), ("/chat", "view-chat"), ("/architecture", "Honest limit"), ("/how-it-works", "Run a real job"), ("/memory", "Memory ON")):
         r = c.get(path)
         assert r.status_code == 200 and marker in r.text, path
 
@@ -324,3 +324,9 @@ def test_a_greeting_is_not_treated_as_a_memory_question(client):
     c, _ = client
     r = c.post("/api/chat", json={"message": "hi"}).json()
     assert r["kind"] == "answer" and r.get("greeting") and r["sources"] == []
+
+
+def test_library_sample_records_are_demo_only(client):
+    c, _ = client
+    r = c.get("/api/records").json()
+    assert r and {"id", "symptom", "machine", "fix", "failed"} <= set(r[0]) and len(r) <= 36

@@ -814,6 +814,36 @@ body.chatmode main{padding:0;max-width:none}
 #view-chat .acts svg,#view-chat .attach svg,#view-chat .tobottom svg,#view-chat .plus svg,#view-chat .ibtn svg,#view-chat .send svg,#view-chat .icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #view-chat .acts button.on svg{fill:currentColor}
 .lmark{width:30px;height:30px;border-radius:9px;background:url(/static/logo.svg) center/cover;display:inline-block;box-shadow:0 0 22px rgba(139,92,246,.55);flex:none}.lmark.big{width:52px;height:52px;border-radius:15px}
+
+.cprofile .who2{flex:1}.cprofile a{flex:none;margin-left:0;white-space:nowrap;border:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:99px;padding:5px 11px;font:500 12px var(--body)}.cprofile a:hover{border-color:var(--ac);color:var(--tx)}
+#libmodal{background:#0b1020;padding:0;place-items:stretch;z-index:400}
+#libmodal .mcard{width:100%;max-width:none;height:100vh;max-height:100vh;border:0;border-radius:0;background:#0b1020;color:#e8ecf8;padding:34px max(24px,7vw) 60px;overflow-y:auto}
+#libmodal .mcard h3{font:800 34px "Sora",var(--body);letter-spacing:-.03em}#libmodal .sub{color:#8f9bc0}
+#libmodal .vx{position:fixed;right:22px;top:20px;width:40px;height:40px;border:1px solid #1f2745;background:#10162a;color:#e8ecf8;border-radius:50%;font-size:20px;cursor:pointer}
+#libmodal .fi{background:#10162a;border:1px solid #1f2745;color:#e8ecf8;border-radius:99px;padding:12px 18px;width:100%;max-width:520px;font:500 14.5px var(--body);outline:none}
+#libmodal .libgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+#libmodal .libitem{background:#10162a;border:1px solid #1f2745;border-radius:16px;color:#e8ecf8;margin:0;padding:16px}
+#libmodal .libitem small{color:#8f9bc0}
+#libmodal .libh{font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:#a78bfa;margin:34px 0 0;display:flex;gap:10px;align-items:center}
+#libmodal .libh span{font:600 11px var(--body);letter-spacing:.04em;text-transform:none;color:#22d3ee;border:1px solid #1d4a63;background:#122a3a;border-radius:99px;padding:2px 9px}
+.rc .t{font:600 14.5px/1.35 var(--body);margin-bottom:6px}.rc .rmeta{font:500 11.5px var(--mono);color:#8f9bc0;margin-bottom:10px}
+.rc .f,.rc .w{font-size:13px;line-height:1.45;margin-top:5px}.rc .f b{color:#fb7185;font-weight:600}.rc .w b{color:#34d399;font-weight:600}
+#view-company{background:#0b1020;color:#e8ecf8;height:100vh;overflow-y:auto;padding:28px max(24px,6vw) 70px;--text:#e8ecf8;--mute:#8f9bc0;--s1:#10162a;--line:#1f2745;--hot:#8b5cf6;--hl:#2a2160;--paper:#10162a;--black:#e8ecf8}
+#view-company .back{background:#10162a;color:#e8ecf8;border:1px solid #1f2745;border-radius:99px;padding:8px 16px;cursor:pointer;font:500 13.5px var(--body)}
+#view-company h1,#view-company h3{font-family:"Sora",var(--body);letter-spacing:-.03em;color:#e8ecf8}#view-company .kick{color:#22d3ee}
+#view-company .title p,#view-company .sub,#view-company small{color:#8f9bc0}
+#view-company .panel,#view-company .ckpis div{background:#10162a;border:1px solid #1f2745;border-radius:18px;box-shadow:none;color:#e8ecf8}
+#view-company .ckpis div.hot{background:linear-gradient(135deg,#8b5cf6,#6d4ae0);color:#fff}
+#view-company button,#view-company .btn{background:#151c33;border:1px solid #2c3560;color:#e8ecf8;border-radius:99px}
+#view-company *{border-color:#1f2745}
+#view-company .pc,#view-company .riskc,#view-company .hold span,#view-company table.fam{background:#10162a;color:#e8ecf8;border:1px solid #1f2745;box-shadow:none;border-radius:16px}
+#view-company .pc b,#view-company .pc strong,#view-company .riskc b,#view-company table.fam td,#view-company table.fam th{color:#e8ecf8}
+#view-company .pc small,#view-company .stats span{color:#8f9bc0}
+#view-company .hold span{border-radius:99px;padding:3px 10px;font-size:12px}#view-company .hold span.sole{background:#2a2160;border-color:#6d4ae0}
+#view-company table.fam{width:100%;border-collapse:collapse;overflow:hidden}#view-company table.fam td,#view-company table.fam th{padding:10px 12px;border-bottom:1px solid #1f2745;text-align:left}
+#view-company .pc.leaving{border-color:#8b5cf6;background:#171a42}
+#view-company h1 .u,#view-company h1 span{color:#a78bfa}#view-company h1 svg path{stroke:#22d3ee}
+
 body.chatmode header,body.chatmode #bar,body.chatmode #banner{display:none}
 .gen{display:inline-block;margin:0 0 8px;padding:3px 9px;border-radius:99px;background:#122a3a;color:#67e8f9;font:600 12px var(--body);border:1px solid #1d4a63}
 .xnav{display:none}.xnav a{color:#8f9bc0;text-decoration:none;font:500 13px var(--body);padding:6px 11px;border-radius:99px;border:1px solid #1f2745;background:#0b1020cc;backdrop-filter:blur(6px)}.xnav a:hover{color:#fff;border-color:#8b5cf6}
@@ -1029,7 +1059,7 @@ body.chatmode{overflow:hidden}
   <div class="toast" id="toast" hidden></div>
 </section>
 
-<section class="view" id="view-company"><section class="view" id="view-company"><section class="view" id="view-company">
+<section class="view" id="view-company">
   <button class="back" data-view="chat">← back to the chat</button>
   <div class="title"><div><div class="kick">for managers</div><h1 id="h-company"></h1></div><p>What the company knows, and who it lives with. Mark someone as leaving to see what would walk out with them.</p></div>
   <div class="ckpis" id="ck"></div>
@@ -1177,7 +1207,7 @@ function consCard(c){
 let DRILL="none",RES=[],modelBefore={},runChaos="none",bkBand=false,bkMem=false,LASTCONS={};
 const LBL={dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",briefing:"Technician briefing",feed:"Alarm feed",technician:"Technician",system:"System"};
 const SCENES=["intro","problem","demo","wrap"];
-function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(HEADS[v])setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="company")loadCompany();document.body.classList.toggle("chatmode",v==="chat");if(v==="chat")setTimeout(()=>$("#cin")&&$("#cin").focus(),60);
+function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(HEADS[v])setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="company")loadCompany();document.body.classList.toggle("chatmode",v==="chat"||v==="company");if(v==="chat")setTimeout(()=>$("#cin")&&$("#cin").focus(),60);
   if(v==="dash")loadDash();if(v==="phone")loadPhone();history.replaceState(null,"","#"+(v==="home"?"":v==="show"?"talk":v));$("#steps").style.visibility=v==="show"?"":"hidden";$("#bar").style.visibility=v==="show"?"":"hidden"}
 function goScene(n){if(!$("#view-show").classList.contains("on"))go("show");setTimeout(()=>$("#s-"+n).scrollIntoView({behavior:RM?"auto":"smooth",block:"start"}),30)}
 function watchScenes(){const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const n=en.target.id.slice(2),i=SCENES.indexOf(n);
@@ -1355,12 +1385,16 @@ async function openSkills(){open2("#skillmodal");$("#sk-err").innerHTML="";const
   await draw();$("#skillx").onclick=()=>close2("#skillmodal");
   $("#sk-save").onclick=async()=>{$("#sk-err").innerHTML="";try{await api("/api/skills",{name:$("#sk-name").value.trim(),prompt:$("#sk-prompt").value.trim(),shared:$("#sk-shared").checked});$("#sk-name").value="";$("#sk-prompt").value="";$("#sk-shared").checked=false;draw()}catch(e){$("#sk-err").innerHTML=`<div class="err">${esc(e.message)}</div>`}}}
 async function openLibrary(){open2("#libmodal");$("#liblist").innerHTML='<div class="empty">Loading…</div>';
-  try{LIB=(await api("/api/docs")).slice().reverse()}catch(e){$("#liblist").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
-  const draw=()=>{const q=($("#libq").value||"").toLowerCase(),list=LIB.filter(x=>!q||x.name.toLowerCase().includes(q)||(x.author||"").toLowerCase().includes(q));
-    $("#liblist").innerHTML=list.length?list.map(x=>`<div class="libitem">${x.kind==="image"?`<img data-img="${esc(x.id)}" alt="">`:""}<b>${esc(x.name)}</b><small>${x.kind==="image"?"picture":"document"} · added by ${esc(x.author)} · ${esc(x.date)}${x.kind==="image"?"":` · ${x.sections} section${x.sections===1?"":"s"}`}</small><button data-ask="${esc(x.id)}" type="button">Ask about this</button></div>`).join(""):'<div class="empty">Nothing here yet. Use + to add a document or picture.</div>';
+  let REC=[];
+  try{LIB=(await api("/api/docs")).slice().reverse();try{REC=await fetch("/api/records",{headers:{Authorization:"Bearer "+TOKEN}}).then(r=>r.ok?r.json():[])}catch{}}catch(e){$("#liblist").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
+  const draw=()=>{const q=($("#libq").value||"").toLowerCase(),list=LIB.filter(x=>!q||x.name.toLowerCase().includes(q)||(x.author||"").toLowerCase().includes(q)),rl=REC.filter(r=>!q||JSON.stringify(r).toLowerCase().includes(q));
+    const mine=list.length?`<div class="libgrid">${list.map(x=>`<div class="libitem">${x.kind==="image"?`<img data-img="${esc(x.id)}" alt="">`:""}<b>${esc(x.name)}</b><small>${x.kind==="image"?"picture":"document"} · ${esc(x.author)} · ${esc(x.date)}${x.kind==="image"?"":` · ${x.sections} section${x.sections===1?"":"s"}`}</small><button data-ask="${esc(x.id)}" type="button">Ask about this</button></div>`).join("")}</div>`:'<div class="empty" style="margin-top:12px">Nothing uploaded yet. Use + in the chat.</div>';
+    const rec=rl.length?`<div class="libh">Incident records <span>sample data</span></div><div class="libgrid">${rl.map(r=>`<div class="libitem rc"><div class="t">${esc(r.symptom||"Incident")}</div><div class="rmeta">${esc(r.id)} · ${esc(r.machine)} · ${esc(r.model)} · ${esc(r.date)}</div>${r.failed.length?`<div class="f"><b>Failed</b> ${esc(r.failed.join("; "))}</div>`:""}${r.fix?`<div class="w"><b>Fixed</b> ${esc(r.fix)}</div>`:""}<button data-rec="${esc(r.id)}" type="button">Ask about this</button></div>`).join("")}</div>`:"";
+    $("#liblist").innerHTML=`<div class="libh" style="margin-top:6px">Your uploads</div>`+mine+rec;
     $$("#liblist [data-ask]").forEach(b=>b.onclick=()=>{const x=LIB.find(y=>y.id===b.dataset.ask);close2("#libmodal");insertPrompt(`About “${x.name}”: `)});
+    $$("#liblist [data-rec]").forEach(b=>b.onclick=()=>{const x=REC.find(y=>y.id===b.dataset.rec);close2("#libmodal");insertPrompt(`What do we know about ${x.machine}: ${x.symptom}? `)});
     $$("#liblist [data-img]").forEach(async im=>{try{const r=await fetch(`/api/docs/${im.dataset.img}/file`,{headers:{Authorization:"Bearer "+TOKEN}});if(r.ok)im.src=URL.createObjectURL(await r.blob())}catch{}})};
-  if(!$("#libq")){$("#liblist").insertAdjacentHTML("beforebegin",'<div class="libtop"><input class="fi" id="libq" placeholder="Search your library" autocomplete="off"></div>')}
+  if(!$("#libq")){$("#liblist").insertAdjacentHTML("beforebegin",'<div class="libtop"><input class="fi" id="libq" placeholder="Search uploads and records" autocomplete="off"></div>')}
   $("#libq").oninput=draw;draw()}
 function wirePlus(){
   const pm=$("#plusmenu");
