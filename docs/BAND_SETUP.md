@@ -39,7 +39,7 @@ run is the setup below; if a field name differs from the spec, the fallback keep
 
    `BAND_BASE_URL` defaults to `https://app.band.ai/api/v1`.
 5. Restart the app. The header chip shows `Band: connected`.
-6. Run an alarm in the Control Room. The with-memory path creates a room titled `SiteMemory <alarm> <machine> <code>`, adds the four agents, and
+6. Run an alarm on the Live demo page. The with-memory path creates a room titled `SiteMemory <alarm> <machine> <code>`, adds the four agents, and
    posts every handoff. Open **Rooms** in the Band app to watch the same conversation. In SiteMemory, handoff bubbles
    are tagged `via Band` when delivery through Band succeeded and `in-process` when it fell back.
 

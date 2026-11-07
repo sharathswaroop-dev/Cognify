@@ -9,7 +9,7 @@ An alarm comes in. Four agents in a [Band](https://band.ai) room (Dispatcher, Di
 | | |
 | --- | --- |
 | ![Control room](docs/screenshots/01-control-room.png) | ![Memory panel and veto](docs/screenshots/02-veto-and-memory.png) |
-| **Agent Control Room:** one alarm, two paths, with a simulated consequence | **Verifier veto and revision**, and the memory panel lighting up on every recall |
+| **Live demo:** one alarm in, the four-agent mesh, two paths, drills and a simulated consequence | **Verifier veto and revision**, and the memory panel lighting up on every recall |
 | ![Phone](docs/screenshots/03-phone-briefing.png) | ![Dashboard](docs/screenshots/04-dashboard.png) |
 | **Technician phone:** the briefing, and voice logging that retains | **Dashboard:** replay score, risk watchlist, ROI calculator |
 
@@ -25,7 +25,7 @@ A repeat visit costs a service company a technician's day, fuel, an SLA penalty 
    - **Parts agent** proposes parts from past visits and checks van and warehouse stock. It does not judge whether the evidence is good enough.
    - **Verifier** sees only raw visit and alarm records, never the other agents' reasoning. Its checks are deterministic, so the same inputs always give the same verdict. A vetoed agent revises and the Verifier checks again.
 2. **Evidence levels.** Every visit stores the suspected cause, the action taken and a verified outcome on a ladder: *suspected → fixed at visit → stable 30 days → stable 90 days*. A fix that comes back within 30 days never counts as fixed. Only verified outcomes raise confidence.
-3. **Agent Control Room.** One input, two paths side by side (without memory, with Hindsight). Agents' conversation streams live with status chips; a memory panel lights up on every recall, reflect and retain; Verifier vetoes and revisions are visible; each path ends in a **simulated consequence** (fixed first time, or a return visit, with hours, cost and downtime).
+3. **Live demo (six acts on one page).** (1) An alarm comes in. (2) A live mesh diagram: Alarm feed, Dispatcher, Diagnostician, Parts, Verifier and the Technician in a Band room, each hand-off a travelling dot, each Hindsight recall, reflect or retain a coloured line to the bank. (3) Two paths side by side, without memory and with the shared Hindsight bank, ending in a **simulated consequence**; the Verifier's vetoes are stamped on screen. (4) **Drills**: switch Band, Hindsight or the main model off for one run and watch the backup take over (in-process agents, local keyword memory, next model; with every model down, the Diagnostician and Parts agent rank by the verified record). (5) **Self-learning**: log that the recommended fix failed, see it retained and the evidence counts change, then brief the same alarm again. (6) **Accuracy**: bars with intervals and a learning curve from the replay evaluation.
 4. **Technician phone and voice logging.** The briefing on a phone, and a mic button: Groq Whisper transcribes the spoken visit, the LLM structures it, the technician confirms, then it is retained.
 5. **Dashboard.** Replay evaluation score, a risk watchlist (every point has a stated reason), an ROI calculator in which every figure is labelled **Benchmark**, **Simulated** or **Your inputs**, and every fix's outcomes over time.
 6. **Leak-proof replay evaluation.** Every past incident is planned using only records dated before it, a guard fails if a later record is present, the Verifier's one threshold is tuned on training machines only, and the final score is on held-out machines.
@@ -71,7 +71,19 @@ All deterministic, over raw records as of the alarm's date:
 
 ## Replay evaluation
 
-EVAL_SECTION
+<!-- RESULTS-START -->
+| Arm | Predicted first-time fix | Right parts | Failed fix avoided |
+| --- | --- | --- | --- |
+| No memory | **0% (0/13, 95% 0%-23%)** | 62% (8/13, 95% 36%-82%) | 100% (7/7, 95% 65%-100%) |
+| Basic search (BM25) | **64% (7/11, 95% 35%-85%)** | 82% (9/11, 95% 52%-95%) | 100% (6/6, 95% 61%-100%) |
+| Basic search + Verifier | **64% (7/11, 95% 35%-85%)** | 64% (7/11, 95% 35%-85%) | 100% (6/6, 95% 61%-100%) |
+
+Simulated: a replay of a synthetic history, scored on 24 incidents on 8 held-out machines that were never used for tuning. Generated 2026-11-07 07:33 with basic search (BM25). Not run: Hindsight: Hindsight was not used for this run. 94 of 179 model calls came back empty (rate limits); those runs are excluded from the rates, so the intervals are wide.
+
+On basic search, the Verifier changed predicted first-time fix from 64% to 64%.
+
+Method, tuning and every failure: [docs/EVALUATION.md](docs/EVALUATION.md).
+<!-- RESULTS-END -->
 
 ## Self-correcting memory
 
