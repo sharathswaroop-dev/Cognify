@@ -243,13 +243,14 @@ class HindsightMemory:
             metadata={k: str(v) for k, v in (meta or {}).items() if isinstance(v, (str, int, float))}))
         self._retained += 1
 
-    def retain_many(self, records: list[dict]) -> None:
+    def retain_many(self, records: list[dict], wait: bool = False) -> None:
+        """wait=True: return only when Hindsight has finished ingesting (the replay evaluation needs this, or it would query a half-built bank)."""
         items = [{"content": r["text"], "timestamp": r.get("date"), "context": "field service visit log",
                   "document_id": r["doc_id"], "tags": r["tags"],
                   "metadata": {k: str(v) for k, v in (r.get("meta") or {}).items() if isinstance(v, (str, int, float))}}
                  for r in records]
         for start in range(0, len(items), 20):  # keep requests small
-            self._io.run(self.client.aretain_batch(self.bank_id, items[start:start + 20], retain_async=True))
+            self._io.run(self.client.aretain_batch(self.bank_id, items[start:start + 20], retain_async=not wait), timeout=900 if wait else 90)
         self._retained += len(items)
 
     def recall(self, query: str, tags: list[str], limit: int = 6, match: str = "any") -> list[Memory]:

@@ -142,7 +142,12 @@ class Replay:
         while self.i < len(self.recs) and (self.recs[self.i]["date"] or "0000") < before:
             batch.append(self.recs[self.i]); self.i += 1
         if batch:
-            (self.mem.retain_many(batch) if hasattr(self.mem, "retain_many") else [self.mem.retain(r["text"], r["tags"], r["date"], r["doc_id"], r["meta"]) for r in batch])
+            import inspect
+            if hasattr(self.mem, "retain_many"):
+                wait = "wait" in inspect.signature(self.mem.retain_many).parameters
+                self.mem.retain_many(batch, wait=True) if wait else self.mem.retain_many(batch)
+            else:
+                [self.mem.retain(r["text"], r["tags"], r["date"], r["doc_id"], r["meta"]) for r in batch]
             self.retained += batch
         late = [r["doc_id"] for r in self.retained if r["date"] and r["date"] >= before]
         if late:
