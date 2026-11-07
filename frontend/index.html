@@ -815,7 +815,7 @@ body.chatmode main{padding:0;max-width:none}
 #view-chat .acts button.on svg{fill:currentColor}
 .lmark{width:30px;height:30px;border-radius:9px;background:url(/static/logo.svg) center/cover;display:inline-block;box-shadow:0 0 22px rgba(139,92,246,.55);flex:none}.lmark.big{width:52px;height:52px;border-radius:15px}
 
-.cprofile .who2{flex:1}.cprofile a{flex:none;margin-left:0;white-space:nowrap;border:1px solid var(--line);border-bottom:1px solid var(--line);border-radius:99px;padding:5px 11px;font:500 12px var(--body)}.cprofile a:hover{border-color:var(--ac);color:var(--tx)}
+.cprofile{flex-wrap:wrap}.cprofile .who2{flex:1}.cprofile a{flex:0 0 100%;margin:6px 0 0;text-align:center;white-space:nowrap;border:1px solid var(--line);border-radius:10px;padding:7px 11px;font:500 12.5px var(--body)}.cprofile a:hover{border-color:var(--ac);color:var(--tx)}
 #libmodal{background:#0b1020;padding:0;place-items:stretch;z-index:400}
 #libmodal .mcard{width:100%;max-width:none;height:100vh;max-height:100vh;border:0;border-radius:0;background:#0b1020;color:#e8ecf8;padding:34px max(24px,7vw) 60px;overflow-y:auto}
 #libmodal .mcard h3{font:800 34px "Sora",var(--body);letter-spacing:-.03em}#libmodal .sub{color:#8f9bc0}
@@ -1375,16 +1375,17 @@ function wireChat(){
   let saved=null;try{saved=JSON.parse(localStorage.getItem("sm_session")||"null")}catch{}
   if(saved){TOKEN=saved.token;api("/api/workspace/me").then(m=>startSession({...saved,admin:m.admin})).catch(()=>showGate())}else showGate()}
 async function uploadFiles(files){if(!SES||!files.length)return;
-  for(const f of files){const image=/\.(png|jpe?g|webp|gif)$/i.test(f.name);let caption="";
+  for(const f of files){const image=/\.(png|jpe?g|webp|gif)$/i.test(f.name);let caption="",ok=false;
     if(image){caption=await askCaption(f);if(!caption)continue}
     const s=curSess();s.msgs.push({r:"user",t:"",file:{name:f.name}});if(s.title==="New chat")s.title=f.name.slice(0,40);saveSess();drawThread();drawSess();drawHead();
     const wrap=$("#cthread .cwrap");const id="u"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="am" id="${id}"><div class="dots"><i></i><i></i><i></i></div><div class="fbnote">Reading ${esc(f.name)}…</div></div>`);scrollChat();
     try{const fd=new FormData();fd.append("file",f);if(caption)fd.append("caption",caption);const r=await fetch("/api/docs",{method:"POST",headers:{Authorization:"Bearer "+TOKEN},body:fd});
       if(r.status===401){showGate("Your session ended. Join again.");return}
-      const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"That file could not be read.");
+      const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"That file could not be read.");ok=true;
       s.msgs.push({r:"ai",t:image?"I have kept the picture in your library and learned your description of it. Ask me about it, and the next person can too.":`I have read it and added it to your company memory in ${d.sections} section${d.sections===1?"":"s"}. Ask me anything about it, and the next person can too.`,file:{name:d.name,sections:d.sections}})}
     catch(e){s.msgs.push({r:"ai",t:"I could not add that file. "+e.message})}
-    saveSess();drawThread()}}
+    saveSess();drawThread();
+    if(ok)await chatSend(image?`What does “${f.name}” tell us, and what should I check first?`:`Summarize “${f.name}”: the key points, what failed, what worked, and what to check first.`)}}
 async function chatSend(msg){
   chatBusy=true;$("#csend").disabled=true;const s=curSess();s.msgs.push({r:"user",t:msg});if(s.title==="New chat")s.title=msg.slice(0,40);saveSess();drawThread();drawSess();drawHead();
   const wrap=$("#cthread .cwrap"),id="c"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="am" id="${id}"><div class="dots"><i></i><i></i><i></i></div></div>`);scrollChat();

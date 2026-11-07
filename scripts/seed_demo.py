@@ -24,6 +24,14 @@ NOTES = [
 ]
 
 
+SKILLS = [
+    dict(name="Brief for a technician", prompt="Write a short brief for the technician about this machine: the likely cause, what already failed so it is not repeated, what to do first, and which parts to bring. Cite the records.", shared=True),
+    dict(name="Root cause analysis", prompt="Analyse this fault. List the most likely root causes in order, the evidence for each from our records, and the fixes that have failed before.", shared=True),
+    dict(name="Summarize a document", prompt="Summarize this document in five bullets: what happened, what failed, what worked, and the lesson for the next person.", shared=True),
+    dict(name="Handover note", prompt="Write a handover note for this site: quirks, access, recurring faults, and what to check first. Use only what our records say.", shared=True),
+]
+
+
 def main():
     with httpx.Client(base_url=BASE, timeout=120) as c:
         tok = c.post("/api/workspace/guest").json()["token"]
@@ -35,6 +43,10 @@ def main():
                 continue
             r = c.post("/api/docs", files={"file": (f.name, f.read_bytes())}, data={"author": "Sample data"})
             print("doc", f.name, r.status_code, r.json().get("sections", r.text[:100]))
+        have_skills = {k["name"] for k in c.get("/api/skills").json()}
+        for k in SKILLS:
+            if k["name"] not in have_skills:
+                print("skill", k["name"], c.post("/api/skills", json=k).status_code)
         if c.get("/api/company").json()["totals"]["notes"] >= len(NOTES):
             print("notes already added")
             return

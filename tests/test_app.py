@@ -322,11 +322,23 @@ def test_compare_runs_both_paths_and_never_invents_when_no_model(client):
 
 def test_a_greeting_is_not_treated_as_a_memory_question(client):
     c, _ = client
-    r = c.post("/api/chat", json={"message": "hi"}).json()
-    assert r["kind"] == "answer" and r.get("greeting") and r["sources"] == []
+    for text in ("hi", "how are you", "how are you doing today?", "thanks"):
+        r = c.post("/api/chat", json={"message": text}).json()
+        assert r["kind"] == "answer" and r.get("greeting") and r["sources"] == [], text
 
 
 def test_library_sample_records_are_demo_only(client):
     c, _ = client
     r = c.get("/api/records").json()
     assert r and {"id", "symptom", "machine", "fix", "failed"} <= set(r[0]) and len(r) <= 36
+
+
+def test_requests_are_answered_not_saved_as_notes():
+    """'Summarize this document: ... what worked ...' is a request. It must never be stored as something a person taught the memory."""
+    import chatintent
+    for m in ("Summarize “inspection_report.pdf”: the key points, what failed, what worked, and what to check first.",
+              "Write a short brief for the technician going to unit M-121: likely cause, what to skip, and which part to bring",
+              "Analyze the condenser fouling pattern on the chillers across all sites we service this year"):
+        assert chatintent.intent(m) == "ask", m
+    assert chatintent.intent("Remember: on the Riverside rooftop units, check the evening supply voltage first.") == "share"
+    assert chatintent.intent("I replaced the contactor on M-07 and it worked") == "share"

@@ -407,7 +407,7 @@ def chat(req: ChatReq, ctx: dict = Depends(current)):
     return {"kind": "answer", **out}
 
 
-_GREET = re.compile(r"^\s*(hi|hii+|hello|hey|yo|thanks|thank you|good (morning|afternoon|evening)|who are you|what can you do)\b", re.I)
+_GREET = re.compile(r"^\s*(hi+|hello|hey|yo|howdy|thanks|thank you|thx|ok(ay)?|cool|bye|goodbye|good (morning|afternoon|evening|night)|how are you|how r u|how'?s it going|how do you do|what'?s up|sup|who are you|what are you|what can you do)\b", re.I)
 _NEGATIVE = re.compile(r"(do(es)? not contain|no (relevant )?(information|record|data|history)|not possible to determine|could not find|nothing (in|about))", re.I)
 GROUND_SYS = ("You answer a field-service question using ONLY the numbered company records given. Cite records as [1], [2]. "
               "Say what was tried and failed, and what worked, if the records say so. Reply with exactly NO_MATCH only if NONE of the records relates to the equipment or symptom asked about (or the message is just a greeting); if some relate, answer from them and say what is not known. "

@@ -6,7 +6,9 @@ from __future__ import annotations
 import re
 
 _Q_START = ("what", "how", "why", "which", "when", "where", "who", "can ", "could ", "should ", "would ", "does ", "do ", "did ", "is ", "are ", "was ", "were ",
-            "tell me", "explain", "show me", "give me", "any ", "has ", "have ", "list ")
+            "tell me", "explain", "show me", "give me", "any ", "has ", "have ", "list ",
+            "summarize", "summarise", "write ", "draft ", "analyse", "analyze", "brief ", "check ", "find ", "compare", "create ", "prepare", "describe", "outline",
+            "review", "suggest", "recommend", "diagnose", "solve", "fix ", "help ", "translate", "rewrite")
 _SHARE_START = ("remember", "note that", "note:", "note ", "for the record", "fyi", "tip:", "tip ", "lesson", "learned", "i fixed", "i replaced", "i found", "i learned", "we fixed",
                 "we replaced", "we found", "what worked", "this worked", "that worked", "it worked", "didn't work", "did not work", "never ", "always ", "make sure", "watch out", "save this")
 _SHARE_ANYWHERE = ("i fixed", "i replaced", "we fixed", "we replaced", "what worked", "it worked", "did not work", "didn't work", "failed every time", "the real cause", "root cause was")
