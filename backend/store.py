@@ -32,6 +32,8 @@ class Store:
         self.alarms = _load("alarms_history.json")
         self.scenarios = _load("alarms_live.json")      # control-room inputs; each carries a hidden "truth"
         self.stock = _load("stock.json")
+        self.notes_path = DATA / "knowledge_notes.json"
+        self.notes = json.loads(self.notes_path.read_text(encoding="utf-8")) if self.notes_path.exists() else []
         self.logged_path = DATA / "logged_visits.json"
         self.logged = json.loads(self.logged_path.read_text(encoding="utf-8")) if self.logged_path.exists() else []
         self._m = {m["id"]: m for m in self.machines}
@@ -86,7 +88,14 @@ class Store:
         self.logged.append(visit)
         self.logged_path.write_text(json.dumps(self.logged, indent=1, ensure_ascii=False), encoding="utf-8")
 
+    def add_note(self, note):
+        self.notes.append(note)
+        self.notes_path.write_text(json.dumps(self.notes, indent=1, ensure_ascii=False), encoding="utf-8")
+
     def clear_logged(self):
+        self.notes = []
+        if self.notes_path.exists():
+            self.notes_path.unlink()
         self.logged = []
         if self.logged_path.exists():
             self.logged_path.unlink()

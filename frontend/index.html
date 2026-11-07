@@ -708,6 +708,40 @@ main{max-width:1500px}
 .sugg{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.sugg button{border:2px solid var(--text);border-radius:999px;background:#fffaee;padding:6px 13px;font:600 13px var(--body);color:var(--text)}.sugg button:hover{background:#fbe4dc}
 .askf{display:flex;gap:10px;margin-top:6px}.askf .fi{flex:1}
 @media (max-width:1100px){.askgrid{grid-template-columns:1fr}}
+.homehero{min-height:calc(100vh - 90px);display:flex;flex-direction:column;justify-content:center;max-width:1100px;margin:0 auto;padding:40px 0}
+.homehero .hand.top{font-size:34px;transform:rotate(-2deg);display:inline-block;margin-bottom:8px}
+.homehero h1{margin:0 0 22px;font:900 clamp(44px,6.6vw,104px)/.95 var(--disp);letter-spacing:-.045em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.homehero h1 .ln{display:block;overflow:hidden;padding:0 0 .14em}.homehero h1 .ln>span{display:inline-block;transform:translateY(105%) rotate(3deg);animation:up .9s var(--ease) forwards}
+.homehero h1 .ln:nth-child(2)>span{animation-delay:.14s;color:var(--hot)}
+.homehero .lede{font-size:clamp(17px,1.5vw,21px);max-width:660px;margin:0 0 34px}
+.doors{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.door{position:relative;text-align:left;padding:30px 30px 26px;border:2.5px solid var(--text);border-radius:var(--wob);background:#fffaee;box-shadow:var(--soft);color:var(--text);transition:transform .35s var(--ease),box-shadow .35s}
+.door.dark{background:var(--text);color:#fff8ea}
+.door:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:6px 12px 0 var(--hot)}
+.door .dn{position:absolute;right:22px;top:18px;font:900 56px/1 var(--disp);color:var(--hot);opacity:.9}
+.door b{display:block;font:900 clamp(28px,3vw,42px)/1 var(--disp);letter-spacing:-.035em;margin:0 56px 12px 0;font-variation-settings:"SOFT" 100,"WONK" 1}
+.door p{margin:0 0 22px;font-size:16px;line-height:1.5;max-width:44ch}
+.door .go{font:700 22px var(--hand);color:var(--hot)}
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:1000px}
+.tile{text-align:left;padding:26px;border:2.5px solid var(--text);border-radius:var(--wob2);background:#fffaee;box-shadow:var(--soft);color:var(--text);transition:transform .3s var(--ease),box-shadow .3s}
+.tile:hover{transform:translateY(-6px);box-shadow:5px 9px 0 var(--text)}
+.tile b{display:block;font:800 26px/1.1 var(--disp);letter-spacing:-.03em;margin-bottom:8px;font-variation-settings:"SOFT" 100,"WONK" 1}.tile p{margin:0;color:var(--mute)}
+.ckpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:22px}
+.ckpis div{padding:18px;border:2.5px solid var(--text);border-radius:var(--wob2);background:#fffaee}
+.ckpis b{display:block;font:900 clamp(36px,3.6vw,56px)/.95 var(--disp);letter-spacing:-.05em;margin-bottom:6px}.ckpis small{font:500 11.5px/1.4 var(--mono);color:var(--mute)}
+.ckpis div.hot{background:var(--hot);color:#fff8ea}.ckpis div.hot small{color:#ffe3da}
+.cgrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:22px;align-items:start}
+.pc{padding:16px 18px;border:2.5px solid var(--text);border-radius:var(--wob2);background:#fffaee;margin-bottom:14px;transition:background .3s,border-color .3s}
+.pc.leaving{background:#fbe4dc;border-color:var(--hot)}
+.pc .ph2{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.pc b{font:800 19px var(--disp);letter-spacing:-.02em}.pc small{display:block;font:400 11.5px var(--mono);color:var(--mute);margin-top:2px}
+.pc .stats{display:flex;gap:16px;margin:10px 0 6px;font:500 12px var(--mono);color:var(--mute)}.pc .stats strong{font:900 20px var(--disp);color:var(--text);margin-right:4px}
+.hold{display:flex;gap:6px;flex-wrap:wrap}.hold span{font:500 11px var(--mono);padding:2px 9px;border:1.5px solid var(--text);border-radius:999px;background:#fff}
+.hold span.sole{background:var(--hot);color:#fff8ea;border-color:var(--hot)}
+.riskc{padding:14px 16px;border:2.5px solid var(--hot);border-radius:var(--wob2);background:#fff;margin-bottom:12px}.riskc b{font:800 16px var(--body)}.riskc p{margin:4px 0 0;font:400 12.5px/1.55 var(--mono);color:var(--mute)}
+.fam{width:100%;border-collapse:collapse;font-size:14px}.fam td,.fam th{padding:10px 8px;border-bottom:2px dashed var(--line);text-align:left}.fam th{font:500 11px var(--mono);color:var(--mute);border-bottom:2.5px solid var(--text)}
+.st2{font:700 11px var(--mono);padding:2px 10px;border-radius:999px;border:1.5px solid var(--text);background:#fff}.st2.thin{background:var(--hot);color:#fff8ea;border-color:var(--hot)}.st2.single{background:#fbe4dc;border-color:var(--hot)}
+@media (max-width:1100px){.doors,.tiles,.cgrid{grid-template-columns:1fr}.ckpis{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body class="fx">
@@ -715,17 +749,51 @@ main{max-width:1500px}
 <div id="curtain"><div class="w"><span>SITE</span><span>MEMORY</span></div></div>
 
 <header>
-  <a class="logo" href="#"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#2b2622"/></svg>
+  <a class="logo" href="#" data-view="home"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#2b2622"/></svg>
     <div><b>SiteMemory</b><small id="company">Field service that remembers</small></div></a>
   <nav id="steps"><button data-scene="intro" class="on"><i>1</i><span>Intro</span></button><button data-scene="problem"><i>2</i><span>Problem</span></button><button data-scene="demo"><i>3</i><span>Demo</span></button><button data-scene="wrap"><i>4</i><span>Wrap-up</span></button></nav>
   <div class="chips" id="status"></div>
-  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="ask">Ask the memory</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
+  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="home">Home</a><a data-view="show">Guided tour</a><a data-view="app">The app</a><a data-view="company">Company knowledge</a><a data-view="ask">Ask the memory</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
 </header>
 <div id="bar"><i id="barfill"></i></div>
 <div id="banner"></div>
 
 <main>
-<section class="view on" id="view-show">
+<section class="view on" id="view-home">
+  <div class="homehero">
+    <span class="hand top">SiteMemory</span>
+    <h1><span class="ln"><span>When the expert retires,</span></span><span class="ln"><span>the knowledge stays.</span></span></h1>
+    <p class="lede">Fifteen years of fixes used to walk out the door with one person. Here every repair, every failure and every hard-won tip is kept in one shared memory, so a new hire can ask, and the agents check themselves before a technician drives out.</p>
+    <div class="doors">
+      <button class="door" data-view="show" data-cursor="Tour"><span class="dn">1</span><b>See how it works</b><p>A guided tour in four short scenes: the problem, then four AI agents on one shared memory, live, including what happens when something breaks.</p><span class="go">Start the tour →</span></button>
+      <button class="door dark" data-view="app" data-cursor="Open"><span class="dn">2</span><b>Open the app</b><p>Ask the company memory a question, share what you know before you leave, brief a technician, and see who holds the knowledge.</p><span class="go">Open the app →</span></button>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="view-app">
+  <button class="back" data-view="home">← home</button>
+  <div class="title"><div><div class="kick">the app</div><h1 id="h-app"></h1></div><p>Four tools on one shared memory. Everyone in the company can use the first two; the dashboards are for managers.</p></div>
+  <div class="tiles">
+    <button class="tile" data-view="ask" data-cursor="Open"><b>Ask the memory</b><p>A new hire asks what the company already knows. Every answer lists the records it used.</p></button>
+    <button class="tile" data-view="company" data-cursor="Open"><b>Company knowledge</b><p>Who holds the fixes, what is written down, and where the knowledge is thin.</p></button>
+    <button class="tile" data-view="phone" data-cursor="Open"><b>Technician phone</b><p>The briefing before a job, and logging the visit by voice.</p></button>
+    <button class="tile" data-view="dash" data-cursor="Open"><b>Evaluation and ROI</b><p>How well the agents do on machines they were never tuned on, and what it is worth.</p></button>
+  </div>
+</section>
+
+<section class="view" id="view-company">
+  <button class="back" data-view="app">← back to the app</button>
+  <div class="title"><div><div class="kick">for managers</div><h1 id="h-company"></h1></div><p>What the company knows, and who it lives with. Mark someone as leaving to see what would walk out with them.</p></div>
+  <div class="ckpis" id="ck"></div>
+  <div class="cgrid">
+    <div class="panel"><h3>Whose knowledge is it?</h3><p class="sub" id="crule"></p><div id="cpeople"></div></div>
+    <div class="panel"><h3>What walks out the door</h3><p class="sub">Click “If they leave” on a person. This shows the model families where they hold most of the proven fixes, and whether they have written anything down.</p><div id="crisk"><div class="empty">Nobody marked yet.</div></div></div>
+  </div>
+  <div class="panel" style="margin-top:22px"><h3>Where knowledge is thin</h3><p class="sub">By model family: how many proven fixes exist, how many people hold them, and how many notes have been shared.</p><div id="cfam"></div></div>
+</section>
+
+<section class="view" id="view-show">
 
   <section class="scene" id="s-intro"><div class="intro">
     <div>
@@ -797,7 +865,7 @@ main{max-width:1500px}
 </section>
 
 <section class="view" id="view-ask">
-  <button class="back" data-view="show">← back to the talk</button>
+  <button class="back" data-view="app">← back to the app</button>
   <div class="title"><div><div class="kick">for the new hire</div><h1 id="h-ask"></h1></div>
     <p>When someone with fifteen years in the job retires, what they know used to leave with them. Here a new technician asks, and the company memory answers from every visit and every note, with the records it used.</p></div>
   <div class="askgrid">
@@ -816,7 +884,7 @@ main{max-width:1500px}
 </section>
 
 <section class="view" id="view-phone">
-  <button class="back" data-view="show">← back to the talk</button>
+  <button class="back" data-view="app">← back to the app</button>
   <div class="title"><div><div class="kick"><b>02</b> — The technician</div><h1 id="h-phone"></h1></div>
     <p>The briefing Ravi reads before the job, from the memory-backed plan. Log the visit by voice: it is transcribed, structured, confirmed, then retained.</p></div>
   <div class="pgrid">
@@ -826,7 +894,7 @@ main{max-width:1500px}
 </section>
 
 <section class="view" id="view-dash">
-  <button class="back" data-view="show">← back to the talk</button>
+  <button class="back" data-view="app">← back to the app</button>
   <div class="title"><div><div class="kick"><b>03</b> — Service manager</div><h1 id="h-dash"></h1></div>
     <p>What the history shows, which machines to watch, how well the agents do on machines they were never tuned on, and what it is worth.</p></div>
   <div class="kpis" id="kpis"></div>
@@ -855,7 +923,7 @@ addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;const sp=e.target.c
 (function loop(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loop)})();
 $("#clock").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
-const HEADS={ask:"Ask the company memory",room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
+const HEADS={app:"The app",company:"Company knowledge",ask:"Ask the company memory",room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
 function setHead(v){words($("#h-"+v),HEADS[v])}
 async function loadStatus(){
   STATUS=await api("/api/status");$("#company").textContent=`${STATUS.company.name} · ${STATUS.company.city}`;const deg=STATUS.memory_degraded;
@@ -881,8 +949,8 @@ function consCard(c){
 let DRILL="none",RES=[],modelBefore={},runChaos="none",bkBand=false,bkMem=false,LASTCONS={};
 const LBL={dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",briefing:"Technician briefing",feed:"Alarm feed",technician:"Technician",system:"System"};
 const SCENES=["intro","problem","demo","wrap"];
-function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(v!=="show")setHead(v);scrollTo({top:0,behavior:"instant"});
-  if(v==="dash")loadDash();if(v==="phone")loadPhone();history.replaceState(null,"","#"+(v==="show"?"":v));$("#steps").style.visibility=v==="show"?"":"hidden";$("#bar").style.visibility=v==="show"?"":"hidden"}
+function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(HEADS[v])setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="company")loadCompany();
+  if(v==="dash")loadDash();if(v==="phone")loadPhone();history.replaceState(null,"","#"+(v==="home"?"":v==="show"?"talk":v));$("#steps").style.visibility=v==="show"?"":"hidden";$("#bar").style.visibility=v==="show"?"":"hidden"}
 function goScene(n){if(!$("#view-show").classList.contains("on"))go("show");setTimeout(()=>$("#s-"+n).scrollIntoView({behavior:RM?"auto":"smooth",block:"start"}),30)}
 function watchScenes(){const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const n=en.target.id.slice(2),i=SCENES.indexOf(n);
     $$("#steps button").forEach((b,j)=>{b.classList.toggle("on",j===i);b.classList.toggle("done",j<i)})}),{rootMargin:"-45% 0px -50% 0px",threshold:0});
@@ -903,6 +971,19 @@ async function askQ(q){const chat=$("#chat");if(chat.querySelector(".empty"))cha
   try{const r=await api("/api/ask",{question:q});const el=document.getElementById(id);
     el.innerHTML=esc(String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"")).slice(0,3200)+(r.sources.length?`<details class="src"><summary>${r.sources.length} records it drew on</summary>${r.sources.map(s=>`<div><b>${esc(s.ref||"note")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`:"")}
   catch(e){document.getElementById(id).innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`}chat.scrollTop=chat.scrollHeight}
+let LEAVING=new Set();try{LEAVING=new Set(JSON.parse(localStorage.getItem("sm_leaving")||"[]"))}catch{}
+async function loadCompany(){let o;try{o=await api("/api/company")}catch(e){$("#cpeople").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
+  const t=o.totals;$("#crule").textContent=o.rule;
+  $("#ck").innerHTML=[[t.visits,"visits on record"],[t.verified,"proven fixes (held 30+ days)"],[t.notes,"notes shared by people"],[t.thin_families,"model families with thin knowledge",t.thin_families?"hot":""],[t.at_risk_families,"families where one person holds half the fixes",t.at_risk_families?"hot":""]].map(x=>`<div class="${x[2]||""}"><b>${x[0]}</b><small>${x[1]}</small></div>`).join("");
+  const draw=()=>{
+    $("#cpeople").innerHTML=o.people.map(p=>`<div class="pc ${LEAVING.has(p.id)?"leaving":""}"><div class="ph2"><div><b>${esc(p.name)}</b><small>${p.years} year${p.years===1?"":"s"} · ${esc(p.speciality)}</small></div><button class="btn sm" data-lv="${p.id}">${LEAVING.has(p.id)?"Leaving ✓":"If they leave"}</button></div>
+      <div class="stats"><span><strong>${p.verified}</strong>proven fixes</span><span><strong>${p.visits}</strong>visit${p.visits===1?"":"s"}</span><span><strong>${p.notes}</strong>notes written</span></div>
+      <div class="hold">${p.holds.map(h=>`<span class="${h.share>=.5?"sole":""}">${esc(h.family)} · ${Math.round(h.share*100)}%</span>`).join("")||'<span style="border-style:dashed;color:var(--mute)">no family where they hold a large share</span>'}</div></div>`).join("");
+    $$("#cpeople [data-lv]").forEach(b=>b.onclick=()=>{const id=b.dataset.lv;LEAVING.has(id)?LEAVING.delete(id):LEAVING.add(id);try{localStorage.setItem("sm_leaving",JSON.stringify([...LEAVING]))}catch{}draw()});
+    const gone=o.people.filter(p=>LEAVING.has(p.id));
+    $("#crisk").innerHTML=gone.length?gone.map(p=>`<div class="riskc"><b>${esc(p.name)} leaves</b>${p.holds.length?p.holds.map(h=>`<p>Holds ${Math.round(h.share*100)}% of the proven fixes for <b style="font-family:var(--body)">${esc(h.family)}</b> (${h.fixes} fixes).</p>`).join(""):"<p>No family where they hold a large share.</p>"}<p>${p.notes?`${p.notes} note${p.notes>1?"s":""} written down so far.`:"Nothing written down yet."} <a data-view="ask" style="color:var(--hot);cursor:pointer;border-bottom:2px dotted var(--hot)">Ask them to share what they know →</a></p></div>`).join(""):'<div class="empty">Nobody marked yet.</div>';
+  };draw();
+  $("#cfam").innerHTML=`<table class="fam"><tr><th>Model family</th><th>Proven fixes</th><th>People</th><th>Notes</th><th>Top holder</th><th>Status</th></tr>${o.families.map(f=>`<tr><td>${esc(f.family)}</td><td>${f.verified}</td><td>${f.people}</td><td>${f.notes}</td><td>${f.top_holder?esc(f.top_holder)+" · "+Math.round(f.top_share*100)+"%":"—"}</td><td><span class="st2 ${f.status==="thin"?"thin":f.status==="single holder"?"single":""}">${esc(f.status)}</span></td></tr>`).join("")}</table>`}
 function wireTalk(){wireAsk();
   fetch("/demo/walkthrough.webm",{method:"HEAD"}).then(r=>{if(r.ok)$("#vidlink").style.display=""}).catch(()=>{});
   document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
@@ -1310,11 +1391,11 @@ $("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$(
 
 (async()=>{
   setTimeout(()=>{$("#curtain").classList.add("go");setTimeout(()=>$("#curtain").remove(),1000)},RM?0:1100);
-  wireTalk();watchScenes();
+  wireTalk();watchScenes();$("#steps").style.visibility="hidden";$("#bar").style.visibility="hidden";
   try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=(SC.find(s=>s.id==="LIVE-4")||SC[0]).id;fillSel();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes()}
   catch(e){$("#packet").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
   loadAcc();
-  const hh=location.hash.slice(1);if(["phone","dash"].includes(hh))go(hh);else if(SCENES.includes(hh))setTimeout(()=>goScene(hh),1300)})();
+  const hh=location.hash.slice(1);if(["app","ask","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}})();
 </script>
 </body>
 </html>

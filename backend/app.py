@@ -30,6 +30,7 @@ except ImportError:
 
 import beliefs as beliefs_mod  # noqa: E402
 import evidence as ev  # noqa: E402
+import knowledge  # noqa: E402
 import records  # noqa: E402
 import simulate  # noqa: E402
 import voice  # noqa: E402
@@ -303,7 +304,15 @@ def share_knowledge(n: Note):
     except Exception as exc:
         log.exception("retain of a note failed")
         raise HTTPException(502, f"Could not save to memory: {exc}") from exc
+    store.add_note({"id": doc_id, "author": n.author.strip(), "role": n.role.strip(), "years": n.years, "machine_id": n.machine_id, "family": (m or {}).get("model_family"),
+                    "site_id": sid, "text": n.text.strip(), "date": ev.NOW})
     return {"saved": True, "memory_text": rec["text"], "tags": rec["tags"], "memory_backend": memory.name}
+
+
+@app.get("/api/company")
+def company_overview():
+    """The company dashboard: who holds which fixes, where knowledge is thin, what has been written down."""
+    return knowledge.overview(store, store.notes)
 
 
 # ------------------------------------------------------------------ voice

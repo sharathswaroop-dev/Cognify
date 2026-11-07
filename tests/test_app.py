@@ -20,6 +20,8 @@ def client(tmp_path, monkeypatch):
     app_mod = importlib.import_module("app")
     app_mod.store.logged_path = tmp_path / "logged.json"
     app_mod.store.logged = []
+    app_mod.store.notes_path = tmp_path / "notes.json"
+    app_mod.store.notes = []
     app_mod.state_path = tmp_path / "state.json"
     return TestClient(app_mod.app), app_mod
 
@@ -113,3 +115,18 @@ def test_knowledge_shared_by_a_senior_person_is_retained_and_found_later(client)
     assert any("Raghu Murthy" in s["text"] for s in found["sources"])
     bad = c.post("/api/knowledge", json={**note, "machine_id": "M-999"})
     assert bad.status_code == 422
+
+
+def test_company_overview_shows_who_holds_the_knowledge_and_counts_shared_notes(client):
+    c, app_mod = client
+    before = c.get("/api/company").json()
+    tot = before["totals"]
+    assert tot["visits"] > 200 and tot["verified"] > 0 and before["people"] and before["families"]
+    assert sum(p["visits"] for p in before["people"]) == tot["visits"]
+    assert all(f["status"] in ("thin", "single holder", "ok") for f in before["families"])
+    note = {"author": before["people"][0]["name"], "role": "senior technician", "years": 9, "machine_id": "M-91",
+            "text": "On this rooftop unit the trips are the inverter board. Check the DC bus before touching the contactor."}
+    assert c.post("/api/knowledge", json=note).status_code == 200
+    after = c.get("/api/company").json()
+    assert after["totals"]["notes"] == 1 and after["people"][0]["notes"] == 1
+    assert any(f["notes"] == 1 for f in after["families"])
