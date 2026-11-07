@@ -255,3 +255,51 @@ def test_only_the_admin_can_reset_or_run_the_evaluation_and_the_tour_has_a_guest
     assert other.post("/api/runs", json={"scenario_id": "LIVE-4", "paths": "with"}).status_code == 401              # running agents needs a session
     assert other.post("/api/runs", json={"scenario_id": "LIVE-4", "paths": "with"}, headers={"Authorization": "Bearer " + guest["token"]}).status_code == 200
     assert c.post("/api/reset-demo").status_code == 200                         # the admin can
+
+
+def test_a_picture_is_kept_and_learned_through_its_caption(client):
+    c, app_mod = client
+    png = b"\x89PNG\r\n\x1a\n" + b"0" * 64
+    no_cap = c.post("/api/docs", files={"file": ("rooftop.png", png, "image/png")}, data={"caption": "short"})
+    assert no_cap.status_code == 422 and "what this picture shows" in no_cap.json()["detail"]
+    r = c.post("/api/docs", files={"file": ("rooftop.png", png, "image/png")}, data={"caption": "The burnt contactor on the Brookfield rooftop unit, with pitted contacts and a scorched coil."})
+    assert r.status_code == 200 and r.json()["kind"] == "image" and "file" not in r.json()
+    item_id = r.json()["id"]
+    assert c.get(f"/api/docs/{item_id}/file").content == png                   # the picture itself is kept in the library
+    found = c.post("/api/chat", json={"message": "burnt contactor pitted contacts scorched coil Brookfield?"}).json()
+    assert any("rooftop.png" in s["text"] for s in found["sources"])
+    assert _fresh(app_mod).get(f"/api/docs/{item_id}/file").status_code == 401   # not without a session
+    assert c.get("/api/docs/nope/file").status_code == 404
+
+
+def test_templates_are_personal_unless_shared_and_only_their_owner_or_the_admin_can_delete(client):
+    c, app_mod = client
+    mine = c.post("/api/skills", json={"name": "Handover note", "prompt": "For machine {machine}: what usually goes wrong, what failed, what fixed it?"}).json()["id"]
+    shared = c.post("/api/skills", json={"name": "New hire basics", "prompt": "What should a new technician know about {site}?", "shared": True}).json()["id"]
+    assert {s["id"] for s in c.get("/api/skills").json()} == {mine, shared}
+    other = _fresh(app_mod)
+    tok = other.post("/api/workspace/join", json={"code": "COOLCARE-DEMO", "email": "ravi@coolcare.example"}).json()["token"]
+    h = {"Authorization": "Bearer " + tok}
+    seen = other.get("/api/skills", headers=h).json()
+    assert [s["id"] for s in seen] == [shared] and seen[0]["mine"] is False       # a personal template stays personal
+    assert other.delete(f"/api/skills/{shared}", headers=h).status_code == 403
+    assert c.delete(f"/api/skills/{shared}").status_code == 200                    # its owner (and admin) can
+    assert c.post("/api/skills", json={"name": "x", "prompt": "too short"}).status_code == 422
+
+
+def test_the_thinking_option_asks_for_a_deeper_reflect(client):
+    c, app_mod = client
+    seen = {}
+    real = app_mod.ws_memory
+    class Spy:
+        def __init__(self, inner): self.inner = inner; self.name = inner.name
+        def recall(self, *a, **k): return self.inner.recall(*a, **k)
+        def reflect(self, q, tags, budget="low"): seen["budget"] = budget; return self.inner.reflect(q, tags)
+    app_mod.ws_memory = lambda ws: Spy(real(ws))
+    try:
+        c.post("/api/chat", json={"message": "What usually goes wrong with the Daikin VRV IV?", "deep": True})
+        assert seen["budget"] == "high"
+        c.post("/api/chat", json={"message": "What usually goes wrong with the Daikin VRV IV?"})
+        assert seen["budget"] == "low"
+    finally:
+        app_mod.ws_memory = real

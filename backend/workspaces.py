@@ -175,6 +175,27 @@ def add_feedback(ws_id: str, item: dict) -> None:
     p.write_text(json.dumps(feedback_log(ws_id) + [item], indent=1, ensure_ascii=False), encoding="utf-8")
 
 
+def skills_path(ws_id: str) -> Path:
+    return DATA / "ws" / f"{ws_id}_skills.json"
+
+
+def skills(ws_id: str) -> list[dict]:
+    p = skills_path(ws_id)
+    return json.loads(p.read_text(encoding="utf-8")) if p.exists() else []
+
+
+def save_skills(ws_id: str, items: list[dict]) -> None:
+    p = skills_path(ws_id)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(json.dumps(items, indent=1, ensure_ascii=False), encoding="utf-8")
+
+
+def files_dir(ws_id: str) -> Path:
+    d = DATA / "ws" / ws_id / "files"
+    d.mkdir(parents=True, exist_ok=True)
+    return d
+
+
 def add_to_library(ws_id: str, item: dict) -> None:
     p = library_path(ws_id)
     p.parent.mkdir(parents=True, exist_ok=True)

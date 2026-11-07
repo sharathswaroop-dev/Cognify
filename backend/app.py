@@ -297,7 +297,7 @@ class AskReq(BaseModel):
     question: str = Field(min_length=3, max_length=400)
 
 
-def _ask(mem, q: str) -> dict:
+def _ask(mem, q: str, deep: bool = False) -> dict:
     """A new hire asks what the company already knows. Hindsight's reflect writes the answer from the stored visits and notes, and the
     records it drew on are returned so the answer can be checked. Nothing here needs a language model of ours."""
     q = q.strip()
@@ -307,7 +307,7 @@ def _ask(mem, q: str) -> dict:
         raise HTTPException(502, f"The memory could not be searched: {exc}") from exc
     answer = None
     try:
-        answer = mem.reflect(q, [])
+        answer = mem.reflect(q, [], budget="high" if deep else "low")       # deep: Hindsight's larger reflect budget
     except Exception:
         log.exception("reflect failed for ask")
     sources = [{"ref": m.ref(), "date": m.date, "text": m.text[:280], "tags": m.tags[:6], **provenance.classify(m.tags)} for m in hits]
@@ -364,6 +364,7 @@ class ChatReq(BaseModel):
     message: str = Field(min_length=1, max_length=2000)
     author: str = Field("", max_length=60)
     context: str | None = Field(None, max_length=400)      # the person's previous question, so a short follow-up makes sense
+    deep: bool = False                                    # the "Thinking" option: a larger reflect for a more detailed answer
 
 
 @app.post("/api/chat")
@@ -384,7 +385,7 @@ def chat(req: ChatReq, ctx: dict = Depends(current)):
         return {"kind": "saved", "answer": f"Saved to the company memory under {author}{about}. The next person who asks will find it.", "memory_text": saved["memory_text"],
                 "machine_id": mid, "backend": saved["memory_backend"]}
     q = msg if len(msg.split()) >= 6 or not req.context else f"{req.context} {msg}"
-    out = _ask(ctx["memory"], q[:400] if len(q) >= 3 else msg + "  ")
+    out = _ask(ctx["memory"], q[:400] if len(q) >= 3 else msg + "  ", req.deep)
     return {"kind": "answer", **out}
 
 
@@ -430,27 +431,80 @@ def workspace_me(ctx: dict = Depends(current)):
 
 
 @app.post("/api/docs")
-async def add_document(file: UploadFile = File(...), author: str = Form(""), ctx: dict = Depends(current)):
-    """A document or case study dropped into the chat. It is read, cut into sections, and retained in THIS company's memory under the person's name."""
+async def add_document(file: UploadFile = File(...), author: str = Form(""), caption: str = Form(""), ctx: dict = Depends(current)):
+    """A document, case study, photo or sketch dropped into the chat. Text is read and cut into sections. A picture cannot be read without a vision model,
+    so the person says what it shows and that caption is what the memory learns; the picture itself is kept in the library."""
     data = await file.read(documents.MAX_BYTES + 1)
     name = (file.filename or "document").strip()
+    image = name.lower().endswith(documents.IMAGES)
+    kept = None
     try:
-        text = documents.extract(name, data)
-        parts = documents.chunks(text)
+        if image:
+            text = documents.image_caption(name, data, caption)
+            parts = [text]
+        else:
+            text = documents.extract(name, data)
+            parts = documents.chunks(text)
     except documents.DocError as exc:
         raise HTTPException(422, str(exc)) from exc
     who = author.strip() if len(author.strip()) >= 2 else ctx["name"]
     stamp = int(time.time() * 1000)
     ds = workspaces.slug(name)
-    recs = [records.document_record(name, who, i + 1, len(parts), p, ds, f"doc-{ds}-{stamp}-{i + 1}", ev.NOW) for i, p in enumerate(parts)]
+    if image:
+        kept = f"{stamp}-{ds}{Path(name).suffix.lower()}"
+        (workspaces.files_dir(ctx["ws"]["id"]) / kept).write_bytes(data)
+    recs = [records.document_record(name, who, i + 1, len(parts), p, ds, f"doc-{ds}-{stamp}-{i + 1}", ev.NOW, "photo" if image else "document") for i, p in enumerate(parts)]
     try:
         ctx["memory"].retain_many(recs)
     except Exception as exc:
         log.exception("retain of a document failed")
         raise HTTPException(502, f"Could not save to memory: {exc}") from exc
-    item = {"id": f"{ds}-{stamp}", "name": name, "author": who, "email": ctx["email"], "sections": len(parts), "chars": len(text), "date": ev.NOW}
+    item = {"id": f"{ds}-{stamp}", "name": name, "author": who, "email": ctx["email"], "sections": len(parts), "chars": len(text), "date": ev.NOW,
+            "kind": "image" if image else "document", "file": kept}
     workspaces.add_to_library(ctx["ws"]["id"], item)
-    return {"saved": True, **item, "memory_backend": ctx["memory"].name}
+    return {"saved": True, **{k: v for k, v in item.items() if k != "file"}, "memory_backend": ctx["memory"].name}
+
+
+@app.get("/api/docs/{item_id}/file")
+def document_file(item_id: str, ctx: dict = Depends(current)):
+    item = next((x for x in workspaces.library(ctx["ws"]["id"]) if x["id"] == item_id and x.get("file")), None)
+    if not item:
+        raise HTTPException(404, "No such file in this company's library.")
+    return FileResponse(workspaces.files_dir(ctx["ws"]["id"]) / item["file"])
+
+
+class SkillIn(BaseModel):
+    name: str = Field(min_length=2, max_length=40)
+    prompt: str = Field(min_length=10, max_length=1500)
+    shared: bool = False
+
+
+@app.get("/api/skills")
+def list_skills(ctx: dict = Depends(current)):
+    """Reusable templates: the person's own, plus any the company has shared with everyone."""
+    return [{**{k: v for k, v in s.items() if k != "owner"}, "mine": s["owner"] == ctx["email"]} for s in workspaces.skills(ctx["ws"]["id"]) if s["owner"] == ctx["email"] or s.get("shared")]
+
+
+@app.post("/api/skills")
+def add_skill(s: SkillIn, ctx: dict = Depends(current)):
+    items = workspaces.skills(ctx["ws"]["id"])
+    if len(items) >= 80:
+        raise HTTPException(422, "That is a lot of templates. Delete some first.")
+    item = {"id": f"sk{int(time.time() * 1000)}", "name": s.name.strip(), "prompt": s.prompt.strip(), "shared": s.shared, "owner": ctx["email"], "date": ev.NOW}
+    workspaces.save_skills(ctx["ws"]["id"], items + [item])
+    return {"saved": True, "id": item["id"]}
+
+
+@app.delete("/api/skills/{skill_id}")
+def delete_skill(skill_id: str, ctx: dict = Depends(current)):
+    items = workspaces.skills(ctx["ws"]["id"])
+    s = next((x for x in items if x["id"] == skill_id), None)
+    if not s:
+        raise HTTPException(404, "No such template.")
+    if s["owner"] != ctx["email"] and not ctx["admin"]:
+        raise HTTPException(403, "Only the person who made it, or the admin, can delete a template.")
+    workspaces.save_skills(ctx["ws"]["id"], [x for x in items if x["id"] != skill_id])
+    return {"deleted": True}
 
 
 @app.get("/api/docs")

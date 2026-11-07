@@ -167,7 +167,7 @@ class LocalMemory:
             return len(self.items)
         return sum(1 for i in self.items if (set(tags) <= set(i["tags"]) if match == "all" else set(tags) & set(i["tags"])))
 
-    def reflect(self, query: str, tags: list[str]) -> str | None:
+    def reflect(self, query: str, tags: list[str], budget: str = "low") -> str | None:
         """Heuristic 'reflect': tally what failed and what worked across matching visits."""
         rel = [i for i in self.items if set(tags) & set(i["tags"]) and "kind:visit" in i["tags"]]
         if not rel:
@@ -271,9 +271,9 @@ class HindsightMemory:
             out.append(Memory(r.text, list(r.tags or []), date, 0.0, meta))
         return out
 
-    def reflect(self, query: str, tags: list[str]) -> str | None:
+    def reflect(self, query: str, tags: list[str], budget: str = "low") -> str | None:
         resp = self._io.run(self.client.areflect(
-            self.bank_id, query, tags=tags or None, tags_match="any", budget="low"))
+            self.bank_id, query, tags=tags or None, tags_match="any", budget=budget if budget in ("low", "mid", "high") else "low"))
         return (resp.text or "").strip() or None
 
     def count(self) -> int:
@@ -352,10 +352,10 @@ class FallbackMemory:
                 self._trip("recall", exc)
         return self.secondary.recall(query, tags, limit=limit, match=match)
 
-    def reflect(self, query: str, tags: list[str]):
+    def reflect(self, query: str, tags: list[str], budget: str = "low"):
         if not self.degraded:
             try:
-                return self.primary.reflect(query, tags)
+                return self.primary.reflect(query, tags, budget=budget)
             except Exception as exc:
                 self._trip("reflect", exc)
         return self.secondary.reflect(query, tags)

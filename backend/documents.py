@@ -9,10 +9,22 @@ import re
 MAX_BYTES = 2_000_000
 MAX_CHUNKS = 60
 TEXT = (".txt", ".md", ".markdown", ".csv", ".json", ".log")
+IMAGES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
+MAX_IMAGE = 4_000_000
 
 
 class DocError(ValueError):
     pass
+
+
+def image_caption(name: str, data: bytes, caption: str) -> str:
+    """The text the memory learns from a picture. We cannot read a picture, so the person says what it shows; without that there is nothing to learn."""
+    if len(data) > MAX_IMAGE:
+        raise DocError(f"That picture is larger than {MAX_IMAGE // 1_000_000} MB.")
+    c = " ".join(caption.split())
+    if len(c) < 10:
+        raise DocError("Tell me what this picture shows (a sentence is enough) so the memory has something to learn.")
+    return c
 
 
 def extract(name: str, data: bytes) -> str:
@@ -30,7 +42,7 @@ def extract(name: str, data: bytes) -> str:
         if len(text.strip()) < 30:
             raise DocError("That PDF has no readable text (it may be a scan). Paste the text into the chat instead.")
         return text
-    raise DocError("I can read .txt, .md, .csv, .json, .log and text PDFs. For other files, paste the text into the chat.")
+    raise DocError("I can read .txt, .md, .csv, .json, .log and text PDFs, and keep pictures with a caption. For other files, paste the text into the chat.")
 
 
 def chunks(text: str, size: int = 1200, overlap: int = 150) -> list[str]:

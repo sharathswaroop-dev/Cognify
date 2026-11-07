@@ -105,9 +105,9 @@ def knowledge_record(author: str, role: str, years: int | None, text: str, machi
     return {"doc_id": doc_id, "text": f"Knowledge shared by {who}{about}: {text}", "tags": tags, "date": date, "meta": {"author": author, "kind": "note"}}
 
 
-def document_record(name: str, author: str, idx: int, total: int, text: str, doc_slug: str, doc_id: str, date: str) -> dict:
+def document_record(name: str, author: str, idx: int, total: int, text: str, doc_slug: str, doc_id: str, date: str, what: str = "document") -> dict:
     """One section of a document or case study someone added, kept with its file name and who added it so an answer can cite it."""
-    return {"doc_id": doc_id, "text": f"From the document \u201c{name}\u201d (added by {author}, section {idx} of {total}): {text}",
+    return {"doc_id": doc_id, "text": f"From the {what} \u201c{name}\u201d (added by {author}, section {idx} of {total}): {text}",
             "tags": ["kind:doc", f"doc:{doc_slug}", f"author:{slug(author)}"], "date": date, "meta": {"author": author, "kind": "doc", "document": name}}
 
 
