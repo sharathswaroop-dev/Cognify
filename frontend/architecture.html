@@ -17,6 +17,20 @@
 .nd span{font:600 13px "Inter";text-align:center;color:var(--mu);line-height:1.3}.nd.on span,.nd:hover span{color:#fff}
 .nd i{position:absolute;top:-4px;right:calc(50% - 38px);width:12px;height:12px;border-radius:50%;border:2px solid var(--bg)}
 .nd i.ok{background:var(--ok)}.nd i.part{background:var(--wa)}.nd i.plan{background:#556}
+.cvw{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#0d1430,#080d20);padding:18px;margin:34px 0 22px;overflow-x:auto}
+.cv{position:relative;height:560px;min-width:1040px;margin-right:56px;background-image:radial-gradient(rgba(143,153,194,.18) 1px,transparent 1px);background-size:22px 22px;border-radius:16px}
+.cv svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cv path{fill:none;stroke:#2a3568;stroke-width:2.2;transition:stroke .3s}
+.cv path.lit{stroke:var(--cy);filter:drop-shadow(0 0 5px var(--cy));stroke-dasharray:8 8;animation:dash .5s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-16}}
+.cn{position:absolute;transform:translate(-50%,-50%);width:138px;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;text-align:left;color:var(--tx);font:inherit;transition:.3s var(--ease)}
+.cn b{display:flex;align-items:center;gap:8px;font:600 12.5px "Inter";line-height:1.25}.cn b i{width:9px;height:9px;border-radius:50%;flex:none}
+.cn i.ok{background:var(--ok)}.cn i.part{background:var(--wa)}.cn i.plan{background:#667}
+.cn small{display:block;font:500 11px "Inter";color:var(--mu);margin-top:3px}
+.cn:hover,.cn.on{border-color:var(--pu);transform:translate(-50%,-50%) scale(1.06);box-shadow:0 14px 34px -10px rgba(139,92,246,.8);z-index:3}
+.cn.lit{border-color:var(--cy);box-shadow:0 0 0 3px rgba(34,211,238,.15),0 0 28px rgba(34,211,238,.45)}
+.cn.mem{border-color:rgba(139,92,246,.55)}
+
 .trace{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:34px}
 .panel{display:grid;grid-template-columns:1.25fr 1fr;gap:18px}
 .dp{min-height:360px}.dp h2{font-size:30px;margin:12px 0 10px}.dp .what{color:#cfd6f2;font-size:16.5px;margin-bottom:20px}
@@ -33,13 +47,13 @@
 <section class="top"><div class="wrap">
   <span class="eyebrow">Architecture</span>
   <h1 class="rv">How a question becomes <span class="grad">an answer you can check.</span></h1>
-  <p class="lede rv" style="--d:1">Eight stages from raw company knowledge to a verified reply. Click any stage. Each one says what it does, where it lives in the code, and, honestly, how finished it is.</p>
+  <p class="lede rv" style="--d:1">Every component from the chat box to the verified reply, wired the way the code is wired. Click any node. Each one says what it does, where it lives in the code, and, honestly, how finished it is.</p>
   <div class="legend rv" style="--d:2"><span class="tag ok">Working</span><span class="tag part">Partially implemented</span><span class="tag plan">Planned</span><span>Every status below was checked against the code and tests, not the roadmap.</span></div>
 </div></section>
 
 <section style="padding-top:20px"><div class="wrap">
   <div class="trace rv"><button class="btn" id="run">▶ Trace a question through the system</button><span style="color:var(--mu);font-size:14px" id="tr">“Why does the rooftop chiller keep tripping?”</span></div>
-  <div class="flow rv" id="flow"><div class="beam" id="beam"></div></div>
+  <div class="cvw rv"><div class="cv" id="cv"><svg id="svg"></svg></div></div>
   <div class="panel">
     <div class="card dp" id="dp"></div>
     <div class="card side" id="side"></div>
@@ -68,34 +82,44 @@
 <script src="/static/site.js"></script>
 <script>
 $("#navmount").outerHTML=nav("a");$("#footmount").outerHTML=foot();
-const N=[
- {k:"Knowledge sources",ic:"01",st:"ok",what:"Where experience enters: incident visits, written notes, uploaded documents, photos with a caption, and corrections made in chat.",
-  how:"Technicians log visits or tell the chat \"Remember…\"; managers drop in case studies. Every item keeps its author and date.",lim:"A picture cannot be read without a vision model, so the person describes it and that caption is what is learned. Scanned PDFs are refused with a clear message.",mods:["records.py","workspaces.py","documents.py"],facts:[["Formats","txt · md · csv · json · log · text PDF"],["Provenance","author + date kept"],["Demo data","Sample HVAC records, labelled"]]},
- {k:"Document ingestion",ic:"02",st:"ok",what:"Turns a file into pieces a memory can hold, without losing where each piece came from.",
-  how:"Text is extracted, cut into paragraph-aware sections of about 1,200 characters with a little overlap, and each section is retained with its document name and section number.",lim:"Limit of 60 sections and 2 MB per file.",mods:["documents.py","records.py","app.py /api/docs"],facts:[["Chunk size","≈1,200 chars + overlap"],["Max","60 sections · 2 MB"],["Reference","kept per section"]]},
- {k:"RAG retrieval + Hindsight memory",ic:"03",st:"ok",what:"The memory layer. Hindsight retains each record, recalls the ones that match a question, and reflects an answer from them.",
-  how:"Each company has its own bank. Recall is tag-scoped when a machine or site is known. If Hindsight is unreachable or returns nothing right after a save, a local keyword index fills the gap, and the status chip says which backend answered.",lim:"We rely on Hindsight's internal search; there is no vector database of our own. Hindsight needs account credit; without it the app runs on the local keyword fallback.",mods:["memory.py","HindsightMemory","FallbackMemory","LocalMemory"],facts:[["Operations","retain · recall · reflect"],["Isolation","one bank per company"],["Fallback","local BM25, flagged in UI"]]},
- {k:"Agent orchestration",ic:"04",st:"part",what:"A mesh of agents that coordinate through the shared memory instead of passing private messages.",
-  how:"Alarm feed → Dispatcher (rules) → Diagnostician (recall + reflect + model) → Parts → Verifier → Technician briefing. Each handoff is an event you can watch. Chaos drills switch one dependency off to show graceful degradation.",lim:"The Band transport between agents is tested against a mock only; with no Band keys the same agents run in-process. We do not fake that a live Band run happened.",mods:["mesh/runner.py","agents.py","beliefs.py","evidence.py"],facts:[["Agents","6 + Feedback/Learning"],["Transport","in-process · Band ready"],["Drills","band · memory · llm off"]]},
- {k:"Groq inference",ic:"05",st:"ok",what:"The language model that writes diagnoses, parts lists and general answers.",
-  how:"A chain of models (gpt-oss-120b → gpt-oss-20b → qwen) with retry-after handling. If no model answers, rule-based backups produce a plain answer and the UI says so.",lim:"The free tier has daily token limits, which can empty the model chain. A paid key lifts that.",mods:["llm.py"],facts:[["Primary","openai/gpt-oss-120b"],["Failover","2 further models"],["No model","rule-based backup"]]},
- {k:"Verification",ic:"06",st:"part",what:"A check before anything reaches a technician: does the diagnosis contradict the raw records?",
-  how:"The Verifier is deterministic code reading the raw records. It can veto or revise a diagnosis (up to three rounds). Chat answers are labelled by evidence level using the same provenance rules.",lim:"Free-form chat answers are labelled and cited but not yet run through the Verifier agent.",mods:["agents.py Verifier","provenance.py"],facts:[["Agent runs","Verifier can veto"],["Chat","provenance label"],["Rounds","max 3"]]},
- {k:"Final response",ic:"07",st:"ok",what:"What the person sees: the answer, the records behind it, how well supported it is, and what to do next.",
-  how:"Sources are listed with reference and date. Corrections made by colleagues are shown first. When memory has nothing, the reply says so and gives general guidance, labelled as such.",lim:"A numeric confidence score is shown only where a real scoring mechanism exists (Wilson intervals on repair outcomes), never invented for chat.",mods:["app.py /api/chat","provenance.py"],facts:[["Shows","answer · sources · basis"],["Empty memory","says so, labels guidance"],["Corrections","shown first"]]},
- {k:"Feedback & learning",ic:"08",st:"ok",what:"Closes the loop so the memory improves from use.",
-  how:"A thumbs-down with a correction is retained and surfaced ahead of the next answer. Repair outcomes move an evidence ladder (suspected → fixed at visit → stable 30 → 90 days); a belief-drift engine flags when the history changes.",lim:"Evaluation numbers on the real memory need Hindsight credit and a paid model tier to run in full; the harness is built and leak-proof, results are not claimed.",mods:["evidence.py","beliefs.py","evaluation.py"],facts:[["Evidence","Wilson intervals"],["Weak signal","n < 5 flagged"],["Eval","held-out replay harness"]]}
-];
-const flow=$("#flow");N.forEach((n,i)=>{const b=document.createElement("button");b.className="nd";b.innerHTML=`<i class="${n.st}"></i><div class="ic">${n.ic}</div><span>${n.k}</span>`;b.onclick=()=>pick(i);flow.appendChild(b)});
+const N={
+ ui:{p:[6,50],k:"Chat UI",st:"ok",what:"What people use: a ChatGPT-style chat with history, document and photo upload, thumbs for feedback, light and dark mode.",how:"Single-page front end served by FastAPI. Conversations are kept in the browser; every request carries the signed token.",lim:"Conversation history lives in the browser (localStorage), not on the server, so it does not follow a person to another device.",mods:["frontend/index.html"],facts:[["Pages","landing · chat · how · architecture"],["History","browser only"],["Voice","browser speech"]]},
+ api:{p:[22,50],k:"FastAPI backend",st:"ok",what:"Receives and processes every request: chat, uploads, runs, feedback, evaluation.",how:"One FastAPI app. Heavy calls run in a threadpool; agent runs stream to the browser over server-sent events.",lim:"A single process. No queue or horizontal scaling yet.",mods:["backend/app.py"],facts:[["Style","REST + SSE"],["Validation","pydantic models"],["Tests","94 passing"]]},
+ auth:{p:[22,16],k:"Auth & workspace",st:"part",what:"Identifies the user and company, and keeps every company's memory separate.",how:"Company code + work email (domain limit) issue an HMAC-signed token. The first person to create a company is its admin. Each company has its own Hindsight bank. A guest session opens the public demo company.",lim:"No real email verification, no roles beyond admin/member, no departments. Stated plainly in the sign-in screen.",mods:["workspaces.py","app.py current()"],facts:[["Token","HMAC-signed"],["Isolation","bank per company"],["Missing","email verify · RBAC"]]},
+ qp:{p:[38,50],k:"Query processing",st:"ok",what:"Understands what the person is doing before any memory is touched.",how:"Routes a message as a question, something to remember, or small talk. Pulls out machine ids, joins a short follow-up to the previous question, and scopes recall by tag when a machine or site is known.",lim:"Rule-based routing plus a model for small talk; no learned intent classifier.",mods:["chatintent.py","app.py chat()"],facts:[["Intents","ask · remember · greeting"],["Context","previous question"],["Scope","machine · site tags"]]},
+ ingest:{p:[38,16],k:"Document ingestion",st:"ok",what:"How uploaded documents enter memory.",how:"Text is extracted (txt, md, csv, json, log, text PDF), cut into paragraph-aware sections of about 1,200 characters with overlap, and each section keeps its document name and number. A photo is kept with the caption the person writes.",lim:"60 sections and 2 MB per file. Scanned PDFs are refused; a picture is not read without a vision model.",mods:["documents.py","records.py"],facts:[["Chunk","≈1,200 chars + overlap"],["Limit","60 sections · 2 MB"],["Photos","caption is what is learned"]]},
+ retain:{p:[54,16],k:"Hindsight retain",st:"ok",what:"How new experiences are stored.",how:"Each visit, note, document section or correction is written with tags (machine, site, kind), a date, a document id and its author. Hindsight ingests in the background, so recall can lag moments after a save; a local copy covers that gap.",lim:"Needs Hindsight credit; without it the same call writes to the local keyword store.",mods:["memory.py","records.py"],facts:[["Writes","tags · date · doc id · author"],["Lag","background ingestion"],["Fallback","local, flagged in UI"]]},
+ db:{p:[70,16],k:"Database & cloud storage",st:"part",what:"Where everything persists.",how:"Hindsight Cloud holds the memory bank per company. A local keyword store mirrors it. Company registry, library, templates and uploaded pictures are JSON files and a folder on the server.",lim:"There is no relational database yet: those JSON files are fine for a demo, not for many companies. Conversations are not stored server-side.",mods:["memory.py","workspaces.py","data/ws/"],facts:[["Memory","Hindsight Cloud + local"],["Metadata","JSON files"],["Planned","Postgres + object storage"]]},
+ recall:{p:[54,50],k:"Hindsight recall",st:"ok",what:"Actual organizational memory retrieval.",how:"Searches the company's bank for the records that match the question, tag-scoped when known, and returns each with its reference, date and tags. If Hindsight answers with nothing right after a save, a real keyword match from the local copy fills the gap and says so.",lim:"We rely on Hindsight's own search; there is no vector database of our own.",mods:["memory.py recall()","FallbackMemory"],facts:[["Returns","ref · date · text · tags"],["Top","8 records"],["Fallback","BM25, score above 0"]]},
+ reflect:{p:[70,33],k:"Hindsight reflect",st:"ok",what:"How accumulated experiences are analyzed.",how:"Asks Hindsight to reason over the stored records and write an answer that reflects patterns across visits. The Thinking option asks for a larger reflect budget.",lim:"While a new bank is still ingesting, reflect can say 'nothing found'. Then the answer is written from the recalled records instead.",mods:["memory.py reflect()"],facts:[["Budget","low · high (Thinking)"],["Used by","chat · diagnostician"],["If empty","grounded summary"]]},
+ ctx:{p:[70,50],k:"Context builder",st:"part",what:"Combines retrieved knowledge before it goes to Groq.",how:"Numbers the top records, puts any colleague correction first, tells the model to answer only from them and cite [1], [2], and to say NO_MATCH if none relate.",lim:"Simple: top 6 records trimmed to about 420 characters each. No re-ranking and no token-budget packing yet.",mods:["app.py _ask()","provenance.py"],facts:[["Records","6 × 420 chars"],["Order","corrections first"],["Guard","NO_MATCH"]]},
+ groq:{p:[88,50],k:"Groq inference",st:"ok",what:"The language model that writes the answer.",how:"gpt-oss-120b, then gpt-oss-20b, then qwen, with retry-after handling. With no model available, rule-based backups answer plainly and the UI says so.",lim:"The free tier has daily token limits; a paid key removes that.",mods:["llm.py"],facts:[["Primary","gpt-oss-120b"],["Failover","2 more models"],["Voice","Whisper large-v3"]]},
+ agents:{p:[38,84],k:"Agent orchestration",st:"part",what:"Coordinates the seven specialized agents.",how:"Alarm feed → Dispatcher (rules) → Diagnostician (recall + reflect + model) → Parts → Verifier → Technician briefing → Feedback & learning. They coordinate through the shared bank, and every handoff is a streamed event. Chaos drills switch one dependency off.",lim:"The Band transport between agents is tested against a mock only; without Band keys the same agents run in-process. A live Band run has not happened.",mods:["mesh/runner.py","agents.py"],facts:[["Agents","7"],["Transport","in-process · Band ready"],["Drills","band · memory · llm"]]},
+ verifier:{p:[54,84],k:"Verifier",st:"part",what:"Checks proposed solutions.",how:"Deterministic code that reads the raw job records, can veto or revise a diagnosis (up to three rounds), and records why. Chat answers get an evidence label from the same provenance rules.",lim:"Free-form chat answers are labelled and cited but not yet run through the Verifier agent.",mods:["agents.py","provenance.py"],facts:[["Agent runs","can veto"],["Chat","evidence label"],["Rounds","max 3"]]},
+ final:{p:[88,84],k:"Final response",st:"ok",what:"What the person sees: the answer, its sources, how well supported it is, and corrections first.",how:"Records are listed with reference and date; a colleague's correction shows ahead of the answer. With nothing in memory the reply says so and gives general guidance, labelled.",lim:"A numeric confidence appears only where a real scoring mechanism exists, never invented for chat.",mods:["app.py","provenance.py"],facts:[["Shows","answer · sources · basis"],["Empty","labelled guidance"],["Next steps","from the briefing"]]},
+ feedback:{p:[88,16],k:"Feedback & learning",st:"ok",what:"Captures outcomes for future memory.",how:"A thumbs-down with a correction is retained and shown first next time. Repair outcomes move an evidence ladder (suspected → fixed at visit → stable 30 → 90 days) and a belief-drift engine flags when old lessons stop holding.",lim:"Real evaluation numbers need Hindsight credit and a paid model tier to run in full; the harness is built and leak-proof.",mods:["evidence.py","beliefs.py","evaluation.py"],facts:[["Evidence","Wilson intervals"],["Weak signal","n < 5"],["Eval","held-out replay"]]}
+};
+const E=[["ui","api"],["api","auth"],["api","qp"],["qp","recall"],["ingest","retain"],["retain","db"],["db","recall"],["db","reflect"],["recall","ctx"],["reflect","ctx"],["ctx","groq"],["groq","verifier"],["verifier","final"],["final","feedback"],["feedback","db"],["api","agents"],["agents","verifier"]];
+const cv=$("#cv");
+for(const [k,n] of Object.entries(N)){const b=document.createElement("button");b.className="cn"+(["recall","reflect","retain","db"].includes(k)?" mem":"");b.dataset.k=k;b.style.left=n.p[0]+"%";b.style.top=n.p[1]+"%";b.innerHTML=`<b><i class="${n.st}"></i>${n.k}</b>`;b.onclick=()=>pick(k);cv.appendChild(b)}
+function pos(k){const r=cv.getBoundingClientRect();return [N[k].p[0]/100*r.width,N[k].p[1]/100*r.height]}
+function draw(){const r=cv.getBoundingClientRect();const svg=$("#svg");svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
+  svg.innerHTML=E.map(([a,b])=>{let [x1,y1]=pos(a),[x2,y2]=pos(b);const dx=x2-x1,dy=y2-y1,h=Math.abs(dx)>=Math.abs(dy)*.6;if(!h&&Math.abs(dy)<80){/* short vertical hop */}
+    if(h){x1+=dx>0?69:-69;x2-=dx>0?69:-69}else{y1+=dy>0?24:-24;y2-=dy>0?24:-24}
+    const m=h?(x1+x2)/2:0,mm=h?0:(y1+y2)/2;const d=h?`M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2}`:`M${x1},${y1} C${x1},${mm} ${x2},${mm} ${x2},${y2}`;
+    let dd=d;if(a==="final"&&b==="feedback"){const [fx,fy]=pos(a),[tx,ty]=pos(b);dd=`M${fx+69},${fy} C${fx+150},${fy} ${tx+150},${ty} ${tx+69},${ty}`}
+    return `<path data-e="${a}-${b}" d="${dd}"/>`}).join("")}
+draw();addEventListener("resize",draw);
 const SL={ok:["Working","ok"],part:["Partially implemented","part"],plan:["Planned","plan"]};
-function pick(i,keepBeam){const n=N[i];$$(".nd").forEach((b,j)=>b.classList.toggle("on",j===i));
-  const [lab,cls]=SL[n.st];
+function pick(k){const n=N[k];$$(".cn").forEach(b=>b.classList.toggle("on",b.dataset.k===k));const [lab,cls]=SL[n.st];
   $("#dp").innerHTML=`<div class="dpanel"><span class="tag ${cls}">${lab}</span><h2>${esc(n.k)}</h2><p class="what">${esc(n.what)}</p><div class="kv"><div><b>How it works</b><p>${esc(n.how)}</p></div><div class="lim"><b>Honest limit</b><p>${esc(n.lim)}</p></div></div></div>`;
-  $("#side").innerHTML=`<div class="dpanel"><b style="font:600 11.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--pu2)">Where it lives</b><div class="mods" style="margin:10px 0 18px">${n.mods.map(m=>`<span>${esc(m)}</span>`).join("")}</div>${n.facts.map(f=>`<div class="row"><span>${esc(f[0])}</span><b>${esc(f[1])}</b></div>`).join("")}</div>`;
-  if(!keepBeam)$("#beam").style.width=(i/(N.length-1)*94)+"%"}
-let tracing=false;
+  $("#side").innerHTML=`<div class="dpanel"><b style="font:600 11.5px Inter;letter-spacing:.1em;text-transform:uppercase;color:var(--pu2)">Where it lives</b><div class="mods" style="margin:10px 0 18px">${n.mods.map(m=>`<span>${esc(m)}</span>`).join("")}</div>${n.facts.map(f=>`<div class="row"><span>${esc(f[0])}</span><b>${esc(f[1])}</b></div>`).join("")}</div>`}
+const TRACE=["ui","api","auth","qp","recall","ctx","groq","verifier","final","feedback"];
+let tracing=false;const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 $("#run").onclick=async()=>{if(tracing)return;tracing=true;$("#run").textContent="Tracing…";
-  for(let i=0;i<N.length;i++){pick(i);$$(".nd")[i].classList.add("lit");await new Promise(r=>setTimeout(r,1100))}
-  $("#run").textContent="▶ Trace again";tracing=false;setTimeout(()=>$$(".nd").forEach(b=>b.classList.remove("lit")),1500)};
-pick(2);
+  for(let i=0;i<TRACE.length;i++){const k=TRACE[i];pick(k);$(`.cn[data-k="${k}"]`).classList.add("lit");
+    const pairs=E.filter(([a,b])=>b===k&&TRACE.slice(0,i).includes(a));if(k==="recall"){const d=$(`#svg path[data-e="db-recall"]`);d&&d.classList.add("lit")}
+    pairs.forEach(([a,b])=>{const e=$(`#svg path[data-e="${a}-${b}"]`);e&&e.classList.add("lit")});await sleep(1100)}
+  $("#run").textContent="▶ Trace again";tracing=false;setTimeout(()=>{$$(".cn.lit").forEach(b=>b.classList.remove("lit"));$$("#svg path.lit").forEach(b=>b.classList.remove("lit"))},1600)};
+pick("recall");
 </script></body></html>
