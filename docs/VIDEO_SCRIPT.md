@@ -16,39 +16,39 @@ Rehearse the whole flow three times. Read every number from `docs/EVALUATION.md`
 
 ### 1. Intro (0:00 to 0:20)
 
-*Screen: the Control Room, an alarm already selected: M-91, compressor overcurrent, supply normal.*
+*Screen: the Home page, slowly scrolling past the headline and the "Same alarm. Same people. One had the notebook." section.*
 
-> "This is SiteMemory. When a service technician visits a machine, what the company knows about it is scattered across job cards, chat threads and the heads of people who may have left. SiteMemory is a team of agents on one shared Hindsight memory that remembers every repair, including the ones that failed, and checks itself against the raw records."
+> "A technician drives forty minutes to a rooftop unit, resets it, tops up the gas, and it trips again. The part was in the warehouse, and the person who knew has left. SiteMemory is a crew of four agents on one shared Hindsight memory that remembers every repair, including the ones that failed, and checks itself against the raw job cards."
 
-### 2. The problem without memory (0:20 to 0:45)
+### 2. The live demo, act by act (0:20 to 2:50)
 
-*Screen: press Run both paths. Point at the left column as it fills.*
+*Screen: Live demo page. Say "act" and the number each time you scroll to the next one; the page is built in these six acts.*
 
-> "Here is one alarm, worked two ways with the same agents and the same model. On the left, no memory. The dispatcher tries a remote reset because nothing says it won't work. The diagnostician guesses at a condenser coil. The verifier has no records, so it passes the generic plan through. Ravi would arrive with a coil cleaner and no inverter board."
+**Act 1 and 2, input and the mesh (0:20 to 1:00).** *Pick the M-91 compressor alarm, leave the drill on "Everything up", press "Send the alarm into the mesh". Keep the mesh diagram on screen.*
 
-### 3. Live demo (0:45 to 2:35)
+> "An alarm comes in from a machine. Watch the mesh. The Dispatcher decides remote fix or technician from the alarm log: remote resets cleared none of the last five, so it sends a technician. The Diagnostician recalls this machine, its model family and the site. The Parts agent decides what goes in the van. Each dot you see is a hand-off in the Band room, and each coloured line to the bank is a real Hindsight recall, reflect or retain, which the receipt on the right records."
 
-**3a. Recall, with the evidence (0:45 to 1:15).** *Right column, then the memory panel.*
+**Act 3, with and without, and the veto (1:00 to 1:40).** *Scroll to the two paths. Point at the red VETO stamp.*
 
-> "On the right, the same agents on the shared Hindsight bank. Watch the panel on the far right: every recall, reflect and retain lights up. The dispatcher finds that remote resets cleared none of the last five overcurrent alarms, so it sends a technician. The diagnostician shows its evidence: how many attempts, how many verified, the success rate and its interval, and it says plainly when that is a weak signal."
+> "On the left the same agents with no records: reset the breaker, clean the coil, and it comes back. On the right, the shared memory. The Diagnostician's first idea is the usual fix, the contactor. The Verifier reads only the raw visit records and vetoes it: on units from 2023 that fix failed four times out of four, and the inverter board is what worked. The agents revise, it checks again and approves. The simulated result: fixed first time, against a return visit."
 
-**3b. The Verifier vetoes (1:15 to 1:50).** *Point at the red VETO bubbles.*
+**Act 4, when something breaks (1:40 to 2:05).** *Scroll up, choose the "Hindsight down" drill, send the alarm again. Point at the chip that turns yellow and the log line.*
 
-> "Now the part I care about. The diagnostician's first idea is the usual fix, replacing the contactor. The verifier reads only the raw visit records and vetoes it: on units installed from 2023 that fix has failed four times out of four, and the board was what worked. It also vetoes the relay board, which past visits replaced on a hunch and which never fixed anything. The agents revise, the verifier checks again and approves. Every claim links to exact past visits."
+> "Now I switch Hindsight off for this run. The agents notice, fall back to a local memory kept in step, say so on screen, and still finish the job. The same goes for Band, where the agents hand off in-process, and for the main model, where the chain moves to the next one. If every model is down, the Diagnostician and Parts agent fall back to ranking by the verified record, and the Verifier still checks the result."
 
-**3c. The consequence (1:50 to 2:10).** *Point at the two result cards and the comparison strip.*
+**Act 5, it learns (2:05 to 2:30).** *Click "Log: the recommended fix failed", show the retained record and the counts, then "Brief the same alarm again".*
 
-> "The same alarm, simulated: with no memory it ends in a return visit, two visits and twice the cost; with memory it is fixed first time. Everything labelled simulated is a replay of a synthetic history, not a field result."
+> "Now the fix does not hold on site. That visit is retained to the bank, the failed count goes up, and I ask again: the briefing changes with the evidence. Failures are remembered as carefully as fixes. By voice, the technician does the same from the phone: Whisper, structure, confirm, retain."
 
-**3d. Retain: it learns (2:10 to 2:35).** *Click "Send the briefing to the technician's phone", tap the mic, speak a short report, confirm.*
+**Act 6, how accurate (2:30 to 2:50).** *Scroll to the bars and the learning curve.*
 
-> "On the phone, the briefing. I log the visit by voice: Whisper transcribes it, the model structures it, and nothing is saved until I confirm. Failures are retained as carefully as fixes, and the memory panel lights up on the retain. Next time, this visit is part of what every agent remembers."
+> "And we measured it, without letting the future leak in. We replayed the whole history in date order, tuned on training machines and scored the machines we held out. [Read the exact numbers from EVALUATION.md here, including what could not be run.] It is a small synthetic dataset, so the caveats are written next to the numbers."
 
-### 4. Takeaway (2:35 to 3:00)
+### 3. Takeaway (2:50 to 3:00)
 
-*Screen: Dashboard, "Does memory actually help?", then the watchlist.*
+*Screen: the Home page call to action.*
 
-> "And we measured it, without letting the future leak in. We replayed the whole history in date order, tuned on training machines, and scored the machines we held out: predicted first-time fix [read from EVALUATION.md: no memory X%, best arm Y%, with its interval]. It is a small synthetic dataset, so the caveats are written next to the numbers, including what we could not run. Every visit makes SiteMemory smarter, and the knowledge stays when a technician leaves."
+> "Every visit makes the next one better, and the knowledge stays when a technician leaves."
 
 ## Do not
 
