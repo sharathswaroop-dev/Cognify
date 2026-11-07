@@ -12,43 +12,35 @@ Rehearse the whole flow three times. Read every number from `docs/EVALUATION.md`
 - Do-not-disturb on, headset microphone, other tabs closed. Keep `docs/screenshots/` open as a fallback if the network drops.
 - Say "held-out", "simulated" and "weak signal" exactly as the UI shows them. Never use the word that names the event type.
 
-## Script
+## Script (about 2.5 minutes, four scenes: the page follows the same order)
 
-### 1. Intro (0:00 to 0:20)
+Click the numbered steps at the top of the page (Intro, Problem, Demo, Wrap-up), or the big buttons. Type your name into "Hi, I'm ___" before you start.
 
-*Screen: the Home page, slowly scrolling past the headline and the "Same alarm. Same people. One had the notebook." section.*
+### 1. Intro (0:00 to 0:30)
 
-> "A technician drives forty minutes to a rooftop unit, resets it, tops up the gas, and it trips again. The part was in the warehouse, and the person who knew has left. SiteMemory is a crew of four agents on one shared Hindsight memory that remembers every repair, including the ones that failed, and checks itself against the raw job cards."
+*Screen: Intro scene. The animated diagram: four agents around one shared memory.*
 
-### 2. The live demo, act by act (0:20 to 2:50)
+> "Hi, I'm [name]. This is SiteMemory: a crew of four AI agents for HVAC field service. They share one Hindsight memory of every repair, including the ones that failed, and a Verifier checks them before a technician drives out. I built it because the person who knew how to fix a machine has usually left."
 
-*Screen: Live demo page. Say "act" and the number each time you scroll to the next one; the page is built in these six acts.*
+### 2. The problem (0:30 to 1:00)
 
-**Act 1 and 2, input and the mesh (0:20 to 1:00).** *Pick the M-91 compressor alarm, leave the drill on "Everything up", press "Send the alarm into the mesh". Keep the mesh diagram on screen.*
+*Screen: Problem scene. Press "Run it with no memory".*
 
-> "An alarm comes in from a machine. Watch the mesh. The Dispatcher decides remote fix or technician from the alarm log: remote resets cleared none of the last five, so it sends a technician. The Diagnostician recalls this machine, its model family and the site. The Parts agent decides what goes in the van. Each dot you see is a hand-off in the Band room, and each coloured line to the bank is a real Hindsight recall, reflect or retain, which the receipt on the right records."
+> "Same alarm, same agents, but no memory. It tries a remote reset, checks the wrong thing, and sends a plan that ends in a return visit: two visits, five hundred dollars, two days of downtime. That is the mistake a technician who remembered would not make."
 
-**Act 3, with and without, and the veto (1:00 to 1:40).** *Scroll to the two paths. Point at the red VETO stamp.*
+### 3. The demo (1:00 to 2:00)
 
-> "On the left the same agents with no records: reset the breaker, clean the coil, and it comes back. On the right, the shared memory. The Diagnostician's first idea is the usual fix, the contactor. The Verifier reads only the raw visit records and vetoes it: on units from 2023 that fix failed four times out of four, and the inverter board is what worked. The agents revise, it checks again and approves. The simulated result: fixed first time, against a return visit."
+*Screen: Demo scene. Press "Send the alarm into the mesh". Keep the graph and the memory receipt on screen.*
 
-**Act 4, when something breaks (1:40 to 2:05).** *Scroll up, choose the "Hindsight down" drill, send the alarm again. Point at the chip that turns yellow and the log line.*
+> "Now the same alarm, with memory. Watch the graph: the Dispatcher searches past alarms, the Diagnostician searches this machine and its model family, and every search shows up live on the right as a recall. [Click the Diagnostician.] This is how it searched: the question, the tags that must all match, and the visits that came back. [If a veto happened:] The Verifier read the raw job records and said no to the usual fix, because on newer units it failed four times out of four; the agent searched again and revised. [Scroll to the correction trail.] Now the fix fails on site. [Click 'Log: the recommended fix failed'.] That visit is retained: attempts go up, the failed count goes from zero to one. [Click 'Brief the same alarm again'.] Same alarm, and the briefing has changed, because the memory has."
 
-> "Now I switch Hindsight off for this run. The agents notice, fall back to a local memory kept in step, say so on screen, and still finish the job. The same goes for Band, where the agents hand off in-process, and for the main model, where the chain moves to the next one. If every model is down, the Diagnostician and Parts agent fall back to ranking by the verified record, and the Verifier still checks the result."
+Optional, 10 seconds: choose **Break something first: Hindsight**, send the alarm again, and point at the yellow backup line: it falls back to local memory and still solves it.
 
-**Act 5, it learns (2:05 to 2:30).** *Click "Log: the recommended fix failed", show the retained record and the counts, then "Brief the same alarm again".*
+### 4. Wrap-up (2:00 to 2:30)
 
-> "Now the fix does not hold on site. That visit is retained to the bank, the failed count goes up, and I ask again: the briefing changes with the evidence. Failures are remembered as carefully as fixes. By voice, the technician does the same from the phone: Whisper, structure, confirm, retain."
+*Screen: Wrap-up scene.*
 
-**Act 6, how accurate (2:30 to 2:50).** *Scroll to the bars and the learning curve.*
-
-> "And we measured it, without letting the future leak in. We replayed the whole history in date order, tuned on training machines and scored the machines we held out. [Read the exact numbers from EVALUATION.md here, including what could not be run.] It is a small synthetic dataset, so the caveats are written next to the numbers."
-
-### 3. Takeaway (2:50 to 3:00)
-
-*Screen: the Home page call to action.*
-
-> "Every visit makes the next one better, and the knowledge stays when a technician leaves."
+> "The takeaway: memory is not enough. An agent also has to find out it was wrong. What surprised me: remembering more made it worse until something checked it. [Read the numbers shown, exactly as on screen, including 'simulated' and anything marked 'not run'.]"
 
 ## Do not
 
