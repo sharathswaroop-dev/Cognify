@@ -7,27 +7,35 @@
 <style>
 html,body{height:100%;overflow:hidden}
 #app{height:100vh;display:flex;flex-direction:column;position:relative;z-index:1}
-.stage{flex:1;min-height:0;margin:14px 22px 0;position:relative;border:1px solid var(--line);border-radius:24px;background:radial-gradient(ellipse at 50% 40%,rgba(139,92,246,.14),transparent 65%),#080d20;overflow:hidden}
-.canvas{position:absolute;inset:70px 0 0 0;background-image:radial-gradient(rgba(143,153,194,.17) 1px,transparent 1px);background-size:24px 24px}
-.canvas svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.canvas path{fill:none;stroke:#2a3568;stroke-width:3;transition:stroke .4s,opacity .4s}
-.canvas path.on{stroke:var(--pu2)}.canvas path.run{stroke:var(--cy);filter:drop-shadow(0 0 6px var(--cy));stroke-dasharray:9 9;animation:dash .5s linear infinite}
-.canvas path.skip{opacity:.16;stroke-dasharray:3 8}
-@keyframes dash{to{stroke-dashoffset:-18}}
-.top{position:absolute;left:18px;right:18px;top:14px;z-index:5;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.stage{flex:1;min-height:0;margin:14px 22px 0;position:relative;border:1px solid var(--line);border-radius:24px;background:radial-gradient(ellipse at 40% 40%,rgba(139,92,246,.14),transparent 65%),#080d20;overflow:hidden}
+.stage:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(143,153,194,.15) 1px,transparent 1px);background-size:24px 24px}
+.top{position:absolute;left:18px;right:18px;top:14px;z-index:6;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .top input{flex:1;min-width:220px;background:#070b1b;border:1px solid var(--line);border-radius:99px;padding:12px 18px;color:var(--tx);font:500 14.5px "Inter";outline:none}.top input:focus{border-color:var(--pu)}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:4px;background:#070b1b}.seg button{border:0;background:none;color:var(--mu);padding:9px 20px;border-radius:99px;font:600 14px "Inter";cursor:pointer;transition:.2s}.seg button.on{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}
-.seg button[data-m="off"].on{background:linear-gradient(135deg,#475085,#2c3560)}
-.fn{position:absolute;transform:translate(-50%,-50%);width:168px;background:linear-gradient(180deg,#151e44,#0f1731);border:1px solid #28336a;border-radius:16px;padding:13px 15px 14px;transition:.35s var(--ease)}
-.fn b{display:flex;align-items:center;gap:9px;font:600 14.5px "Inter"}.fn b i{width:10px;height:10px;border-radius:50%;background:#394272;flex:none}
-.fn small{display:block;font:500 12px "JetBrains Mono";color:var(--mu);margin-top:6px;min-height:16px}
-.fn.mem{border-color:rgba(139,92,246,.7);background:linear-gradient(180deg,#221a55,#140f36)}.fn.off{opacity:.2;filter:grayscale(1)}
+.seg button[data-m="off"].on{background:linear-gradient(135deg,#556,#334)}
+.cvx{position:absolute;inset:74px 0 0 0}
+.lane{position:absolute;left:1.2%;right:1.2%;border-radius:16px;border:1px dashed rgba(143,153,194,.14);transition:opacity .5s}
+.lane b{position:absolute;left:16px;top:-9px;background:#080d20;padding:0 8px;font:600 10.5px "Inter";letter-spacing:.16em;text-transform:uppercase;color:#6f7bb0}
+.lane.a{top:2%;height:27%;background:linear-gradient(90deg,rgba(139,92,246,.09),transparent)}.lane.b{top:35%;height:29%;background:linear-gradient(90deg,rgba(34,211,238,.07),transparent)}.lane.c{top:71%;height:26%;background:linear-gradient(90deg,rgba(251,191,36,.07),transparent)}
+.lane.dim{opacity:.22}
+svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+svg path.e{fill:none;stroke:#2c3870;stroke-width:2.6;transition:stroke .4s,opacity .4s}
+svg path.e.on{stroke:#6d5bd0}svg path.e.skip{opacity:.13;stroke-dasharray:3 8}
+svg path.e.run{stroke:var(--cy);filter:drop-shadow(0 0 6px var(--cy));stroke-dasharray:9 9;animation:dash .5s linear infinite;stroke-width:3.2}
+@keyframes dash{to{stroke-dashoffset:-18}}
+svg circle.pk{fill:var(--pu2);opacity:.85;filter:drop-shadow(0 0 4px var(--pu2))}
+.fn{position:absolute;transform:translate(-50%,-50%);width:164px;background:linear-gradient(180deg,#151e44,#0f1731);border:1px solid #28336a;border-radius:16px;padding:12px 14px 13px;transition:.35s var(--ease);z-index:3}
+.fn b{display:flex;align-items:center;gap:9px;font:600 14px "Inter"}.fn b i{width:10px;height:10px;border-radius:50%;background:#394272;flex:none}
+.fn small{display:block;font:500 11.5px "JetBrains Mono";color:var(--mu);margin-top:6px;min-height:15px}
+.fn.mem{border-color:rgba(139,92,246,.7);background:linear-gradient(180deg,#221a55,#140f36)}
+.fn.big{width:210px}.fn.big small{white-space:normal}
+.fn.off{opacity:.18;filter:grayscale(1)}
 .fn.run{border-color:var(--cy);box-shadow:0 0 0 4px rgba(34,211,238,.15),0 0 34px rgba(34,211,238,.45)}.fn.run b i{background:var(--cy)}
 .fn.done b i{background:var(--ok)}.fn.err{border-color:var(--er)}.fn.err b i{background:var(--er)}
-.flout{height:150px;margin:14px 22px 18px;border:1px solid var(--line);border-radius:18px;padding:16px 20px;background:linear-gradient(180deg,var(--card2),var(--card));font-size:14.5px;white-space:pre-wrap;overflow:auto;color:#cfd6f2}
+.flout{height:140px;margin:14px 22px 18px;border:1px solid var(--line);border-radius:18px;padding:14px 20px;background:linear-gradient(180deg,var(--card2),var(--card));font-size:14.5px;white-space:pre-wrap;overflow:auto;color:#cfd6f2}
 .flout h5{font:600 11px "Inter";letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px;color:var(--pu2)}
 .rec{border:1px solid var(--line);border-radius:10px;padding:8px 12px;margin-top:8px;font-size:12.5px;color:var(--mu);background:rgba(34,211,238,.04)}.rec b{color:var(--cy);font-family:"JetBrains Mono";font-weight:500}
-@media(max-width:1000px){html,body{overflow:auto}#app{height:auto}.stage{height:620px;flex:none}.fn{width:120px}}
+@media(max-width:1000px){html,body{overflow:auto}#app{height:auto}.stage{height:640px;flex:none}.fn{width:118px}.fn.big{width:140px}}
 </style></head><body>
 <div id="spot"></div><div id="grid"></div>
 <div id="app">
@@ -35,26 +43,40 @@ html,body{height:100%;overflow:hidden}
 <div class="stage">
   <div class="top"><div class="seg" id="fseg"><button data-m="on" class="on">Memory ON</button><button data-m="off">Memory OFF</button></div>
     <input id="fq" value="Why does M-07 keep tripping on high pressure?" maxlength="300"><button class="btn" id="frun">Run →</button></div>
-  <div class="canvas" id="cv"><svg id="fsvg"></svg></div>
+  <div class="cvx" id="cv">
+    <div class="lane a" id="la"><b>Company memory</b></div><div class="lane b" id="lb"><b>Answer path</b></div><div class="lane c" id="lc"><b>Without memory</b></div>
+    <svg id="fsvg"></svg>
+  </div>
 </div>
 <div class="flout" id="flout"><h5>Output</h5>Press Run.</div>
 </div>
 <script src="/static/site.js"></script>
 <script>
 $("#navmount").outerHTML=nav("m");
-/* ---------- n8n-style flow: chat input -> search -> memory store (and back) -> LLM -> answer ---------- */
-const FN={q:[9,50,"Chat input"],router:[21,50,"Router"],search:[38,20,"Search memory",1],store:[60,20,"Memory store",1],llm:[60,72,"Groq LLM"],label:[78,72,"Evidence label",1],answer:[91,50,"Answer"]};
-const SUB={store:"incidents · documents · files · corrections"};
-const FE={on:[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["llm","label"],["label","answer"]],off:[["q","router"],["router","llm"],["llm","answer"]]};
-const ALLE=[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["router","llm"],["llm","label"],["label","answer"],["llm","answer"]];
-const DY={"search-store":-13,"store-search":13};
+/* chat input -> router -> search -> memory store (and back) -> context -> Groq -> label -> answer;  OFF: router -> Groq (no memory) -> answer */
+const FN={q:[7,50,"Chat input"],router:[21,50,"Router"],search:[36,50,"Search memory",1],store:[36,16,"Hindsight store",1,1],ctx:[51,50,"Context builder",1],llm:[66,50,"Groq LLM"],label:[80,50,"Evidence label",1],answer:[93,50,"Answer"],feedback:[80,16,"Feedback & learning",1],plain:[56,84,"Groq, no memory"]};
+const SUB={store:"incidents · documents · files · corrections",feedback:"thumbs-down → retained"};
+const FE={on:[["q","router"],["router","search"],["search","store"],["store","search"],["search","ctx"],["ctx","llm"],["llm","label"],["label","answer"]],off:[["q","router"],["router","plain"],["plain","answer"]]};
+const DECOR=[["answer","feedback"],["feedback","store"]];                      /* the learning loop: drawn, not executed by a run */
+const ALLE=[["q","router"],["router","search"],["search","store"],["store","search"],["search","ctx"],["ctx","llm"],["llm","label"],["label","answer"],["router","plain"],["plain","answer"],...DECOR];
+const DY={"search-store":0,"store-search":0},DX={"search-store":-16,"store-search":16};
 let FM="on";const cv=$("#cv");
-for(const [k,v] of Object.entries(FN)){const d=document.createElement("div");d.className="fn"+(v[3]?" mem":"");d.dataset.f=k;d.style.left=v[0]+"%";d.style.top=v[1]+"%";d.innerHTML=`<b><i></i>${v[2]}</b><small></small>`;cv.appendChild(d)}
-function fpos(k){const r=cv.getBoundingClientRect();return [FN[k][0]/100*r.width,FN[k][1]/100*r.height]}
-function fdraw(){const r=cv.getBoundingClientRect();const svg=$("#fsvg");svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
-  svg.innerHTML=ALLE.map(([a,b])=>{const dy=DY[a+"-"+b]||0;let [x1,y1]=fpos(a),[x2,y2]=fpos(b);y1+=dy;y2+=dy;const fwd=x2>=x1;const x1b=x1+(fwd?84:-84),x2b=x2+(fwd?-84:84),m=(x1b+x2b)/2;return `<path data-e="${a}-${b}" d="M${x1b},${y1} C${m},${y1} ${m},${y2} ${x2b},${y2}"/>`}).join("");fmode()}
-function fmode(){const act=FE[FM].map(e=>e.join("-"));$$("#fsvg path").forEach(p=>{p.classList.remove("run");const on=act.includes(p.dataset.e);p.classList.toggle("on",on);p.classList.toggle("skip",!on)});
-  $$(".fn").forEach(n=>{const used=FE[FM].some(e=>e.includes(n.dataset.f));n.classList.toggle("off",!used);n.classList.remove("run","done","err");n.querySelector("small").textContent=FM==="on"?(SUB[n.dataset.f]||""):""})}
+for(const [k,v] of Object.entries(FN)){const d=document.createElement("div");d.className="fn"+(v[3]?" mem":"")+(v[4]?" big":"");d.dataset.f=k;d.style.left=v[0]+"%";d.style.top=v[1]+"%";d.innerHTML=`<b><i></i>${v[2]}</b><small></small>`;cv.appendChild(d)}
+function box(k){const r=cv.getBoundingClientRect(),el=$(`.fn[data-f="${k}"]`);return {x:FN[k][0]/100*r.width,y:FN[k][1]/100*r.height,w:el.offsetWidth/2,h:el.offsetHeight/2}}
+function fdraw(){const r=cv.getBoundingClientRect();const svg=$("#fsvg");svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);let out="";
+  ALLE.forEach(([a,b],i)=>{const A=box(a),B=box(b),key=a+"-"+b,ox=DX[key]||0;let x1=A.x,y1=A.y,x2=B.x,y2=B.y,d;
+    const dx=x2-x1,dy=y2-y1,horiz=Math.abs(dx)>Math.abs(dy)*.7;
+    if(horiz){x1+=dx>0?A.w:-A.w;x2-=dx>0?B.w:-B.w;const m=(x1+x2)/2;d=`M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2}`}
+    else{x1+=ox;x2+=ox;y1+=dy>0?A.h:-A.h;y2-=dy>0?B.h:-B.h;const m=(y1+y2)/2;d=`M${x1},${y1} C${x1},${m} ${x2},${m} ${x2},${y2}`}
+    out+=`<path class="e" id="p${i}" data-e="${key}" d="${d}"/>`});
+  svg.innerHTML=out;fmode()}
+function fmode(){const act=FE[FM].map(e=>e.join("-")),dec=DECOR.map(e=>e.join("-"));
+  $$("#fsvg path").forEach(p=>{p.classList.remove("run");const on=act.includes(p.dataset.e)||(FM==="on"&&dec.includes(p.dataset.e));p.classList.toggle("on",on);p.classList.toggle("skip",!on)});
+  $$("#fsvg circle.pk").forEach(c=>c.remove());
+  const svg=$("#fsvg");ALLE.forEach((e,i)=>{const key=e.join("-"),on=act.includes(key)||(FM==="on"&&dec.includes(key));if(!on)return;
+    svg.insertAdjacentHTML("beforeend",`<circle class="pk" r="3.6"><animateMotion dur="${(3+(i%5)*.7).toFixed(1)}s" begin="${(i*.3).toFixed(2)}s" repeatCount="indefinite"><mpath href="#p${i}"/></animateMotion></circle>`)});
+  $$(".fn").forEach(n=>{const k=n.dataset.f,used=FE[FM].some(e=>e.includes(k))||(FM==="on"&&k==="feedback");n.classList.toggle("off",!used);n.classList.remove("run","done","err");n.querySelector("small").textContent=(FM==="on"||k==="plain")?(SUB[k]||""):""});
+  $("#la").classList.toggle("dim",FM==="off");$("#lc").classList.toggle("dim",FM==="on");$("#lb").classList.remove("dim")}
 fdraw();addEventListener("resize",fdraw);
 $$("#fseg button").forEach(b=>b.onclick=()=>{FM=b.dataset.m;$$("#fseg button").forEach(x=>x.classList.toggle("on",x===b));fmode();$("#flout").innerHTML="<h5>Output</h5>Press Run."});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
@@ -65,18 +87,17 @@ $("#frun").onclick=async()=>{const q=$("#fq").value.trim();if(q.length<3)return;
   let r;try{r=await post("/api/compare",{question:q})}catch(err){$("#flout").innerHTML="<h5>Output</h5>Could not run: "+esc(err.message);btn.disabled=false;return}
   const path=FE[FM],on=r.on,off=r.off,n=(on.sources||[]).length;
   for(const [a,b] of path){let info="",bad=false;
-    if(b==="router")info=FM==="on"?"needs history → memory":"skips memory";
+    if(b==="router")info=FM==="on"?"needs history":"skips memory";
     else if(b==="search"&&a==="router")info="query sent";
-    else if(b==="store")info=`${n} record${n===1?"":"s"} found · ${r.backend}`;
-    else if(b==="search")info=`${n} back from store`;
-    else if(b==="llm")info=FM==="on"?(on.found?"writes from the records":"no records, general"):(off.answer?off.ms+" ms · no memory":"no model answered");
-    else if(b==="label")info=on.basis?({strong:"well supported",partial:"partly supported"}[on.basis.level]||"not proven"):"no sources";
+    else if(b==="store")info=`${n} record${n===1?"":"s"} · ${r.backend}`;
+    else if(b==="search")info=`${n} back`;
+    else if(b==="ctx")info=n?"records → prompt":"nothing to add";
+    else if(b==="llm")info=on.found?"writes from records":"general only";
+    else if(b==="plain"){info=off.answer?off.ms+" ms":"no model";bad=!off.answer}
+    else if(b==="label")info=on.basis?({strong:"well supported",partial:"partly supported"}[on.basis.level]||"from records"):"no sources";
     else if(b==="answer")info=FM==="on"?(on.found?"cited":"says: none"):"uncited";
-    bad=(b==="llm"&&FM==="off"&&!off.answer);
     await fstep(a,b,info,bad)}
   const o=FM==="on"?on:off;const txt=o.answer?plain(o.answer):(o.error||"No answer.");
-  $("#flout").innerHTML=`<h5>${FM==="on"?"Memory ON · answered from this company's records":"Memory OFF · normal AI response, no company records"}</h5>`+esc(txt)+(FM==="on"&&n?`<div style="margin-top:12px">${on.sources.slice(0,3).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,140))}…</div>`).join("")}</div>`:"");
+  $("#flout").innerHTML=`<h5>${FM==="on"?"Memory ON · answered from this company's records":"Memory OFF · normal AI response, no company records"}</h5>`+esc(txt)+(FM==="on"&&n?`<div style="margin-top:10px">${on.sources.slice(0,2).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,120))}…</div>`).join("")}</div>`:"");
   btn.disabled=false};
-
-
 </script></body></html>

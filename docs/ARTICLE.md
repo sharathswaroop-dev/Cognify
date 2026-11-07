@@ -9,7 +9,7 @@ Then share the link on r/llmdevs, r/sideproject, r/aiagents or r/aimemory. Requi
 
 A technician drives forty minutes to a rooftop AC unit that keeps tripping. He resets the breaker, tops up the gas, and watches it trip again. The real cause was a burnt part that sat in the warehouse the whole time. The person who knew had fixed this unit twice and had since left the company.
 
-I built SiteMemory so that second trip doesn't happen. It is a team of agents for field-service companies that remember every machine, site and repair, and, the part I spent the most time on, **check their own memory before they recommend anything**.
+I built Cognify so that second trip doesn't happen. It is a team of agents for field-service companies that remember every machine, site and repair, and, the part I spent the most time on, **check their own memory before they recommend anything**.
 
 ## The problem, concretely
 
@@ -53,7 +53,7 @@ The alarm: a 2024 unit, compressor overcurrent, supply voltage normal. With no m
 
 It also vetoes a relay board that past visits had replaced on a hunch: *used in 4 visits on comparable units, fixed the fault in 0.* The Diagnostician revises, and says exactly how sure it is: *n=4: 3 verified, 1 not yet stable, 0 failed; verified rate 75% (95% 30-95%); weak signal.* The Verifier approves. The simulated outcome: fixed first time, against a return visit.
 
-![The mesh and the memory receipt](screenshots/02-live-demo-mesh.png)
+![The mesh and the memory receipt](screenshots/05-agents.png)
 
 ## Did it help? A replay with no leakage
 

@@ -1,6 +1,6 @@
 # Running the agents on Band
 
-SiteMemory's four agents (Dispatcher, Diagnostician, Parts agent, Verifier) hand work to each other in a
+Cognify's four agents (Dispatcher, Diagnostician, Parts agent, Verifier) hand work to each other in a
 [Band](https://band.ai) room. Each handoff is a real Band message that mentions the receiving agent; the receiver reads
 it back from Band, acknowledges it, and only then acts on it. Without Band credentials the same four agents run
 in-process, so nothing about the demo depends on Band being reachable.
@@ -39,8 +39,8 @@ run is the setup below; if a field name differs from the spec, the fallback keep
 
    `BAND_BASE_URL` defaults to `https://app.band.ai/api/v1`.
 5. Restart the app. The header chip shows `Band: connected`.
-6. Run an alarm on the Live demo page. The with-memory path creates a room titled `SiteMemory <alarm> <machine> <code>`, adds the four agents, and
-   posts every handoff. Open **Rooms** in the Band app to watch the same conversation. In SiteMemory, handoff bubbles
+6. Run an alarm on the Live demo page. The with-memory path creates a room titled `Cognify <alarm> <machine> <code>`, adds the four agents, and
+   posts every handoff. Open **Rooms** in the Band app to watch the same conversation. In Cognify, handoff bubbles
    are tagged `via Band` when delivery through Band succeeded and `in-process` when it fell back.
 
 All four keys are required. With fewer, the app runs in-process and says so.

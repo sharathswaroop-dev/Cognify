@@ -1,4 +1,4 @@
-# SiteMemory: full context from the planning conversation
+# Cognify: full context from the planning conversation
 
 Everything decided before coding. Read this, then `Problem_Statement.pdf` and `Content_Guide.pdf` in this folder, then `../HANDOFF.md` and `../README.md`.
 
@@ -38,7 +38,7 @@ Everything decided before coding. Read this, then `Problem_Statement.pdf` and `C
 - Video: one per team, 2-5 minutes, 1080p, screen recording with voiceover (talking head optional). Structure: intro 30s, the problem without memory 30s, live demo showing retain/recall and the before/after 2-3 min, takeaway 30s. Post publicly on YouTube with a Nano Banana thumbnail.
 - The content contest needs every member to submit an article and a post, plus one team video.
 
-## 3. Why SiteMemory (idea selection)
+## 3. Why Cognify (idea selection)
 - First pick was an Incident Response agent, rejected after research. At least 8 public Hindsight projects already did it (SentinelAI, RecallOps, HindsightOps, Pulse, IncidentRecall, OpsMind and others), and PagerDuty sells an SRE agent with memory. That would score badly on innovation.
 - Also already done: Accounts Payable (the "Finley" invoice agent) and insurance claims (Hindsight's own ClaimsIQ cookbook demo).
 - Chosen: **field service technician agent** (HVAC, elevators, generators, medical equipment). It's not on the PDF list, and no Hindsight project doing it was found.
@@ -49,14 +49,14 @@ Everything decided before coding. Read this, then `Problem_Statement.pdf` and `C
 - Technician view (phone frame): job, then a memory briefing (likely cause, DON'T REPEAT, DO FIRST, BRING parts, site notes), a "What Hindsight recalled" panel, and a "Log this visit" form that retains to memory.
 - "Memory off vs on" side-by-side view for the same job (this is the proof for the 25% memory score).
 - Manager dashboard: first-time-fix rate, repeat visits, attempts that keep failing, machine history timeline.
-- Band AI: technicians can ask SiteMemory in a Band chat (still to build).
+- Band AI: technicians can ask Cognify in a Band chat (still to build).
 
 ## 5. Demo story (60-90s)
 1. Problem: "Meet Ravi, a new technician (joined Oct 2026). Repeat visits cost time, fuel and angry customers."
 2. J-1201, Orion Tech Park Bay 3, Daikin VRV IV M-07. Memory OFF gives generic checks.
 3. Memory ON: "Reset failed on 12 Mar and 19 Aug. Contactor burnt both times (voltage dips ~190V). Carry DK-CTR-24V. Gate code 4471. Call Priya before 10am." Fixed in one visit.
 4. Learning: J-1202 is a new site with no history, but the agent still warns via the same model at other sites. Log a failed attempt, re-brief, and your own visit is now in memory.
-5. Close: "Every visit makes SiteMemory smarter. Knowledge stays when technicians leave."
+5. Close: "Every visit makes Cognify smarter. Knowledge stays when technicians leave."
 Rehearse at least 3 times; the local fallback mode is a backup if the Wi-Fi fails.
 
 ## 6. Accounts and keys

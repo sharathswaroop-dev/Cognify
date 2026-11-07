@@ -10,7 +10,7 @@ characters and checks all of this. Use the numbers from docs/EVALUATION.md exact
 A technician drove 40 minutes, reset a rooftop AC unit, topped up the gas, and watched it trip again.
 The fix was a part in the warehouse. The person who knew had left.
 
-I built SiteMemory: agents on one shared Hindsight memory, plus a Verifier that can say no.
+I built Cognify: agents on one shared Hindsight memory, plus a Verifier that can say no.
 • Without memory: reset it, clean the coil. With memory: replace the inverter board; the usual contactor fix failed 4 of 4 on 2023+ units.
 • It says how sure it is: n, verified rate, interval. Under 5 attempts is a weak signal.
 • Replayed history with no leakage; held-out machines: 0% first-time fix with no memory vs 64% with keyword memory, simulated, 24 incidents.

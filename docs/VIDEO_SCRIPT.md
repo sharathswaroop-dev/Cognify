@@ -20,7 +20,7 @@ Click the numbered steps at the top of the page (Intro, Problem, Demo, Wrap-up),
 
 *Screen: Intro scene. The animated diagram: four agents around one shared memory.*
 
-> "Hi, I'm [name]. This is SiteMemory: a crew of four AI agents for HVAC field service. They share one Hindsight memory of every repair, including the ones that failed, and a Verifier checks them before a technician drives out. I built it because the person who knew how to fix a machine has usually left."
+> "Hi, I'm [name]. This is Cognify: a crew of four AI agents for HVAC field service. They share one Hindsight memory of every repair, including the ones that failed, and a Verifier checks them before a technician drives out. I built it because the person who knew how to fix a machine has usually left."
 
 ### 2. The problem (0:30 to 1:00)
 

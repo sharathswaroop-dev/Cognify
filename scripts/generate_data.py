@@ -1,4 +1,4 @@
-"""Generate the synthetic dataset for SiteMemory (a fictional HVAC contractor in Bengaluru).
+"""Generate the synthetic dataset for Cognify (a fictional HVAC contractor in Bengaluru).
 
 12 sites, 50 machines, ~250 visits over Nov 2025 - Oct 2026, plus alarms with remote-fix outcomes, parts stock and
 demo scenarios. The history deliberately contains the messy things real service logs contain:

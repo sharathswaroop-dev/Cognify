@@ -772,6 +772,13 @@ def architecture_page():
     return FileResponse(FRONTEND / "architecture.html")
 
 
+@app.get("/phone")
+@app.get("/evaluation")
+def legacy_views():
+    """The technician phone (voice logging) and the evaluation dashboard live in the original single-page app."""
+    return FileResponse(FRONTEND / "index.html")
+
+
 @app.get("/memory")
 def memory_page():
     return FileResponse(FRONTEND / "memory.html")

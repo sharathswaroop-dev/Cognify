@@ -1,0 +1,5 @@
+Sample report: Orion Tech Park, Tower B, chilled-water pump P-2
+
+Vibration on pump P-2 rose steadily over three weeks. The motor bearings were checked first and were fine. Shaft alignment was off by 0.4 mm after a pipe support settled. Re-aligning the coupling and re-seating the pipe support brought vibration back to normal. Replacing the bearings, which was the first suggestion, would not have helped.
+
+Recommendation: check alignment and pipe supports before ordering bearings.

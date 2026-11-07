@@ -1,4 +1,4 @@
-"""Memory layer for SiteMemory.
+"""Memory layer for Cognify.
 
 Two backends with the same interface:
   * HindsightMemory - the real thing (Hindsight Cloud or self-hosted), used when HINDSIGHT_API_KEY
@@ -15,6 +15,7 @@ Every memory is tagged so we can recall at three levels:
 """
 from __future__ import annotations
 
+import time
 import asyncio
 import json
 import logging
@@ -234,7 +235,7 @@ class HindsightMemory:
         try:
             self._io.run(self.client.acreate_bank(
                 bank_id,
-                name=f"SiteMemory - {label}",
+                name=f"Cognify - {label}",
                 mission=mission or ("Remember every HVAC service visit: symptoms, what was tried, what failed, what fixed it, "
                                     "parts, and each customer site's access rules, so the next technician fixes it first time."),
             ))
@@ -314,13 +315,24 @@ def build_memory(role: str = "field", bank_id: str | None = None, mission: str |
 class FallbackMemory:
     """Hindsight first, local keyword memory if Hindsight fails (no credits, outage, bad key).
 
-    The first failure opens a circuit: from then on everything is served by the local memory and `reason` says why, so the UI can
-    show it instead of pretending. Every retain also goes to the local memory so the two stay in step."""
+    A failure opens a circuit: for 45 seconds everything is served by the local memory and `reason` says why, so the UI can
+    show it instead of pretending; after that Hindsight is tried again. Every retain also goes to the local memory so the two stay in step."""
 
     def __init__(self, primary, secondary):
         self.primary, self.secondary = primary, secondary
-        self.degraded, self.reason = False, ""
+        self._down, self._t = False, 0.0
+        self.reason = ""
         self.bank_id = getattr(primary, "bank_id", "local")
+
+    COOLDOWN = 45.0          # seconds on the local memory after a failure, then Hindsight is tried again (a gateway timeout should not last until a restart)
+
+    @property
+    def degraded(self) -> bool:
+        return self._down and (time.time() - self._t) < self.COOLDOWN
+
+    @degraded.setter
+    def degraded(self, value: bool) -> None:
+        self._down, self._t = bool(value), (time.time() if value else 0.0)
 
     @property
     def name(self) -> str:

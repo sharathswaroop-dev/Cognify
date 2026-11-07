@@ -1,11 +1,11 @@
-# SiteMemory: handoff for the next Claude session
+# Cognify: handoff for the next Claude session
 
 Read this file and README.md first, then continue from "Next steps".
 
 ## Context
 - Event: "AI Agents That Learn Using Hindsight" (Vectorize). Required: Hindsight memory + Band AI desktop. Online round: judged on the repo, the video and the posts.
 - Judging: Innovation 30%, Hindsight memory use 25%, Technical 20%, UX 15%, Real-world impact 10%.
-- Idea: **SiteMemory**, field-service agents (HVAC) that remember repairs and check themselves. Team brief doc: https://claude.ai/artifact/Mrk5rjy7VrPj3ptquD3ENd; the flow the website follows: https://claude.ai/artifact/KU4zBJ75YTF9b7oJ9NEyjp
+- Idea: **Cognify**, field-service agents (HVAC) that remember repairs and check themselves. Team brief doc: https://claude.ai/artifact/Mrk5rjy7VrPj3ptquD3ENd; the flow the website follows: https://claude.ai/artifact/KU4zBJ75YTF9b7oJ9NEyjp
 
 ## Content rules (from the content guide; breaking them disqualifies)
 - Never use the event-type word (the one in the brief's title) in articles, posts, hashtags, video titles or repo docs. `python scripts/check_content.py` checks this and the length/format rules.

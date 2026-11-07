@@ -1,0 +1,7 @@
+Sample SOP: Daikin VRV IV outdoor unit, error E3 (high-pressure / compressor protection trip)
+
+1. Read the supply voltage at the unit under load. Below about 200 V, suspect the supply or the contactor before the compressor.
+2. Inspect the compressor contactor coil for burn marks and the contacts for pitting. In this fleet the contactor was the root cause far more often than the compressor.
+3. Do not replace the compressor relay board as a first step: on comparable units it replaced the fault without fixing it in every recorded case.
+4. If the trip returns after a new contactor, reseat the inverter board connector before ordering a new inverter PCB, then check the board revision and firmware.
+5. Record every attempt, including the ones that failed, so the next engineer does not repeat them.

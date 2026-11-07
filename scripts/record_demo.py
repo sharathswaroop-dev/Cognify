@@ -85,8 +85,15 @@ def main():
         pg.get_by_text("Try the demo company").click()
         time.sleep(2.5)
         ask(pg, "hi", 8)
-        ask(pg, "why does M-07 keep tripping on high pressure", 18)
-        ask(pg, "how do I reset a router password", 18)
+        ask(pg, "why does M-07 keep tripping on high pressure", 18)       # answered from memory, with the records behind it
+        pg.set_input_files("#cfile", str(ROOT / "docs" / "demo" / "upload_example.txt"))      # upload a document
+        time.sleep(12)
+        ask(pg, "what did the pump report say to check before ordering bearings", 18)
+        ask(pg, "Remember: on the Riverside rooftop units, check the evening supply voltage before blaming the compressor.", 10)   # teach it
+        ask(pg, "what should I check first on the Riverside rooftop units", 18)                   # and it recalls what was just taught
+        pg.locator('button[data-act="up"]').last.click()                                           # feedback on the answer
+        time.sleep(2)
+        ask(pg, "how do I reset a router password", 18)                                           # not in memory: labelled general guidance
         time.sleep(2)
         pg.click("#liblink")                                        # the library: uploads and sample incident records
         time.sleep(5)

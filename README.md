@@ -1,25 +1,29 @@
-# SiteMemory
+# Cognify
 
 **Field-service agents that remember every machine, every site and every repair, check each other against the raw records, and say how sure they are.**
 
 An alarm comes in. Four agents in a [Band](https://band.ai) room (Dispatcher, Diagnostician, Parts agent, Verifier) turn it into a diagnosis, a parts list and a technician briefing, all on **one shared [Hindsight](https://github.com/vectorize-io/hindsight) memory bank**. The Verifier sees only the raw visit records, runs deterministic checks and can veto. The same agents also run with no memory, side by side, so you can see what memory changes.
 
-![SiteMemory architecture](docs/architecture.svg)
+![Cognify architecture](docs/architecture.svg)
 
 | | |
 | --- | --- |
-| ![Home](docs/screenshots/01-home.png) | ![The mesh](docs/screenshots/02-live-demo-mesh.png) |
-| **Home:** the story in one page | **Live demo, the mesh:** hand-offs between the four agents and every Hindsight recall, reflect and retain |
-| ![With and without](docs/screenshots/03-with-and-without.png) | ![Phone](docs/screenshots/04-phone-briefing.png) |
-| **Without vs with memory**, with the memory receipt | **Technician phone:** the briefing, and voice logging that retains |
-| ![Dashboard](docs/screenshots/05-dashboard.png) | |
-| **Dashboard:** replay score, risk watchlist, ROI calculator | |
+| ![Landing](docs/screenshots/01-landing.png) | ![Architecture](docs/screenshots/02-architecture.png) |
+| **Landing:** the problem, the memory layer and a live memory ON/OFF comparison | **Architecture:** every component on one canvas, each marked working, partial or planned |
+| ![Memory ON](docs/screenshots/03-memory-on.png) | ![Memory OFF](docs/screenshots/04-memory-off.png) |
+| **Memory ON:** search goes out to the store, results come back, then the model writes | **Memory OFF:** the same question skips the store and gets a plain model answer |
+| ![Agents](docs/screenshots/05-agents.png) | ![Chat](docs/screenshots/06-chat.png) |
+| **How it works:** people and agents on one map, a real job streaming its hand-offs | **Chat:** answers from the company memory with the records behind them |
+| ![Library](docs/screenshots/07-library.png) | ![Company knowledge](docs/screenshots/08-company-knowledge.png) |
+| **Library:** uploads and sample incident records | **Company knowledge:** who holds which fixes, and what walks out the door |
+| ![Phone](docs/screenshots/09-technician-phone.png) | ![Evaluation](docs/screenshots/10-evaluation.png) |
+| **Technician phone** (`/phone`): the briefing and voice logging that retains | **Evaluation** (`/evaluation`): replay score, risk watchlist, ROI calculator |
 
-*Screenshots were captured on real Hindsight recalls while the Groq free-tier daily token limit was spent, so the agents ran in their no-model backup mode (ranking by the verified record). The Verifier veto path with the language model on is shown in the live demo and covered by the tests.*
+*Screenshots are captured from the running app by `scripts/take_screenshots.py` (sample data, real Hindsight and Groq). The Verifier veto path with the language model on is shown in the live demo and covered by the tests.*
 
 ## The problem
 
-A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. What prevents it (what failed on this unit last time, what finally fixed it, which part to carry, the gate code) lives in job cards, chat threads and the heads of people who leave. And plain "memory" is not enough: a log is full of wrong diagnoses, parts that were replaced on a hunch, fixes that held for three weeks, and fixes that quietly stop working on a newer generation of units. SiteMemory is built for that mess.
+A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. What prevents it (what failed on this unit last time, what finally fixed it, which part to carry, the gate code) lives in job cards, chat threads and the heads of people who leave. And plain "memory" is not enough: a log is full of wrong diagnoses, parts that were replaced on a hunch, fixes that held for three weeks, and fixes that quietly stop working on a newer generation of units. Cognify is built for that mess.
 
 ## What it does
 

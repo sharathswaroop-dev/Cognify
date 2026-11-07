@@ -321,3 +321,26 @@ def test_fallback_memory_fills_the_gap_when_hindsight_answers_with_nothing(tmp_p
     assert found and "capacitor" in found[0].text and mem.gap_fills == 1
     assert mem.recall("completely unrelated quantum gravity", [], 5) == []          # no match, no made-up answer
     assert not mem.degraded                                                           # this is not an outage, just ingestion lag
+
+
+def test_hindsight_is_tried_again_after_the_cooldown(tmp_path):
+    """One gateway timeout must not leave the app on the local memory until a restart."""
+    from memory import FallbackMemory, LocalMemory
+
+    class Flaky:
+        name, bank_id = "hindsight", "t"
+        fail = True
+
+        def recall(self, *a, **k):
+            if self.fail:
+                raise RuntimeError("504 Gateway Timeout")
+            return []
+
+    p = Flaky()
+    mem = FallbackMemory(p, LocalMemory(tmp_path / "l.json"))
+    mem.recall("q", [], 3)
+    assert mem.degraded and "504" in mem.reason          # tripped, and says why
+    mem.COOLDOWN = 0.0                                    # the cooldown has passed
+    p.fail = False
+    mem.recall("q", [], 3)
+    assert not mem.degraded and mem.name == "hindsight"   # back on Hindsight
