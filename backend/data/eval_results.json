@@ -10,25 +10,19 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": true,
-     "top": "performed generic checks: inspected condenser for fouling, verified refrigerant charge, ensured proper water flow and ambient conditions",
-     "missing": [
-      "Descaling chemical (40L)",
-      "Condenser end-cover gasket set"
-     ]
+     "top": "Performed generic checks",
+     "missing": []
     },
     "basic": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": true,
-     "top": "Check condenser pressure, refrigerant charge, airflow, and blockages",
-     "missing": [
-      "Descaling chemical (40L)",
-      "Condenser end-cover gasket set"
-     ]
+     "top": "Performed generic checks for condenser water flow and refrigerant charge",
+     "missing": []
     },
     "basic_verified": {
      "fix": false,
@@ -44,16 +38,52 @@
    },
    "basic_vetoes": [
     {
-     "item": "Check condenser pressure, refrigerant charge, airflow, and blockages",
+     "item": "Performed generic checks for condenser water flow and refrigerant charge",
      "target": "diagnostician"
     },
     {
-     "item": "Performed generic diagnostic checks: verify condenser pressure, refrigerant charge, airflow, and blockages",
+     "item": "HP pressure transducer (CAR-HPT-30)",
+     "target": "parts"
+    },
+    {
+     "item": "Coil cleaner (5L)",
+     "target": "parts"
+    },
+    {
+     "item": "Descaling chemical (40L)",
+     "target": "parts"
+    },
+    {
+     "item": "Refrigerant R410A (3kg)",
+     "target": "parts"
+    },
+    {
+     "item": "Condenser end-cover gasket set",
+     "target": "parts"
+    },
+    {
+     "item": "Performed generic checks for condenser water flow and refrigerant charge",
      "target": "diagnostician"
     },
     {
-     "item": "Further investigation required",
+     "item": "Performed generic checks for condenser water flow and refrigerant charge",
      "target": "diagnostician"
+    },
+    {
+     "item": "Coil cleaner (5L)",
+     "target": "parts"
+    },
+    {
+     "item": "Descaling chemical (40L)",
+     "target": "parts"
+    },
+    {
+     "item": "HP pressure transducer (CAR-HPT-30)",
+     "target": "parts"
+    },
+    {
+     "item": "Condenser end-cover gasket set",
+     "target": "parts"
     }
    ]
   },
@@ -69,7 +99,7 @@
      "parts": true,
      "ftf": false,
      "warn": null,
-     "top": "checked and cleaned drain line",
+     "top": "Check drain line, condensate pump, and drain pan for clogs; inspect wall mounting for leaks",
      "missing": []
     },
     "basic": {
@@ -77,7 +107,7 @@
      "parts": true,
      "ftf": false,
      "warn": null,
-     "top": "Check drain line, clean filter, inspect condensate pump, ensure proper slope",
+     "top": "Cleared the condensate drain line",
      "missing": []
     },
     "basic_verified": {
@@ -94,16 +124,40 @@
    },
    "basic_vetoes": [
     {
-     "item": "Check drain line, clean filter, inspect condensate pump, ensure proper slope",
+     "item": "Cleared the condensate drain line",
      "target": "diagnostician"
     },
     {
-     "item": "Performed generic checks: inspected drain line, filter, condensate pump, slope",
+     "item": "PVC drain pipe 20mm (3m)",
+     "target": "parts"
+    },
+    {
+     "item": "Drain trap",
+     "target": "parts"
+    },
+    {
+     "item": "Condensate pump (SPL-CP-12)",
+     "target": "parts"
+    },
+    {
+     "item": "Performed generic checks on the condensate drain line and sensor",
      "target": "diagnostician"
     },
     {
-     "item": "Checked drain line, filter, condensate pump, slope for blockages or misalignment.",
+     "item": "Performed generic inspection, cleared the condensate drain line, and tested/replaced the drain sensor",
      "target": "diagnostician"
+    },
+    {
+     "item": "Drain trap",
+     "target": "parts"
+    },
+    {
+     "item": "PVC drain pipe 20mm (3m)",
+     "target": "parts"
+    },
+    {
+     "item": "Condensate pump (SPL-CP-12)",
+     "target": "parts"
     }
    ]
   },
@@ -119,11 +173,10 @@
      "parts": false,
      "ftf": false,
      "warn": true,
-     "top": "checked filter, inspected refrigerant, verified compressor operation, cleaned condenser, ensured proper airflow",
+     "top": "Performed generic checks",
      "missing": [
       "Copper coupler 3/8\"",
-      "Brazing rods",
-      "Refrigerant R410A (3kg)"
+      "Brazing rods"
      ]
     },
     "basic": {
@@ -131,11 +184,10 @@
      "parts": false,
      "ftf": false,
      "warn": true,
-     "top": "Check refrigerant charge, airflow, and thermostat settings; inspect condenser coils and filter; verify compressor operation.",
+     "top": "Performed generic checks including refrigerant pressure, filter cleaning, and airflow verification",
      "missing": [
       "Copper coupler 3/8\"",
-      "Brazing rods",
-      "Refrigerant R410A (3kg)"
+      "Brazing rods"
      ]
     },
     "basic_verified": {
@@ -153,16 +205,48 @@
    },
    "basic_vetoes": [
     {
-     "item": "Check refrigerant charge, airflow, and thermostat settings; inspect condenser coils and filter; verify compressor operation.",
+     "item": "Performed generic checks including refrigerant pressure, filter cleaning, and airflow verification",
      "target": "diagnostician"
     },
     {
-     "item": "Performed standard low cooling capacity diagnostics",
+     "item": "Coil cleaner (5L)",
+     "target": "parts"
+    },
+    {
+     "item": "Refrigerant R410A (3kg)",
+     "target": "parts"
+    },
+    {
+     "item": "Airflow sensor (VRT-AFS-2)",
+     "target": "parts"
+    },
+    {
+     "item": "No specific repair available; generic checks required",
      "target": "diagnostician"
     },
     {
-     "item": "Checked refrigerant charge, condenser coil, compressor, airflow, filter, etc.",
+     "item": "Performed generic checks",
      "target": "diagnostician"
+    },
+    {
+     "item": "Coil cleaner (5L)",
+     "target": "parts"
+    },
+    {
+     "item": "Refrigerant R410A (3kg)",
+     "target": "parts"
+    },
+    {
+     "item": "Indoor unit PCB (CAS-PCB-A1)",
+     "target": "parts"
+    },
+    {
+     "item": "Compressor contactor 24V coil (DK-CTR-24V)",
+     "target": "parts"
+    },
+    {
+     "item": "Airflow sensor (VRT-AFS-2)",
+     "target": "parts"
     }
    ]
   },
@@ -178,7 +262,7 @@
      "parts": false,
      "ftf": false,
      "warn": null,
-     "top": "Recharged refrigerant",
+     "top": "Check system for common low cooling capacity issues",
      "missing": [
       "Copper coupler 3/8\"",
       "Brazing rods"
@@ -189,7 +273,7 @@
      "parts": false,
      "ftf": false,
      "warn": null,
-     "top": "Topped up refrigerant (R22/R410A)",
+     "top": "Topped up refrigerant",
      "missing": [
       "Copper coupler 3/8\"",
       "Brazing rods"
@@ -200,7 +284,7 @@
      "parts": false,
      "ftf": false,
      "warn": null,
-     "top": "Topped up refrigerant (R22/R410A)",
+     "top": "Topped up refrigerant",
      "missing": [
       "Copper coupler 3/8\"",
       "Brazing rods",
@@ -224,18 +308,20 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": true,
+     "parts": false,
      "ftf": false,
      "warn": true,
-     "top": "Check airflow, filter, fan operation, and duct integrity; verify return air temperature sensors and ensure proper cooling loop flow.",
-     "missing": []
+     "top": "Cleaned or replaced the filter",
+     "missing": [
+      "EC fan module 500mm (EBM-R3G500)"
+     ]
     },
     "basic": {
      "fix": true,
      "parts": true,
      "ftf": true,
      "warn": true,
-     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "top": "Replaced EC fan module and recalibrated airflow sensor",
      "missing": []
     },
     "basic_verified": {
@@ -243,11 +329,16 @@
      "parts": true,
      "ftf": true,
      "warn": true,
-     "top": "Replaced EC fan module on fan 2 and recalibrated airflow sensor",
+     "top": "Replaced EC fan module and recalibrated airflow sensor",
      "missing": []
     }
    },
-   "basic_vetoes": []
+   "basic_vetoes": [
+    {
+     "item": "Airflow sensor (VRT-AFS-2)",
+     "target": "parts"
+    }
+   ]
   },
   {
    "job": "J-1021",
@@ -258,14 +349,11 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": true,
-     "top": "Check condensate drain line, clean filter, inspect drain pan, ensure proper slope",
-     "missing": [
-      "PVC drain pipe 20mm (3m)",
-      "Drain trap"
-     ]
+     "top": "Cleared the condensate drain line",
+     "missing": []
     },
     "basic": {
      "fix": true,
@@ -295,20 +383,18 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": true,
-     "top": "Checked refrigerant charge, filters, coils, compressor, pressure lines",
-     "missing": [
-      "Compressor contactor 24V coil (DK-CTR-24V)"
-     ]
+     "top": "Conducted generic checks for high-pressure trip",
+     "missing": []
     },
     "basic": {
      "fix": true,
      "parts": true,
      "ftf": true,
      "warn": true,
-     "top": "Replaced the compressor contactor 24V coil (DK-CTR-24V)",
+     "top": "Replaced compressor contactor and checked phase voltages",
      "missing": []
     },
     "basic_verified": {
@@ -316,16 +402,11 @@
      "parts": true,
      "ftf": true,
      "warn": true,
-     "top": "Replaced compressor contactor 24V coil (DK-CTR-24V)",
+     "top": "Replaced compressor contactor and checked phase voltages",
      "missing": []
     }
    },
-   "basic_vetoes": [
-    {
-     "item": "Replaced the compressor contactor 24V coil (DK-CTR-24V)",
-     "target": "diagnostician"
-    }
-   ]
+   "basic_vetoes": []
   },
   {
    "job": "J-1064",
@@ -339,7 +420,7 @@
      "parts": false,
      "ftf": false,
      "warn": null,
-     "top": "Check return air temperature sensors, airflow, filter, coil, and refrigerant levels; verify proper airflow and clean components.",
+     "top": "Conducted generic checks for airflow, filter condition, and thermostat settings.",
      "missing": [
       "EC fan module 500mm (EBM-R3G500)"
      ]
@@ -361,7 +442,12 @@
      "missing": []
     }
    },
-   "basic_vetoes": []
+   "basic_vetoes": [
+    {
+     "item": "Airflow sensor (VRT-AFS-2)",
+     "target": "parts"
+    }
+   ]
   },
   {
    "job": "J-1050",
@@ -372,14 +458,11 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": true,
-     "top": "performed generic vibration inspection and corrective actions (tightened mounts, balanced fan, inspected bearings)",
-     "missing": [
-      "Bearing 6206-2RS (x2)",
-      "V-belt B-48"
-     ]
+     "top": "Rebalanced the fan and secured the impeller",
+     "missing": []
     },
     "basic": {
      "fix": true,
@@ -412,32 +495,17 @@
      "parts": false,
      "ftf": false,
      "warn": null,
-     "top": "Check condenser water flow, ambient temperature, refrigerant charge",
+     "top": "performed generic checks",
      "missing": [
-      "Descaling chemical (40L)",
       "Condenser end-cover gasket set"
      ]
     },
-    "basic": {
-     "fix": false,
-     "parts": true,
-     "ftf": false,
-     "warn": null,
-     "top": "Performed chemical descaling of condenser tubes and corrected cooling-tower water treatment dosing",
-     "missing": []
-    },
-    "basic_verified": {
-     "fix": true,
-     "parts": true,
-     "ftf": true,
-     "warn": null,
-     "top": "Chemical descaling of condenser tubes and corrected cooling‑tower water treatment dosing",
-     "missing": []
-    }
+    "basic": null,
+    "basic_verified": null
    },
    "basic_vetoes": [
     {
-     "item": "Performed chemical descaling of condenser tubes and corrected cooling-tower water treatment dosing",
+     "item": "Chemically descaled condenser tubes and corrected cooling-tower water treatment dosing",
      "target": "diagnostician"
     },
     {
@@ -445,8 +513,16 @@
      "target": "parts"
     },
     {
-     "item": "Performed chemical descaling of condenser tubes and corrected cooling‑tower water treatment dosing",
+     "item": "Run the standard checks and log everything you try",
      "target": "diagnostician"
+    },
+    {
+     "item": "Chemically descaled condenser tubes and corrected cooling-tower water treatment dosing",
+     "target": "diagnostician"
+    },
+    {
+     "item": "HP pressure transducer (CAR-HPT-30)",
+     "target": "parts"
     }
    ]
   },
@@ -459,14 +535,11 @@
    "arms": {
     "none": {
      "fix": false,
-     "parts": false,
+     "parts": true,
      "ftf": false,
      "warn": null,
-     "top": "Checked and balanced fan blades, tightened mounting bolts, inspected bearings",
-     "missing": [
-      "Bearing 6206-2RS (x2)",
-      "V-belt B-48"
-     ]
+     "top": "Rebalanced the fan rotor",
+     "missing": []
     },
     "basic": {
      "fix": true,
