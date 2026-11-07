@@ -6,6 +6,7 @@ Every agent message, every memory operation (recall / reflect / retain), every V
 is emitted as an event and streamed to the UI."""
 from __future__ import annotations
 
+import copy
 import logging
 import threading
 import time
@@ -16,6 +17,7 @@ from typing import Any
 from agents import Case, Diagnostician, Dispatcher, PartsAgent, Verifier, feedback_text
 from plan import drop_vetoed
 from simulate import simulate
+from memory import FallbackMemory, LocalMemory
 from traced import NullMemory, TracedMemory
 from .band import BandError, BandRoom, load_clients
 
@@ -36,6 +38,22 @@ def _clean(o: Any) -> Any:
     return o
 
 
+CHAOS = ("none", "band", "memory", "llm")
+
+
+class _BrokenHindsight:
+    """Stands in for Hindsight during a drill: every call fails the way a real outage does."""
+    name, bank_id = "hindsight (simulated outage)", "simulated"
+
+    def _boom(self, *a, **k):
+        raise RuntimeError("503 Service Unavailable: simulated Hindsight outage")
+
+    recall = reflect = retain = retain_many = _boom
+
+    def count(self) -> int:
+        return 0
+
+
 class Run:
     def __init__(self, scenario: dict, alarm: dict):
         self.id = uuid.uuid4().hex[:10]
@@ -45,6 +63,8 @@ class Run:
         self.cond = threading.Condition()
         self.started = datetime.now().isoformat(timespec="seconds")
         self.transport = {"with": "in-process", "without": "in-process"}
+        self.chaos = "none"
+        self.paths = ("without", "with")
 
     def emit(self, path: str, agent: str, kind: str, text: str, data: dict | None = None, ops: list | None = None) -> dict:
         ev = {"n": len(self.events), "t": round(time.time(), 2), "path": path, "agent": agent, "label": LABELS.get(agent, agent), "kind": kind, "text": text,
@@ -61,7 +81,7 @@ class Run:
 
     def public(self) -> dict:
         return {"id": self.id, "scenario": {k: v for k, v in self.scenario.items() if k != "truth"}, "alarm": self.alarm, "status": self.status,
-                "transport": self.transport, "started": self.started, "events": self.events,
+                "transport": self.transport, "chaos": self.chaos, "started": self.started, "events": self.events,
                 "plans": {p: _clean(plan) for p, plan in self.plans.items()}}
 
 
@@ -72,11 +92,16 @@ class Ctx:
         self.run, self.path, self.case, self.room = run, path, case, room
         self.ops: list[dict] = []
         self.lock = threading.Lock()
+        self.watch, self.announced = None, False
 
     def on_op(self, e: dict) -> None:
         with self.lock:
             self.ops.append(e)
         self.run.emit(self.path, e.get("who") or "system", "memory", f"{e['op']} {len(e['hits'])} hit(s)" if not e.get("skipped") else f"{e['op']} skipped (memory off)", e)
+        if self.watch is not None and getattr(self.watch, "degraded", False) and not self.announced:
+            self.announced = True
+            self.run.emit(self.path, "system", "system", "Hindsight did not answer (" + str(getattr(self.watch, "reason", ""))[:110] + "). The agents switched to the local keyword memory and carried on; nothing was lost.",
+                          {"fallback": "memory"})
 
     def mark(self) -> int:
         with self.lock:
@@ -98,7 +123,7 @@ class Ctx:
             except BandError as exc:
                 self.room = None
                 self.run.transport[self.path] = "in-process"
-                self.run.emit(self.path, "system", "system", f"Band unreachable ({str(exc)[:120]}). Continuing in-process so the run keeps going.")
+                self.run.emit(self.path, "system", "system", f"Band unreachable ({str(exc)[:120]}). Continuing in-process so the run keeps going.", {"fallback": "band"})
         self.run.emit(self.path, sender, "handoff", f"→ {LABELS.get(to, to)}: {text}", {"to": to, "via": self.run.transport[self.path]})
 
 
@@ -125,22 +150,24 @@ class ControlRoom:
                 "backend": self.memory.name, "agents": ["dispatcher", "diagnostician", "parts", "verifier"]}
 
     # ---------------------------------------------------------------- start
-    def case_for(self, scenario: dict, use_memory: bool, run: Run, ctx_holder: dict, as_of: str | None = None) -> Case:
+    def case_for(self, scenario: dict, use_memory: bool, run: Run, ctx_holder: dict, as_of: str | None = None, memory=None, llm=None) -> Case:
         m = self.store.machine(scenario["machine_id"])             # raises UnknownMachine for an invented id
         site = self.store.site(m["site_id"])
         job = next((j for j in self.store.open_jobs if j["job_id"] == scenario.get("job_id")), None) or {
             "job_id": f"AL-{run.alarm['id']}", "date": run.alarm["ts"][:10], "machine_id": m["id"], "symptom": f"{scenario['description']}. Readings {scenario['readings']}."}
         emit = lambda e: ctx_holder["ctx"].on_op(e)
-        mem = TracedMemory(self.memory, emit, self.store) if use_memory else NullMemory(emit)
-        return Case(alarm=run.alarm, machine=m, site=site, job=job, store=self.store, llm=self.llm, memory=mem, use_memory=use_memory, as_of=as_of,
+        mem = TracedMemory(memory or self.memory, emit, self.store) if use_memory else NullMemory(emit)
+        return Case(alarm=run.alarm, machine=m, site=site, job=job, store=self.store, llm=llm or self.llm, memory=mem, use_memory=use_memory, as_of=as_of,
                     visits=self.store.visits_before(as_of) if use_memory else [], alarms=self.store.alarms_before(as_of) if use_memory else [])
 
-    def start(self, scenario_id: str, as_of: str | None = None) -> Run:
+    def start(self, scenario_id: str, as_of: str | None = None, chaos: str = "none", paths: tuple = ("without", "with")) -> Run:
         sc = self.store.scenario(scenario_id)
         self.store.machine(sc["machine_id"])
         alarm = {**{k: sc[k] for k in ("machine_id", "code", "description", "readings", "severity")}, "id": f"{sc['id']}-{len(self.runs) + 1}",
                  "ts": datetime.now().isoformat(timespec="seconds"), "site_id": sc["site_id"]}
         run = Run(sc, alarm)
+        run.chaos = chaos if chaos in CHAOS else "none"
+        run.paths = tuple(paths)
         self.runs[run.id] = run
         for old in list(self.runs)[:-20]:
             self.runs.pop(old, None)
@@ -151,10 +178,12 @@ class ControlRoom:
         return self.runs.get(rid)
 
     def _both(self, run: Run, sc: dict, as_of: str | None) -> None:
-        run.emit("with", "feed", "alarm", f"{sc['code']} on {sc['machine_id']}: {sc['description']}. {sc['headline']}.", {"alarm": run.alarm})
-        run.emit("without", "feed", "alarm", f"{sc['code']} on {sc['machine_id']}: {sc['description']}. {sc['headline']}.", {"alarm": run.alarm})
+        for pth in run.paths:
+            run.emit(pth, "feed", "alarm", f"{sc['code']} on {sc['machine_id']}: {sc['description']}. {sc['headline']}.", {"alarm": run.alarm})
         threads = []
         for path, use_memory in (("without", False), ("with", True)):
+            if path not in run.paths:
+                continue
             t = threading.Thread(target=self._safe_path, args=(run, sc, path, use_memory, as_of), daemon=True)
             t.start()
             threads.append(t)
@@ -165,9 +194,22 @@ class ControlRoom:
     def _safe_path(self, run: Run, sc: dict, path: str, use_memory: bool, as_of: str | None) -> None:
         try:
             holder: dict = {}
-            case = self.case_for(sc, use_memory, run, holder, as_of)
+            mem_override, llm_override, chaos = None, None, run.chaos if use_memory else "none"
+            if chaos == "memory":
+                local = getattr(self.memory, "secondary", None) or self.memory
+                mem_override = FallbackMemory(_BrokenHindsight(), local)
+                run.emit(path, "system", "system", "Drill: Hindsight is switched off for this run. Watch the agents carry on.", {"chaos": "memory"})
+            if chaos == "llm":
+                chain = list(getattr(self.llm, "models", []) or [])
+                if chain:
+                    llm_override = copy.copy(self.llm)
+                    llm_override.models = ["simulated/model-outage"] + chain
+                run.emit(path, "system", "system", f"Drill: the primary model ({chain[0] if chain else 'the LLM'}) is switched off for this run. The chain moves to the next model.", {"chaos": "llm", "fallback": "llm"})
+            case = self.case_for(sc, use_memory, run, holder, as_of, mem_override, llm_override)
             room = None
-            if use_memory and self.band:
+            if chaos == "band":
+                run.emit(path, "system", "system", "Drill: Band is unreachable (simulated outage). The same four agents run in-process; the hand-offs are identical.", {"chaos": "band", "fallback": "band"})
+            elif use_memory and self.band:
                 try:
                     room = BandRoom(self.band, f"SiteMemory {run.alarm['id']} {sc['machine_id']} {sc['code']}")
                     run.transport[path] = "band"
@@ -177,6 +219,7 @@ class ControlRoom:
             elif use_memory:
                 run.emit(path, "system", "system", "Band is not configured: the same four agents run in-process.")
             ctx = Ctx(run, path, case, room)
+            ctx.watch = mem_override
             holder["ctx"] = ctx
             if not use_memory:
                 ctx.on_op({"op": "recall", "who": "system", "bank": "(memory off)", "query": "this path has no memory and no records", "tags": [], "hits": [], "ms": 0, "skipped": True})

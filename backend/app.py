@@ -128,12 +128,14 @@ def reference():
 # ------------------------------------------------------------------ the control room
 class RunReq(BaseModel):
     scenario_id: str
+    chaos: Literal["none", "band", "memory", "llm"] = "none"        # a drill: switch one dependency off for this run
+    paths: Literal["both", "with"] = "both"
 
 
 @app.post("/api/runs")
 def start_run(req: RunReq):
-    run = room.start(req.scenario_id)
-    return {"run_id": run.id, "alarm": run.alarm}
+    run = room.start(req.scenario_id, chaos=req.chaos, paths=("without", "with") if req.paths == "both" else ("with",))
+    return {"run_id": run.id, "alarm": run.alarm, "chaos": run.chaos}
 
 
 @app.get("/api/runs/{run_id}")
@@ -232,18 +234,18 @@ def open_jobs():
 
 
 @app.post("/api/runs/{run_id}/sample-log")
-def sample_log(run_id: str):
+def sample_log(run_id: str, fail: bool = False):
     """The technician follows the WITH-memory plan; what happened (per the simulation) is logged and retained. Demonstrates retain."""
     run = room.get(run_id)
     if not run or "with" not in run.plans:
         raise HTTPException(404, "Run not finished")
     plan, truth = run.plans["with"], run.scenario["truth"]
-    fix, ok = plan["diagnosis"]["causes"][0], plan["consequence"]["outcome"] != "return visit needed"
+    fix, ok = plan["diagnosis"]["causes"][0], plan["consequence"]["outcome"] != "return visit needed" and not fail   # fail=true: the drill where the recommended fix does not hold
     body = VisitLog(actions=[Action(action=fix["fix"], result="worked" if ok else "failed",
                                     detail="Followed the briefing." if ok else "The plan did not match what was found on site.")],
                     outcome="resolved" if ok else "revisit_needed", root_cause=truth["cause"] if ok else "", suspected_cause=fix["cause"],
                     parts_used=[p["part"] for p in plan["parts"]["carry"]][:3] if ok else [],
-                    notes="Logged from the control-room demo (simulated outcome).", machine_id=run.alarm["machine_id"], symptom=run.scenario["description"])
+                    notes="Logged from the live demo (simulated outcome)." + (" The recommended fix did not hold on site." if fail else ""), machine_id=run.alarm["machine_id"], symptom=run.scenario["description"])
     job = next((j for j in store.open_jobs if j["job_id"] == run.scenario.get("job_id")),
                {"job_id": f"AL-{run.alarm['id']}", "machine_id": run.alarm["machine_id"], "symptom": run.scenario["description"], "technician_id": "T-06"})
     return _log_visit(job, body)

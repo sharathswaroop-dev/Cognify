@@ -254,3 +254,30 @@ def test_hindsight_failure_degrades_to_local_memory_and_says_why(store, tmp_path
     hits = mem.recall("compressor contactor trips", ["machine:M-07"], 5)
     assert hits and all("machine:M-07" in h.tags for h in hits)     # the fallback still answers, scoped by tag
     assert mem.count() > 100
+
+
+# ------------------------------------------------------------------------------------ drills: one dependency fails, the run still finishes
+def test_drill_hindsight_down_the_agents_switch_to_local_memory_and_still_solve_it(room):
+    run = wait(room.start("LIVE-4", chaos="memory", paths=("with",)))
+    assert run.status == "done" and set(run.plans) == {"with"}
+    fb = [e for e in run.events if e["data"].get("fallback") == "memory"]
+    assert fb and "local keyword memory" in fb[0]["text"]
+    assert run.plans["with"]["consequence"]["outcome"] == "fixed first time"
+
+
+def test_drill_band_down_hands_off_in_process(room):
+    run = wait(room.start("LIVE-4", chaos="band", paths=("with",)))
+    assert run.status == "done" and run.transport["with"] == "in-process"
+    assert any(e["data"].get("chaos") == "band" for e in run.events)
+    assert any(e["kind"] == "handoff" for e in run.events)
+
+
+def test_drill_primary_model_down_fails_over_to_the_next(room):
+    run = wait(room.start("LIVE-4", chaos="llm", paths=("with",)))
+    assert run.status == "done" and run.plans["with"]["briefing"]["headline"]
+    assert any(e["data"].get("chaos") == "llm" for e in run.events)
+
+
+def test_with_only_run_skips_the_baseline(room):
+    run = wait(room.start("LIVE-4", paths=("with",)))
+    assert set(run.plans) == {"with"} and not any(e["path"] == "without" for e in run.events)
