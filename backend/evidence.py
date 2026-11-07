@@ -48,8 +48,11 @@ def is_fix(v: dict) -> bool:
 
 def visit_levels(visits: list[dict], as_of: str | None = None) -> dict[str, dict]:
     """job_id -> {level, recurred, recurred_after_days, recurrence_job}. as_of is exclusive: only records dated before it are known."""
+    explicit = as_of is not None
     as_of = as_of or NOW
-    known = [v for v in visits if v["date"] < as_of or v["date"] == as_of and False]
+    # With an explicit as_of (a replay) the date is exclusive: nothing from that day on is known. Without one ("now") today's own records
+    # count, so a visit the technician logs this morning changes the evidence straight away.
+    known = [v for v in visits if v["date"] < as_of or (not explicit and v["date"] == as_of)]
     by_mc = defaultdict(list)
     for v in known:
         by_mc[(v["machine_id"], v.get("fault_class", ""))].append(v)

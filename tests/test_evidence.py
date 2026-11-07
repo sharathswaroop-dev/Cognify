@@ -68,3 +68,14 @@ def test_wilson_interval_is_honest_about_small_samples():
     lo2, _ = ev.wilson(40, 40)
     assert lo2 > 0.9
     assert ev.wilson(0, 0) == (0.0, 1.0)
+
+
+def test_a_visit_logged_today_counts_immediately_but_a_replay_still_excludes_its_own_day(store):
+    import evidence as ev
+    m = store.machine("M-91")
+    base = dict(store.history[0])
+    logged = {**base, "job_id": "J-TODAY-V1", "incident_id": "I-TODAY", "visit_no": 1, "machine_id": "M-91", "site_id": m["site_id"], "date": ev.NOW,
+              "fault_class": m.get("fault_class", ""), "actions": [{"action": "Replaced compressor contactor", "result": "failed", "detail": ""}], "outcome": "revisit_needed"}
+    now = ev.attempts([logged], store.machine).get(m["model_family"], {})
+    assert any(a["job_id"] == "J-TODAY-V1" and a["result"] == "failed" for lst in now.values() for a in lst)
+    assert not ev.attempts([logged], store.machine, as_of=ev.NOW)                  # a replay of that same day does not see it
