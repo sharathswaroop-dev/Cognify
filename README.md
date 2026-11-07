@@ -21,6 +21,16 @@ An alarm comes in. Four agents in a [Band](https://band.ai) room (Dispatcher, Di
 
 *Screenshots are captured from the running app by `scripts/take_screenshots.py` (sample data, real Hindsight and Groq). The Verifier veto path with the language model on is shown in the live demo and covered by the tests.*
 
+
+## Adding knowledge ("training" the memory)
+
+Cognify does not retrain a model. It learns by **retaining** what your organization writes down, and every answer cites it.
+
+- **In the chat:** drop in a PDF, text file or photo (with a one-line caption). It is read, retained in the company memory and analysed straight away. Or type `Remember: ...`.
+- **Sample content:** `python scripts/seed_demo.py` adds sample notes, eight sample documents and shared prompt templates (brief, root cause, summary, handover) to the demo company.
+- **A whole folder or a cloned repository of runbooks and reports:** `python scripts/ingest_folder.py path/to/folder` (optionally with a company code and email) sends every readable file through the same path.
+- **Corrections:** a thumbs-down with the right answer is retained and shown first next time.
+
 ## The problem
 
 A repeat visit costs a service company a technician's day, fuel, an SLA penalty or a customer. What prevents it (what failed on this unit last time, what finally fixed it, which part to carry, the gate code) lives in job cards, chat threads and the heads of people who leave. And plain "memory" is not enough: a log is full of wrong diagnoses, parts that were replaced on a hunch, fixes that held for three weeks, and fixes that quietly stop working on a newer generation of units. Cognify is built for that mess.
