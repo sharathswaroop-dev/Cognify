@@ -315,6 +315,8 @@ def _ask(mem, q: str, deep: bool = False) -> dict:
     if not hits and not answer:
         return {"answer": "Nothing in the company memory covers that yet. If you know the answer, tell me and I will keep it for the next person.", "sources": [], "found": False,
                 "basis": provenance.basis([]), "backend": mem.name}
+    if answer and hits and _NEGATIVE.search(answer[:240]):          # Hindsight is still ingesting and says "nothing", yet records were retrieved: answer from those records instead
+        answer = None
     if not answer and hits and llm.available:
         ctx_txt = "\n".join(f"[{i + 1}] {m.text[:420]}" for i, m in enumerate(hits[:6]))
         answer = llm.text_chat(GROUND_SYS, f"Question: {q}\n\nRecords:\n{ctx_txt}", max_tokens=420)
@@ -406,6 +408,7 @@ def chat(req: ChatReq, ctx: dict = Depends(current)):
 
 
 _GREET = re.compile(r"^\s*(hi|hii+|hello|hey|yo|thanks|thank you|good (morning|afternoon|evening)|who are you|what can you do)\b", re.I)
+_NEGATIVE = re.compile(r"(do(es)? not contain|no (relevant )?(information|record|data|history)|not possible to determine|could not find|nothing (in|about))", re.I)
 GROUND_SYS = ("You answer a field-service question using ONLY the numbered company records given. Cite records as [1], [2]. "
               "Say what was tried and failed, and what worked, if the records say so. Reply with exactly NO_MATCH only if NONE of the records relates to the equipment or symptom asked about (or the message is just a greeting); if some relate, answer from them and say what is not known. "
               "Plain text only: no markdown, no tables. Under 140 words. Never add facts that are not in the records.")

@@ -89,7 +89,7 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
   </div>
 </div></section>
 <section style="padding:20px 0 0"><div class="wrap">
-  <div class="sec-h rv" style="margin-bottom:26px"><span class="eyebrow">The flow</span><h2>One question, <span class="grad">two paths.</span></h2><p class="lede">Switch memory on or off and run it. The lit path is what actually executed; each node shows its real result.</p></div>
+  <div class="sec-h rv" style="margin-bottom:26px"><span class="eyebrow">The flow</span><h2>One question, <span class="grad">two paths.</span></h2><p class="lede">Switch memory on or off and run it. ON goes out to the memory store and comes back with what it found before the LLM writes. OFF skips the store entirely. Each node shows its real result.</p></div>
   <div class="fl rv">
     <div class="bar"><div class="seg" id="fseg"><button data-m="on" class="on">Memory ON</button><button data-m="off">Memory OFF</button></div>
       <input id="fq" value="Why does M-07 keep tripping on high pressure?" maxlength="300"><button class="btn" id="frun">Run flow →</button></div>
@@ -149,37 +149,42 @@ label{display:block;font:600 12.5px "Inter";color:var(--mu);margin-bottom:6px}
 $("#navmount").outerHTML=nav("h");$("#footmount").outerHTML=foot();
 $("input[name=date]").value=new Date().toISOString().slice(0,10);
 
-/* ---------- n8n-style flow ---------- */
-const FN={q:[7,50,"Question"],router:[25,50,"Router"],recall:[45,22,"Hindsight recall",1],ground:[64,22,"Reflect + Groq",1],label:[82,22,"Evidence label",1],plain:[64,80,"Groq, no memory"],answer:[94,50,"Answer"]};
-const FE={on:[["q","router"],["router","recall"],["recall","ground"],["ground","label"],["label","answer"]],off:[["q","router"],["router","plain"],["plain","answer"]]};
-const ALLE=[["q","router"],["router","recall"],["recall","ground"],["ground","label"],["label","answer"],["router","plain"],["plain","answer"]];
+/* ---------- n8n-style flow: chat input -> search -> memory store (and back) -> LLM -> answer ---------- */
+const FN={q:[6,50,"Chat input"],router:[21,50,"Router"],search:[38,20,"Search memory",1],store:[60,20,"Memory store",1],llm:[60,72,"Groq LLM"],label:[78,72,"Evidence label",1],answer:[94,50,"Answer"]};
+const SUB={store:"incidents · documents · files · corrections"};
+const FE={on:[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["llm","label"],["label","answer"]],off:[["q","router"],["router","llm"],["llm","answer"]]};
+const ALLE=[["q","router"],["router","search"],["search","store"],["store","search"],["search","llm"],["router","llm"],["llm","label"],["label","answer"],["llm","answer"]];
+const DY={"search-store":-13,"store-search":13};
 let FM="on";const cv=$("#cv");
 for(const [k,v] of Object.entries(FN)){const d=document.createElement("div");d.className="fn"+(v[3]?" mem":"");d.dataset.f=k;d.style.left=v[0]+"%";d.style.top=v[1]+"%";d.innerHTML=`<b><i></i>${v[2]}</b><small></small>`;cv.appendChild(d)}
 function fpos(k){const r=cv.getBoundingClientRect();return [FN[k][0]/100*r.width,FN[k][1]/100*r.height]}
 function fdraw(){const r=cv.getBoundingClientRect();const svg=$("#fsvg");svg.setAttribute("viewBox",`0 0 ${r.width} ${r.height}`);
-  svg.innerHTML=ALLE.map(([a,b])=>{const [x1,y1]=fpos(a),[x2,y2]=fpos(b),x1b=x1+60,x2b=x2-60,m=(x1b+x2b)/2;return `<path data-e="${a}-${b}" d="M${x1b},${y1} C${m},${y1} ${m},${y2} ${x2b},${y2}"/>`}).join("");fmode()}
+  svg.innerHTML=ALLE.map(([a,b])=>{const dy=DY[a+"-"+b]||0;let [x1,y1]=fpos(a),[x2,y2]=fpos(b);y1+=dy;y2+=dy;const fwd=x2>=x1;const x1b=x1+(fwd?60:-60),x2b=x2+(fwd?-60:60),m=(x1b+x2b)/2;return `<path data-e="${a}-${b}" d="M${x1b},${y1} C${m},${y1} ${m},${y2} ${x2b},${y2}"/>`}).join("");fmode()}
 function fmode(){const act=FE[FM].map(e=>e.join("-"));$$("#fsvg path").forEach(p=>{p.classList.remove("run");const on=act.includes(p.dataset.e);p.classList.toggle("on",on);p.classList.toggle("skip",!on)});
-  $$(".fn").forEach(n=>{const used=FE[FM].some(e=>e.includes(n.dataset.f));n.classList.toggle("off",!used);n.classList.remove("run","done","err");n.querySelector("small").textContent=""})}
+  $$(".fn").forEach(n=>{const used=FE[FM].some(e=>e.includes(n.dataset.f));n.classList.toggle("off",!used);n.classList.remove("run","done","err");n.querySelector("small").textContent=FM==="on"?(SUB[n.dataset.f]||""):""})}
 fdraw();addEventListener("resize",fdraw);
 $$("#fseg button").forEach(b=>b.onclick=()=>{FM=b.dataset.m;$$("#fseg button").forEach(x=>x.classList.toggle("on",x===b));fmode();$("#flout").innerHTML="<h5>Output</h5>Press Run flow."});
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function fstep(path,i,info,bad){const [a,b]=path[i];const e=$(`#fsvg path[data-e="${a}-${b}"]`);if(e)e.classList.add("run");const n=$(`.fn[data-f="${b}"]`);n.classList.add("run");await sleep(650);
+async function fstep(a,b,info,bad){const e=$(`#fsvg path[data-e="${a}-${b}"]`);if(e)e.classList.add("run");const n=$(`.fn[data-f="${b}"]`);n.classList.add("run");await sleep(700);
   if(e)e.classList.remove("run");n.classList.remove("run");n.classList.add(bad?"err":"done");if(info)n.querySelector("small").textContent=info}
 $("#frun").onclick=async()=>{const q=$("#fq").value.trim();if(q.length<3)return;const btn=$("#frun");btn.disabled=true;fmode();$("#flout").innerHTML="<h5>Output</h5>Running…";
-  $(`.fn[data-f="q"]`).classList.add("done");$(`.fn[data-f="q"] small`).textContent=q.slice(0,16)+"…";
+  $(`.fn[data-f="q"]`).classList.add("done");$(`.fn[data-f="q"] small`).textContent=q.slice(0,18)+"…";
   let r;try{r=await post("/api/compare",{question:q})}catch(err){$("#flout").innerHTML="<h5>Output</h5>Could not run: "+esc(err.message);btn.disabled=false;return}
-  const path=FE[FM],on=r.on,off=r.off;
-  for(let i=0;i<path.length;i++){const b=path[i][1];let info="",bad=false;
-    if(b==="router")info=FM==="on"?"memory path":"skips memory";
-    else if(b==="recall")info=`${(on.sources||[]).length} records · ${r.backend}`;
-    else if(b==="ground")info=on.found?"answer from records":"nothing to ground";
+  const path=FE[FM],on=r.on,off=r.off,n=(on.sources||[]).length;
+  for(const [a,b] of path){let info="",bad=false;
+    if(b==="router")info=FM==="on"?"needs history → memory":"skips memory";
+    else if(b==="search"&&a==="router")info="query sent";
+    else if(b==="store")info=`${n} record${n===1?"":"s"} found · ${r.backend}`;
+    else if(b==="search")info=`${n} back from store`;
+    else if(b==="llm")info=FM==="on"?(on.found?"writes from the records":"no records, general"):(off.answer?off.ms+" ms · no memory":"no model answered");
     else if(b==="label")info=on.basis?({strong:"well supported",partial:"partly supported"}[on.basis.level]||"not proven"):"no sources";
-    else if(b==="plain"){info=off.answer?off.ms+" ms":"no model";bad=!off.answer}
     else if(b==="answer")info=FM==="on"?(on.found?"cited":"says: none"):"uncited";
-    await fstep(path,i,info,bad)}
+    bad=(b==="llm"&&FM==="off"&&!off.answer);
+    await fstep(a,b,info,bad)}
   const o=FM==="on"?on:off;const txt=o.answer?plain(o.answer):(o.error||"No answer.");
-  $("#flout").innerHTML=`<h5>${FM==="on"?"Memory ON · answered from this company's records":"Memory OFF · normal AI response, no company records"}</h5>`+esc(txt)+(FM==="on"&&(on.sources||[]).length?`<div style="margin-top:12px">${on.sources.slice(0,3).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,140))}…</div>`).join("")}</div>`:"");
+  $("#flout").innerHTML=`<h5>${FM==="on"?"Memory ON · answered from this company's records":"Memory OFF · normal AI response, no company records"}</h5>`+esc(txt)+(FM==="on"&&n?`<div style="margin-top:12px">${on.sources.slice(0,3).map(s=>`<div class="rec"><b>${esc(s.ref||"record")}</b> · ${esc(s.date||"")} — ${esc((s.text||"").slice(0,140))}…</div>`).join("")}</div>`:"");
   btn.disabled=false};
+
 /* ---------- the map ---------- */
 const NODES={tech:{x:12,y:25,l:"Technician",t:"user",c:"T"},mgr:{x:12,y:70,l:"Manager / new hire",t:"user",c:"M"},
  mem:{x:50,y:48,l:"Shared memory · Hindsight",t:"mem",c:"MEMORY"},
