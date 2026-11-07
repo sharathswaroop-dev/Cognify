@@ -8,10 +8,14 @@ An alarm comes in. Four agents in a [Band](https://band.ai) room (Dispatcher, Di
 
 | | |
 | --- | --- |
-| ![Control room](docs/screenshots/01-control-room.png) | ![Memory panel and veto](docs/screenshots/02-veto-and-memory.png) |
-| **Live demo:** one alarm in, the four-agent mesh, two paths, drills and a simulated consequence | **Verifier veto and revision**, and the memory panel lighting up on every recall |
-| ![Phone](docs/screenshots/03-phone-briefing.png) | ![Dashboard](docs/screenshots/04-dashboard.png) |
-| **Technician phone:** the briefing, and voice logging that retains | **Dashboard:** replay score, risk watchlist, ROI calculator |
+| ![Home](docs/screenshots/01-home.png) | ![The mesh](docs/screenshots/02-live-demo-mesh.png) |
+| **Home:** the story in one page | **Live demo, the mesh:** hand-offs between the four agents and every Hindsight recall, reflect and retain |
+| ![With and without](docs/screenshots/03-with-and-without.png) | ![Phone](docs/screenshots/04-phone-briefing.png) |
+| **Without vs with memory**, with the memory receipt | **Technician phone:** the briefing, and voice logging that retains |
+| ![Dashboard](docs/screenshots/05-dashboard.png) | |
+| **Dashboard:** replay score, risk watchlist, ROI calculator | |
+
+*Screenshots were captured on real Hindsight recalls while the Groq free-tier daily token limit was spent, so the agents ran in their no-model backup mode (ranking by the verified record). The Verifier veto path with the language model on is shown in the live demo and covered by the tests.*
 
 ## The problem
 

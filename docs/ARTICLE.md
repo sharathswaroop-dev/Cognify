@@ -53,7 +53,7 @@ The alarm: a 2024 unit, compressor overcurrent, supply voltage normal. With no m
 
 It also vetoes a relay board that past visits had replaced on a hunch: *used in 4 visits on comparable units, fixed the fault in 0.* The Diagnostician revises, and says exactly how sure it is: *n=4: 3 verified, 1 not yet stable, 0 failed; verified rate 75% (95% 30-95%); weak signal.* The Verifier approves. The simulated outcome: fixed first time, against a return visit.
 
-![Veto and memory](screenshots/02-veto-and-memory.png)
+![The mesh and the memory receipt](screenshots/02-live-demo-mesh.png)
 
 ## Did it help? A replay with no leakage
 
