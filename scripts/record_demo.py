@@ -1,11 +1,12 @@
-"""Record a walkthrough video of the live demo (1440x900, no voice) to docs/demo/walkthrough.webm.
+"""Record a walkthrough video of the talk (1440x900, no voice) to docs/demo/walkthrough.webm.
 
     python backend/app.py            # in one terminal (real Hindsight + Groq keys in .env)
     python scripts/record_demo.py    # in another
 
-It drives the real page: home, send an alarm, watch the agents on the node canvas, open the Diagnostician to read how it searched, read the
-self-correction trail, switch Hindsight off for one run, teach it a failed fix, and finish on the accuracy section. Whatever the agents do
-on the day is what the video shows, so run it when the model budget is available (a model veto is the best footage), then add your voice-over.
+It drives the real page through the four scenes: intro, the problem (no memory), the demo (agents recall and check, you open the
+Diagnostician to read how it searched, the self-correction trail, the failed fix retained, the same alarm briefed again) and the wrap-up.
+Whatever the agents do on the day is what the video shows, so run it when the model budget is available (a Verifier veto is the best footage),
+and on a fresh memory (the page's "reset the demo memory" link, then wait for Hindsight to finish ingesting). Then add your voice-over.
 Needs: pip install playwright && playwright install chromium
 """
 import sys
@@ -38,62 +39,42 @@ def main():
         ctx = b.new_context(viewport={"width": 1440, "height": 900}, record_video_dir=str(OUT / "_raw"), record_video_size={"width": 1440, "height": 900})
         pg = ctx.new_page()
         pg.goto(URL)
-        time.sleep(4.5)
+        time.sleep(6)                                              # scene 1: intro
         pg.mouse.move(700, 500, steps=20)
-        pg.evaluate("document.querySelector('.sec').scrollIntoView({behavior:'smooth'})")
+        point(pg, ".intro .btn.pri")
+        pg.click(".intro .btn.pri")                                # scene 2: the problem
+        time.sleep(2.5)
+        point(pg, "#probrun")
+        pg.click("#probrun")
+        pg.wait_for_selector("#prob .ps.bad, #prob .ps.good, #prob .err", timeout=360000)
+        time.sleep(5)
+        point(pg, '#steps button[data-scene="demo"]')              # scene 3: the demo
+        pg.click('#steps button[data-scene="demo"]')
         time.sleep(3)
-        glide(pg, ".crew", 1.5)
-        pg.evaluate("scrollTo({top:0,behavior:'smooth'})")
-        time.sleep(1.5)
-        point(pg, '.hero .btn.pri')
-        pg.click('.hero .btn.pri')
-        time.sleep(2)
-        # act 1: the alarm
-        point(pg, '.sc[data-id="LIVE-4"]')
-        pg.click('.sc[data-id="LIVE-4"]')
-        time.sleep(1.2)
         point(pg, "#run")
         pg.click("#run")
-        glide(pg, ".flow", 0.5)
-        pg.wait_for_selector("#cmp .cmp", timeout=360000)
-        time.sleep(2)
-        # act 2: open the agents
-        for node, wait in (("dispatcher", 2.5), ("diagnostician", 3), ("verifier", 3)):
-            glide(pg, ".flow", 0.2)
+        pg.wait_for_selector("#outcome.on", timeout=420000)
+        time.sleep(3)
+        for node in ("dispatcher", "diagnostician", "verifier"):   # open the agents: how each one searched
+            glide(pg, "#flow", 0.2)
             point(pg, f'.nd[data-n="{node}"] .ndh')
             pg.click(f'.nd[data-n="{node}"] .ndh')
-            glide(pg, "#ndv", wait)
-            pg.evaluate("document.querySelector('#ndv').scrollBy({top:0})")
-        pg.evaluate("document.querySelector('#ndv > div:nth-child(2)').scrollIntoView({behavior:'smooth',block:'center'})")
-        time.sleep(3)
-        glide(pg, ".corr", 4)
+            glide(pg, ".under", 3.5)
+        glide(pg, ".corr", 5)                                      # the self-correction trail
         pg.evaluate("window.scrollBy({top:420,behavior:'smooth'})")
         time.sleep(4)
-        # act 3: with and without
-        glide(pg, ".board", 5)
-        glide(pg, "#cmp", 3, "center")
-        # act 4: switch Hindsight off for one run
-        glide(pg, "#drills", 1.0, "center")
-        point(pg, '.drill[data-d="memory"]')
-        pg.click('.drill[data-d="memory"]')
-        time.sleep(1)
-        pg.click("#run")
-        glide(pg, ".flow", 0.5)
-        pg.wait_for_selector("#cmp .cmp", timeout=360000)
-        time.sleep(2)
-        glide(pg, ".lanes", 3)
-        # act 5: it learns
-        glide(pg, ".learn", 1.0)
+        glide(pg, ".demo2", 1.0)                                   # retain, then ask again
         point(pg, "#teachbtn")
         pg.click("#teachbtn")
         pg.wait_for_selector("#l1out .delta, #l1out .err", timeout=120000)
-        time.sleep(4)
+        time.sleep(5)
         point(pg, "#rebrief")
         pg.click("#rebrief")
-        pg.wait_for_selector("#l2out .diffbox, #l2out .err", timeout=360000)
-        time.sleep(5)
-        # act 6: accuracy
-        glide(pg, "#accpanel", 7, "center")
+        pg.wait_for_selector("#l2out .diffbox, #l2out .err", timeout=420000)
+        time.sleep(6)
+        point(pg, '#steps button[data-scene="wrap"]')              # scene 4: wrap-up
+        pg.click('#steps button[data-scene="wrap"]')
+        time.sleep(9)
         ctx.close()
         vid = next((OUT / "_raw").glob("*.webm"))
         target = OUT / "walkthrough.webm"

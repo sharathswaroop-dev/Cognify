@@ -131,12 +131,12 @@ def reference():
 class RunReq(BaseModel):
     scenario_id: str
     chaos: Literal["none", "band", "memory", "llm"] = "none"        # a drill: switch one dependency off for this run
-    paths: Literal["both", "with"] = "both"
+    paths: Literal["both", "with", "without"] = "both"
 
 
 @app.post("/api/runs")
 def start_run(req: RunReq):
-    run = room.start(req.scenario_id, chaos=req.chaos, paths=("without", "with") if req.paths == "both" else ("with",))
+    run = room.start(req.scenario_id, chaos=req.chaos, paths={"both": ("without", "with"), "with": ("with",), "without": ("without",)}[req.paths])
     return {"run_id": run.id, "alarm": run.alarm, "chaos": run.chaos}
 
 
