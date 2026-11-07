@@ -95,6 +95,19 @@ def main():
         mclick(pg, "#frun")
         pg.wait_for_function("document.querySelector('#flout h5') && document.querySelector('#flout h5').textContent.includes('Memory OFF')", timeout=90000)
         time.sleep(5)
+        # 3a. how an answer is made, without and with memory, step by step
+        pg.goto(BASE + "/how-it-works#steps")
+        time.sleep(2.5)
+        pg.evaluate("document.querySelectorAll('.rv').forEach(e=>e.classList.add('in'))")
+        glide(pg, "#steps", 1.0)
+        time.sleep(4)
+        pg.mouse.wheel(0, 700)
+        time.sleep(4)
+        glide(pg, "#cmpt", 1.0)
+        time.sleep(5)
+        glide(pg, "#lvf", 1.0, "center")
+        mclick(pg, "#lvf button")                                   # run both paths live
+        time.sleep(20)
         # 3b. people and agents on one map: a real job
         pg.goto(BASE + "/how-it-works")
         time.sleep(2)
