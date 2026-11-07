@@ -812,9 +812,10 @@ body.chatmode main{padding:0;max-width:none}
 /* ============ the chat, dressed like a modern AI chat app: dark, quiet, text first ============ */
 #view-chat .acts svg,#view-chat .attach svg,#view-chat .tobottom svg,#view-chat .plus svg,#view-chat .ibtn svg,#view-chat .send svg,#view-chat .icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #view-chat .acts button.on svg{fill:currentColor}
+.lmark{width:28px;height:28px;border-radius:9px;background:conic-gradient(from 210deg,#8b5cf6,#22d3ee,#8b5cf6);display:inline-grid;place-items:center;box-shadow:0 0 22px rgba(139,92,246,.55);flex:none}.lmark:after{content:"";width:10px;height:10px;border-radius:50%;background:#080c18}.lmark.big{width:46px;height:46px;border-radius:14px}.lmark.big:after{width:16px;height:16px}
 body.chatmode header,body.chatmode #bar,body.chatmode #banner{display:none}
 .gen{display:inline-block;margin:0 0 8px;padding:3px 9px;border-radius:99px;background:#122a3a;color:#67e8f9;font:600 12px var(--body);border:1px solid #1d4a63}
-.xnav{display:none;position:fixed;top:10px;right:14px;z-index:30;display:flex;gap:6px}.xnav a{color:#8f9bc0;text-decoration:none;font:500 13px var(--body);padding:6px 11px;border-radius:99px;border:1px solid #1f2745;background:#0b1020cc;backdrop-filter:blur(6px)}.xnav a:hover{color:#fff;border-color:#8b5cf6}
+.xnav{display:none}.xnav a{color:#8f9bc0;text-decoration:none;font:500 13px var(--body);padding:6px 11px;border-radius:99px;border:1px solid #1f2745;background:#0b1020cc;backdrop-filter:blur(6px)}.xnav a:hover{color:#fff;border-color:#8b5cf6}
 body.chatmode{overflow:hidden}
 #view-chat .cgpt{background:var(--bg);color:var(--tx);display:grid;grid-template-columns:268px minmax(0,1fr);height:100vh;background:var(--bg);color:var(--tx);transition:grid-template-columns .25s var(--ease)}
 #view-chat .cgpt.collapsed{grid-template-columns:0 minmax(0,1fr)}.cgpt.collapsed .cside{display:none}
@@ -960,7 +961,7 @@ body.chatmode{overflow:hidden}
 <section class="view" id="view-chat">
   <div class="cgpt" id="cgpt">
     <aside class="cside" id="cside">
-      <div class="ctop"><a class="clogo" href="/" title="Home"><svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#8b5cf6" stroke="#e8ecf8" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#e8ecf8"/></svg><b>SiteMemory</b></a>
+      <div class="ctop"><a class="clogo" href="/" title="Home"><span class="lmark"></span><b>SiteMemory</b></a>
         <span class="grow"></span><button class="icon" id="csearchbtn" title="Search chats"><span data-i="search"></span></button><button class="icon" id="ctoggle" title="Hide sidebar"><span data-i="side"></span></button></div>
       <input id="csearch" class="csearch" placeholder="Search chats" hidden autocomplete="off">
       <div class="cnav">
@@ -1215,7 +1216,7 @@ const IC={
  check:'<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>'};
 const ic=n=>IC[n]||"";
 function hydrateIcons(root=document){$$("[data-i]",root).forEach(el=>{if(!el.firstChild)el.innerHTML=ic(el.dataset.i)})}
-const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#8b5cf6" stroke="#f1ecdc" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#f1ecdc"/></svg>`;
+const CHAT_LOGO=`<span class="lmark big"></span>`;
 const STARTERS=[["ask","What usually goes wrong with the Daikin VRV IV?"],["ask","What should a new technician know about Brookfield Business Centre?"],["ask","When a compressor trips on a 2024 unit, what actually fixed it?"],["tell","Remember that on M-91 the trips are the inverter board, never the contactor. Check the DC bus first."]];
 let lastQ=null,chatBusy=false,SES=null,SESS={cur:null,items:[]},speaking=null,sessFilter="";
 const sesKey=()=>`sm_sess_${SES.workspace.id}_${SES.email}`;
