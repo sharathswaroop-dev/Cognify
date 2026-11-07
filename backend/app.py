@@ -30,6 +30,7 @@ except ImportError:
 
 import beliefs as beliefs_mod  # noqa: E402
 import evidence as ev  # noqa: E402
+import chatintent  # noqa: E402
 import knowledge  # noqa: E402
 import records  # noqa: E402
 import simulate  # noqa: E402
@@ -307,6 +308,34 @@ def share_knowledge(n: Note):
     store.add_note({"id": doc_id, "author": n.author.strip(), "role": n.role.strip(), "years": n.years, "machine_id": n.machine_id, "family": (m or {}).get("model_family"),
                     "site_id": sid, "text": n.text.strip(), "date": ev.NOW})
     return {"saved": True, "memory_text": rec["text"], "tags": rec["tags"], "memory_backend": memory.name}
+
+
+class ChatReq(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    author: str = Field("A colleague", max_length=60)
+    context: str | None = Field(None, max_length=400)      # the person's previous question, so a short follow-up makes sense
+
+
+@app.post("/api/chat")
+def chat(req: ChatReq):
+    """One conversation box. A question is answered from the company memory (Hindsight reflect, with the records it used); something the person
+    tells the chat to remember is saved under their name for the next person. The reply says which of the two it did."""
+    msg = req.message.strip()
+    author = req.author.strip() if len(req.author.strip()) >= 2 else "A colleague"
+    if chatintent.intent(msg) == "share":
+        text = chatintent.strip_cue(msg)
+        if len(text) < 15:
+            return {"kind": "clarify", "answer": "Tell me a bit more so the next person can use it: what happened, on which machine, and what fixed it?"}
+        mid = chatintent.machine_in(text)
+        if mid and not store.has_machine(mid):
+            mid = None
+        saved = share_knowledge(Note(author=author, machine_id=mid, text=text))
+        about = f" about {mid}" if mid else ""
+        return {"kind": "saved", "answer": f"Saved to the company memory under {author}{about}. The next person who asks will find it.", "memory_text": saved["memory_text"],
+                "machine_id": mid, "backend": saved["memory_backend"]}
+    q = msg if len(msg.split()) >= 6 or not req.context else f"{req.context} {msg}"
+    out = ask_the_memory(AskReq(question=q[:400] if len(q) >= 3 else msg + "  "))
+    return {"kind": "answer", **out}
 
 
 @app.get("/api/company")

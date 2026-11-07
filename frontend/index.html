@@ -742,6 +742,43 @@ main{max-width:1500px}
 .fam{width:100%;border-collapse:collapse;font-size:14px}.fam td,.fam th{padding:10px 8px;border-bottom:2px dashed var(--line);text-align:left}.fam th{font:500 11px var(--mono);color:var(--mute);border-bottom:2.5px solid var(--text)}
 .st2{font:700 11px var(--mono);padding:2px 10px;border-radius:999px;border:1.5px solid var(--text);background:#fff}.st2.thin{background:var(--hot);color:#fff8ea;border-color:var(--hot)}.st2.single{background:#fbe4dc;border-color:var(--hot)}
 @media (max-width:1100px){.doors,.tiles,.cgrid{grid-template-columns:1fr}.ckpis{grid-template-columns:repeat(2,1fr)}}
+body.chatmode main{padding:0;max-width:none}
+.cgpt{display:grid;grid-template-columns:270px minmax(0,1fr);height:calc(100vh - 68px);min-height:520px}
+.cside{background:var(--text);color:#f1ecdc;display:flex;flex-direction:column;gap:18px;padding:18px 16px;overflow-y:auto}
+.newchat{border:2px solid #f1ecdc;border-radius:14px;background:none;color:#f1ecdc;padding:11px 14px;font:700 15px var(--body);text-align:left;transition:background .25s}.newchat:hover{background:#4a423a}
+.cwho label{display:block;font:500 11px var(--mono);color:#a8a490;margin-bottom:6px}
+.cwho input{width:100%;padding:9px 12px;border:2px solid #6b6254;border-radius:12px;background:#3a342d;color:#f1ecdc;font:500 14px var(--body);outline:none}.cwho input:focus{border-color:var(--hot)}
+.slinks{display:flex;flex-direction:column;gap:2px}.slinks a{padding:9px 12px;border-radius:10px;color:#f1ecdc;cursor:pointer;font:600 14px var(--body);text-decoration:none}.slinks a:hover{background:#4a423a}
+.sfoot{margin-top:auto;font:400 11.5px/1.55 var(--mono);color:#a8a490}
+.cmain{display:flex;flex-direction:column;min-width:0;background:var(--ink)}
+.cthread{flex:1;overflow-y:auto;padding:28px 0 10px}
+.cwrap{max-width:780px;margin:0 auto;padding:0 22px}
+.cempty{max-width:780px;margin:0 auto;padding:7vh 22px 0;text-align:center}
+.cempty svg{width:56px;height:56px;margin-bottom:10px}
+.cempty h2{margin:0 0 6px;font:900 clamp(30px,3.6vw,48px)/1.05 var(--disp);letter-spacing:-.04em;font-variation-settings:"SOFT" 100,"WONK" 1}
+.cempty p{margin:0 0 26px;color:var(--mute)}
+.cards2{display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+.cards2 button{padding:14px 16px;border:2px solid var(--text);border-radius:16px;background:#fffaee;color:var(--text);font:600 14.5px/1.4 var(--body);text-align:left;transition:transform .25s var(--ease),background .25s,box-shadow .25s}
+.cards2 button small{display:block;font:500 11px var(--mono);color:var(--hot);margin-bottom:4px}
+.cards2 button:hover{transform:translateY(-3px);background:#fbe4dc;box-shadow:3px 5px 0 var(--text)}
+.cmsg{display:flex;gap:14px;margin:0 0 26px;animation:rv .45s var(--ease)}
+.cmsg.user{justify-content:flex-end}
+.cmsg.user .cb{background:var(--text);color:#fff8ea;border-radius:20px 20px 4px 20px;padding:11px 16px;max-width:78%;white-space:pre-wrap;line-height:1.5}
+.cav{flex:none;width:36px;height:36px}.cav svg{width:36px;height:36px}
+.cmsg.ai .cb{flex:1;min-width:0;line-height:1.65;font-size:16px}
+.cmsg.ai .cb .txt{white-space:pre-wrap}
+.dots{display:inline-flex;gap:5px;padding:10px 0}.dots i{width:9px;height:9px;border-radius:50%;background:var(--text);animation:bounce 1s ease-in-out infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,80%,100%{transform:translateY(0);opacity:.35}40%{transform:translateY(-7px);opacity:1}}
+.csrc{margin-top:12px}.csrc summary{cursor:pointer;font:600 12.5px var(--mono);color:var(--hot);list-style:none}.csrc summary::before{content:"▸ "}.csrc[open] summary::before{content:"▾ "}
+.csrc div{padding:9px 12px;margin-top:8px;border:2px solid var(--text);border-radius:12px;background:#fffaee;font:400 12.5px/1.55 var(--mono);color:var(--mute)}
+.csrc b{font-weight:500;color:var(--text);border:1.5px solid var(--text);border-radius:999px;padding:0 8px;margin-right:6px;background:#fbe4dc}
+.savedcard{margin-top:12px;padding:12px 14px;border:2.5px solid var(--text);border-radius:14px;background:#fbe4dc;font:400 12.5px/1.55 var(--mono)}
+.savedcard b{display:block;font:800 14px var(--body);margin-bottom:4px}
+.composer{margin:0 auto;width:min(780px,calc(100% - 44px));display:flex;align-items:flex-end;gap:10px;padding:10px 10px 10px 18px;border:2.5px solid var(--text);border-radius:28px;background:#fffaee;box-shadow:var(--soft)}
+.composer textarea{flex:1;border:0;outline:none;resize:none;background:none;font:500 16px/1.5 var(--body);color:var(--text);max-height:180px;padding:6px 0}
+.send{flex:none;width:42px;height:42px;border-radius:50%;border:2px solid var(--text);background:var(--hot);color:#fff8ea;font:900 20px var(--body);transition:transform .2s var(--ease)}.send:hover{transform:translateY(-2px)}.send:disabled{opacity:.4}
+.chint{text-align:center;font:400 11.5px var(--mono);color:var(--mute);padding:10px 20px 14px}
+@media (max-width:900px){.cgpt{grid-template-columns:1fr}.cside{display:none}.cards2{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="fx">
@@ -753,7 +790,7 @@ main{max-width:1500px}
     <div><b>SiteMemory</b><small id="company">Field service that remembers</small></div></a>
   <nav id="steps"><button data-scene="intro" class="on"><i>1</i><span>Intro</span></button><button data-scene="problem"><i>2</i><span>Problem</span></button><button data-scene="demo"><i>3</i><span>Demo</span></button><button data-scene="wrap"><i>4</i><span>Wrap-up</span></button></nav>
   <div class="chips" id="status"></div>
-  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="home">Home</a><a data-view="show">Guided tour</a><a data-view="app">The app</a><a data-view="company">Company knowledge</a><a data-view="ask">Ask the memory</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
+  <div class="more"><button id="morebtn">More ▾</button><div class="moremenu" id="moremenu"><a data-view="home">Home</a><a data-view="show">Guided tour</a><a data-view="chat">Chat with the memory</a><a data-view="company">Company knowledge</a><a data-view="phone">Technician phone</a><a data-view="dash">Dashboard</a><a id="vidlink" href="/demo/walkthrough.webm" target="_blank" style="display:none">Recorded walkthrough ↗</a><a href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div></div>
 </header>
 <div id="bar"><i id="barfill"></i></div>
 <div id="banner"></div>
@@ -766,24 +803,29 @@ main{max-width:1500px}
     <p class="lede">Fifteen years of fixes used to walk out the door with one person. Here every repair, every failure and every hard-won tip is kept in one shared memory, so a new hire can ask, and the agents check themselves before a technician drives out.</p>
     <div class="doors">
       <button class="door" data-view="show" data-cursor="Tour"><span class="dn">1</span><b>See how it works</b><p>A guided tour in four short scenes: the problem, then four AI agents on one shared memory, live, including what happens when something breaks.</p><span class="go">Start the tour →</span></button>
-      <button class="door dark" data-view="app" data-cursor="Open"><span class="dn">2</span><b>Open the app</b><p>Ask the company memory a question, share what you know before you leave, brief a technician, and see who holds the knowledge.</p><span class="go">Open the app →</span></button>
+      <button class="door dark" data-view="chat" data-cursor="Open"><span class="dn">2</span><b>Open the app</b><p>Chat with the company memory like you would with ChatGPT: ask what it knows, or tell it what you know before you leave. Dashboards for managers.</p><span class="go">Open the app →</span></button>
     </div>
   </div>
 </section>
 
-<section class="view" id="view-app">
-  <button class="back" data-view="home">← home</button>
-  <div class="title"><div><div class="kick">the app</div><h1 id="h-app"></h1></div><p>Four tools on one shared memory. Everyone in the company can use the first two; the dashboards are for managers.</p></div>
-  <div class="tiles">
-    <button class="tile" data-view="ask" data-cursor="Open"><b>Ask the memory</b><p>A new hire asks what the company already knows. Every answer lists the records it used.</p></button>
-    <button class="tile" data-view="company" data-cursor="Open"><b>Company knowledge</b><p>Who holds the fixes, what is written down, and where the knowledge is thin.</p></button>
-    <button class="tile" data-view="phone" data-cursor="Open"><b>Technician phone</b><p>The briefing before a job, and logging the visit by voice.</p></button>
-    <button class="tile" data-view="dash" data-cursor="Open"><b>Evaluation and ROI</b><p>How well the agents do on machines they were never tuned on, and what it is worth.</p></button>
+<section class="view" id="view-chat">
+  <div class="cgpt">
+    <aside class="cside">
+      <button class="newchat" id="newchat" data-cursor="New">＋ New chat</button>
+      <div class="cwho"><label for="chatname">Your name</label><input id="chatname" placeholder="e.g. Priya" maxlength="60" autocomplete="off"></div>
+      <div class="slinks"><a data-view="company">Company knowledge</a><a data-view="phone">Technician phone</a><a data-view="dash">Evaluation and ROI</a><a data-view="show">Guided tour</a><a data-view="home">Home</a></div>
+      <div class="sfoot">Answers come from the company's repair history and the notes people have shared, through Hindsight. Every answer lists the records it used.</div>
+    </aside>
+    <section class="cmain">
+      <div class="cthread" id="cthread"></div>
+      <form class="composer" id="composer"><textarea id="cin" rows="1" placeholder="Ask a question, or tell me what you know…" maxlength="2000"></textarea><button class="send" id="csend" type="submit" aria-label="Send">↑</button></form>
+      <div class="chint">Ask what the company already knows, or start with “Remember…” to save something for the next person.</div>
+    </section>
   </div>
 </section>
 
 <section class="view" id="view-company">
-  <button class="back" data-view="app">← back to the app</button>
+  <button class="back" data-view="chat">← back to the chat</button>
   <div class="title"><div><div class="kick">for managers</div><h1 id="h-company"></h1></div><p>What the company knows, and who it lives with. Mark someone as leaving to see what would walk out with them.</p></div>
   <div class="ckpis" id="ck"></div>
   <div class="cgrid">
@@ -860,31 +902,12 @@ main{max-width:1500px}
       <div class="wcard"><h4>What surprised me</h4><p class="surp edit" id="surp" contenteditable spellcheck="false">Remembering more made it worse until something checked it: the old fix was still the top suggestion for newer units, and only the Verifier reading the raw records caught it.</p></div>
       <div class="wcard"><h4>Does it actually help?</h4><div id="accpanel"><div class="empty">Loading…</div></div></div>
     </div>
-    <div class="wlinks"><button class="btn pri mag" data-view="ask" data-cursor="Ask">Ask the memory</button><button class="btn mag" data-view="phone" data-cursor="Open">Technician phone</button><button class="btn mag" data-view="dash" data-cursor="Open">Dashboard</button><a class="btn" href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div>
+    <div class="wlinks"><button class="btn pri mag" data-view="chat" data-cursor="Chat">Chat with the memory</button><button class="btn mag" data-view="phone" data-cursor="Open">Technician phone</button><button class="btn mag" data-view="dash" data-cursor="Open">Dashboard</button><a class="btn" href="https://github.com/sharathswaroop-dev/sitememory" target="_blank" rel="noopener">GitHub repo ↗</a></div>
   </section>
 </section>
 
-<section class="view" id="view-ask">
-  <button class="back" data-view="app">← back to the app</button>
-  <div class="title"><div><div class="kick">for the new hire</div><h1 id="h-ask"></h1></div>
-    <p>When someone with fifteen years in the job retires, what they know used to leave with them. Here a new technician asks, and the company memory answers from every visit and every note, with the records it used.</p></div>
-  <div class="askgrid">
-    <div class="panel"><h3>Ask what the company already knows</h3><p class="sub">Answers come from Hindsight's reflect over the stored visits and notes. Every source is listed so you can check it.</p>
-      <div class="chat" id="chat"><div class="empty">Try one of these, or type your own.</div></div>
-      <div class="sugg" id="sugg"></div>
-      <form id="askf" class="askf"><input id="askq" class="fi" placeholder="e.g. What usually goes wrong with the Daikin VRV IV?" autocomplete="off"><button class="btn pri mag" data-cursor="Ask">Ask</button></form></div>
-    <div class="panel"><h3>Share what you know</h3><p class="sub">Retiring, or handing over? Write down what you would tell your replacement. It is kept with your name and what it is about.</p>
-      <form id="notef">
-        <label class="f">Your name</label><input class="fi" id="n-author" placeholder="e.g. Raghu Murthy" maxlength="60" required>
-        <label class="f">Your role and years in the job</label><div style="display:grid;grid-template-columns:1fr 90px;gap:8px"><input class="fi" id="n-role" placeholder="senior technician" maxlength="60"><input class="fi" id="n-years" type="number" min="0" max="60" placeholder="years"></div>
-        <label class="f">About which machine (optional)</label><select class="fi" id="n-machine"><option value="">The company in general</option></select>
-        <label class="f">What would you tell your replacement?</label><textarea class="fi" id="n-text" style="min-height:130px" placeholder="On this unit the trips are the inverter board, never the contactor. Check the DC bus first. The key is at the security desk…" required></textarea>
-        <div style="margin-top:14px"><button class="btn pri mag" data-cursor="Save">Save to the company memory</button></div><div id="noteout"></div></form></div>
-  </div>
-</section>
-
 <section class="view" id="view-phone">
-  <button class="back" data-view="app">← back to the app</button>
+  <button class="back" data-view="chat">← back to the chat</button>
   <div class="title"><div><div class="kick"><b>02</b> — The technician</div><h1 id="h-phone"></h1></div>
     <p>The briefing Ravi reads before the job, from the memory-backed plan. Log the visit by voice: it is transcribed, structured, confirmed, then retained.</p></div>
   <div class="pgrid">
@@ -894,7 +917,7 @@ main{max-width:1500px}
 </section>
 
 <section class="view" id="view-dash">
-  <button class="back" data-view="app">← back to the app</button>
+  <button class="back" data-view="chat">← back to the chat</button>
   <div class="title"><div><div class="kick"><b>03</b> — Service manager</div><h1 id="h-dash"></h1></div>
     <p>What the history shows, which machines to watch, how well the agents do on machines they were never tuned on, and what it is worth.</p></div>
   <div class="kpis" id="kpis"></div>
@@ -923,7 +946,7 @@ addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;const sp=e.target.c
 (function loop(){cx+=(mx-cx)*.2;cy+=(my-cy)*.2;cur.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(loop)})();
 $("#clock").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 
-const HEADS={app:"The app",company:"Company knowledge",ask:"Ask the company memory",room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
+const HEADS={company:"Company knowledge",room:"Watch the mesh work",phone:"Technician phone",dash:"Service dashboard"};
 function setHead(v){words($("#h-"+v),HEADS[v])}
 async function loadStatus(){
   STATUS=await api("/api/status");$("#company").textContent=`${STATUS.company.name} · ${STATUS.company.city}`;const deg=STATUS.memory_degraded;
@@ -949,28 +972,46 @@ function consCard(c){
 let DRILL="none",RES=[],modelBefore={},runChaos="none",bkBand=false,bkMem=false,LASTCONS={};
 const LBL={dispatcher:"Dispatcher",diagnostician:"Diagnostician",parts:"Parts agent",verifier:"Verifier",briefing:"Technician briefing",feed:"Alarm feed",technician:"Technician",system:"System"};
 const SCENES=["intro","problem","demo","wrap"];
-function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(HEADS[v])setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="company")loadCompany();
+function go(v){$$(".view").forEach(x=>x.classList.toggle("on",x.id==="view-"+v));if(HEADS[v])setHead(v);scrollTo({top:0,behavior:"instant"});if(v==="company")loadCompany();document.body.classList.toggle("chatmode",v==="chat");if(v==="chat")setTimeout(()=>$("#cin")&&$("#cin").focus(),60);
   if(v==="dash")loadDash();if(v==="phone")loadPhone();history.replaceState(null,"","#"+(v==="home"?"":v==="show"?"talk":v));$("#steps").style.visibility=v==="show"?"":"hidden";$("#bar").style.visibility=v==="show"?"":"hidden"}
 function goScene(n){if(!$("#view-show").classList.contains("on"))go("show");setTimeout(()=>$("#s-"+n).scrollIntoView({behavior:RM?"auto":"smooth",block:"start"}),30)}
 function watchScenes(){const io=new IntersectionObserver(es=>es.forEach(en=>{if(!en.isIntersecting)return;const n=en.target.id.slice(2),i=SCENES.indexOf(n);
     $$("#steps button").forEach((b,j)=>{b.classList.toggle("on",j===i);b.classList.toggle("done",j<i)})}),{rootMargin:"-45% 0px -50% 0px",threshold:0});
   SCENES.forEach(n=>io.observe($("#s-"+n)));
   addEventListener("scroll",()=>{const m=document.documentElement.scrollHeight-innerHeight;$("#barfill").style.width=(m>0?scrollY/m*100:0)+"%"},{passive:true})}
-const SUGG=["What usually goes wrong with the Daikin VRV IV?","What should a new technician know about Brookfield Business Centre?","When a compressor trips on a 2024 unit, what actually fixed it?","Which fixes should I not repeat?"];
-function wireAsk(){
-  $("#sugg").innerHTML=SUGG.map(q=>`<button type="button">${esc(q)}</button>`).join("");
-  $$("#sugg button").forEach(b=>b.onclick=()=>askQ(b.textContent));
-  $("#askf").onsubmit=e=>{e.preventDefault();const q=$("#askq").value.trim();if(q){$("#askq").value="";askQ(q)}};
-  api("/api/reference").then(r=>{$("#n-machine").insertAdjacentHTML("beforeend",r.machines.map(m=>`<option value="${esc(m.id)}">${esc(m.id)} · ${esc(m.model)}</option>`).join(""))}).catch(()=>{});
-  $("#notef").onsubmit=async e=>{e.preventDefault();const out=$("#noteout"),btn=$("#notef button");btn.disabled=true;out.innerHTML='<div class="pipe"><div class="st act"><i></i><span>Saving to the company memory…</span></div></div>';
-    try{const r=await api("/api/knowledge",{author:$("#n-author").value.trim(),role:$("#n-role").value.trim(),years:$("#n-years").value?+$("#n-years").value:null,machine_id:$("#n-machine").value||null,text:$("#n-text").value.trim()});
-      out.innerHTML=`<p class="foot" style="margin-top:12px">Saved to ${esc(r.memory_backend)}. The next person who asks will find it:</p><div class="saved">${esc(r.memory_text)}</div>`;$("#n-text").value="";loadStatus()}
-    catch(err){out.innerHTML=`<div class="err">${esc(err.message)}</div>`}btn.disabled=false}}
-async function askQ(q){const chat=$("#chat");if(chat.querySelector(".empty"))chat.innerHTML="";
-  chat.insertAdjacentHTML("beforeend",`<div class="cm q">${esc(q)}</div>`);const id="a"+Date.now();chat.insertAdjacentHTML("beforeend",`<div class="cm a" id="${id}"><div class="pipe"><div class="st act"><i></i><span>Searching the company memory…</span></div></div></div>`);chat.scrollTop=chat.scrollHeight;
-  try{const r=await api("/api/ask",{question:q});const el=document.getElementById(id);
-    el.innerHTML=esc(String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"")).slice(0,3200)+(r.sources.length?`<details class="src"><summary>${r.sources.length} records it drew on</summary>${r.sources.map(s=>`<div><b>${esc(s.ref||"note")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`:"")}
-  catch(e){document.getElementById(id).innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`}chat.scrollTop=chat.scrollHeight}
+const CHAT_LOGO=`<svg viewBox="0 0 40 40" fill="none"><path d="M6 8C14 3 28 4 34 7c4 9 3 21-1 27-8 4-20 4-26 0C3 26 3 15 6 8Z" fill="#e5533d" stroke="#2b2622" stroke-width="2.5" stroke-linejoin="round"/><path d="M14 22c0-6 4-9 7-9s6 3 6 7-3 7-7 7" stroke="#fff8ea" stroke-width="3" stroke-linecap="round"/><circle cx="20.5" cy="27" r="2" fill="#2b2622"/></svg>`;
+const STARTERS=[["ask","What usually goes wrong with the Daikin VRV IV?"],["ask","What should a new technician know about Brookfield Business Centre?"],["ask","When a compressor trips on a 2024 unit, what actually fixed it?"],["tell","Remember that on M-91 the trips are the inverter board, never the contactor. Check the DC bus first."]];
+let lastQ=null,chatBusy=false;
+function chatEmpty(){$("#cthread").innerHTML=`<div class="cempty">${CHAT_LOGO}<h2>What do you want to know?</h2><p>Ask what the company already knows, or tell me what you know and I will keep it for the next person.</p>
+  <div class="cards2">${STARTERS.map(s=>`<button type="button"><small>${s[0]==="tell"?"TEACH IT":"ASK"}</small>${esc(s[1])}</button>`).join("")}</div></div>`;
+  $$("#cthread .cards2 button").forEach((b,i)=>b.onclick=()=>chatSend(STARTERS[i][1]))}
+function wireChat(){
+  try{$("#chatname").value=localStorage.getItem("sm_chatname")||""}catch{}
+  $("#chatname").addEventListener("input",e=>{try{localStorage.setItem("sm_chatname",e.target.value)}catch{}});
+  const ta=$("#cin"),grow=()=>{ta.style.height="auto";ta.style.height=Math.min(180,ta.scrollHeight)+"px"};
+  ta.addEventListener("input",grow);
+  ta.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("#composer").requestSubmit()}});
+  $("#composer").onsubmit=e=>{e.preventDefault();const v=ta.value.trim();if(v&&!chatBusy){ta.value="";grow();chatSend(v)}};
+  $("#newchat").onclick=()=>{lastQ=null;chatEmpty();ta.focus()};
+  chatEmpty()}
+function scrollChat(){const t=$("#cthread");t.scrollTop=t.scrollHeight}
+async function chatSend(msg){
+  chatBusy=true;$("#csend").disabled=true;const t=$("#cthread");let wrap=t.querySelector(".cwrap");
+  if(!wrap){t.innerHTML='<div class="cwrap"></div>';wrap=t.querySelector(".cwrap")}
+  wrap.insertAdjacentHTML("beforeend",`<div class="cmsg user"><div class="cb">${esc(msg)}</div></div>`);
+  const id="c"+Date.now();wrap.insertAdjacentHTML("beforeend",`<div class="cmsg ai" id="${id}"><div class="cav">${CHAT_LOGO}</div><div class="cb"><div class="dots"><i></i><i></i><i></i></div></div></div>`);scrollChat();
+  try{
+    const author=($("#chatname").value||"").trim()||"A colleague";
+    const r=await api("/api/chat",{message:msg,author,context:lastQ});
+    if(r.kind==="answer")lastQ=msg;
+    const cb=document.querySelector("#"+id+" .cb"),clean=String(r.answer).replace(/\*\*/g,"").replace(/#{1,4}\s*/g,"").slice(0,3600);
+    cb.innerHTML='<div class="txt"></div>';const tx=cb.querySelector(".txt"),words=clean.split(/(\s+)/);let i=0;
+    await new Promise(res=>{const step=()=>{i+=RM?words.length:3;tx.textContent=words.slice(0,i).join("");scrollChat();if(i<words.length)setTimeout(step,16);else res()};step()});
+    if(r.kind==="answer"&&r.sources&&r.sources.length)cb.insertAdjacentHTML("beforeend",`<details class="csrc"><summary>${r.sources.length} records it used</summary>${r.sources.map(s=>`<div><b>${esc(s.ref||"note")}</b>${s.date?esc(s.date)+" · ":""}${esc(s.text)}</div>`).join("")}</details>`);
+    if(r.kind==="saved"){cb.insertAdjacentHTML("beforeend",`<div class="savedcard"><b>✓ Saved to the company memory</b>${esc(r.memory_text)}</div>`);loadStatus()}
+  }catch(e){const cb=document.querySelector("#"+id+" .cb");cb.innerHTML=`<span style="color:var(--hot)">${esc(e.message)}</span>`}
+  chatBusy=false;$("#csend").disabled=false;scrollChat();$("#cin").focus()}
+
 let LEAVING=new Set();try{LEAVING=new Set(JSON.parse(localStorage.getItem("sm_leaving")||"[]"))}catch{}
 async function loadCompany(){let o;try{o=await api("/api/company")}catch(e){$("#cpeople").innerHTML=`<div class="err">${esc(e.message)}</div>`;return}
   const t=o.totals;$("#crule").textContent=o.rule;
@@ -984,7 +1025,7 @@ async function loadCompany(){let o;try{o=await api("/api/company")}catch(e){$("#
     $("#crisk").innerHTML=gone.length?gone.map(p=>`<div class="riskc"><b>${esc(p.name)} leaves</b>${p.holds.length?p.holds.map(h=>`<p>Holds ${Math.round(h.share*100)}% of the proven fixes for <b style="font-family:var(--body)">${esc(h.family)}</b> (${h.fixes} fixes).</p>`).join(""):"<p>No family where they hold a large share.</p>"}<p>${p.notes?`${p.notes} note${p.notes>1?"s":""} written down so far.`:"Nothing written down yet."} <a data-view="ask" style="color:var(--hot);cursor:pointer;border-bottom:2px dotted var(--hot)">Ask them to share what they know →</a></p></div>`).join(""):'<div class="empty">Nobody marked yet.</div>';
   };draw();
   $("#cfam").innerHTML=`<table class="fam"><tr><th>Model family</th><th>Proven fixes</th><th>People</th><th>Notes</th><th>Top holder</th><th>Status</th></tr>${o.families.map(f=>`<tr><td>${esc(f.family)}</td><td>${f.verified}</td><td>${f.people}</td><td>${f.notes}</td><td>${f.top_holder?esc(f.top_holder)+" · "+Math.round(f.top_share*100)+"%":"—"}</td><td><span class="st2 ${f.status==="thin"?"thin":f.status==="single holder"?"single":""}">${esc(f.status)}</span></td></tr>`).join("")}</table>`}
-function wireTalk(){wireAsk();
+function wireTalk(){wireChat();
   fetch("/demo/walkthrough.webm",{method:"HEAD"}).then(r=>{if(r.ok)$("#vidlink").style.display=""}).catch(()=>{});
   document.addEventListener("click",e=>{const t=e.target;if(!t.closest)return;
     const sg=t.closest("[data-scene-go]");if(sg){goScene(sg.dataset.sceneGo);return}
@@ -1395,7 +1436,7 @@ $("#resetbtn").onclick=async()=>{try{const rr=await api("/api/reset-demo",{});$(
   try{await loadStatus();SC=await api("/api/scenarios");JOBS=await api("/api/jobs/open");selSc=(SC.find(s=>s.id==="LIVE-4")||SC[0]).id;fillSel();renderPacket();buildDrills();initFlow();buildMesh();renderCorr();renderLog();renderRes()}
   catch(e){$("#packet").innerHTML=`<div class="err">Backend not reachable: ${esc(e.message)}</div>`}
   loadAcc();
-  const hh=location.hash.slice(1);if(["app","ask","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}})();
+  const hh=location.hash.slice(1);if(["chat","company","phone","dash","show"].includes(hh))go(hh);else if(hh==="app"||hh==="ask")go("chat");else if(hh==="talk")go("show");else if(SCENES.includes(hh)){go("show");setTimeout(()=>goScene(hh),1300)}})();
 </script>
 </body>
 </html>

@@ -130,3 +130,28 @@ def test_company_overview_shows_who_holds_the_knowledge_and_counts_shared_notes(
     after = c.get("/api/company").json()
     assert after["totals"]["notes"] == 1 and after["people"][0]["notes"] == 1
     assert any(f["notes"] == 1 for f in after["families"])
+
+
+def test_chat_tells_questions_from_things_to_remember():
+    import chatintent as ci
+    for q in ("What usually goes wrong with the Daikin VRV IV?", "how do I reset the breaker", "Which fixes should I not repeat?", "tell me about M-91"):
+        assert ci.intent(q) == "ask", q
+    for s in ("Remember the key for Brookfield is kept at the security desk", "I replaced the inverter board on M-91 and the trips stopped",
+              "On the rooftop units the real cause is always the inverter board, never the contactor, so check the DC bus first before you order any parts"):
+        assert ci.intent(s) == "share", s
+    assert ci.machine_in("it happened on m-91 again") == "M-91" and ci.machine_in("no machine here") is None
+
+
+def test_chat_answers_questions_and_remembers_what_it_is_told(client):
+    c, app_mod = client
+    a = c.post("/api/chat", json={"message": "What usually goes wrong with the Daikin VRV IV compressor?", "author": "Priya"}).json()
+    assert a["kind"] == "answer" and a["answer"] and a["sources"]
+    s = c.post("/api/chat", json={"message": "Remember that on M-91 the trips are always the inverter board, never the contactor. Check the DC bus first.", "author": "Raghu Murthy"}).json()
+    assert s["kind"] == "saved" and s["machine_id"] == "M-91" and "Raghu Murthy" in s["memory_text"]
+    assert app_mod.store.notes and app_mod.store.notes[0]["author"] == "Raghu Murthy"
+    again = c.post("/api/chat", json={"message": "Raghu Murthy inverter board DC bus trips on M-91?", "author": "Priya"}).json()
+    assert any("Raghu Murthy" in x["text"] for x in again["sources"])
+    short = c.post("/api/chat", json={"message": "Remember this", "author": "Priya"}).json()
+    assert short["kind"] == "clarify"
+    follow = c.post("/api/chat", json={"message": "and for 2024 units?", "author": "Priya", "context": "What usually goes wrong with the Daikin VRV IV compressor?"}).json()
+    assert follow["kind"] == "answer"
