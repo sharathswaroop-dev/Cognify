@@ -151,3 +151,19 @@ Widget unitPhoto(Object? dataUrl) {
     return const SizedBox.shrink();
   }
 }
+
+/// Ask the person to confirm before something they cannot easily undo (accepting a job, saying they have arrived).
+Future<bool> confirmDialog(BuildContext context, {required String title, required String body, required String yes}) async {
+  final r = await showDialog<bool>(
+    context: context,
+    builder: (c) => AlertDialog(
+      title: Text(title),
+      content: Text(body),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('Not yet')),
+        FilledButton(onPressed: () => Navigator.pop(c, true), child: Text(yes)),
+      ],
+    ),
+  );
+  return r ?? false;
+}

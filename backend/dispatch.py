@@ -219,8 +219,20 @@ class Dispatch:
                 raise ValueError("Finish your current job before going offline.")
             st["duty"] = "on" if on else "off"
             st["last_seen"] = self.now()
+            waiting = 0
+            if on and st["status"] == "available":
+                name = self._tech(tid)["name"]
+                for rep in self.state["reports"]:
+                    if rep["status"] == "unassigned" and self.now() - rep["created"] < 1800:        # nobody could take it: a technician coming online gets the chance
+                        rep["ranking"] = self.rank(rep["site_id"], rep["machine_id"])
+                        rep["status"] = "offered"
+                        self._event(rep, f"{name} came online. Offering the waiting request again.", "search")
+                        self._open_wave(rep)
+                waiting = sum(1 for r in self.state["reports"] if r["status"] == "offered" and any(o["tech_id"] == tid and o["result"] == "pending" for o in r["offers"]))
+                if waiting:
+                    self._push(tid, "You are online", f"{waiting} task{'s' if waiting != 1 else ''} waiting for you. Open the app to accept.", {"type": "online", "waiting": waiting})
             self._save()
-            return {"id": tid, "duty": st["duty"]}
+            return {"id": tid, "duty": st["duty"], "waiting": waiting}
 
     def user(self, uid: str) -> dict:
         u = self.state["users"].get(uid)

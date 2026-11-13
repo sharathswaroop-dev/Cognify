@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'api.dart';
 import 'push.dart';
 import 'roles.dart';
+import 'splash.dart';
 import 'theme.dart';
 
 Future<void> main() async {
@@ -20,7 +21,7 @@ class CognifyField extends StatelessWidget {
         title: 'Cognify Field',
         debugShowCheckedModeBanner: false,
         theme: buildTheme(),
-        home: Api.token == null ? const ConnectScreen() : homeFor(),
+        home: SplashScreen(next: () => Api.token == null ? const ConnectScreen() : homeFor()),
       );
 }
 

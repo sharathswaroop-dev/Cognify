@@ -420,13 +420,19 @@ class _OfferScreenState extends State<OfferScreen> {
               )
             else ...[
             FilledButton.icon(
-              onPressed: _busy ? null : () => _answer('accept'),
+              onPressed: _busy
+                  ? null
+                  : () async {
+                      if (await confirmDialog(context, title: 'Accept this job?', body: 'You are committing to go to ${s(widget.offer['site'])}. If another technician is a better match, you will be told.', yes: 'Yes, accept')) _answer('accept');
+                    },
               icon: const Icon(Icons.check_rounded),
               label: const Text('Accept and go'),
               style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 18), minimumSize: const Size.fromHeight(56)),
             ),
             const SizedBox(height: 10),
-            OutlinedButton(onPressed: _busy ? null : () => _answer('decline'), style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52)), child: const Text('Decline')),
+            OutlinedButton(onPressed: _busy ? null : () async {
+              if (await confirmDialog(context, title: 'Reject this job?', body: 'It will be offered to the next technicians.', yes: 'Yes, reject')) _answer('decline');
+            }, style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(52)), child: const Text('Decline')),
             ],
           ]),
         ),

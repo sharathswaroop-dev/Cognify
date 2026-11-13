@@ -499,3 +499,17 @@ def test_the_acceptance_is_confirmed_and_the_work_ends_done_or_not_done(world):
     d.start_work(r["id"], "T-04", r["otp"])
     d.set_status(r["id"], "T-04", "resolved", done=False)
     assert d.view(r)["outcome"] == "not_done" and r["status"] == "resolved"
+
+
+def test_a_technician_coming_online_gets_the_requests_nobody_took(world):
+    d, clock, rep = world
+    sent = []
+    d.push_hook = lambda key, title, body, data: sent.append((key, title, data))
+    for t in ("T-01", "T-02", "T-03", "T-04", "T-05", "T-06"):
+        d.set_duty(t, False)                                           # everyone is offline
+    r = d.create_report(rep["id"], "S-05", "M-42", "Not cooling at all", "high", manual=True)
+    assert r["status"] == "unassigned"                                 # nobody could take it
+    out = d.set_duty("T-04", True)                                     # Farhan comes online
+    assert r["status"] == "offered" and out["waiting"] == 1
+    assert any(o["tech_id"] == "T-04" and o["result"] == "pending" for o in r["offers"])
+    assert ("T-04", "You are online", {"type": "online", "waiting": 1}) in sent

@@ -101,7 +101,13 @@ class _JobCard extends StatelessWidget {
     final mach = m(job['machine']), site = m(job['site']), tech = m(job['technician']);
     final high = s(job['priority']).toLowerCase() == 'high';
     return Panel(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => JobScreen(job: job))),
+      onTap: () async {
+        final ok = await confirmDialog(context,
+            title: 'Open this job?',
+            body: '${s(job['symptom'])}\n${s(site['name'])}\n\nYou will see the unit\'s history, then go through arrival, the customer\'s OTP and the work.',
+            yes: 'Yes, open it');
+        if (ok && context.mounted) Navigator.of(context).push(MaterialPageRoute(builder: (_) => JobScreen(job: job)));
+      },
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Row(children: [
           if (job['report_id'] != null) ...[const Pill('Dispatched to you', color: C.violet2), const SizedBox(width: 8)],
@@ -289,7 +295,9 @@ class _JobScreenState extends State<JobScreen> {
                   style: const TextStyle(fontWeight: FontWeight.w700),
                 ),
               ),
-              if (s(_report!['status']) == 'en_route') FilledButton(onPressed: _arrived, style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)), child: const Text("I've arrived")),
+              if (s(_report!['status']) == 'en_route') FilledButton(onPressed: () async {
+                if (await confirmDialog(context, title: 'Confirm you have arrived?', body: 'The customer will be asked for their OTP to start the work.', yes: 'Yes, I am here')) _arrived();
+              }, style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)), child: const Text("I've arrived")),
             ]),
           ),
         ],
