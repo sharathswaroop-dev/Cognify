@@ -39,6 +39,8 @@ class Store:
         self._m = {m["id"]: m for m in self.machines}
         self._s = {s["id"]: s for s in self.sites}
         self._t = {t["id"]: t for t in self.techs}
+        self.dyn_jobs: list = []           # jobs created when a reported problem is accepted by a technician
+        self.dyn_scenarios: list = []      # the matching alarm the agents can brief on
 
     # ------------------------------------------------------------------ lookups
     def has_machine(self, mid) -> bool:
@@ -60,16 +62,21 @@ class Store:
         return self._t[tid]
 
     def job(self, jid):
-        for j in self.open_jobs:
+        for j in self.open_jobs + self.dyn_jobs:
             if j["job_id"] == jid:
                 return j
         raise NotFound(f"Unknown job {jid}")
 
     def scenario(self, sid):
-        for s in self.scenarios:
+        for s in self.scenarios + self.dyn_scenarios:
             if s["id"] == sid:
                 return s
         raise NotFound(f"Unknown scenario {sid}")
+
+    def add_tech(self, tech: dict) -> dict:
+        self.techs.append(tech)
+        self._t[tech["id"]] = tech
+        return tech
 
     # ------------------------------------------------------------------ records
     def all_visits(self):

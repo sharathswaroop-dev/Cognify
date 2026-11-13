@@ -19,3 +19,30 @@ backend/data/workspace_secret.txt
 backend/data/ws/
 backend/data/knowledge_notes.json
 backend/data/eval_partial.json
+
+backend/data/dispatch_state.json
+
+# Firebase push secrets: never commit
+backend/data/firebase-service-account.json
+backend/data/push_tokens.json
+*-firebase-adminsdk-*.json
+backend/data/dispatch_state.json
+
+# Backups, logs and local copies: never commit (the .env backups hold real API keys)
+.env
+.env.*
+!.env.example
+*.bak
+*.bak-*
+*.backup-*
+server.log
+*.pem
+*.key
+*.keystore
+*.jks
+backend/data/dispatch_state.backup-*.json
+backend/data/eval_results.*-*.json
+docs/EVALUATION.*-*.md
+docs/demo/*.first-take.webm
+docs/demo/_raw*/
+mobile/android/app/google-services.json

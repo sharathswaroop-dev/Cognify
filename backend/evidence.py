@@ -27,9 +27,14 @@ def _d(s: str) -> date:
     return date.fromisoformat(s[:10])
 
 
+_FILLER = {"the", "a", "an", "of", "and", "to", "on", "in", "with", "for", "its", "their"}
+
+
 def fix_key(action: str) -> str:
     """Group wordings of one fix: 'Replaced compressor contactor and checked...' ~ 'Replaced compressor contactor (DK-CTR-24V)'."""
-    return " ".join(re.findall(r"[a-z]+", action.lower())[:3])
+    # Filler words are dropped so a model's 'Replaced the compressor contactor' still matches the record's 'Replaced compressor contactor'.
+    words = [w for w in re.findall(r"[a-z]+", action.lower()) if w not in _FILLER]
+    return " ".join(words[:3])
 
 
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
@@ -121,3 +126,37 @@ def confidence(stats: dict) -> str:
     if stats["verified"] >= 5 and (stats["rate"] or 0) >= 0.8:
         return "high"
     return "medium" if (stats["rate"] or 0) >= 0.5 else "low"
+
+_SYN = {"board": "pcb", "circuit": "pcb", "boards": "pcb", "pcbs": "pcb", "contactors": "contactor", "replaced": "replace", "replacing": "replace", "replace": "replace",
+        "changed": "replace", "swapped": "replace", "installed": "replace", "updated": "update", "updating": "update", "cleaned": "clean", "cleaning": "clean",
+        "flushed": "flush", "flushing": "flush", "descaling": "descale", "descaled": "descale"}
+_NOISE = _FILLER | {"faulty", "defective", "old", "new", "its", "unit", "units", "revision", "rev", "check", "checked", "and", "also"}
+
+
+def _toks(label: str) -> set[str]:
+    out = set()
+    for w in re.findall(r"[a-z0-9]+", re.sub(r"\([^)]*\)", " ", label.lower())):     # part codes in brackets are not part of the repair's name
+        w = _SYN.get(w, w)
+        if len(w) >= 2 and w not in _NOISE:
+            out.add(w)
+    return out
+
+
+def snap_fix(label: str, known: list[str], min_shared: int = 3, min_overlap: float = 0.66) -> str:
+    """A language model words a repair its own way ('Replaced the faulty board with revision D'). Map it onto the wording the records use
+    ('Replaced inverter PCB (A2P) and updated its firmware') when they clearly describe the same repair, so the Verifier compares like with like.
+    It never invents a repair: if nothing in the records is close enough the label is returned unchanged."""
+    a = _toks(label)
+    if len(a) < min_shared:
+        return label
+    best, best_score = None, 0.0
+    for k in dict.fromkeys(known):
+        b = _toks(k)
+        shared = a & b
+        if len(shared) < min_shared or not b:
+            continue
+        score = len(shared) / min(len(a), len(b))
+        if score >= min_overlap and score > best_score:
+            best, best_score = k, score
+    return best or label
+

@@ -207,10 +207,15 @@ class Diagnostician:
                 + (f"\n\nVERIFIER FEEDBACK (address every point; propose causes whose fixes the raw records support):\n{feedback}" if feedback else ""))
         d = case.llm.json_chat(DIAG_PROMPT, user, required=("causes",)) if case.llm else None
         causes = []
+        known = [a["action"] for v in case.visits if case.store.machine(v["machine_id"])["model_family"] == case.family
+                 for a in v["actions"] if a["result"] == "worked"]
         for c in ((d or {}).get("causes") or [])[:3]:
             if isinstance(c, dict) and c.get("fix"):
-                causes.append({"cause": str(c.get("cause", ""))[:200], "fix": str(c["fix"])[:200], "why": str(c.get("why", ""))[:200],
-                               "evidence_jobs": [j for j in (c.get("evidence_jobs") or []) if isinstance(j, str)][:6]})
+                written = str(c["fix"])[:200]
+                fix = ev.snap_fix(written, known) if case.use_memory else written      # same repair, the records' wording: the Verifier compares like with like
+                causes.append({"cause": str(c.get("cause", ""))[:200], "fix": fix[:200], "why": str(c.get("why", ""))[:200],
+                               "evidence_jobs": [j for j in (c.get("evidence_jobs") or []) if isinstance(j, str)][:6],
+                               **({"fix_as_written": written} if fix != written else {})})
         if not causes and case.use_memory:
             fb = rule_causes(case, {ev.fix_key(prior["causes"][0]["fix"])} if (feedback and prior) else None, ev.fix_key(hint) if hint else None)
             causes = fb

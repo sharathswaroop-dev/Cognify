@@ -79,3 +79,16 @@ def test_a_visit_logged_today_counts_immediately_but_a_replay_still_excludes_its
     now = ev.attempts([logged], store.machine).get(m["model_family"], {})
     assert any(a["job_id"] == "J-TODAY-V1" and a["result"] == "failed" for lst in now.values() for a in lst)
     assert not ev.attempts([logged], store.machine, as_of=ev.NOW)                  # a replay of that same day does not see it
+
+
+def test_snap_fix_maps_a_models_wording_onto_the_records_wording():
+    known = ["Replaced inverter PCB (A2P) and updated its firmware.", "Replaced compressor contactor and checked phase voltages.",
+             "Replaced compressor relay board (DK-RLY-B2)"]
+    assert ev.snap_fix("Replaced the faulty board with revision D (DK-PCB-A2P-D) and updated firmware", known) == known[0]
+    assert ev.snap_fix("Replaced the compressor contactor (DK-CTR-24V)", known) == known[1]
+
+
+def test_snap_fix_never_merges_different_repairs_and_never_invents_one():
+    known = ["Replaced inverter PCB (A2P) and updated its firmware.", "Replaced compressor contactor and checked phase voltages."]
+    assert ev.snap_fix("Topped up refrigerant (R410A)", known) == "Topped up refrigerant (R410A)"
+    assert ev.snap_fix("Replaced compressor relay board", known) == "Replaced compressor relay board"

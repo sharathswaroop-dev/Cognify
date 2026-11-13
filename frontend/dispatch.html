@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live dispatch — Cognify</title>
+<link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/site.css">
+<style>
+body{font-size:17px}
+#stage{position:relative;height:calc(100vh - 65px);min-height:700px;overflow:hidden;background:#04070f;border-bottom:1px solid var(--line)}
+#cv{position:absolute;inset:0;width:100%;height:100%;display:block}
+.glass{position:absolute;background:rgba(7,11,28,.66);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(139,92,246,.26);border-radius:24px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
+.thin{scrollbar-width:thin;scrollbar-color:#2c3560 transparent}
+/* top bar */
+#hud{position:absolute;left:50%;top:18px;transform:translateX(-50%);display:flex;gap:10px;align-items:center;padding:10px 12px 10px 20px;border-radius:99px;z-index:5;white-space:nowrap}
+.live{display:inline-flex;align-items:center;gap:9px;font:700 13px "JetBrains Mono";color:var(--ok);letter-spacing:.1em}
+.live i{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 rgba(52,211,153,.7);animation:lv 1.6s infinite}
+@keyframes lv{70%{box-shadow:0 0 0 10px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.hud-s{display:flex;gap:18px;margin:0 8px 0 10px}.hud-s div{font:500 12.5px "Inter";color:var(--mu)}.hud-s b{font:800 19px "Sora";color:#fff;margin-right:5px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:3px;background:rgba(255,255,255,.04)}.seg button{border:0;background:none;color:var(--mu);padding:7px 16px;border-radius:99px;font:600 13.5px "Inter";cursor:pointer}.seg button.on{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}#m-man.on{background:linear-gradient(135deg,#d97706,#f59e0b);color:#1a1200}
+.hbtn{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--tx);border-radius:99px;padding:9px 16px;font:600 14px "Inter";cursor:pointer;transition:.2s}
+.hbtn:hover{border-color:var(--pu2);background:rgba(139,92,246,.16)}.hbtn.pri{background:linear-gradient(135deg,var(--pu),#6d4ae0);border-color:transparent;color:#fff}.hbtn.on{border-color:var(--ok);color:var(--ok)}
+/* panels */
+#left{left:20px;top:86px;bottom:84px;width:392px;padding:20px;overflow-y:auto;z-index:4}
+#right{right:20px;top:86px;bottom:84px;width:330px;padding:20px;overflow-y:auto;z-index:4}
+.h{font:700 11.5px "Inter";letter-spacing:.16em;text-transform:uppercase;color:#6f7bb0;margin:0 0 10px}
+.req .pr{display:flex;align-items:center;gap:14px}
+.req .sc{flex:none;width:62px;height:62px;border-radius:18px;display:grid;place-items:center;align-content:center;font:800 27px/1 "Sora";letter-spacing:-.05em;background:linear-gradient(160deg,#241d52,#171a42);border:1px solid #4a3aa8}
+.req .sc small{display:block;font:600 8.5px "Inter";letter-spacing:.14em;color:#a78bfa;margin-top:3px}
+.req h3{font:700 18px/1.28 "Sora";letter-spacing:-.02em}.req .m{color:var(--mu);font-size:13.5px;line-height:1.5;margin-top:3px}.req .m b{color:var(--tx)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font:500 12px "Inter";padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mu);background:rgba(255,255,255,.03)}
+.chip.urgent{color:var(--er);border-color:rgba(251,113,133,.45);background:rgba(251,113,133,.08)}.chip.high{color:var(--wa);border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.08)}.chip.normal{color:var(--cy);border-color:rgba(34,211,238,.4);background:rgba(34,211,238,.07)}
+.st{display:inline-block;font:700 11px "Inter";letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:99px}
+.st.offered{background:rgba(251,191,36,.12);color:var(--wa);border:1px solid rgba(251,191,36,.4)}.st.en_route{background:rgba(34,211,238,.1);color:var(--cy);border:1px solid rgba(34,211,238,.4)}
+.st.on_site,.st.working{background:rgba(139,92,246,.14);color:var(--pu2);border:1px solid rgba(139,92,246,.45)}.st.resolved{background:rgba(52,211,153,.1);color:var(--ok);border:1px solid rgba(52,211,153,.4)}.st.unassigned{background:rgba(251,113,133,.1);color:var(--er);border:1px solid rgba(251,113,133,.4)}
+.lay{margin-top:18px;display:grid;gap:8px}
+.ly{border:1px solid var(--line);border-radius:16px;padding:10px 14px;background:rgba(10,17,40,.7);transition:.3s;position:relative}
+.ly .t{display:flex;align-items:center;gap:8px;font:700 14px "Sora"}.ly .t span{margin-left:auto;font:700 10.5px "Inter";letter-spacing:.1em;text-transform:uppercase}
+.ly .s{color:var(--mu);font-size:12.5px;margin-top:2px}
+.ly.idle{opacity:.5}.ly.skipped{opacity:.4}.ly.skipped .t span{color:#6f7bb0}
+.ly.active{border-color:var(--wa);background:linear-gradient(160deg,rgba(251,191,36,.13),rgba(10,17,40,.8));box-shadow:0 0 0 1px var(--wa),0 0 34px -8px rgba(251,191,36,.6)}.ly.active .t span{color:var(--wa)}
+.ly.failed{border-color:rgba(251,113,133,.5)}.ly.failed .t span{color:var(--er)}
+.ly.won{border-color:var(--ok);background:linear-gradient(160deg,rgba(52,211,153,.12),rgba(10,17,40,.8))}.ly.won .t span{color:var(--ok)}
+.tc{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tb{font:600 12px "Inter";padding:4px 11px;border-radius:99px;border:1px solid var(--line);color:var(--mu);background:#0a1128}
+.tb.pending{color:var(--wa);border-color:var(--wa);animation:pl 1.2s ease-in-out infinite}@keyframes pl{50%{background:rgba(251,191,36,.18)}}
+.tb.accepted{color:var(--ok);border-color:var(--ok);background:rgba(52,211,153,.1)}.tb.won{color:#04120c;background:var(--ok);border-color:var(--ok)}
+.tb.declined,.tb.timeout{color:var(--er);border-color:rgba(251,113,133,.45);text-decoration:line-through;opacity:.8}.tb.lost{opacity:.5;text-decoration:line-through}
+.feed{display:grid;gap:7px;margin-top:6px}
+.fe{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:#c4cdee;animation:sl .5s var(--ease)}@keyframes sl{from{opacity:0;transform:translateX(-12px)}}
+.fe i{font-style:normal;flex:none;width:22px;text-align:center}.fe small{display:block;color:#6f7bb0;font:500 11px "JetBrains Mono"}
+.fe.start{color:#ddd6fe}.fe.offer{color:#fde7a6}.fe.accept{color:#a7f3d0}.fe.search{color:#a5f3fc}.fe.alert{color:#fecdd3}.fe.resolved{color:#a7f3d0}
+.man{margin-top:16px;border:1px solid var(--wa);border-radius:18px;padding:14px;background:linear-gradient(160deg,rgba(251,191,36,.1),rgba(10,17,40,.8))}
+.man .h{color:var(--wa)}.man .row{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:14px}.man .row b{flex:1;font-weight:600}.man .row small{color:var(--mu);font-size:11.5px;font-family:"JetBrains Mono"}
+.mb{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--tx);border-radius:99px;padding:6px 13px;font:600 12.5px "Inter";cursor:pointer}.mb:hover{border-color:var(--pu2)}
+.mb.ok{border-color:var(--ok);color:var(--ok)}.mb.no{border-color:var(--er);color:var(--er)}.mb.all{width:100%;margin-top:10px;padding:9px;border-color:var(--er);color:var(--er)}
+.otp{margin-top:16px;border:1px solid var(--pu2);border-radius:18px;padding:14px;background:linear-gradient(160deg,rgba(139,92,246,.16),rgba(10,17,40,.8))}.otp .code{font:800 34px "JetBrains Mono";letter-spacing:.22em;color:#fff;margin:6px 0 2px}.otp small{color:var(--mu);font-size:12.5px;line-height:1.5;display:block}
+.ok2{margin-top:14px;font-size:14px;color:var(--ok)}
+.why{margin-top:14px}.why summary{cursor:pointer;color:var(--pu2);font:600 13.5px "Inter"}
+.rk{display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px dashed var(--line);font-size:13px}
+.rk .n{width:24px;height:24px;border-radius:8px;background:#151c3b;display:grid;place-items:center;font:700 12px "JetBrains Mono";color:var(--mu)}.rk.top .n{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}
+.rk b.t{font:700 17px "Sora"}.rk .w{color:var(--mu);font-size:12px;display:block;line-height:1.4}
+.stack{display:flex;height:8px;border-radius:99px;overflow:hidden;background:#141c3c;margin-top:6px}.stack i{display:block;height:100%}
+.rl{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;margin-bottom:22px}
+.ri{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(10,17,40,.6);cursor:pointer;transition:.2s}
+.ri:hover{border-color:var(--pu2)}.ri.sel{border-color:var(--pu2);background:rgba(139,92,246,.14)}.ri.done{opacity:.5}
+.ri .p{font:800 16px "Sora";width:34px}.ri .tx{flex:1;min-width:0;font-size:12.5px;line-height:1.35;color:var(--mu)}.ri .tx b{display:block;color:var(--tx);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro{display:flex;align-items:center;gap:10px;font-size:14px;padding:5px 0}.ro i{width:10px;height:10px;border-radius:50%;flex:none}.ro span{color:var(--mu);font-size:12px;margin-left:auto}
+/* bottom stepper */
+#bar{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);padding:12px 24px;border-radius:99px;z-index:5;display:flex;gap:4px;align-items:center;max-width:calc(100vw - 60px);min-width:560px;overflow:hidden}
+.sp2{display:flex;align-items:center;gap:7px;font:600 12px "Inter";color:#5b678f;white-space:nowrap}.sp2 b{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;border:1px solid #2c3560;font:700 11px "JetBrains Mono"}
+.sp2.on{color:#fff}.sp2.on b{background:linear-gradient(135deg,var(--pu),#6d4ae0);border-color:transparent;color:#fff;box-shadow:0 0 18px rgba(139,92,246,.8)}.sp2.done{color:var(--ok)}.sp2.done b{background:rgba(52,211,153,.15);border-color:var(--ok);color:var(--ok)}
+.ar{flex:1;min-width:10px;height:1px;background:#2c3560;margin:0 4px}
+#tip{position:absolute;z-index:6;pointer-events:none;background:rgba(7,11,28,.92);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px;max-width:280px;display:none;line-height:1.45}
+#tip b{font:700 15px "Sora"}
+.empty{color:var(--mu);font-size:14px;line-height:1.6}
+@media(max-width:1250px){#bar{display:none}#right{display:none}#left{width:340px}}
+@media(max-width:820px){#stage{height:auto;min-height:0}#cv{position:relative;height:60vh}#left{position:relative;width:auto;left:0;top:0;bottom:0;margin:14px;border-radius:20px}#hud{position:relative;transform:none;left:0;top:0;margin:14px;flex-wrap:wrap}}
+/* the long explanation */
+.page{padding:60px 40px 90px;max-width:1500px;margin:0 auto}
+.how .k{font:600 13px "JetBrains Mono";letter-spacing:.1em;color:var(--cy);text-transform:uppercase}
+.how h2{font-size:clamp(32px,3.8vw,52px);margin:10px 0 12px;max-width:22ch}.how .lead{color:var(--mu);font-size:19px;line-height:1.6;max-width:860px}
+.flow{display:grid;gap:14px;margin-top:30px;counter-reset:s}
+.step{display:grid;grid-template-columns:64px 1fr;gap:22px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px 28px;counter-increment:s}
+.step:before{content:counter(s);width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font:800 24px "Sora";background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}
+.step h3{font:700 23px "Sora";letter-spacing:-.02em;margin-bottom:6px}.step p{color:var(--mu);font-size:17px;line-height:1.6}.step p b{color:var(--tx)}
+.cases{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}@media(max-width:1200px){.cases{grid-template-columns:1fr 1fr}}@media(max-width:760px){.cases{grid-template-columns:1fr}}
+.case{background:#0a1128;border:1px solid var(--line);border-radius:22px;padding:22px}.case small{font:600 12px "JetBrains Mono";letter-spacing:.08em;color:var(--wa);text-transform:uppercase}.case h4{font:700 20px/1.3 "Sora";margin:8px 0}.case p{color:var(--mu);font-size:16px;line-height:1.55}.case .ex{margin-top:10px;font-size:14.5px;color:#c9b8ff;border-top:1px dashed var(--line);padding-top:10px}
+.note{margin-top:30px;border:1px dashed var(--line);border-radius:22px;padding:22px 26px;color:var(--mu);font-size:16.5px;line-height:1.65}.note b{color:#fff}
+/* modal */
+.mod{position:fixed;inset:0;background:rgba(3,5,12,.7);backdrop-filter:blur(6px);display:none;place-items:center;z-index:100;padding:20px}.mod.on{display:grid}
+.mcard{width:min(580px,100%);background:#0e1530;border:1px solid var(--line);border-radius:26px;padding:28px}
+.mcard h2{font-size:28px;margin-bottom:14px}
+.mcard label{display:block;font:600 12.5px "Inter";letter-spacing:.06em;text-transform:uppercase;color:var(--mu);margin:14px 0 6px}
+.mcard select,.mcard input,.mcard textarea{width:100%;background:#0a1128;border:1px solid var(--line);border-radius:14px;color:var(--tx);padding:13px 15px;font:inherit;font-size:16px}
+.mcard textarea{min-height:92px;resize:vertical}
+.sev{display:flex;gap:8px}.sev button{flex:1;padding:12px;border-radius:14px;border:1px solid var(--line);background:#0a1128;color:var(--mu);font:600 15px "Inter";cursor:pointer}.sev button.on{color:#fff;border-color:var(--pu2);background:#1d2150}
+.row2{display:flex;gap:12px;margin-top:20px}.err{color:var(--er);font-size:14.5px;margin-top:12px}
+</style></head><body>
+<div id="navmount"></div>
+<div id="stage">
+  <canvas id="cv"></canvas>
+  <div id="hud" class="glass"><span class="live"><i></i>LIVE DISPATCH · SIMULATION</span>
+    <div class="hud-s" id="hudS"></div>
+    <div class="seg" title="Demo: simulated technicians answer by themselves. Manual: nobody answers until you (or a real phone) accepts or rejects."><button id="m-demo" class="on">Demo</button><button id="m-man">Manual</button></div>
+    <select id="plan" class="hbtn" title="Demo mode: how many technicians decline before one accepts (7 and 12 bring in the 30-technician city fleet)"><option value="">Who accepts: random</option><option value="0">First request accepts</option><option value="3">After 3 decline</option><option value="7">After 7 decline</option><option value="12">After 12 decline</option><option value="-1">Nobody accepts</option></select>
+    <button class="hbtn" id="auto" title="Keep sending sample requests so the screen is never idle">Auto-play</button>
+    <button class="hbtn" id="sim">⚡ Simulate a request</button><button class="hbtn pri" id="new">+ Report a problem</button><a class="hbtn" href="#how" style="text-decoration:none">How it works ↓</a></div>
+  <aside id="left" class="glass thin"></aside>
+  <aside id="right" class="glass thin"></aside>
+  <div id="bar" class="glass"></div>
+  <div id="tip"></div>
+</div>
+
+<main class="page"><section class="how" id="how">
+  <div class="k">How the dispatch system works</div>
+  <h2>From "something is wrong" to a technician at the door</h2>
+  <p class="lead">Nothing here is a black box. Every step is a rule you can read, every number is shown on the screen above, and every decision is written to the log of the request it belongs to.</p>
+  <div class="flow">
+    <div class="step"><div><h3>Someone reports a problem</h3><p>A facility manager reports it in the app or on this page: <b>which site, which unit, what is wrong, how urgent</b>. The system checks that the unit belongs to that site, then opens the request: a beacon appears on the map.</p></div></div>
+    <div class="step"><div><h3>It is ranked against every other open request</h3><p>Each request gets a <b>priority score</b> out of 100: severity (urgent 40, high 30, normal 15), how critical the site is (a hospital or data centre +20, an office or hotel +10, a residence +5), how long it has waited (the score rises while nobody takes it), and how likely this unit is to fail again, from the memory. The reasons are shown with every request.</p></div></div>
+    <div class="step"><div><h3>The search is layered: small first, wider only when needed</h3><p>Like a ride-hailing app, the first layer is <b>everyone free within 3 km</b>. If nobody is free inside, the system skips to <b>8 km</b>, then <b>15 km</b>, then <b>30 km</b>. The rings on the map are these layers; the amber one is the layer being notified right now.</p></div></div>
+    <div class="step"><div><h3>Only technicians who are online and inside the layer see it</h3><p>Like a ride-hailing captain, a technician switches <b>Online</b> or <b>Offline</b> in the app. Offline technicians receive nothing and are never asked, not even as a last resort. Online technicians outside the current layer do not see the request either: an offer reaches a phone only when that technician is inside the radius being notified.</p></div></div>
+    <div class="step"><div><h3>Demo mode and Manual mode</h3><p>In <b>Demo</b> mode the simulated technicians answer by themselves, some accept and some decline, so the whole story plays without anyone touching anything. In <b>Manual</b> mode nobody answers until a person decides: either you, with the Accept and Reject buttons on this screen, or a real technician on the phone app. The same two modes exist in the app: a technician's phone can be set to Demo (the simulation plays that technician) or Manual (the person decides), and a reporter chooses the mode of each request.</p></div></div>
+    <div class="step"><div><h3>Everyone in the layer is notified at once</h3><p>A notification goes to <b>all</b> free technicians inside the current layer at the same moment. Each one sees the job, the distance, the ETA and <b>why they were picked</b>, and has 45 seconds to accept or decline. You can watch the packets travel from the request to each phone.</p></div></div>
+    <div class="step"><div><h3>The best match among those who accept gets the job</h3><p>The first accept opens a short window (4 seconds). When it closes, the technician with the highest <b>match score</b> among those who accepted wins: 38% closeness, 30% <b>verified experience on this exact kind of fault</b> (from the raw visit records), 12% skill, 20% availability. The others are told a better match took it. <a href="/how-matching-works" style="color:var(--pu2)">Try the scoring with any site and unit →</a></p></div></div>
+    <div class="step"><div><h3>If everyone in the layer says no, the next layer opens</h3><p>Declines and silence are written to the log. When nobody in a layer takes the job, the log says <b>"Everyone within 3 km said no or did not answer. Widening the search to within 8 km"</b> and the next ring lights up.</p></div></div>
+    <div class="step"><div><h3>Busy technicians and the manager are the last resort</h3><p>If every free technician has said no, the busy ones are asked, soonest first, with their remaining job time added to the ETA. If nobody at all can take it, the request turns red as <b>Needs a manager</b>.</p></div></div>
+    <div class="step"><div><h3>The winner drives over, and the customer gets a one-time code</h3><p>The job opens in their app. They can watch the <b>four agents</b> (Dispatcher, Diagnostician, Parts, Verifier) work in a Band room: what failed on this unit before, what to do first, what to bring. The reporter follows the drive on their own screen and sees a <b>4-digit OTP</b>, shown only to them.</p></div></div>
+    <div class="step"><div><h3>The OTP proves who is solving the problem</h3><p>When the technician arrives, they ask the customer for the code and type it in. <b>The work cannot start, and the job cannot be closed, until the right code is entered</b>. A wrong code is logged, and after five wrong tries the job locks. Only then does the status become "Working".</p></div></div>
+    <div class="step"><div><h3>While they work, the app becomes an assistant</h3><p>When the work starts, the technician's app switches to a chat that already knows the unit. They can ask "what failed here before?", "what do I check first?" or "which part do I need?" and get answers from the shared memory, with the records behind them.</p></div></div>
+    <div class="step"><div><h3>The visit is logged and the memory gets smarter</h3><p>The technician logs what they tried, including what failed. The request closes, the technician is free again at the site, and the visit goes into the shared memory. The <b>next</b> match and the <b>next</b> briefing both use it.</p></div></div>
+  </div>
+  <h2 style="margin-top:56px">What if…</h2>
+  <p class="lead">The cases that decide whether a dispatch system is any good. Each one is a rule in the code, with a test.</p>
+  <div class="cases">
+    <div class="case"><small>Nobody is close</small><h4>No free technician within 3 km, or 8, or 15</h4><p>The layers with nobody free are skipped, each skip is logged, and the first notification goes to the nearest layer that has anyone free.</p><div class="ex">Try it: report a problem at <b>Nexa Data Center</b> (Electronic City). Nobody is within 8 km, so layer 1 is the 15 km ring.</div></div>
+    <div class="case"><small>The nearest has never seen it</small><h4>A close technician with no history on this fault</h4><p>Distance is 38% of the score, not 100%. If both accept, the technician with proven experience on this exact fault wins the job.</p><div class="ex">Try it: <b>M-42</b> (cassette, MG Road). Farhan is 5.9 km away but has fixed 5 similar faults, so he beats the closer Arjun.</div></div>
+    <div class="case"><small>Two accept at once</small><h4>Several technicians say yes</h4><p>The first accept starts a 4-second window. When it ends, the highest match score among the acceptors wins; the rest are told a better match took it.</p></div>
+    <div class="case"><small>Everyone says no</small><h4>The whole layer declines or stays silent</h4><p>After everyone has answered, or 45 seconds pass, the next layer opens and every technician in it is notified. A technician is never asked twice for the same request.</p></div>
+    <div class="case"><small>A technician is offline</small><h4>They switched to Offline, or are off shift</h4><p>They are not notified and not asked as a last resort, and they show grey on the map. They cannot go offline in the middle of a job.</p></div>
+    <div class="case"><small>A wrong OTP</small><h4>Someone enters a code that is not right</h4><p>The attempt is logged, the work does not start, and after five wrong tries the job locks and the manager is told.</p></div>
+    <div class="case"><small>Everyone is busy</small><h4>All free technicians have said no, or there are none</h4><p>The busy ones are asked, soonest first, with their remaining job time added to the ETA. If even they cannot, the request escalates to a manager.</p></div>
+    <div class="case"><small>A new technician joins</small><h4>No history yet</h4><p>They are scored on distance, skill and availability only, with zero experience points. Every visit they log adds to the memory, so their score on that kind of fault rises with the work.</p></div>
+  </div>
+  <div class="note"><b>What is simulated.</b> Coordinates, technician positions and availability are simulated (a fictional Bengaluru contractor, no real GPS). Technicians whose phone is not connected answer by themselves after a few seconds, so the screen is alive without phones. The match weights (38 / 30 / 12 / 20), the radii (3 / 8 / 15 / 30 km) and the 4-second window are set by hand, not learned, and are one line each to change in <code style="font:500 14px 'JetBrains Mono';color:#c9b8ff">backend/dispatch.py</code>. The repair histories behind the experience score are the sample company's synthetic records.</div>
+</section></main>
+
+<div class="mod" id="mod"><div class="mcard"><h2>Report a problem</h2>
+  <label>Your name</label><input id="f-name" placeholder="e.g. Priya Nair" autocomplete="off">
+  <label>Site</label><select id="f-site"></select>
+  <label>Unit</label><select id="f-mach"></select>
+  <label>How urgent</label><div class="sev" id="f-sev"><button data-s="normal">Normal</button><button data-s="high" class="on">High</button><button data-s="urgent">Urgent</button></div>
+  <label>What is wrong <a href="#" id="f-typ" style="float:right;text-transform:none;letter-spacing:0;color:var(--pu2)">use a typical description</a></label><textarea id="f-sym" placeholder="e.g. Outdoor unit keeps tripping and the floor is not cooling"></textarea>
+  <div class="err" id="f-err"></div>
+  <div class="row2"><button class="btn ghost" id="f-cancel">Cancel</button><button class="btn" id="f-go">Send it out</button></div></div></div>
+<script src="/static/site.js"></script>
+<script>
+$("#navmount").outerHTML=nav("d");
+/* ====================================================== state */
+const RINGS=[3,8,15,30],KMLAT=111.32,KMLNG=111.32*Math.cos(13*Math.PI/180),CLAT=12.95,CLNG=77.63;
+const COL={available:"#34d399",busy:"#fbbf24",en_route:"#22d3ee",on_site:"#a78bfa",off_duty:"#5b678f"},PC={closeness:"#22d3ee",experience:"#a78bfa",skill:"#fbbf24",availability:"#34d399"};
+const SEV={urgent:"#fb7185",high:"#fbbf24",normal:"#22d3ee"};
+let BOARD=[],MAP=null,SEL=null,PREV={},META=null,AUTO=false,MANUAL=false,lastMake=0,KNOWN=null,PICKED=0,SYNCED=null,PHOTOS={};
+const TECH={},FX=[],T0=performance.now(),cam={lat:CLAT,lng:CLNG,sc:20,base:20};
+(()=>{const arc=CanvasRenderingContext2D.prototype.arc;CanvasRenderingContext2D.prototype.arc=function(x,y,r,s,e,c){return arc.call(this,x,y,Math.max(0,r),s,e,c)}})();   /* an easing overshoot can make a radius slightly negative: draw nothing instead of throwing */
+let SES=localStorage.getItem("cg_presenter_session")||"";
+async function presenterLogin(){let key=localStorage.getItem("cg_presenter_key")||"";
+  for(let i=0;i<3;i++){const r=await fetch("/api/dispatch/presenter-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key})});
+    if(r.ok){SES=(await r.json()).session;localStorage.setItem("cg_presenter_session",SES);return true}
+    if(r.status===429)throw new Error("Too many attempts. Wait a minute and reload.");
+    key=prompt("Presenter key (the DISPATCH_PRESENTER_KEY set on the server). Leave it empty if this is the laptop running Cognify.")||"";localStorage.setItem("cg_presenter_key",key)}
+  return false}
+async function authed(url,opt){const go=()=>fetch(url,{...(opt||{}),headers:{"Content-Type":"application/json","X-Cognify-Session":SES}});let r=await go();if(r.status===401||r.status===403){if(await presenterLogin())r=await go()}return r}
+const apiPost=(p,b)=>authed(p,{method:"POST",body:JSON.stringify(b||{})}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"Something went wrong");return d});
+const apiGet=p=>authed(p).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"Request failed");return d});
+/* ====================================================== canvas */
+const cv=$("#cv"),ctx=cv.getContext("2d");let DPR=1,VW=0,VH=0,SC=20,CX=0,CY=0;
+let CW=800;
+function resize(){const r=$("#stage").getBoundingClientRect();DPR=Math.min(2,window.devicePixelRatio||1);VW=r.width;VH=cv.clientHeight||r.height;cv.width=VW*DPR;cv.height=VH*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+  const wide=VW>1250;CW=wide?VW-780:VW-(VW>820?380:0);cam.base=Math.max(8,Math.min(CW*.94/36,VH*.84/28));if(!cam.sc||cam.sc<5)cam.sc=cam.base;SC=cam.sc;CX=wide?VW/2:VW/2+(VW>820?170:0);CY=VH/2+30}
+addEventListener("resize",resize);
+const P=(lat,lng)=>[CX+(lng-cam.lng)*KMLNG*SC,CY-(lat-cam.lat)*KMLAT*SC];
+function rnd(seed){return()=>{seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+/* a deterministic city: arterial roads, ring roads and glowing districts, so the map feels alive without any map tiles */
+const ROADS=(()=>{const r=rnd(7),out=[];for(let i=0;i<22;i++){const a=i/22*Math.PI*2+r()*.2,len=18+r()*16,bend=(r()-.5)*.5;out.push({k:"rad",a,len,bend})}
+  for(let i=0;i<30;i++)out.push({k:"seg",x:(r()-.5)*40,y:(r()-.5)*32,a:r()*Math.PI,len:3+r()*7});return out})();
+function drawCity(t){
+  const [OX,OY]=P(CLAT,CLNG);
+  const g=ctx.createRadialGradient(VW/2,VH/2,0,VW/2,VH/2,Math.max(VW,VH)*.7);g.addColorStop(0,"#0b1330");g.addColorStop(.55,"#070c1f");g.addColorStop(1,"#03050d");ctx.fillStyle=g;ctx.fillRect(0,0,VW,VH);
+  ctx.save();ctx.strokeStyle="rgba(143,153,194,.05)";ctx.lineWidth=1;const gs=SC*2;for(let x=((OX%gs)+gs)%gs;x<VW;x+=gs){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,VH);ctx.stroke()}for(let y=((OY%gs)+gs)%gs;y<VH;y+=gs){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(VW,y);ctx.stroke()}ctx.restore();
+  ctx.save();ctx.lineCap="round";
+  [6,11,17,24].forEach((km,i)=>{ctx.strokeStyle=`rgba(120,140,220,${.07-i*.01})`;ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(OX+1.5*SC,OY+1*SC,km*SC*1.05,km*SC*.95,.15,0,Math.PI*2);ctx.stroke()});
+  ROADS.forEach(rd=>{ctx.strokeStyle="rgba(120,140,220,.075)";ctx.lineWidth=1.2;ctx.beginPath();
+    if(rd.k==="rad"){const x0=OX+1.5*SC,y0=OY+SC;ctx.moveTo(x0,y0);const x1=x0+Math.cos(rd.a)*rd.len*SC,y1=y0+Math.sin(rd.a)*rd.len*SC*.9;ctx.quadraticCurveTo(x0+Math.cos(rd.a+rd.bend)*rd.len*SC*.55,y0+Math.sin(rd.a+rd.bend)*rd.len*SC*.5,x1,y1)}
+    else{const x0=OX+rd.x*SC,y0=OY+rd.y*SC;ctx.moveTo(x0,y0);ctx.lineTo(x0+Math.cos(rd.a)*rd.len*SC,y0+Math.sin(rd.a)*rd.len*SC)}ctx.stroke()});
+  ctx.restore();
+  if(MAP)MAP.sites.forEach(s=>{const [x,y]=P(s.lat,s.lng);const gg=ctx.createRadialGradient(x,y,0,x,y,SC*3.2);gg.addColorStop(0,"rgba(80,100,200,.16)");gg.addColorStop(1,"rgba(80,100,200,0)");ctx.fillStyle=gg;ctx.fillRect(x-SC*3.2,y-SC*3.2,SC*6.4,SC*6.4)});
+}
+const focus=()=>BOARD.find(r=>r.id===SEL);
+const ease=x=>1-Math.pow(1-x,3);
+function ringPath(cx,cy,km){ctx.beginPath();ctx.ellipse(cx,cy,km*KMLNG/KMLNG*SC,km*SC,0,0,Math.PI*2)}
+function drawRings(F,t){
+  const [bx,by]=P(MAP.sites.find(s=>s.id===F.site_id).lat,MAP.sites.find(s=>s.id===F.site_id).lng);
+  (F.layers||[]).forEach((L,i)=>{if(i>=RINGS.length)return;const km=RINGS[i],st=L.state,R=km*SC;
+    ctx.save();ctx.beginPath();ctx.arc(bx,by,R,0,Math.PI*2);
+    if(st==="active"){const pul=.5+.5*Math.sin(t*3);ctx.fillStyle=`rgba(251,191,36,${.05+.04*pul})`;ctx.fill();ctx.strokeStyle="rgba(251,191,36,.95)";ctx.lineWidth=2.4;ctx.shadowColor="#fbbf24";ctx.shadowBlur=22;ctx.setLineDash([]);ctx.stroke();
+      if(ctx.createConicGradient){ctx.shadowBlur=0;ctx.beginPath();ctx.moveTo(bx,by);const a=t*1.9;ctx.arc(bx,by,R,a-1.1,a);ctx.closePath();const cg=ctx.createConicGradient(a-1.1,bx,by);cg.addColorStop(0,"rgba(251,191,36,0)");cg.addColorStop(.18,"rgba(251,191,36,.34)");cg.addColorStop(.19,"rgba(251,191,36,0)");ctx.fillStyle=cg;ctx.fill()}}
+    else if(st==="failed"){ctx.strokeStyle="rgba(251,113,133,.55)";ctx.lineWidth=1.6;ctx.setLineDash([3,8]);ctx.stroke()}
+    else if(st==="won"){ctx.fillStyle="rgba(52,211,153,.05)";ctx.fill();ctx.strokeStyle="rgba(52,211,153,.9)";ctx.lineWidth=2.2;ctx.shadowColor="#34d399";ctx.shadowBlur=16;ctx.stroke()}
+    else{ctx.strokeStyle=st==="skipped"?"rgba(120,130,170,.18)":"rgba(251,191,36,.3)";ctx.lineWidth=1.2;ctx.setLineDash([6,9]);ctx.stroke()}
+    ctx.restore();
+    const ang=-.62-i*.18,lx=bx+Math.cos(ang)*R,ly=by+Math.sin(ang)*R;
+    const txt=`LAYER ${i+1} · ${km} km · ${L.free} free${st==="failed"?" · no takers":st==="won"?" · matched":st==="skipped"?" · skipped":""}`;
+    ctx.save();ctx.font="700 11px Inter";const w=ctx.measureText(txt).width+18;ctx.fillStyle="rgba(5,8,20,.8)";ctx.strokeStyle=st==="active"?"#fbbf24":st==="failed"?"rgba(251,113,133,.6)":st==="won"?"#34d399":"rgba(120,130,170,.35)";ctx.lineWidth=1;
+    ctx.beginPath();ctx.roundRect(lx-w/2,ly-11,w,22,11);ctx.fill();ctx.stroke();ctx.fillStyle=st==="active"?"#fde7a6":st==="failed"?"#fda4af":st==="won"?"#a7f3d0":"#7a87b8";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(txt,lx,ly+.5);ctx.restore()});
+  return [bx,by]}
+function bez(p0,p1,k,u){const mx=(p0[0]+p1[0])/2,my=(p0[1]+p1[1])/2,dx=p1[0]-p0[0],dy=p1[1]-p0[1],cx=mx-dy*k,cy=my+dx*k,a=(1-u)*(1-u),b=2*(1-u)*u,c=u*u;return[a*p0[0]+b*cx+c*p1[0],a*p0[1]+b*cy+c*p1[1]]}
+function drawBeacon(x,y,color,t,big){
+  for(let i=0;i<3;i++){const u=((t*.55+i/3)%1),r=(big?10:6)+u*(big?62:30);ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle=color;ctx.globalAlpha=(1-u)*.55;ctx.lineWidth=2;ctx.stroke()}
+  ctx.globalAlpha=1;ctx.save();ctx.shadowColor=color;ctx.shadowBlur=big?28:14;ctx.beginPath();ctx.arc(x,y,big?10:6,0,Math.PI*2);ctx.fillStyle="#0a0610";ctx.fill();ctx.lineWidth=big?3.2:2.2;ctx.strokeStyle=color;ctx.stroke();ctx.beginPath();ctx.arc(x,y,big?4:2.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.restore()}
+function techPos(id){const o=TECH[id];return o?P(o.lat,o.lng):null}
+const tpx=o=>P(o.lat,o.lng);
+function drawPackets(F,t,B){
+  const wave=(F.offers||[]).filter(o=>o.wave===F.wave);
+  wave.forEach(o=>{const p=techPos(o.tech_id);if(!p)return;const seed=o.tech_id.charCodeAt(2)*.37;
+    const col=o.result==="pending"?"#fbbf24":o.result==="accepted"?"#34d399":o.result==="won"?"#34d399":o.result==="lost"?"#6f7bb0":"#fb7185";
+    if(o.result==="pending"||o.result==="accepted"||o.result==="won"){
+      const back=o.result!=="pending";ctx.save();ctx.strokeStyle=col;ctx.globalAlpha=o.result==="won"?.9:.28;ctx.lineWidth=o.result==="won"?3:1.4;ctx.beginPath();ctx.moveTo(B[0],B[1]);const m=bez(B,p,.18,.5);ctx.quadraticCurveTo(m[0]*2-(B[0]+p[0])/2,m[1]*2-(B[1]+p[1])/2,p[0],p[1]);ctx.stroke();ctx.restore();
+      const n=o.result==="won"?5:4;for(let i=0;i<n;i++){let u=((t*(back?.6:.5)+i/n+seed)%1);const q=back?bez(p,B,.18,u):bez(B,p,.18,u);ctx.save();ctx.shadowColor=col;ctx.shadowBlur=14;ctx.fillStyle=col;ctx.globalAlpha=.4+.6*Math.sin(Math.PI*u);ctx.beginPath();ctx.arc(q[0],q[1],3.2,0,Math.PI*2);ctx.fill();ctx.restore()}}
+    if(o.result==="pending"){const fr=Math.max(0,Math.min(1,o.left/45));ctx.save();ctx.strokeStyle="rgba(251,191,36,.95)";ctx.lineWidth=3;ctx.shadowColor="#fbbf24";ctx.shadowBlur=10;ctx.beginPath();ctx.arc(p[0],p[1],19,-Math.PI/2,-Math.PI/2+fr*Math.PI*2);ctx.stroke();
+      const pu=((t*1.2+seed)%1);ctx.globalAlpha=(1-pu)*.7;ctx.lineWidth=2;ctx.beginPath();ctx.arc(p[0],p[1],19+pu*18,0,Math.PI*2);ctx.stroke();ctx.restore()}
+    if(o.result==="won"){ctx.save();ctx.strokeStyle="#34d399";ctx.lineWidth=2.4;ctx.shadowColor="#34d399";ctx.shadowBlur=16;ctx.beginPath();ctx.arc(p[0],p[1],21,0,Math.PI*2);ctx.stroke();ctx.restore()}});
+  /* the route of the technician who is on the way */
+  if(F.assigned&&(F.status==="en_route"||F.status==="on_site")){const p=techPos(F.assigned.id);if(p){ctx.save();ctx.strokeStyle="#22d3ee";ctx.lineWidth=2.4;ctx.shadowColor="#22d3ee";ctx.shadowBlur=14;ctx.setLineDash([2,9]);ctx.lineDashOffset=-t*30;ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(B[0],B[1]);ctx.stroke();ctx.restore()}}}
+function drawTech(o,t){
+  const [x,y]=tpx(o),col=COL[o.status]||"#8d99c2",F=focus();const off=F&&(F.offers||[]).find(q=>q.tech_id===o.id&&q.wave===F.wave);
+  let sh=0;const fx=FX.find(f=>f.type==="decline"&&f.id===o.id&&t*1000-f.t<500);if(fx)sh=Math.sin((t*1000-fx.t)/18)*5*(1-(t*1000-fx.t)/500);
+  ctx.save();ctx.translate(x+sh,y);ctx.shadowColor=col;ctx.shadowBlur=off&&off.result==="pending"?26:14;ctx.beginPath();ctx.arc(0,0,13,0,Math.PI*2);ctx.fillStyle="#070c1c";ctx.fill();ctx.lineWidth=2.6;ctx.strokeStyle=col;ctx.stroke();ctx.shadowBlur=0;
+  ctx.fillStyle="#fff";ctx.font="800 11px Sora";ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(o.name.split(" ").map(w=>w[0]).join("").slice(0,2),0,.5);
+  ctx.font="600 12px Inter";ctx.fillStyle=off&&off.result==="lost"?"#6f7bb0":"#e9edfb";ctx.textAlign="left";ctx.fillText(o.name.split(" ")[0]+(o.online?" 📱":o.mode==="demo"?" 🤖":""),18,-4);
+  if(off&&off.total!=null){ctx.font="600 10.5px JetBrains Mono";ctx.fillStyle=off.result==="won"?"#34d399":"#8d99c2";ctx.fillText("match "+off.total,18,9)}
+  ctx.restore()}
+function drawFX(t){const now=t*1000;for(let i=FX.length-1;i>=0;i--){const f=FX[i],age=now-f.t,dur=f.dur||1100;if(age>dur){FX.splice(i,1);continue}const u=age/dur;const [fx_,fy_]=P(f.lat,f.lng);f.x=fx_;f.y=fy_;f.R=(f.km||0)*SC;
+  if(f.type==="burst"||f.type==="decline"||f.type==="lost"){const col=f.type==="burst"?"#34d399":f.type==="decline"?"#fb7185":"#8d99c2";ctx.save();ctx.globalAlpha=1-u;ctx.strokeStyle=col;ctx.lineWidth=3*(1-u)+1;ctx.shadowColor=col;ctx.shadowBlur=18;ctx.beginPath();ctx.arc(f.x,f.y,14+ease(u)*52,0,Math.PI*2);ctx.stroke();
+    ctx.shadowBlur=0;ctx.font="700 13px Sora";ctx.fillStyle=col;ctx.textAlign="center";ctx.fillText(f.label,f.x,f.y-30-u*26);if(f.type==="decline"){ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(f.x-8,f.y-8);ctx.lineTo(f.x+8,f.y+8);ctx.moveTo(f.x+8,f.y-8);ctx.lineTo(f.x-8,f.y+8);ctx.stroke()}ctx.restore()}
+  else if(f.type==="broadcast"){const e=ease(u);ctx.save();ctx.globalAlpha=(1-u)*.85;ctx.strokeStyle="#fbbf24";ctx.lineWidth=4*(1-u)+1;ctx.shadowColor="#fbbf24";ctx.shadowBlur=26;ctx.beginPath();ctx.arc(f.x,f.y,e*f.R,0,Math.PI*2);ctx.stroke();ctx.restore()}
+  else if(f.type==="new"){const e=ease(u);ctx.save();ctx.globalAlpha=(1-u)*.9;ctx.strokeStyle=f.col;ctx.lineWidth=5*(1-u)+1;ctx.shadowColor=f.col;ctx.shadowBlur=30;ctx.beginPath();ctx.arc(f.x,f.y,e*SC*5,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.font="800 14px Sora";ctx.fillStyle=f.col;ctx.textAlign="center";ctx.globalAlpha=1-u;ctx.fillText("NEW REQUEST",f.x,f.y-34-u*20);ctx.restore()}
+  else if(f.type==="won"){ctx.save();ctx.globalAlpha=1-u;ctx.font="800 15px Sora";ctx.fillStyle="#34d399";ctx.textAlign="center";ctx.shadowColor="#34d399";ctx.shadowBlur=16;ctx.fillText(f.label,f.x,f.y-34-u*30);ctx.restore()}}}
+function camTarget(){const F=focus();if(!MAP||!F||F.status==="resolved")return{lat:CLAT,lng:CLNG,sc:cam.base};const s=MAP.sites.find(x=>x.id===F.site_id);if(!s)return{lat:CLAT,lng:CLNG,sc:cam.base};
+  const ring=F.current_ring||((F.layers||[]).findIndex(l=>l.state!=="idle"&&l.state!=="skipped")+1)||1;let km=ring<=RINGS.length?RINGS[ring-1]:36;
+  const a=F.assigned&&TECH[F.assigned.id];if(a)km=Math.max(km*.7,Math.hypot((a.lat-s.lat)*KMLAT,(a.lng-s.lng)*KMLNG)*1.15);
+  const need=Math.min(CW/2,VH/2*.8)/(km*1.2);return{lat:s.lat,lng:s.lng,sc:Math.max(cam.base*.9,Math.min(cam.base*4.2,need))}}
+let last=performance.now();
+function frame(now){const t=(now-T0)/1000,dt=Math.min(.1,(now-last)/1000);last=now;
+  const tg=camTarget(),kc=Math.min(1,dt*1.6);cam.lat+=(tg.lat-cam.lat)*kc;cam.lng+=(tg.lng-cam.lng)*kc;cam.sc*=Math.pow(tg.sc/cam.sc,kc);SC=cam.sc;ctx.clearRect(0,0,VW,VH);drawCity(t);
+  if(MAP){const F=focus();let B=null;
+    Object.values(TECH).forEach(o=>{const k=Math.min(1,dt*3.2);o.lat+=(o.tlat-o.lat)*k;o.lng+=(o.tlng-o.lng)*k});
+    BOARD.filter(r=>r.status!=="resolved"&&r.id!==SEL).forEach(r=>{const s=MAP.sites.find(x=>x.id===r.site_id);if(s){const [x,y]=P(s.lat,s.lng);drawBeacon(x,y,SEV[r.severity]||"#fb7185",t,false)}});
+    if(F&&F.status!=="resolved"){B=drawRings(F,t);drawPackets(F,t,B);const s=MAP.sites.find(x=>x.id===F.site_id);drawBeacon(B[0],B[1],SEV[F.severity]||"#fb7185",t,true)}
+    else if(F){const s=MAP.sites.find(x=>x.id===F.site_id),[x,y]=P(s.lat,s.lng);ctx.save();ctx.fillStyle="#34d399";ctx.shadowColor="#34d399";ctx.shadowBlur=20;ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fill();ctx.restore()}
+    MAP.sites.forEach(s=>{const [x,y]=P(s.lat,s.lng);const hot=BOARD.some(r=>r.site_id===s.id&&r.status!=="resolved");ctx.font=(hot?"600 12px":"500 11px")+" Inter";ctx.fillStyle=hot?"#e9edfb":"#56628f";ctx.textAlign="left";ctx.textBaseline="alphabetic";ctx.fillText(s.area,x+(hot?16:9),y+4);if(!hot){ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle="#3b4a86";ctx.fill()}});
+    Object.values(TECH).forEach(o=>drawTech(o,t));drawFX(t)}
+  else{ctx.fillStyle="#56628f";ctx.font="600 16px Inter";ctx.textAlign="center";ctx.fillText("Connecting…",VW/2,VH/2)}
+  requestAnimationFrame(frame)}
+/* ====================================================== data → effects → panels */
+function detect(newBoard){
+  const t=performance.now()-T0;
+  newBoard.forEach(r=>{const prev=PREV[r.id],s=MAP&&MAP.sites.find(x=>x.id===r.site_id);
+    if(!prev&&s&&r.status!=="resolved")FX.push({type:"new",lat:s.lat,lng:s.lng,col:SEV[r.severity]||"#fb7185",t,dur:1600});
+    if(prev&&s&&r.wave>prev.wave){const km=RINGS[(r.current_ring||1)-1]||30;FX.push({type:"broadcast",lat:s.lat,lng:s.lng,km,t,dur:1300})}
+    (r.offers||[]).forEach(o=>{const k=`${o.tech_id}:${o.wave}`,pr=prev&&prev.res[k],q=TECH[o.tech_id];if(!q||pr===undefined||pr===o.result)return;const w={lat:q.lat,lng:q.lng};
+      if(o.result==="declined"||o.result==="timeout")FX.push({type:"decline",id:o.tech_id,...w,label:o.result==="timeout"?"No answer":"Declined",t});
+      else if(o.result==="accepted")FX.push({type:"burst",...w,label:"Accepted",t});
+      else if(o.result==="lost")FX.push({type:"lost",...w,label:"Not chosen",t,dur:1400});
+      else if(o.result==="won")FX.push({type:"won",...w,label:"★ BEST MATCH",t,dur:2200})})});
+  PREV={};newBoard.forEach(r=>{const res={};(r.offers||[]).forEach(o=>res[`${o.tech_id}:${o.wave}`]=o.result);PREV[r.id]={wave:r.wave,res}})}
+const ICON={report:"📍",search:"📡",offer:"🔔",accept:"✅",arrive:"🚗",start:"🔑",resolved:"🏁",alert:"⚠️",info:"•"};
+const sLabel={offered:"Notifying",en_route:"Confirmed · on the way",on_site:"Arrived",working:"Working",resolved:"Resolved",unassigned:"Needs a manager"};
+function ago(t){const s=Math.max(0,Math.round(Date.now()/1000-t));return s<2?"now":s<60?s+"s ago":Math.round(s/60)+"m ago"}
+const isPhone=id=>{const t=MAP&&MAP.technicians.find(x=>x.id===id);return !!(t&&t.online)};
+function layerRows(F){return (F.layers||[]).slice(0,4).map((L,i)=>{const offs=(F.offers||[]).filter(o=>o.ring===L.ring&&o.free!==false);
+  const lab={active:"notifying",failed:"no takers",won:"matched",skipped:"nobody free",idle:"waiting"}[L.state]||L.state;
+  const sub=L.state==="skipped"?"Nobody free inside, skipped":L.state==="idle"?`${L.free} free if needed`:`${offs.length} notified`;
+  return `<div class="ly ${L.state}"><div class="t">Layer ${i+1} · ${esc(L.label)}<span>${lab}</span></div><div class="s">${sub}</div>${offs.length?`<div class="tc">${offs.map(o=>`<span class="tb ${o.result}">${esc(o.tech.split(" ")[0])}${isPhone(o.tech_id)?" 📱":""}${o.result==="won"?" ★":o.result==="accepted"?" ✓":o.result==="declined"?" ✗":""}</span>`).join("")}</div>`:""}</div>`}).join("")}
+function stepper(F){if(!F)return "";const acc=(F.offers||[]).some(o=>o.wave===F.wave&&o.result==="accepted");
+  const S=["Reported","Layer search","Notified","Accepted","Best match","On the way","Arrived","OTP verified","Resolved"];
+  const cur=F.status==="offered"?(acc?3:2):F.status==="en_route"?5:F.status==="on_site"?6:F.status==="working"?7:F.status==="resolved"?8:2;
+  return S.map((n,i)=>`<div class="sp2 ${i<cur?"done":i===cur?"on":""}"><b>${i<cur?"✓":i+1}</b>${n}</div>${i<S.length-1?'<div class="ar"></div>':""}`).join("")}
+function countBox(F){const c=F.counts;if(!c||!c.notified)return "";
+  const cell=(n,l,col)=>`<div style="flex:1;text-align:center"><b style="display:block;font:700 26px 'Inter';color:${col}">${n}</b><small style="color:var(--mu);font-size:11px;letter-spacing:.08em">${l}</small></div>`;
+  return `<div class="man" style="margin-top:14px"><div class="h" style="margin:0 0 8px">Responses so far</div><div style="display:flex;gap:4px">${cell(c.notified,"NOTIFIED","#e8ecff")}${cell(c.declined,"REJECTED","#ff6b81")}${cell(c.accepted,"ACCEPTED","#34d399")}${cell(c.waiting,"WAITING","#fbbf24")}</div>
+  ${(F.waves||[]).length>1?`<div style="margin-top:8px;font-size:12px;color:var(--mu);line-height:1.6">${F.waves.map(w=>`Layer ${w.wave} (${w.ring} km): ${w.notified} notified, ${w.declined} rejected, ${w.accepted} accepted`).join("<br>")}</div>`:""}</div>`}
+function phoneBox(F){
+  const pend=(F.offers||[]).filter(o=>o.wave===F.wave&&o.result==="pending"&&isPhone(o.tech_id));
+  if(F.status!=="offered"||F.manual||!pend.length)return "";
+  return `<div class="man" style="border-color:var(--cy);background:linear-gradient(160deg,rgba(34,211,238,.1),rgba(10,17,40,.8))"><div class="h" style="margin:0;color:var(--cy)">📱 Waiting for a real phone</div><small style="color:var(--mu);font-size:12.5px;line-height:1.5;display:block;margin-top:4px">${pend.map(o=>esc(o.tech)).join(", ")} ${pend.length>1?"have":"has"} the offer on their phone. Accept or reject there, and this screen updates instantly.</small></div>`}
+function manualBox(F){
+  if(F.status==="offered"&&F.manual){const pend=(F.offers||[]).filter(o=>o.wave===F.wave&&o.result==="pending");
+    return `<div class="man"><div class="h" style="margin:0">Manual mode · you are the technicians</div><small style="color:var(--mu);font-size:12.5px;line-height:1.5;display:block;margin-top:4px">Everyone in this layer was notified. Accept or reject for each one. If everyone rejects, the next layer opens.</small>${pend.map(o=>`<div class="row"><b>${esc(o.tech)}</b><small>match ${o.total}</small><button class="mb ok" data-resp="${F.id}|${o.tech_id}|accept">Accept</button><button class="mb no" data-resp="${F.id}|${o.tech_id}|decline">Reject</button></div>`).join("")||'<div class="row"><b>Deciding the best match…</b></div>'}${pend.length>1?`<button class="mb all" data-rejall="${F.id}">Reject everyone in this layer</button>`:""}</div>`}
+  if(F.status==="on_site")return `<div class="otp"><div class="h" style="margin:0;color:#c9b8ff">Waiting for the customer's OTP</div>${F.manual&&F.otp?`<div class="code">${esc(F.otp)}</div><small>The customer reads this code to the technician. The work cannot start until it is entered.</small><div style="display:flex;gap:8px;margin-top:10px"><button class="mb ok" data-otp="${F.id}|${F.assigned.id}|${F.otp}">Customer shares the OTP</button><button class="mb no" data-otp="${F.id}|${F.assigned.id}|0000">Try a wrong code</button></div>`:`<small>${esc(F.assigned?F.assigned.name:"The technician")} has arrived and must ask the customer for the one-time code before starting.</small>`}</div>`;
+  if(F.status==="working")return `<div class="ok2">🔑 OTP verified. ${esc(F.assigned?F.assigned.name:"The technician")} is working on it.</div>`;
+  return ""}
+function panels(){
+  const open=BOARD.filter(r=>r.status!=="resolved"),F=focus();
+  if(F&&F.id!==SYNCED){SYNCED=F.id;setMode(!!F.manual)}      /* the page follows the mode of the request on screen, so it always matches the app */
+  if(F&&F.has_photo&&!PHOTOS[F.id]){PHOTOS[F.id]="loading";apiGet("/api/reports/"+F.id).then(r=>{PHOTOS[F.id]=r.photo||"";panels()}).catch(()=>{})}
+  $("#hudS").innerHTML=`<div><b>${open.length}</b>open</div><div><b>${BOARD.filter(r=>r.status==="offered").length}</b>notifying</div><div><b>${MAP?MAP.technicians.filter(t=>t.status==="en_route").length:0}</b>on the way</div><div><b>${BOARD.length-open.length}</b>done</div>`;
+  if(!F){$("#left").innerHTML=`<div class="h">No request yet</div><p class="empty">Press <b style="color:#fff">Simulate a request</b>. A beacon appears where the problem is, the nearest layer lights up, everyone inside is notified at once, and the best match to accept gets the job. If everyone declines, the next layer opens.</p>`;$("#bar").innerHTML="";}
+  else{
+    const rk=(F.ranking||[]).map((t,i)=>`<div class="rk ${i===0?"top":""}"><span class="n">${i+1}</span><div><b style="font:600 14px Inter">${esc(t.name)}</b>${t.available?"":` <span class="chip">busy</span>`}<span class="w">${esc(t.reasons.slice(0,3).join(" · "))}</span><div class="stack">${Object.keys(PC).map(k=>`<i style="width:${t.points[k]}%;background:${PC[k]}"></i>`).join("")}</div></div><b class="t">${t.total}</b></div>`).join("");
+    $("#left").innerHTML=`<div class="req"><div class="h">Request ${esc(F.id)}</div><div class="pr"><div class="sc">${F.priority.score}<small>PRIORITY</small></div><div><h3>${esc(F.symptom)}</h3></div></div>
+      ${PHOTOS[F.id]&&PHOTOS[F.id]!=="loading"?`<img src="${PHOTOS[F.id]}" alt="Photo of the unit" style="width:100%;max-height:150px;object-fit:cover;border-radius:12px;margin:10px 0">`:""}<div class="m"><b>${esc(F.site)}</b> · ${esc(F.area)}${F.machine?` · ${esc(F.machine.id)} ${esc(F.machine.model)}`:""}<br>reported by ${esc(F.reporter.name)}</div>
+      <div class="chips"><span class="st ${F.status}">${sLabel[F.status]}</span>${F.source==="app"?'<span class="chip" style="color:var(--cy);border-color:rgba(34,211,238,.5)">📱 raised in the app · ${F.manual?"Manual":"Demo"} mode</span>':""}${F.confirmed?`<span class="chip" style="color:#34d399;border-color:rgba(52,211,153,.6)">✔ Confirmed${F.assigned?" · "+esc(F.assigned.name.split(" ")[0]):""} ${F.confirmed_via==="phone"?"📱 from a connected phone":F.confirmed_via==="demo"?"🤖 demo":"simulated"}</span>`:""}${F.outcome?`<span class="chip" style="${F.outcome==="done"?"color:#34d399;border-color:rgba(52,211,153,.6)":"color:#fbbf24;border-color:rgba(251,191,36,.6)"}">${F.outcome==="done"?"✔ Work done":"✖ Not done, revisit needed"}</span>`:""}<span class="chip ${F.severity}">${F.severity}</span>${F.priority.reasons.map(x=>`<span class="chip">${esc(x)}</span>`).join("")}</div>
+      ${F.assigned&&F.status!=="resolved"?`<div class="m" style="margin-top:12px"><b>${esc(F.assigned.name)}</b> is ${F.status==="on_site"?"on site":"on the way, ETA "+F.eta_min+" min"}</div>`:""}</div>
+      ${manualBox(F)}${phoneBox(F)}${countBox(F)}
+      <div class="lay"><div class="h" style="margin:0">Search layers</div>${layerRows(F)}</div>
+      <div class="h" style="margin-top:20px">Live log</div><div class="feed">${F.events.slice(-7).reverse().map(e=>`<div class="fe ${e.kind}"><i>${ICON[e.kind]||"•"}</i><div>${esc(e.text)}<small>${ago(e.t)}</small></div></div>`).join("")}</div>
+      <details class="why"><summary>Why these technicians? (the math)</summary>${rk}</details>`;
+    $("#bar").innerHTML=stepper(F)}
+  $("#right").innerHTML=`<div class="h">Requests</div><div class="rl">${BOARD.length?BOARD.map(r=>`<div class="ri ${r.id===SEL?"sel":""} ${r.status==="resolved"?"done":""}" data-id="${r.id}"><span class="p" style="color:${SEV[r.severity]}">${r.priority.score}</span><div class="tx"><b>${r.source==="app"?"📱 ":""}${esc(r.symptom)}</b>${esc(r.site)} · ${sLabel[r.status]}</div></div>`).join(""):`<p class="empty">Nothing yet.</p>`}</div>
+    <div class="h">Technicians</div>${MAP?MAP.technicians.map(t=>`<div class="ro"><i style="background:${COL[t.status]||"#8d99c2"}"></i>${esc(t.name)}<span>${t.status.replace("_"," ")}${t.online?" · 📱 connected phone":t.mode==="demo"?" · demo":""}</span></div>`).join(""):""}`}
+async function refresh(){try{const [b,m]=await Promise.all([apiGet("/api/dispatch/board?viewer=demo"),apiGet("/api/dispatch/map")]);MAP=m;
+    m.technicians.forEach(t=>{let o=TECH[t.id];if(!o)o=TECH[t.id]={lat:t.lat,lng:t.lng};o.tlat=t.lat;o.tlng=t.lng;o.status=t.status;o.name=t.name;o.id=t.id;o.online=t.online;o.mode=t.mode});
+    if(KNOWN===null)KNOWN=new Set(b.map(r=>r.id));
+    else{const fresh=b.filter(r=>!KNOWN.has(r.id));fresh.forEach(r=>KNOWN.add(r.id));if(fresh.length&&Date.now()-PICKED>8000)SEL=fresh[fresh.length-1].id}      /* a request raised on a phone takes over the screen */
+    detect(b);BOARD=b;if(!SEL||!b.find(r=>r.id===SEL))SEL=((b.find(r=>r.status!=="resolved")||b[0]||{}).id)||null;panels();
+    if(AUTO&&Date.now()-lastMake>9000&&!b.some(r=>r.status!=="resolved")){lastMake=Date.now();apiPost("/api/dispatch/demo-report?manual="+MANUAL+planQ()).then(r=>{SEL=r.id}).catch(()=>{})}}catch(e){}}
+resize();requestAnimationFrame(frame);refresh();setInterval(refresh,1000);new ResizeObserver(resize).observe($("#stage"));
+$("#right").addEventListener("click",e=>{const c=e.target.closest(".ri");if(c){SEL=c.dataset.id;PICKED=Date.now();panels()}});
+$("#left").addEventListener("click",async e=>{const b=e.target.closest("button");if(!b)return;
+  try{if(b.dataset.resp){const [rid,tid,act]=b.dataset.resp.split("|");await apiPost(`/api/reports/${rid}/respond`,{tech_id:tid,action:act,demo:true})}
+    else if(b.dataset.rejall){const F=BOARD.find(r=>r.id===b.dataset.rejall);for(const o of (F.offers||[]).filter(o=>o.wave===F.wave&&o.result==="pending"))await apiPost(`/api/reports/${F.id}/respond`,{tech_id:o.tech_id,action:"decline",demo:true})}
+    else if(b.dataset.otp){const [rid,tid,otp]=b.dataset.otp.split("|");await apiPost(`/api/reports/${rid}/start`,{tech_id:tid,otp,demo:true})}}
+  catch(err){b.textContent=err.message.slice(0,44)}refresh()});
+const planQ=()=>{const v=$("#plan").value;return MANUAL||v===""?"":"&accept_after="+v};
+const setMode=m=>{MANUAL=m;$("#plan").style.display=m?"none":"";$("#m-man").classList.toggle("on",m);$("#m-demo").classList.toggle("on",!m)};$("#m-demo").onclick=()=>setMode(false);$("#m-man").onclick=()=>setMode(true);
+$("#sim").onclick=async()=>{$("#sim").disabled=true;try{const r=await apiPost("/api/dispatch/demo-report?manual="+MANUAL+planQ());SEL=r.id;PICKED=Date.now();lastMake=Date.now()}catch(e){}$("#sim").disabled=false;refresh()};
+$("#auto").onclick=()=>{AUTO=!AUTO;$("#auto").classList.toggle("on",AUTO);$("#auto").textContent=AUTO?"Auto-play: on":"Auto-play";lastMake=0};
+/* hover a technician for the reasons */
+cv.addEventListener("mousemove",e=>{const r=cv.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;let hit=null;Object.values(TECH).forEach(o=>{if(Math.hypot(o.x-x,o.y-y)<20)hit=o});const tip=$("#tip");
+  if(!hit){tip.style.display="none";return}const F=focus(),row=F&&(F.ranking||[]).find(q=>q.tech_id===hit.id);
+  tip.innerHTML=`<b>${esc(hit.name)}</b><br>${hit.status.replace("_"," ")}${hit.online?" · phone connected":" · simulated"}${row?`<br><span style="color:#c4cdee">${esc(row.reasons.join(" · "))}</span><br>match score <b style="font-size:13px">${row.total}</b>`:""}`;tip.style.left=Math.min(x+18,VW-300)+"px";tip.style.top=(y+14)+"px";tip.style.display="block"});
+cv.addEventListener("mouseleave",()=>$("#tip").style.display="none");
+/* report form */
+let sev="high",USER=null;try{USER=JSON.parse(localStorage.getItem("dp_user")||"null")}catch{}
+async function openForm(){if(!META)META=await apiGet("/api/dispatch/meta");$("#f-site").innerHTML=META.sites.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.area)}</option>`).join("");fillMach();$("#f-name").value=USER?USER.name:"";$("#f-err").textContent="";$("#mod").classList.add("on");$("#f-sym").focus()}
+function fillMach(){const s=META.sites.find(x=>x.id===$("#f-site").value);$("#f-mach").innerHTML=s.machines.map(m=>`<option value="${m.id}">${esc(m.id)} · ${esc(m.model)} · ${esc(m.location)}</option>`).join("")}
+$("#f-typ").onclick=e=>{e.preventDefault();const s=META.sites.find(x=>x.id===$("#f-site").value),m=s.machines.find(x=>x.id===$("#f-mach").value);if(m&&m.typical)$("#f-sym").value=m.typical};
+$("#new").onclick=openForm;$("#f-site").onchange=fillMach;$("#f-cancel").onclick=()=>$("#mod").classList.remove("on");
+$$("#f-sev button").forEach(b=>b.onclick=()=>{sev=b.dataset.s;$$("#f-sev button").forEach(x=>x.classList.toggle("on",x===b))});
+$("#f-go").onclick=async()=>{const name=$("#f-name").value.trim();$("#f-err").textContent="";
+  try{if(!USER||USER.name!==name){USER=await apiPost("/api/dispatch/register",{name,role:"reporter",site_id:$("#f-site").value});localStorage.setItem("dp_user",JSON.stringify(USER))}
+    const r=await apiPost("/api/reports",{user_id:USER.id,site_id:$("#f-site").value,machine_id:$("#f-mach").value,symptom:$("#f-sym").value,severity:sev,manual:MANUAL,source:"web",accept_after:planQ()?+$("#plan").value:null});
+    SEL=r.id;$("#f-sym").value="";$("#mod").classList.remove("on");refresh()}catch(e){$("#f-err").textContent=e.message}};
+</script></body></html>

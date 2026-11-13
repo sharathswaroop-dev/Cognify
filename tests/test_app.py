@@ -44,7 +44,7 @@ def test_the_hidden_truth_is_never_sent_to_the_browser(client):
     c, _ = client
     assert "truth" not in json.dumps(c.get("/api/scenarios").json())
     rid = c.post("/api/runs", json={"scenario_id": "LIVE-1"}).json()["run_id"]
-    for _ in range(100):
+    for _ in range(300):
         run = c.get(f"/api/runs/{rid}").json()
         if run["status"] != "running":
             break
@@ -324,7 +324,22 @@ def test_a_greeting_is_not_treated_as_a_memory_question(client):
     c, _ = client
     for text in ("hi", "how are you", "how are you doing today?", "thanks"):
         r = c.post("/api/chat", json={"message": text}).json()
-        assert r["kind"] == "answer" and r.get("greeting") and r["sources"] == [], text
+        assert r["kind"] == "chat" and r["sources"] == [] and r["answer"], text
+
+
+def test_a_vague_problem_is_asked_about_not_searched(client):
+    c, _ = client
+    r = c.post("/api/chat", json={"message": "i have a problem"}).json()
+    assert r["kind"] == "clarify" and r["chips"] and any(w in r["answer"].lower() for w in ("machine", "unit"))
+
+
+def test_a_correction_in_plain_words_is_retained_and_acknowledged(client):
+    c, _ = client
+    hist = [{"role": "user", "content": "M-07 trips on E3", "kind": "answer"}, {"role": "assistant", "content": "Replace the contactor.", "kind": "answer"}]
+    r = c.post("/api/chat", json={"message": "no, it was actually the supply voltage dips on M-07, a stabiliser fixed it", "history": hist}).json()
+    assert r["kind"] == "corrected" and "correction" in r["answer"].lower() and r["memory_text"]
+    r = c.post("/api/chat", json={"message": "no that's wrong", "history": hist}).json()
+    assert r["kind"] == "correct_ask"
 
 
 def test_library_sample_records_are_demo_only(client):
@@ -342,3 +357,11 @@ def test_requests_are_answered_not_saved_as_notes():
         assert chatintent.intent(m) == "ask", m
     assert chatintent.intent("Remember: on the Riverside rooftop units, check the evening supply voltage first.") == "share"
     assert chatintent.intent("I replaced the contactor on M-07 and it worked") == "share"
+
+
+def test_the_chat_knows_which_unit_the_technician_is_working_on(client):
+    c, _ = client
+    r = c.post("/api/chat", json={"message": "it keeps tripping, what should I check first?", "machine_id": "M-07"}).json()
+    assert r["kind"] == "answer" and (r.get("offer") or {}).get("machine_id") == "M-07"          # the unit from the active job was used, no need to say it
+    r2 = c.post("/api/chat", json={"message": "it keeps tripping, what should I check first?"}).json()
+    assert (r2.get("offer") or {}).get("machine_id") != "M-07"

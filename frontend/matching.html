@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How matching works — Cognify</title>
+<link rel="icon" type="image/svg+xml" href="/static/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/site.css">
+<style>
+.hero{padding:70px 0 26px}.hero h1{font-size:clamp(36px,5.2vw,66px);max-width:15ch}.hero h1 em{font-style:normal;background:linear-gradient(100deg,#a78bfa,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mu);max-width:700px;font-size:18px;margin-top:16px;line-height:1.55}
+.sec{padding:48px 0 8px}.sec .k{font:600 12px "JetBrains Mono";letter-spacing:.1em;color:var(--cy);text-transform:uppercase}
+.sec h2{font-size:clamp(26px,3.2vw,40px);margin:8px 0 10px;max-width:22ch}.sec>p,.lead{color:var(--mu);max-width:720px;font-size:16px;line-height:1.6}
+.box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:20px}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.ctl select{background:#0a1128;color:var(--tx);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font:500 14px "Inter";max-width:100%}
+.ctl .sev{display:flex;gap:6px}.ctl .sev button{padding:9px 14px;border-radius:99px;border:1px solid var(--line);background:#0a1128;color:var(--mu);font:600 13px "Inter";cursor:pointer}.ctl .sev button.on{color:#fff;border-color:var(--pu2);background:#1d2150}
+.tc{display:grid;grid-template-columns:34px 1.1fr 1.6fr 64px;gap:14px;align-items:center;padding:14px 8px;border-top:1px solid var(--line)}
+.tc:first-of-type{border-top:0}
+.tc.win{background:linear-gradient(90deg,rgba(139,92,246,.13),transparent);border-radius:16px;border-top-color:transparent}
+.tc .n{width:30px;height:30px;border-radius:9px;background:#151c3b;display:grid;place-items:center;font:700 13px "JetBrains Mono";color:var(--mu)}.tc.win .n{background:linear-gradient(135deg,var(--pu),#6d4ae0);color:#fff}
+.tc h4{font:700 16px "Sora";letter-spacing:-.02em}.tc small{color:var(--mu);display:block;font-size:12.5px;line-height:1.45;margin-top:3px}
+.stack{display:flex;height:16px;border-radius:99px;overflow:hidden;background:#141c3c}.stack i{display:block;height:100%;transition:width .6s var(--ease)}
+.leg{display:flex;gap:16px;flex-wrap:wrap;margin:6px 0 4px;font-size:12.5px;color:var(--mu)}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.tot{font:800 24px "Sora";letter-spacing:-.04em;text-align:right}
+.pts{display:flex;gap:12px;flex-wrap:wrap;font:500 11.5px "JetBrains Mono";color:var(--mu);margin-top:6px}
+.callout{margin-top:16px;border:1px solid #4a3aa8;background:linear-gradient(135deg,#241d52,#171a42);border-radius:16px;padding:14px 18px;line-height:1.55}
+.formula{font:500 14px "JetBrains Mono";background:#0a1128;border:1px solid var(--line);border-radius:12px;padding:12px 16px;color:#c9b8ff;overflow-x:auto;margin-top:14px;white-space:nowrap}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}}@media(max-width:560px){.steps{grid-template-columns:1fr}}
+.stp{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}.stp b{display:block;font:800 26px "Sora";color:var(--pu2);margin-bottom:4px}.stp h4{font:700 15px "Sora";margin-bottom:4px}.stp p{color:var(--mu);font-size:13.5px;line-height:1.5}
+.pr{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}@media(max-width:800px){.pr{grid-template-columns:1fr 1fr}}
+.pc{background:#0a1128;border:1px solid var(--line);border-radius:16px;padding:14px}.pc b{font:800 22px "Sora";color:var(--cy)}.pc h4{font:700 14px "Sora";margin:4px 0}.pc p{color:var(--mu);font-size:12.5px;line-height:1.5}
+.tl{margin-top:16px;display:grid;gap:8px}.tl div{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.5;padding:11px 14px;border-radius:14px;background:#0a1128;border:1px solid var(--line);animation:in .4s var(--ease)}@keyframes in{from{opacity:0;transform:translateY(6px)}}
+.tl div b{flex:none;width:76px;font:600 11px "JetBrains Mono";letter-spacing:.06em;text-transform:uppercase;padding-top:2px;color:var(--mu)}
+.tl .offer b{color:var(--wa)}.tl .accept b,.tl .resolved b{color:var(--ok)}.tl .arrive b{color:var(--pu2)}.tl .report b{color:var(--cy)}.tl .alert b{color:var(--er)}
+.note{margin:46px 0 60px;border:1px dashed var(--line);border-radius:18px;padding:18px 22px;color:var(--mu);font-size:14px;line-height:1.6}.note b{color:#fff}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}@media(max-width:800px){.two{grid-template-columns:1fr}}
+.cmp{background:#0a1128;border:1px solid var(--line);border-radius:16px;padding:16px}.cmp h4{font:700 14px "Sora";margin-bottom:6px}.cmp p{color:var(--mu);font-size:13.5px;line-height:1.55}.cmp.good{border-color:#4a3aa8}
+</style></head><body>
+<div id="spot"></div><div id="grid"></div>
+<div id="navmount"></div>
+<main class="wrap">
+  <section class="hero"><div class="k" style="font:600 12px 'JetBrains Mono';letter-spacing:.1em;color:var(--cy)">HOW MATCHING WORKS</div>
+    <h1>Not just the nearest. The nearest who can <em>actually fix it</em>.</h1>
+    <p>A ride-hailing app sends the closest driver. A repair call needs more than that: the closest technician who has never seen this fault may take longer to fix it and make a second trip. Cognify matches on distance, verified experience, skill and availability, and shows every number.</p>
+    <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap"><a class="btn" href="/dispatch">Open the dispatch board →</a><a class="btn ghost" href="#try">Try the matching below</a></div></section>
+
+  <section class="sec"><div class="k">The whole flow</div><h2>From a report to a repair, in four steps</h2>
+    <div class="steps">
+      <div class="stp"><b>1</b><h4>Someone reports it</h4><p>A facility manager reports a problem in the app or on the web: site, unit, what is wrong, how urgent.</p></div>
+      <div class="stp"><b>2</b><h4>It is ranked</h4><p>Every open problem gets a priority score, so the board shows what to handle first, not just what came first.</p></div>
+      <div class="stp"><b>3</b><h4>Notified like a ride, layer by layer</h4><p>Everyone free in the nearest radius is notified at once, with 45 seconds to answer. The best match among those who accept gets the job. If everyone declines, the next radius opens.</p></div>
+      <div class="stp"><b>4</b><h4>Briefed and closed</h4><p>They accept, drive over, get the four-agent briefing, and log the visit. What they log goes into the shared memory.</p></div>
+    </div></section>
+
+  <section class="sec"><div class="k">Step 2 · which problem first</div><h2>The priority score</h2>
+    <p>Four things decide what is handled first. Each one adds points, and the reasons are shown next to every problem on the board.</p>
+    <div class="pr">
+      <div class="pc"><b>10–40</b><h4>Severity</h4><p>Urgent 40, high 30, normal 15. What the reporter said.</p></div>
+      <div class="pc"><b>5–20</b><h4>How critical the site is</h4><p>A hospital or data centre outranks a clubhouse.</p></div>
+      <div class="pc"><b>0–20</b><h4>How long it has waited</h4><p>The score rises while nobody has taken it.</p></div>
+      <div class="pc"><b>0–20</b><h4>Likely to come back</h4><p>From the memory: units whose fixes have failed before or whose usual fix stopped working.</p></div>
+    </div></section>
+
+  <section class="sec" id="try"><div class="k">Step 3 · who gets the job</div><h2>Score every technician, openly</h2>
+    <p>Pick a site, a unit and an urgency. This is the real calculation on the sample company's data (a fictional Bengaluru contractor, with simulated positions), recomputed live.</p>
+    <div class="box">
+      <div class="ctl"><select id="x-site"></select><select id="x-mach"></select><div class="sev" id="x-sev"><button data-s="normal">Normal</button><button data-s="high" class="on">High</button><button data-s="urgent">Urgent</button></div></div>
+      <div class="leg"><span><i style="background:#22d3ee"></i>Closeness 38%</span><span><i style="background:#a78bfa"></i>Experience on this fault 30%</span><span><i style="background:#fbbf24"></i>Skill match 12%</span><span><i style="background:#34d399"></i>Available now 20%</span></div>
+      <div id="x-rank"></div>
+      <div class="callout" id="x-say"></div>
+      <div style="margin:22px 0 8px;font:600 12px 'Inter';letter-spacing:.14em;text-transform:uppercase;color:#6f7bb0">Search radius ladder · the layers that get notified, one after another</div>
+      <div id="x-lad" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <p class="lead" style="margin-top:12px;font-size:14.5px" id="x-ladtxt"></p>
+      <div class="formula" id="x-formula"></div>
+    </div></section>
+
+  <section class="sec"><div class="k">Why this beats "nearest"</div><h2>Two ways to send a technician</h2>
+    <div class="two"><div class="cmp"><h4>Nearest driver (ride-hailing style)</h4><p>Picks whoever is closest. A new joiner who has never seen this fault arrives first, guesses, and the unit trips again. A second trip costs a technician's day and an SLA penalty.</p></div>
+      <div class="cmp good"><h4>Cognify: close and proven</h4><p>Distance still counts for the most, but a technician who has fixed this fault before, and whose fixes stayed fixed, is preferred. The experience is counted from the raw visit records, not self-reported.</p></div></div></section>
+
+  <section class="sec"><div class="k">Step 3 · live</div><h2>Watch an offer happen</h2>
+    <p>This creates a real report on the sample company. Everyone free in the nearest radius is notified at once, simulated technicians answer after a few seconds (some decline), the best match among those who accept gets the job, and the timeline below is the server's own event log. For the full animated version, open the live dispatch.</p>
+    <div class="box"><button class="btn" id="live">▶ Report a problem now</button><div class="tl" id="tl"></div></div></section>
+
+  <div class="note"><b>Honest limits.</b> Coordinates, positions and availability are simulated: there is no real GPS feed. The weights (38 / 30 / 12 / 20) are chosen by hand, not learned, and are easy to change. Technicians whose phone app is not connected are simulated, answering after a few seconds. The repair histories are the sample company's synthetic records.</div>
+</main>
+<script src="/static/site.js"></script>
+<script>
+$("#navmount").outerHTML=nav("x");
+let SES=localStorage.getItem("cg_presenter_session")||"";
+async function presenterLogin(){let key=localStorage.getItem("cg_presenter_key")||"";
+  for(let i=0;i<3;i++){const r=await fetch("/api/dispatch/presenter-login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({key})});
+    if(r.ok){SES=(await r.json()).session;localStorage.setItem("cg_presenter_session",SES);return true}
+    if(r.status===429)throw new Error("Too many attempts. Wait a minute and reload.");
+    key=prompt("Presenter key (the DISPATCH_PRESENTER_KEY set on the server). Leave it empty if this is the laptop running Cognify.")||"";localStorage.setItem("cg_presenter_key",key)}
+  return false}
+async function authed(url,opt){const go=()=>fetch(url,{...(opt||{}),headers:{"Content-Type":"application/json","X-Cognify-Session":SES}});let r=await go();if(r.status===401||r.status===403){if(await presenterLogin())r=await go()}return r}
+const apiPost=(p,b)=>authed(p,{method:"POST",body:JSON.stringify(b||{})}).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"Something went wrong");return d});
+const apiGet=p=>authed(p).then(async r=>{const d=await r.json();if(!r.ok)throw new Error(typeof d.detail==="string"?d.detail:"Request failed");return d});
+const C={closeness:"#22d3ee",experience:"#a78bfa",skill:"#fbbf24",availability:"#34d399"};
+let META=null,sev="high";
+async function init(){META=await apiGet("/api/dispatch/meta");$("#x-site").innerHTML=META.sites.map(s=>`<option value="${s.id}" ${s.id==="S-05"?"selected":""}>${esc(s.name)} · ${esc(s.area)}</option>`).join("");fillM("M-42");go()}
+function fillM(pick){const s=META.sites.find(x=>x.id===$("#x-site").value);$("#x-mach").innerHTML=s.machines.map(m=>`<option value="${m.id}" ${m.id===pick?"selected":""}>${esc(m.id)} · ${esc(m.model)} · ${esc(m.location)}</option>`).join("")}
+$("#x-site").onchange=()=>{fillM();go()};$("#x-mach").onchange=go;
+$$("#x-sev button").forEach(b=>b.onclick=()=>{sev=b.dataset.s;$$("#x-sev button").forEach(x=>x.classList.toggle("on",x===b));go()});
+async function go(){
+  const d=await apiGet(`/api/dispatch/explain?site_id=${$("#x-site").value}&machine_id=${$("#x-mach").value}&severity=${sev}`);
+  $("#x-rank").innerHTML=d.ranking.map((t,i)=>`<div class="tc ${i===0?"win":""}"><span class="n">${i+1}</span><div><h4>${esc(t.name)}</h4><small>${esc(t.speciality)} · ${t.years} yr${t.years===1?"":"s"}</small><small>${esc(t.reasons.join(" · "))}</small></div>
+    <div><div class="stack">${Object.keys(C).map(k=>`<i style="width:${t.points[k]}%;background:${C[k]}" title="${k}: ${t.points[k]}"></i>`).join("")}</div><div class="pts">${Object.keys(C).map(k=>`<span style="color:${C[k]}">${k.slice(0,4)} ${t.points[k]}</span>`).join("")}</div></div><div class="tot">${t.total}</div></div>`).join("");
+  const near=d.ranking.filter(t=>t.available).sort((a,b)=>a.distance_km-b.distance_km)[0],win=d.ranking[0];
+  $("#x-say").innerHTML=win.tech_id===near.tech_id?`<b>${esc(win.name)}</b> is both the closest free technician (${win.distance_km} km) and a strong match, so a plain "nearest" app would pick the same person here. Try a different unit to see where they differ.`
+    :`A plain "nearest driver" app would send <b>${esc(near.name)}</b> (${near.distance_km} km away, ${near.experience.fault} verified fixes of this fault). Cognify offers it to <b>${esc(win.name)}</b> first (${win.distance_km} km away, ${win.experience.fault} verified fixes${win.experience.same_machine?`, ${win.experience.same_machine} on this very unit`:""}). ${win.total} points against ${d.ranking.find(t=>t.tech_id===near.tech_id).total}.`;
+  const first=d.ladder.find(l=>l.new.length);
+  $("#x-lad").innerHTML=d.ladder.map(l=>`<div style="flex:1;min-width:120px;border:1px solid ${first&&l.ring===first.ring?"#fbbf24":"var(--line)"};border-radius:14px;padding:10px 14px;background:${first&&l.ring===first.ring?"rgba(251,191,36,.1)":"#0a1128"};opacity:${l.new.length||(first&&l.ring===first.ring)?1:.55}"><b style="font:700 15px Sora">${esc(l.label)}</b><div style="color:var(--mu);font-size:13px;margin-top:2px">${l.free} free${l.new.length?" · new: "+esc(l.new.join(", ")):""}</div></div>`).join("");
+  $("#x-ladtxt").innerHTML=first?`The search stops at <b>${esc(first.label)}</b>, the first radius with a free technician${first.ring>1?`; the ${first.ring-1} smaller radius${first.ring>2?"es were":" was"} empty, so it was skipped`:""}. Everyone free inside it is notified at once and, if several accept, the best match wins. Match order: ${d.queue.map((q,i)=>`${i+1}. ${esc(q.name)}`).join(" → ")}.`:"Nobody is free anywhere; busy technicians are asked by how soon they can get there.";
+  $("#x-formula").textContent=d.formula+"   ·   priority of this problem: "+d.priority.score+" ("+d.priority.reasons.join(", ")+")"}
+init();
+/* live offer */
+let timer=null;
+$("#live").onclick=async()=>{$("#live").disabled=true;clearInterval(timer);$("#tl").innerHTML="";
+  try{const r=await apiPost("/api/dispatch/demo-report");let shown=0;
+    const tick=async()=>{const v=await apiGet("/api/reports/"+r.id);v.events.slice(shown).forEach(e=>{$("#tl").insertAdjacentHTML("beforeend",`<div class="${e.kind}"><b>${e.kind}</b><span>${esc(e.text)}</span></div>`)});shown=v.events.length;if(v.status==="resolved"||v.status==="unassigned"){clearInterval(timer);$("#live").disabled=false;$("#live").textContent="▶ Report another problem"}};
+    await tick();timer=setInterval(tick,1500)}catch(e){$("#tl").innerHTML=`<div class="alert"><b>error</b><span>${esc(e.message)}</span></div>`;$("#live").disabled=false}};
+</script></body></html>

@@ -7,3 +7,5 @@ hindsight-client>=1.2
 httpx>=0.27
 python-multipart>=0.0.9
 pypdf>=4.0
+google-auth>=2.30
+requests>=2.31
